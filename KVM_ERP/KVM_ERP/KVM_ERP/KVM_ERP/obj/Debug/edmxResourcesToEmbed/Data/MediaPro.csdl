@@ -1,0 +1,833 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ClubMembershipModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="ClubMembershipEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="VW_USER_DETAILS" EntityType="ClubMembershipModel.VW_USER_DETAILS" />
+    <FunctionImport Name="PR_ACCOUNTINGYEAR_ID_CHK" ReturnType="Collection(ClubMembershipModel.PR_ACCOUNTINGYEAR_ID_CHK_Result)">
+      <Parameter Name="PFYear" Mode="In" Type="Int32" />
+      <Parameter Name="PTYear" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" ReturnType="Collection(ClubMembershipModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result)">
+      <Parameter Name="PCompId" Mode="In" Type="Int32" />
+      <Parameter Name="PYrId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_CompanyDetail_Flx_Assgn" ReturnType="Collection(ClubMembershipModel.pr_CompanyDetail_Flx_Assgn_Result)">
+      <Parameter Name="PCOMPID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchAccountGroup" ReturnType="Collection(ClubMembershipModel.pr_SearchAccountGroup_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchAccountHeadMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchAccountHeadMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchCompanyMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchCompanyMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchDepartmentMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchDepartmentMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchDesignationMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchDesignationMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLocationMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchLocationMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchRegionMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchRegionMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchStateMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchStateMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Search_Roles" ReturnType="Collection(ClubMembershipModel.pr_Search_Roles_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="AspNetUsers" EntityType="ClubMembershipModel.AspNetUser" />
+    <FunctionImport Name="pr_SearchCategoryMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchCategoryMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchEditionMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchEditionMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLanguageMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchLanguageMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchMediaUnitMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchMediaUnitMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchPublicationTypeMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchPublicationTypeMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchPositionMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchPositionMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchHSNCodeMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchHSNCodeMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchReleaseOrder" ReturnType="Collection(ClubMembershipModel.pr_SearchReleaseOrder_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PSDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PCompyid" Mode="In" Type="Int32" />
+      <Parameter Name="PEmplid" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_RO_Publication_Edition_List" ReturnType="Collection(ClubMembershipModel.pr_RO_Publication_Edition_List_Result)">
+      <Parameter Name="Publnid" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchInvoice" ReturnType="Collection(ClubMembershipModel.pr_SearchInvoice_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PSDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PCompyid" Mode="In" Type="Int32" />
+      <Parameter Name="PEmplid" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillMasterAmountWiseClntSlct" ReturnType="Collection(ClubMembershipModel.pr_BillMasterAmountWiseClntSlct_Result)" />
+    <FunctionImport Name="pr_BillMasterParyWiseClntSlct" ReturnType="Collection(ClubMembershipModel.pr_BillMasterParyWiseClntSlct_Result)" />
+    <FunctionImport Name="pr_BillMasterPrcntWiseClntSlct" ReturnType="Collection(ClubMembershipModel.pr_BillMasterPrcntWiseClntSlct_Result)" />
+    <FunctionImport Name="pr_BillMasterSpaceWiseClntSlct" ReturnType="Collection(ClubMembershipModel.pr_BillMasterSpaceWiseClntSlct_Result)" />
+    <FunctionImport Name="pr_BillDetailPublicationAmountCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailPublicationAmountCbxSlct_Result)">
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailPublicationPartyCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailPublicationPartyCbxSlct_Result)">
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailPublicationPrcntCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailPublicationPrcntCbxSlct_Result)">
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailPublicationSpaceCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailPublicationSpaceCbxSlct_Result)">
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailROAmountCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailROAmountCbxSlct_Result)">
+      <Parameter Name="PPUBLNID" Mode="In" Type="Int32" />
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailROParyCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailROParyCbxSlct_Result)">
+      <Parameter Name="PPUBLNID" Mode="In" Type="Int32" />
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailROPrcntCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailROPrcntCbxSlct_Result)">
+      <Parameter Name="PPUBLNID" Mode="In" Type="Int32" />
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailROSpaceCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailROSpaceCbxSlct_Result)">
+      <Parameter Name="PPUBLNID" Mode="In" Type="Int32" />
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_ReleaseOrderDetailCtrlAssgn" ReturnType="Collection(ClubMembershipModel.pr_ReleaseOrderDetailCtrlAssgn_Result)">
+      <Parameter Name="PRODID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Get_Client_Address_Detail" ReturnType="Collection(ClubMembershipModel.pr_Get_Client_Address_Detail_Result)">
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Billing_Release_Order_DOR_Ctrl_Assgn" ReturnType="Collection(ClubMembershipModel.pr_Billing_Release_Order_DOR_Ctrl_Assgn_Result)">
+      <Parameter Name="PBillMId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Billing_Release_Order_No_Ctrl_Assgn" ReturnType="Collection(ClubMembershipModel.pr_Billing_Release_Order_No_Ctrl_Assgn_Result)">
+      <Parameter Name="PBillMId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailRODORSpaceCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailRODORSpaceCbxSlct_Result)">
+      <Parameter Name="PROID" Mode="In" Type="Int32" />
+      <Parameter Name="PKUsrId" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailRODORAmountCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailRODORAmountCbxSlct_Result)">
+      <Parameter Name="PROID" Mode="In" Type="Int32" />
+      <Parameter Name="PKUsrId" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailRODORPartyCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailRODORPartyCbxSlct_Result)">
+      <Parameter Name="PROID" Mode="In" Type="Int32" />
+      <Parameter Name="PKUsrId" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailRODORPrcntCbxSlct" ReturnType="Collection(ClubMembershipModel.pr_BillDetailRODORPrcntCbxSlct_Result)">
+      <Parameter Name="PROID" Mode="In" Type="Int32" />
+      <Parameter Name="PKUsrId" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchProductionReleaseOrder" ReturnType="Collection(ClubMembershipModel.pr_SearchProductionReleaseOrder_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PSDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PCompyid" Mode="In" Type="Int32" />
+      <Parameter Name="PEmplid" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchEmployeeMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchEmployeeMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchProductionInvoice" ReturnType="Collection(ClubMembershipModel.pr_SearchProductionInvoice_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PSDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PCompyid" Mode="In" Type="Int32" />
+      <Parameter Name="PEmplid" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchStudioInvoice" ReturnType="Collection(ClubMembershipModel.pr_SearchStudioInvoice_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PSDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PCompyid" Mode="In" Type="Int32" />
+      <Parameter Name="PEmplid" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Production_Bill_RO_Cbx_Assgn" ReturnType="Collection(ClubMembershipModel.pr_Production_Bill_RO_Cbx_Assgn_Result)">
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+      <Parameter Name="PKUsrId" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Billing_Production_Release_Order_No_Ctrl_Assgn" ReturnType="Collection(ClubMembershipModel.pr_Billing_Production_Release_Order_No_Ctrl_Assgn_Result)">
+      <Parameter Name="PBillMId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchClientMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchClientMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchPublicationMaster" ReturnType="Collection(ClubMembershipModel.pr_SearchPublicationMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchPublicationBill" ReturnType="Collection(ClubMembershipModel.pr_SearchPublicationBill_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PSDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PCompyid" Mode="In" Type="Int32" />
+      <Parameter Name="PEmplid" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Publicattion_RO_Flx_Assgn" ReturnType="Collection(ClubMembershipModel.pr_Publicattion_RO_Flx_Assgn_Result)">
+      <Parameter Name="PCateId" Mode="In" Type="Int32" />
+      <Parameter Name="PPublnId" Mode="In" Type="Int32" />
+      <Parameter Name="PCompYId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_BillDetailPublicationSpaceCbxSlct_Mod" ReturnType="Collection(ClubMembershipModel.pr_BillDetailPublicationSpaceCbxSlct_Mod_Result)">
+      <Parameter Name="BILLMID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Get_Publication_Address_Detail" ReturnType="Collection(ClubMembershipModel.pr_Get_Publication_Address_Detail_Result)">
+      <Parameter Name="PCLNTID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Publicattion_RO_Flx_Assgn_Mod" ReturnType="Collection(ClubMembershipModel.pr_Publicattion_RO_Flx_Assgn_Mod_Result)">
+      <Parameter Name="PPBillId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchEstimate" ReturnType="Collection(ClubMembershipModel.pr_SearchEstimate_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PSDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PCompyid" Mode="In" Type="Int32" />
+      <Parameter Name="PEmplid" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Estimate_Detail_Flx_Assgn" ReturnType="Collection(ClubMembershipModel.pr_Estimate_Detail_Flx_Assgn_Result)">
+      <Parameter Name="PEstiId" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="VW_USER_DETAILS">
+    <Key>
+      <PropertyRef Name="GroupId" />
+      <PropertyRef Name="GroupName" />
+    </Key>
+    <Property Name="GroupId" Type="Int32" Nullable="false" />
+    <Property Name="GroupName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="PR_ACCOUNTINGYEAR_ID_CHK_Result">
+    <Property Type="Int32" Name="YRID" Nullable="false" />
+    <Property Type="String" Name="YRDESC" Nullable="false" MaxLength="15" />
+    <Property Type="Int32" Name="YRID1" Nullable="false" />
+    <Property Type="DateTime" Name="FDATE" Nullable="false" Precision="16" />
+    <Property Type="DateTime" Name="TDATE" Nullable="false" Precision="16" />
+    <Property Type="String" Name="YRDESC1" Nullable="false" MaxLength="15" />
+    <Property Type="String" Name="CUSRID" Nullable="false" MaxLength="100" />
+    <Property Type="DateTime" Name="PRCSDATE" Nullable="false" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+    <Property Type="Int32" Name="COMPYID" Nullable="false" />
+    <Property Type="Int32" Name="COMPID" Nullable="false" />
+    <Property Type="Int32" Name="YRID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_CompanyDetail_Flx_Assgn_Result">
+    <Property Type="Int32" Name="COMPDID" Nullable="false" />
+    <Property Type="Int32" Name="COMPID" Nullable="false" />
+    <Property Type="String" Name="COMPPONAME" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="COMPPOADDR" Nullable="false" MaxLength="500" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchAccountGroup_Result">
+    <Property Type="String" Name="ACHEADGCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ACHEADGID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchAccountHeadMaster_Result">
+    <Property Type="String" Name="ACHEADCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ACHEADID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchCompanyMaster_Result">
+    <Property Type="String" Name="COMPCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="COMPPHN1" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPCPRSN" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPMAIL" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="COMPID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchDepartmentMaster_Result">
+    <Property Type="String" Name="DEPTCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DEPTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="DEPTID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchDesignationMaster_Result">
+    <Property Type="String" Name="DSGNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DSGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="DSGNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchLocationMaster_Result">
+    <Property Type="String" Name="LOCTCODE" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="LOCTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="REGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="STATEDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LOCTID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchRegionMaster_Result">
+    <Property Type="String" Name="REGNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="REGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="REGNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchStateMaster_Result">
+    <Property Type="String" Name="STATECODE" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="STATEDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="REGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="STATETYPE" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="STATEID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_Search_Roles_Result">
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Descp" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="SDPTNAME" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Discriminator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="NPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BrnchId" Type="Int32" Nullable="false" />
+    <Property Name="UBrnchName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DBrnchId" Type="Int32" Nullable="false" />
+    <Property Name="DeptName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="pr_SearchCategoryMaster_Result">
+    <Property Type="String" Name="ACCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ACID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchEditionMaster_Result">
+    <Property Type="String" Name="EDTNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="EDTNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="EDTNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchLanguageMaster_Result">
+    <Property Type="String" Name="LANGCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LANGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LANGID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchMediaUnitMaster_Result">
+    <Property Type="String" Name="MUNITCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="MUNITDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="MUNITID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchPublicationTypeMaster_Result">
+    <Property Type="String" Name="PUBLNTCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PUBLNTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="PUBLNTID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchPositionMaster_Result">
+    <Property Type="String" Name="POSTNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="POSTNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="POSTNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchHSNCodeMaster_Result">
+    <Property Type="String" Name="HSNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="HSNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="TAXEXPRN" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="CGSTEXPRN" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="SGSTEXPRN" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="IGSTEXPRN" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="HSNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchReleaseOrder_Result">
+    <Property Type="DateTime" Name="RODATE" Nullable="true" Precision="16" />
+    <Property Type="String" Name="RONID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CLNTNAME" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="NETTAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="RCOUNT" Nullable="true" />
+    <Property Type="Int32" Name="BCOUNT" Nullable="true" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="ROID" Nullable="true" />
+    <Property Type="String" Name="CUSRID" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_RO_Publication_Edition_List_Result">
+    <Property Type="Int32" Name="EDTNID" Nullable="false" />
+    <Property Type="String" Name="EDTNDESC" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchInvoice_Result">
+    <Property Type="DateTime" Name="BILLDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="BILLNID" Nullable="true" />
+    <Property Type="String" Name="BILLPRNNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CLNTNAME" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="NETTAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="false" MaxLength="9" />
+    <Property Type="Int32" Name="BILLMID" Nullable="true" />
+    <Property Type="String" Name="CUSRID" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillMasterAmountWiseClntSlct_Result">
+    <Property Type="Int32" Name="CLNTID" Nullable="false" />
+    <Property Type="String" Name="CLNTNAME" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillMasterParyWiseClntSlct_Result">
+    <Property Type="Int32" Name="CLNTID" Nullable="false" />
+    <Property Type="String" Name="CLNTNAME" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillMasterPrcntWiseClntSlct_Result">
+    <Property Type="Int32" Name="CLNTID" Nullable="false" />
+    <Property Type="String" Name="CLNTNAME" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillMasterSpaceWiseClntSlct_Result">
+    <Property Type="Int32" Name="CLNTID" Nullable="false" />
+    <Property Type="String" Name="CLNTNAME" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailPublicationAmountCbxSlct_Result">
+    <Property Type="Int32" Name="PUBLNID" Nullable="false" />
+    <Property Type="String" Name="PUBLNNAME" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailPublicationPartyCbxSlct_Result">
+    <Property Type="Int32" Name="PUBLNID" Nullable="false" />
+    <Property Type="String" Name="PUBLNNAME" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailPublicationPrcntCbxSlct_Result">
+    <Property Type="Int32" Name="PUBLNID" Nullable="false" />
+    <Property Type="String" Name="PUBLNNAME" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailPublicationSpaceCbxSlct_Result">
+    <Property Type="Int32" Name="PUBLNID" Nullable="false" />
+    <Property Type="String" Name="PUBLNNAME" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailROAmountCbxSlct_Result">
+    <Property Type="Int32" Name="ROID" Nullable="false" />
+    <Property Type="Int32" Name="RONID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailROParyCbxSlct_Result">
+    <Property Type="Int32" Name="ROID" Nullable="false" />
+    <Property Type="Int32" Name="RONID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailROPrcntCbxSlct_Result">
+    <Property Type="Int32" Name="ROID" Nullable="false" />
+    <Property Type="Int32" Name="RONID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailROSpaceCbxSlct_Result">
+    <Property Type="Int32" Name="ROID" Nullable="false" />
+    <Property Type="Int32" Name="RONID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_ReleaseOrderDetailCtrlAssgn_Result">
+    <Property Type="String" Name="MUNITCODE" Nullable="false" MaxLength="15" />
+    <Property Type="Int32" Name="RODID" Nullable="false" />
+    <Property Type="Int32" Name="ROID" Nullable="false" />
+    <Property Type="DateTime" Name="DOR" Nullable="false" Precision="16" />
+    <Property Type="DateTime" Name="ADOR" Nullable="true" Precision="16" />
+    <Property Type="String" Name="EDTNIDS" Nullable="true" />
+    <Property Type="String" Name="EDTNDESC" Nullable="true" />
+    <Property Type="Int32" Name="DORTYPE" Nullable="false" />
+    <Property Type="Int32" Name="DORSTATUS" Nullable="false" />
+    <Property Type="Int32" Name="CANLSTATUS" Nullable="false" />
+    <Property Type="String" Name="DORNARTN" Nullable="true" />
+    <Property Type="Decimal" Name="SPACE" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RATE" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="GAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="MUNITID" Nullable="false" />
+    <Property Type="Int32" Name="PBILLDID" Nullable="false" />
+    <Property Type="Int32" Name="BILLDID" Nullable="false" />
+    <Property Type="Int32" Name="BLDTYPE" Nullable="false" />
+    <Property Type="Decimal" Name="BLDSPACE" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="BLDAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="BLDPRCNT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="PEDTNID" Nullable="false" />
+    <Property Type="String" Name="DORCAPTN" Nullable="true" />
+    <Property Type="Int32" Name="NOP" Nullable="false" />
+    <Property Type="Decimal" Name="BAmt" Nullable="true" Precision="19" Scale="2" />
+    <Property Type="Decimal" Name="BPrcnt" Nullable="true" Precision="19" Scale="2" />
+    <Property Type="Int32" Name="PRMTYPE" Nullable="false" />
+    <Property Type="Decimal" Name="PRMEXPRN" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="EXPNTYPE" Nullable="false" />
+    <Property Type="Int32" Name="CMSNMODE" Nullable="false" />
+    <Property Type="Decimal" Name="CMSNPRCNT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="String" Name="ACDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="POSTNDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="SIZE" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_Get_Client_Address_Detail_Result">
+    <Property Type="Int32" Name="CLNTID" Nullable="false" />
+    <Property Type="String" Name="CLNTNAME" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="CLNTADDR" Nullable="true" />
+    <Property Type="Int16" Name="STATETYPE" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_Billing_Release_Order_DOR_Ctrl_Assgn_Result">
+    <Property Type="Int32" Name="RODID" Nullable="false" />
+    <Property Type="String" Name="DOR" Nullable="true" MaxLength="4000" />
+  </ComplexType>
+  <ComplexType Name="pr_Billing_Release_Order_No_Ctrl_Assgn_Result">
+    <Property Type="Int32" Name="ROID" Nullable="false" />
+    <Property Type="Int32" Name="RONID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailRODORSpaceCbxSlct_Result">
+    <Property Type="Int32" Name="RODID" Nullable="false" />
+    <Property Type="String" Name="DOR" Nullable="true" MaxLength="4000" />
+    <Property Type="String" Name="ADOR" Nullable="true" MaxLength="4000" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailRODORAmountCbxSlct_Result">
+    <Property Type="Int32" Name="RODID" Nullable="false" />
+    <Property Type="String" Name="DOR" Nullable="true" MaxLength="4000" />
+    <Property Type="String" Name="ADOR" Nullable="true" MaxLength="4000" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailRODORPartyCbxSlct_Result">
+    <Property Type="Int32" Name="RODID" Nullable="false" />
+    <Property Type="String" Name="DOR" Nullable="true" MaxLength="4000" />
+    <Property Type="String" Name="ADOR" Nullable="true" MaxLength="4000" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailRODORPrcntCbxSlct_Result">
+    <Property Type="Int32" Name="RODID" Nullable="false" />
+    <Property Type="String" Name="DOR" Nullable="true" MaxLength="4000" />
+    <Property Type="String" Name="ADOR" Nullable="true" MaxLength="4000" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchProductionReleaseOrder_Result">
+    <Property Type="DateTime" Name="RODATE" Nullable="true" Precision="16" />
+    <Property Type="String" Name="RONID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CLNTNAME" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="RONAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="ROID" Nullable="true" />
+    <Property Type="String" Name="CUSRID" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchEmployeeMaster_Result">
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DSGNDESC" Nullable="true" />
+    <Property Type="String" Name="REGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATECPNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEPHN3" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATEEMAIL" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="CATEID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchProductionInvoice_Result">
+    <Property Type="DateTime" Name="BILLDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="BILLNID" Nullable="true" />
+    <Property Type="String" Name="BILLPRNNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CLNTNAME" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="NETTAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="false" MaxLength="9" />
+    <Property Type="Int32" Name="BILLMID" Nullable="true" />
+    <Property Type="String" Name="CUSRID" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchStudioInvoice_Result">
+    <Property Type="DateTime" Name="BILLDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="BILLNID" Nullable="true" />
+    <Property Type="String" Name="BILLPRNNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CLNTNAME" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="NETTAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="false" MaxLength="9" />
+    <Property Type="Int32" Name="BILLMID" Nullable="true" />
+    <Property Type="String" Name="CUSRID" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_Production_Bill_RO_Cbx_Assgn_Result">
+    <Property Type="Int32" Name="RODID" Nullable="false" />
+    <Property Type="Int32" Name="RONID" Nullable="false" />
+    <Property Type="String" Name="RODNO" Nullable="false" MaxLength="25" />
+  </ComplexType>
+  <ComplexType Name="pr_Billing_Production_Release_Order_No_Ctrl_Assgn_Result">
+    <Property Type="Int32" Name="RODID" Nullable="false" />
+    <Property Type="Int32" Name="RONID" Nullable="false" />
+    <Property Type="String" Name="RODNO" Nullable="false" MaxLength="25" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchClientMaster_Result">
+    <Property Type="String" Name="CLNTCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CLNTNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CLNTPNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CLNTPHN3" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CLNTMAIL" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="STATEDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="CLNTID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchPublicationMaster_Result">
+    <Property Type="String" Name="PUBLNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PUBLNNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LANGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PUBLNTDESC" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="STATEDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PUBLNGSTNO" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="PUBLNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchPublicationBill_Result">
+    <Property Type="DateTime" Name="PBILLDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="PBILLNO" Nullable="true" />
+    <Property Type="String" Name="PBILLDNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PUBLNNAME" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="PBILLNAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="false" MaxLength="9" />
+    <Property Type="Int32" Name="PBILLID" Nullable="true" />
+    <Property Type="String" Name="CUSRID" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_Publicattion_RO_Flx_Assgn_Result">
+    <Property Type="Int32" Name="PrnROId" Nullable="false" />
+    <Property Type="DateTime" Name="RODate" Nullable="false" Precision="16" />
+    <Property Type="DateTime" Name="DOR" Nullable="false" Precision="16" />
+    <Property Type="Decimal" Name="RODAmt" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="NAmt" Nullable="true" Precision="37" Scale="4" />
+    <Property Type="Int32" Name="CateId" Nullable="false" />
+    <Property Type="Int32" Name="PublnId" Nullable="false" />
+    <Property Type="Int32" Name="CompYId" Nullable="false" />
+    <Property Type="Int32" Name="TranId" Nullable="false" />
+    <Property Type="Decimal" Name="TCol" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="Rate" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="RODId" Nullable="false" />
+    <Property Type="Int32" Name="BillId" Nullable="false" />
+    <Property Type="String" Name="ClntName" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="PBillDId" Nullable="false" />
+    <Property Type="Int32" Name="BillNId" Nullable="true" />
+    <Property Type="DateTime" Name="BillDate" Nullable="true" Precision="16" />
+    <Property Type="String" Name="Size" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="EdtnDescs" Nullable="true" />
+    <Property Type="String" Name="ACDesc" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="PostnDesc" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_BillDetailPublicationSpaceCbxSlct_Mod_Result">
+    <Property Type="Int32" Name="PUBLNID" Nullable="false" />
+    <Property Type="String" Name="PUBLNNAME" Nullable="false" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_Get_Publication_Address_Detail_Result">
+    <Property Type="Int32" Name="PUBLNID" Nullable="false" />
+    <Property Type="String" Name="PUBLNNAME" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="PUBLNADDR" Nullable="true" />
+    <Property Type="Int16" Name="STATETYPE" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_Publicattion_RO_Flx_Assgn_Mod_Result">
+    <Property Type="Int32" Name="PrnROId" Nullable="false" />
+    <Property Type="DateTime" Name="RODATE" Nullable="false" Precision="16" />
+    <Property Type="DateTime" Name="DOR" Nullable="false" Precision="16" />
+    <Property Type="Decimal" Name="RODAmt" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="NAmt" Nullable="true" Precision="37" Scale="4" />
+    <Property Type="Int32" Name="CateId" Nullable="false" />
+    <Property Type="Int32" Name="PUBLNID" Nullable="false" />
+    <Property Type="Int32" Name="COMPYID" Nullable="false" />
+    <Property Type="Int32" Name="TranId" Nullable="false" />
+    <Property Type="Decimal" Name="TCol" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RATE" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="RODID" Nullable="false" />
+    <Property Type="Int32" Name="BillId" Nullable="false" />
+    <Property Type="String" Name="CLNTNAME" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="PBILLDID" Nullable="false" />
+    <Property Type="Int32" Name="BILLNID" Nullable="false" />
+    <Property Type="DateTime" Name="BILLDATE" Nullable="false" Precision="16" />
+    <Property Type="String" Name="SIZE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="EDTNDESCS" Nullable="true" />
+    <Property Type="String" Name="ACDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="POSTNDESC" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="PBILLID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchEstimate_Result">
+    <Property Type="DateTime" Name="EstiDate" Nullable="true" Precision="16" />
+    <Property Type="String" Name="EstiPrnNo" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="ClntName" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="EstiNAmt" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="EstiId" Nullable="true" />
+    <Property Type="String" Name="CUSRID" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_Estimate_Detail_Flx_Assgn_Result">
+    <Property Type="Int32" Name="EstiId" Nullable="false" />
+    <Property Type="Int32" Name="EstiDId" Nullable="false" />
+    <Property Type="Int32" Name="EstiPId" Nullable="false" />
+    <Property Type="DateTime" Name="DOR" Nullable="false" Precision="16" />
+    <Property Type="DateTime" Name="ADOR" Nullable="false" Precision="16" />
+    <Property Type="Int32" Name="DORType" Nullable="false" />
+    <Property Type="String" Name="EdtnIds" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="EstiDORs" Nullable="false" />
+    <Property Type="String" Name="EdtnDesc" Nullable="false" />
+    <Property Type="String" Name="EstiSize" Nullable="false" MaxLength="100" />
+    <Property Type="Decimal" Name="Space" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="Rate" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="MUnitId" Nullable="false" />
+    <Property Type="Decimal" Name="Amount" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="String" Name="Nartn" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="PublnId" Nullable="false" />
+    <Property Type="Decimal" Name="PEstiAmt" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="ROStat" Nullable="false" />
+    <Property Type="Int32" Name="TInsrt" Nullable="false" />
+    <Property Type="Int32" Name="FInsrt" Nullable="false" />
+  </ComplexType>
+</Schema>

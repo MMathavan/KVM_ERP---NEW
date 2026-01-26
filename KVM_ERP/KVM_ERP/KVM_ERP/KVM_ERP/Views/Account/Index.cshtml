@@ -1,0 +1,76 @@
+﻿@model IEnumerable<KVM_ERP.Models.ApplicationUser>
+@{
+    ViewBag.Title = "User Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0"><i class="fa fa-users me-2"></i> User Management</h3>
+            <a class="btn btn-light btn-sm" href="@Url.Action("Create","Account")">
+                <i class="fa fa-plus-circle me-1"></i> Add New User
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>USER NAME</th>
+                            <th>FIRST NAME</th>
+                            <th>LAST NAME</th>
+                            <th>MOBILE NUMBER</th>
+                            <th>GENDER</th>
+                            <th>EMAIL</th>
+                            <th class="text-end">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var u in Model ?? Enumerable.Empty<KVM_ERP.Models.ApplicationUser>())
+                        {
+                            <tr>
+                                <td>@u.UserName</td>
+                                <td>@u.FirstName</td>
+                                <td>@u.LastName</td>
+                                <td>@u.MobileNo</td>
+                                <td>@u.Gender</td>
+                                <td>@u.Email</td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-sm btn-outline-primary" title="Change Password" href="@Url.Action("Manage","Account", new { id = u.UserName })">
+                                            <i class="fa fa-key"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-secondary" title="Edit" href="@Url.Action("Edit","Account", new { id = u.UserName })">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-info" title="Groups" href="@Url.Action("UserGroups","Account", new { id = u.UserName })">
+                                            <i class="fa fa-people-group"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-warning" title="Permissions" href="@Url.Action("UserPermissions","Account", new { id = u.UserName })">
+                                            <i class="fa fa-shield"></i>
+                                        </a>
+                                        @using (Html.BeginForm("Delete","Account", FormMethod.Post, new { @class = "d-inline" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            @Html.Hidden("id", u.UserName)
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Delete user @u.UserName?');">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card { border-radius: 8px; }
+    .table th { font-weight: 600; text-transform: uppercase; font-size: 0.8rem; }
+    .btn-group .btn { margin-left: .25rem; }
+</style>

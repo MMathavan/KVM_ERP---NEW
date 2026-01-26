@@ -1,0 +1,121 @@
+@model KVM_ERP.Models.AccountViewModels.EditRoleViewModel
+@{
+    ViewBag.Title = "Edit Role";
+}
+
+<div class="container">
+    <div class="card shadow" style="max-width: 800px; margin: 2rem auto;">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="h4 mb-0">
+                <i class="fas fa-user-tag me-2"></i>Edit Role
+            </h2>
+        </div>
+
+        <div class="card-body">
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger mb-4" })
+
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.OriginalRoleName)
+
+                <!-- Header Section -->
+                <div class="mb-4">
+                    <h3 class="h5 text-primary">Role Information</h3>
+                    <p class="text-muted">Update role details below</p>
+                </div>
+
+                <!-- Role Details Section -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Role Name</label>
+                        @Html.TextBoxFor(model => model.RoleName, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter role name",
+                            data_val = "true",
+                            data_val_required = "Role name is required"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="RoleName" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(model => model.RoleName)
+                        </span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Description</label>
+                        @Html.TextBoxFor(model => model.Description, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Enter description"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="Description" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary px-4">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 8px;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem 2rem;
+    }
+
+    .form-control {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .btn {
+        min-width: 160px;
+    }
+
+    .text-danger.small {
+        font-size: 0.875rem;
+    }
+
+    .field-validation-error {
+        display: block;
+        margin-top: 0.25rem;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // Enable Bootstrap 5 validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+}

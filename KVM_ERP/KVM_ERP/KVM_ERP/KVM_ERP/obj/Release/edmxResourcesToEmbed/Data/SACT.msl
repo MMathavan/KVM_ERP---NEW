@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SACT_ERPModelStoreContainer" CdmEntityContainer="SACT_ERPEntities">
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="SACT_ERPModel.AspNetUser">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="NPassword" ColumnName="NPassword" />
+          <ScalarProperty Name="BrnchId" ColumnName="BrnchId" />
+          <ScalarProperty Name="UBrnchName" ColumnName="UBrnchName" />
+          <ScalarProperty Name="DBrnchId" ColumnName="DBrnchId" />
+          <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VW_USER_DETAILS">
+      <EntityTypeMapping TypeName="SACT_ERPModel.VW_USER_DETAILS">
+        <MappingFragment StoreEntitySet="VW_USER_DETAILS">
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="PR_ACCOUNTINGYEAR_ID_CHK" FunctionName="SACT_ERPModel.Store.PR_ACCOUNTINGYEAR_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.PR_ACCOUNTINGYEAR_ID_CHK_Result">
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+          <ScalarProperty Name="YRDESC" ColumnName="YRDESC" />
+          <ScalarProperty Name="YRID1" ColumnName="YRID1" />
+          <ScalarProperty Name="FDATE" ColumnName="FDATE" />
+          <ScalarProperty Name="TDATE" ColumnName="TDATE" />
+          <ScalarProperty Name="YRDESC1" ColumnName="YRDESC1" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+          <ScalarProperty Name="PRCSDATE" ColumnName="PRCSDATE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_CompanyDetail_Flx_Assgn" FunctionName="SACT_ERPModel.Store.pr_CompanyDetail_Flx_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_CompanyDetail_Flx_Assgn_Result">
+          <ScalarProperty Name="COMPDID" ColumnName="COMPDID" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+          <ScalarProperty Name="COMPPONAME" ColumnName="COMPPONAME" />
+          <ScalarProperty Name="COMPPOADDR" ColumnName="COMPPOADDR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Search_Roles" FunctionName="SACT_ERPModel.Store.pr_Search_Roles">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_Search_Roles_Result">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Descp" ColumnName="Descp" />
+          <ScalarProperty Name="SDPTNAME" ColumnName="SDPTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountGroup" FunctionName="SACT_ERPModel.Store.pr_SearchAccountGroup">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchAccountGroup_Result">
+          <ScalarProperty Name="ACHEADGCODE" ColumnName="ACHEADGCODE" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADGID" ColumnName="ACHEADGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountHeadMaster" FunctionName="SACT_ERPModel.Store.pr_SearchAccountHeadMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchAccountHeadMaster_Result">
+          <ScalarProperty Name="ACHEADCODE" ColumnName="ACHEADCODE" />
+          <ScalarProperty Name="ACHEADDESC" ColumnName="ACHEADDESC" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADID" ColumnName="ACHEADID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchBranchMaster" FunctionName="SACT_ERPModel.Store.pr_SearchBranchMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchBranchMaster_Result">
+          <ScalarProperty Name="BRNCHCODE" ColumnName="BRNCHCODE" />
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="BRNCHADDR" ColumnName="BRNCHADDR" />
+          <ScalarProperty Name="BRNCHPHN1" ColumnName="BRNCHPHN1" />
+          <ScalarProperty Name="BRNCHCPRSN" ColumnName="BRNCHCPRSN" />
+          <ScalarProperty Name="BRNCHMAIL" ColumnName="BRNCHMAIL" />
+          <ScalarProperty Name="BRNCHID" ColumnName="BRNCHID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCompanyMaster" FunctionName="SACT_ERPModel.Store.pr_SearchCompanyMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchCompanyMaster_Result">
+          <ScalarProperty Name="COMPCODE" ColumnName="COMPCODE" />
+          <ScalarProperty Name="COMPNAME" ColumnName="COMPNAME" />
+          <ScalarProperty Name="COMPADDR" ColumnName="COMPADDR" />
+          <ScalarProperty Name="COMPPHN1" ColumnName="COMPPHN1" />
+          <ScalarProperty Name="COMPCPRSN" ColumnName="COMPCPRSN" />
+          <ScalarProperty Name="COMPMAIL" ColumnName="COMPMAIL" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCostFactorMaster" FunctionName="SACT_ERPModel.Store.pr_SearchCostFactorMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchCostFactorMaster_Result">
+          <ScalarProperty Name="CFMODE" ColumnName="CFMODE" />
+          <ScalarProperty Name="CFDESC" ColumnName="CFDESC" />
+          <ScalarProperty Name="CFEXPR" ColumnName="CFEXPR" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CFID" ColumnName="CFID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDepartmentMaster" FunctionName="SACT_ERPModel.Store.pr_SearchDepartmentMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchDepartmentMaster_Result">
+          <ScalarProperty Name="DEPTCODE" ColumnName="DEPTCODE" />
+          <ScalarProperty Name="DEPTDESC" ColumnName="DEPTDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DEPTID" ColumnName="DEPTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchEmployeeMaster" FunctionName="SACT_ERPModel.Store.pr_SearchEmployeeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchEmployeeMaster_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEPNAME" ColumnName="CATEPNAME" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="CATEMAIL" ColumnName="CATEMAIL" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchSupplierMaster" FunctionName="SACT_ERPModel.Store.pr_SearchSupplierMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchSupplierMaster_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEPNAME" ColumnName="CATEPNAME" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="CATEMAIL" ColumnName="CATEMAIL" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchUnitMaster" FunctionName="SACT_ERPModel.Store.pr_SearchUnitMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchUnitMaster_Result">
+          <ScalarProperty Name="UNITCODE" ColumnName="UNITCODE" />
+          <ScalarProperty Name="UNITDESC" ColumnName="UNITDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="UNITID" ColumnName="UNITID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_USER_MENU_DETAIL_ASSGN" FunctionName="SACT_ERPModel.Store.pr_USER_MENU_DETAIL_ASSGN" />
+    <FunctionImportMapping FunctionImportName="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" FunctionName="SACT_ERPModel.Store.PR_COMPANYACCOUNTINGDETAIL_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDesignationMaster" FunctionName="SACT_ERPModel.Store.pr_SearchDesignationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchDesignationMaster_Result">
+          <ScalarProperty Name="DSGNCODE" ColumnName="DSGNCODE" />
+          <ScalarProperty Name="DSGNDESC" ColumnName="DSGNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DSGNID" ColumnName="DSGNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchHSNCodeMaster" FunctionName="SACT_ERPModel.Store.pr_SearchHSNCodeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchHSNCodeMaster_Result">
+          <ScalarProperty Name="HSNCODE" ColumnName="HSNCODE" />
+          <ScalarProperty Name="HSNDESC" ColumnName="HSNDESC" />
+          <ScalarProperty Name="TAXEXPRN" ColumnName="TAXEXPRN" />
+          <ScalarProperty Name="CGSTEXPRN" ColumnName="CGSTEXPRN" />
+          <ScalarProperty Name="SGSTEXPRN" ColumnName="SGSTEXPRN" />
+          <ScalarProperty Name="IGSTEXPRN" ColumnName="IGSTEXPRN" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="HSNID" ColumnName="HSNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchStateMaster" FunctionName="SACT_ERPModel.Store.pr_SearchStateMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchStateMaster_Result">
+          <ScalarProperty Name="STATECODE" ColumnName="STATECODE" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="STATETYPE" ColumnName="STATETYPE" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="STATEID" ColumnName="STATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLocationMaster" FunctionName="SACT_ERPModel.Store.pr_SearchLocationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchLocationMaster_Result">
+          <ScalarProperty Name="LOCTCODE" ColumnName="LOCTCODE" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LOCTID" ColumnName="LOCTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCustomerMaster" FunctionName="SACT_ERPModel.Store.pr_SearchCustomerMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchCustomerMaster_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEPNAME" ColumnName="CATEPNAME" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="CATEMAIL" ColumnName="CATEMAIL" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchMaterialGroupMaster" FunctionName="SACT_ERPModel.Store.pr_SearchMaterialGroupMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchMaterialGroupMaster_Result">
+          <ScalarProperty Name="MTRLGCODE" ColumnName="MTRLGCODE" />
+          <ScalarProperty Name="MTRLGDESC" ColumnName="MTRLGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="MTRLGID" ColumnName="MTRLGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchPackingMaster" FunctionName="SACT_ERPModel.Store.pr_SearchPackingMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchPackingMaster_Result">
+          <ScalarProperty Name="PACKMCODE" ColumnName="PACKMCODE" />
+          <ScalarProperty Name="PACKMDESC" ColumnName="PACKMDESC" />
+          <ScalarProperty Name="PACKMNOU" ColumnName="PACKMNOU" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="PACKMID" ColumnName="PACKMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchMaterialMaster" FunctionName="SACT_ERPModel.Store.pr_SearchMaterialMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchMaterialMaster_Result">
+          <ScalarProperty Name="MTRLCODE" ColumnName="MTRLCODE" />
+          <ScalarProperty Name="MTRLGDESC" ColumnName="MTRLGDESC" />
+          <ScalarProperty Name="MTRLDESC" ColumnName="MTRLDESC" />
+          <ScalarProperty Name="PACKMDESC" ColumnName="PACKMDESC" />
+          <ScalarProperty Name="UNITCODE" ColumnName="UNITCODE" />
+          <ScalarProperty Name="HSNCODE" ColumnName="HSNCODE" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="MTRLID" ColumnName="MTRLID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchRateCardMaster" FunctionName="SACT_ERPModel.Store.pr_SearchRateCardMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchRateCardMaster_Result">
+          <ScalarProperty Name="TRANDATE" ColumnName="TRANDATE" />
+          <ScalarProperty Name="MTRLGDESC" ColumnName="MTRLGDESC" />
+          <ScalarProperty Name="MTRLDESC" ColumnName="MTRLDESC" />
+          <ScalarProperty Name="PRATE" ColumnName="PRATE" />
+          <ScalarProperty Name="SRATE" ColumnName="SRATE" />
+          <ScalarProperty Name="RATECID" ColumnName="RATECID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_RATECARD_CTRL_ASSGN" FunctionName="SACT_ERPModel.Store.PR_RATECARD_CTRL_ASSGN">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.PR_RATECARD_CTRL_ASSGN_Result">
+          <ScalarProperty Name="MTRLID" ColumnName="MTRLID" />
+          <ScalarProperty Name="MTRLGDESC" ColumnName="MTRLGDESC" />
+          <ScalarProperty Name="MTRLDESC" ColumnName="MTRLDESC" />
+          <ScalarProperty Name="MTRLGID" ColumnName="MTRLGID" />
+          <ScalarProperty Name="PRATE" ColumnName="PRATE" />
+          <ScalarProperty Name="SRATE" ColumnName="SRATE" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchMainStoreOpeningStockMaster" FunctionName="SACT_ERPModel.Store.pr_SearchMainStoreOpeningStockMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_SearchMainStoreOpeningStockMaster_Result">
+          <ScalarProperty Name="TRANDATE" ColumnName="TRANDATE" />
+          <ScalarProperty Name="TRANDNO" ColumnName="TRANDNO" />
+          <ScalarProperty Name="TRANREFNO" ColumnName="TRANREFNO" />
+          <ScalarProperty Name="TRANREFNAME" ColumnName="TRANREFNAME" />
+          <ScalarProperty Name="TRANNAMT" ColumnName="TRANNAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="TRANMID" ColumnName="TRANMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_MainStore_Opening_Detail_Ctrl_Assgn" FunctionName="SACT_ERPModel.Store.pr_MainStore_Opening_Detail_Ctrl_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_MainStore_Opening_Detail_Ctrl_Assgn_Result">
+          <ScalarProperty Name="TRANDID" ColumnName="TRANDID" />
+          <ScalarProperty Name="TRANMID" ColumnName="TRANMID" />
+          <ScalarProperty Name="DTRANTID" ColumnName="DTRANTID" />
+          <ScalarProperty Name="TRANDCFEXPRN" ColumnName="TRANDCFEXPRN" />
+          <ScalarProperty Name="TRANDREFTYPE" ColumnName="TRANDREFTYPE" />
+          <ScalarProperty Name="TRANDREFGID" ColumnName="TRANDREFGID" />
+          <ScalarProperty Name="TRANDREFID" ColumnName="TRANDREFID" />
+          <ScalarProperty Name="TRANDREFNAME" ColumnName="TRANDREFNAME" />
+          <ScalarProperty Name="DACHEADID" ColumnName="DACHEADID" />
+          <ScalarProperty Name="TRANDMTRLPRFT" ColumnName="TRANDMTRLPRFT" />
+          <ScalarProperty Name="PACKMID" ColumnName="PACKMID" />
+          <ScalarProperty Name="FWRDID" ColumnName="FWRDID" />
+          <ScalarProperty Name="TWRDID" ColumnName="TWRDID" />
+          <ScalarProperty Name="TRANDSSTATUS" ColumnName="TRANDSSTATUS" />
+          <ScalarProperty Name="TRANDSEXPRN" ColumnName="TRANDSEXPRN" />
+          <ScalarProperty Name="DCONSNID" ColumnName="DCONSNID" />
+          <ScalarProperty Name="TRANDCNEXPRN" ColumnName="TRANDCNEXPRN" />
+          <ScalarProperty Name="TRANDQTY" ColumnName="TRANDQTY" />
+          <ScalarProperty Name="TRANDRATE" ColumnName="TRANDRATE" />
+          <ScalarProperty Name="TRANDGAMT" ColumnName="TRANDGAMT" />
+          <ScalarProperty Name="TRANDSAMT" ColumnName="TRANDSAMT" />
+          <ScalarProperty Name="TRANDCAMT" ColumnName="TRANDCAMT" />
+          <ScalarProperty Name="TRANDXAMT" ColumnName="TRANDXAMT" />
+          <ScalarProperty Name="TRANDNAMT" ColumnName="TRANDNAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="TRANBID" ColumnName="TRANBID" />
+          <ScalarProperty Name="AMTRLID" ColumnName="AMTRLID" />
+          <ScalarProperty Name="TRANBDNO" ColumnName="TRANBDNO" />
+          <ScalarProperty Name="TRANBQTY" ColumnName="TRANBQTY" />
+          <ScalarProperty Name="TRANBVQTY" ColumnName="TRANBVQTY" />
+          <ScalarProperty Name="TRANBRATE" ColumnName="TRANBRATE" />
+          <ScalarProperty Name="TRANBGAMT" ColumnName="TRANBGAMT" />
+          <ScalarProperty Name="TRANBCAMT" ColumnName="TRANBCAMT" />
+          <ScalarProperty Name="TRANBXAMT" ColumnName="TRANBXAMT" />
+          <ScalarProperty Name="TRANBNAMT" ColumnName="TRANBNAMT" />
+          <ScalarProperty Name="TRANBPID" ColumnName="TRANBPID" />
+          <ScalarProperty Name="TRANDPID" ColumnName="TRANDPID" />
+          <ScalarProperty Name="TRANBREFNO" ColumnName="TRANBREFNO" />
+          <ScalarProperty Name="STKMDATE" ColumnName="STKMDATE" />
+          <ScalarProperty Name="STKEDATE" ColumnName="STKEDATE" />
+          <ScalarProperty Name="STKBQTY" ColumnName="STKBQTY" />
+          <ScalarProperty Name="STKFQTY" ColumnName="STKFQTY" />
+          <ScalarProperty Name="STKTQTY" ColumnName="STKTQTY" />
+          <ScalarProperty Name="STKPAMT" ColumnName="STKPAMT" />
+          <ScalarProperty Name="STKXAMT" ColumnName="STKXAMT" />
+          <ScalarProperty Name="STKPRATE" ColumnName="STKPRATE" />
+          <ScalarProperty Name="STKMRP" ColumnName="STKMRP" />
+          <ScalarProperty Name="STKXRATE" ColumnName="STKXRATE" />
+          <ScalarProperty Name="STKSRATE" ColumnName="STKSRATE" />
+          <ScalarProperty Name="STKTAMT" ColumnName="STKTAMT" />
+          <ScalarProperty Name="STKBID" ColumnName="STKBID" />
+          <ScalarProperty Name="MCATEID" ColumnName="MCATEID" />
+          <ScalarProperty Name="MCATENAME" ColumnName="MCATENAME" />
+          <ScalarProperty Name="PACKMDESC" ColumnName="PACKMDESC" />
+          <ScalarProperty Name="PACKMNOU" ColumnName="PACKMNOU" />
+          <ScalarProperty Name="HSNID" ColumnName="HSNID" />
+          <ScalarProperty Name="TRANBCGSTEXPRN" ColumnName="TRANBCGSTEXPRN" />
+          <ScalarProperty Name="TRANBSGSTEXPRN" ColumnName="TRANBSGSTEXPRN" />
+          <ScalarProperty Name="TRANBIGSTEXPRN" ColumnName="TRANBIGSTEXPRN" />
+          <ScalarProperty Name="TRANBCGSTAMT" ColumnName="TRANBCGSTAMT" />
+          <ScalarProperty Name="TRANBSGSTAMT" ColumnName="TRANBSGSTAMT" />
+          <ScalarProperty Name="TRANBIGSTAMT" ColumnName="TRANBIGSTAMT" />
+          <ScalarProperty Name="ASTKPRATE" ColumnName="ASTKPRATE" />
+          <ScalarProperty Name="ASTKSRATE" ColumnName="ASTKSRATE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Stores_Material_Search_Assgn" FunctionName="SACT_ERPModel.Store.pr_Stores_Material_Search_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SACT_ERPModel.pr_Stores_Material_Search_Assgn_Result">
+          <ScalarProperty Name="MTRLDESC" ColumnName="MTRLDESC" />
+          <ScalarProperty Name="MTRLID" ColumnName="MTRLID" />
+          <ScalarProperty Name="MTRLGID" ColumnName="MTRLGID" />
+          <ScalarProperty Name="ACHEADID" ColumnName="ACHEADID" />
+          <ScalarProperty Name="HSNID" ColumnName="HSNID" />
+          <ScalarProperty Name="DCMLSTATUS" ColumnName="DCMLSTATUS" />
+          <ScalarProperty Name="MTRLESTATUS" ColumnName="MTRLESTATUS" />
+          <ScalarProperty Name="MTRLBSTATUS" ColumnName="MTRLBSTATUS" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

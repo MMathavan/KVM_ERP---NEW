@@ -1,0 +1,12 @@
+@{
+    Layout = null;
+}
+
+@Html.Raw(ViewBag.HtmlContent)
+
+<script>
+    // Auto-print when page loads
+    window.onload = function() {
+        window.print();
+    };
+</script>

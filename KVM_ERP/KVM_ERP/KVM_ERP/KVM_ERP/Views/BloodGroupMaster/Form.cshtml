@@ -1,0 +1,184 @@
+﻿@model KVM_ERP.Models.BloodGroupMaster
+@{
+    ViewBag.Title = "BloodGroup Master Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Main Container with Card Layout -->
+<div class="container">
+    <div class="card shadow" style="max-width: 800px; margin: 2rem auto;">
+        <!-- Card Header with Title -->
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">
+                <i class="fas fa-map-marked-alt me-2"></i>BloodGroup Master
+                <div class="clearfix"></div>
+            </h2>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+            <!-- Display success message if exists -->
+            @if (ViewBag.msg != null && !string.IsNullOrEmpty(ViewBag.msg.ToString()))
+            {
+                <div class="alert alert-info alert-dismissible fade show mb-4">
+                    @Html.Raw(ViewBag.msg)
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <!-- Main Form - Keeping all original functionality -->
+            @using (Html.BeginForm("savedata", "BloodGroupMaster", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "alert alert-danger mb-4" })
+
+                <!-- Hidden Fields Section -->
+                <div class="row mb-3 d-none">
+                    <div class="col-md-4">
+                        <label class="form-label">Primary</label>
+                        @Html.TextBoxFor(model => model.BLDGID, new { @class = "form-control BLDGID", @id = "BLDGID" })
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">CUSRID</label>
+                        @Html.TextBoxFor(model => model.CUSRID, new { @class = "form-control CUSRID", @id = "CUSRID" })
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">LMUSRID</label>
+                        @Html.TextBoxFor(model => model.LMUSRID, new { @class = "form-control LMUSRID", @id = "LMUSRID" })
+                    </div>
+                </div>
+
+                <!-- State Code Field -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Code <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(model => model.BLDGCODE, new
+                        {
+                            @class = "form-control BLDGCODE caps",
+                            @id = "BLDGCODE",
+                            required = "required",
+                            MaxLength = "15",
+                            placeholder = "Enter BloodGroup Code"
+                        })
+                        @Html.ValidationMessageFor(model => model.BLDGCODE, "", new { @class = "text-danger small" })
+                        <input type="text" value="@Model.BLDGCODE" name="i_BLDGCODE" hidden>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Description <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(model => model.BLDGDESC, new
+                        {
+                            @class = "form-control BLDGDESC",
+                            @id = "BLDGDESC",
+                            required = "required",
+                            placeholder = "Enter BloodGroup Description"
+                        })
+                        @Html.ValidationMessageFor(model => model.BLDGDESC, "", new { @class = "text-danger small" })
+                        <input type="text" value="@Model.BLDGDESC" name="i_BLDGDESC" hidden>
+                    </div>
+                </div>
+
+                <!-- State Type Dropdown -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Status</label>
+                        @Html.DropDownList("DISPSTATUS", null, new
+                        {
+                            @class = "form-select DISPSTATUS",
+                            @id = "DISPSTATUS"
+                        })
+                    </div>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="d-flex gap-3 mt-4">
+                    <button type="button" name="back" class="btn btn-outline-secondary" onclick="JavaScript:history.back()">
+                        <i class="fas fa-arrow-left me-2"></i>Go Back
+                    </button>
+                    <button type="submit" name="save" class="btn btn-primary ms-auto">
+                        <i class="fas fa-save me-2"></i>Save
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for the form -->
+<style>
+    /* Card styling */
+    .card {
+        border: none;
+        border-radius: 8px;
+    }
+
+    /* Card header styling */
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    /* Card body padding */
+    .card-body {
+        padding: 1.5rem 2rem;
+    }
+
+    /* Form control styling */
+    .form-control, .form-select {
+        padding: 0.5rem 0.75rem;
+        border-radius: 4px;
+    }
+
+    /* Required field indicator */
+    .req, .text-danger {
+        color: #dc3545;
+    }
+
+    /* Button styling */
+    .btn {
+        min-width: 120px;
+    }
+
+    /* Validation message styling */
+    .field-validation-error {
+        font-size: 0.875rem;
+    }
+
+    /* Auto-capitalize text */
+    .caps {
+        text-transform: uppercase;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            // Auto-hide success message after delay
+            $('.msg').delay(1200).fadeOut(1000);
+
+            // Auto-capitalize state code
+            $(".BLDGCODE").on("input", function () {
+                const currentValue = $(this).val();
+                const upperValue = currentValue.toUpperCase();
+                if (currentValue !== upperValue) {
+                    $(this).val(upperValue);
+                }
+            });
+
+            // Bootstrap 5 form validation
+            (function () {
+                'use strict'
+                var forms = document.querySelectorAll('.needs-validation')
+                Array.prototype.slice.call(forms).forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })();
+        });
+    </script>
+}

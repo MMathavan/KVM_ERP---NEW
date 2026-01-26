@@ -1,0 +1,262 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*@MCPL.Helper.Delete_fun.delete_check1("materialrequest","46605")
+    @MCPL.Helper.TD_DEL.delete_check1("materialrequest", "97770")*@
+
+
+<div class="col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>  State Wise Rate Card@*(@Session["BRNCHNAME"])*@ <a class="btn btn-danger btn-sm pull-right" style="padding:3px;margin:0 0 10px" href="@Url.Action("Form", "RateCardMaster")"><i class="fa fa-plus-square "></i> Add New </a> <div class="clearfix"> </div></h3>
+
+
+        </div>
+
+
+        <div class="col-lg-12" style="margin-top:10px">
+            <div class="alert alert-info  center-block " style="text-align:center">
+                <input class="uname form-control hide" id="uname" name="uname" value="@Session["BRNCHNAME"]" />
+
+                <form action="#" method="post" accept-charset="utf-8" id="exportcartingorderform" data-ng-controller="myController" name="exportcartingorderform">
+
+                    <label for="BranchName">State Name</label>
+
+                    @Html.DropDownList("CATEID", null, new { @class = "CATEID", @id = "CATEID", @name = "CATEID" })
+                    <input type="text" value="@ViewBag.F_CATEID" id="F_CATEID" name="F_CATEID" class="form-control F_CATEID hidden" />
+                    @*<input type="text" value="@System.Web.HttpContext.Current.Session["S_BRNCHID"]" id="S_BRNCHID" name="S_BRNCHID" class="form-control S_BRNCHID hidden" />*@
+                    <input type="text" value="@ViewBag.F_CATENAME" id="F_CATENAME" name="F_CATENAME" class="form-control F_CATENAME hidden" />
+                    <input type="text" value="@System.Web.HttpContext.Current.Session["Group"]" id="F_KUSRID" class="hidden" />
+                    @*<label for="from">From</label>
+                        <input type="text" id="from" name="from" value="@System.Web.HttpContext.Current.Session["SDATE"]">
+                        <label for="to">to</label>
+                        <input type="text" id="to" name="to" value="@System.Web.HttpContext.Current.Session["EDATE"]">*@
+                    <input type="submit" name="submit" value="Search" class="btn btn-danger btn-sm" />
+                </form>
+
+            </div>
+        </div>
+
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="">
+                        <div class="panel-body">
+
+                            <table id="example" class="display" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>W.E.F.Date</th>
+                                        <th>Group</th>
+                                        <th>Material</th>
+                                        <th>Rate</th>
+                                        <th>ID</th>
+                                        <th>Edit / Delete</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                    <tr>
+                                        <th>W.E.F.Date</th>
+                                        <th>Group</th>
+                                        <th>Material</th>
+                                        <th>Rate</th>
+                                        <th>ID</th>
+                                        <th>Edit / Delete</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+
+
+    <script type="text/javascript" class="init">
+
+
+
+var editor; // use a global for the submit and return data rendering in the examples
+
+$(document).ready(function() {
+
+    $("#CATEID").on("change", function () {
+       // var bname = $('#F_BRNCHID :selected').text();
+        //  var bid = $('#F_BRNCHID :selected').val();
+
+        var bname = $('#CATEID :selected').text();
+        var bid = $('#CATEID :selected').val();
+        alert(bname);
+        //alert(bid);
+        $("#F_CATEID").val(bid);
+        //$("#S_BRNCHID").val(bid);
+        $("#F_CATENAME").val(bname);
+
+        //$("#F_BRNCHID").val($(this).find("option:selected").text());
+
+    });
+
+    @*//start
+
+    //    alert("1");
+        //function GetBranch(obj) {
+  //          alert("2");
+            //row = obj.parentNode.parentNode.rowIndex;
+            //row = row - 1;
+            //var $tableBody = $('#TDETAIL').find("tbody")
+            var BID = $("#BRNCHID").val();
+            var BrnchCType = @Session["BRNCHCTYPE"];
+            // if (BCMID == "") { BCMID = 0; }
+
+            // $trCur = $tableBody.find("tr:eq(" + row + ")");
+            // $trCur.find(".OFTDESC").val($trCur.find(".OFTID option:selected").text());
+
+            //$trCur.find(".BCDID").empty();// $trCur.find(".OFTID").empty();
+
+            var ddlCustomers = $("#BRNCHID");
+            ddlCustomers.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+            $.ajax({
+                type: 'post',
+                url: '@Url.Action("GetBranchList1", "Expenses")/' + BrnchCType, // we are calling json method
+                dataType: 'json',
+                success: function (data) {
+                    ddlCustomers.empty().append('<option selected="selected" value="0">Please select</option>');
+                    $.each(data, function (k, v) {
+                        ddlCustomers.append($("<option value=" + v.BRNCHID + ">" + v.BRNCHNAME + "</option>"));
+                    });
+                    //alert(data.BRNCHNAME);
+                    //("#BRNCHID").e
+                    //BRNCHID.html('');
+
+                    //if (data != "") { $select.append("<option value=''>Select Branch</option>"); } else { $select.append("<option value=''>No Record Found</option>"); }
+                    //$.each(data, function (k, v) {
+                    //    BRNCHID.append("<option value=" + v.BRNCHID + ">" + v.BRNCHNAME + "</option>");
+                    //})
+                },
+                error: function (ex) {
+                    alert('Failed to data ' + ex);
+                }
+            });
+        //}
+
+    //end*@
+
+
+    if ($("#F_KUSRID").val() == "Admin" || $("#F_KUSRID").val() == "Manager") {
+        if ($("#S_BRNCHID").val() == 0) $(".BRNCHID").append("<option value=0 selected>Of All Branches</option>");
+        else $(".BRNCHID").append("<option value=0>Of All Branches</option>");
+    }
+
+    var uname = ($(".uname").val());
+
+ //   var BID = $("#BRNCHID").val()
+  //  alert(BID);
+table=$('#example').DataTable( {
+    ajax: "@Url.Action("GetAjaxData", "RateCardMaster")",
+    "stateSave": true,
+		columns: [
+			{ data: "TRANDATE" },
+			{ data: "MTRLGDESC" },
+            { data: "MTRLDESC" },
+            { data: "PRATE" },
+            { data: "RATECID", "visible": false },
+			{
+
+			    mRender: function (data, type, row) {
+			        return '<a href="@Url.Action("Form", "RateCardMaster")/' + row["RATECID"] + '"   class="editor_edit btn btn-warning btn-sm" >EDIT</a>&nbsp;<a href="#" id="' + row["RATECID"] + '\" class="editor_remove btn btn-danger btn-sm" >DELETE</a>'
+			    }
+			    //data: null,
+				//className: "center",
+				//defaultContent: '<a href="" class="editor_edit btn btn-warning btn-sm">Edit</a> &nbsp; <a href="" class="editor_remove btn btn-sm btn-danger">Delete</a>'
+			}
+		]
+    });
+
+
+//alert("4");
+
+            $("#from").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat: 'dd-mm-yy',
+                onClose: function (selectedDate) {
+                    $("#to").datepicker("option", "minDate", selectedDate);
+                }
+            });
+            $("#to").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat: 'dd-mm-yy',
+                onClose: function (selectedDate) {
+                    $("#from").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+
+
+//alert("5");
+    //..........delete function
+            $(document).on("click", "a.editor_remove", function () {
+
+                var r = confirm("Are you sure to delete this record ?");
+
+                if (r == true) {
+
+
+                    var idx = $(this).attr('id');
+
+                    base = window.location.origin;
+
+
+
+                    $.post(base + "/RateCardMaster/Del",
+      {
+          id: idx, fld: ""
+      },
+      function (data, status) {
+
+          alert(data);
+
+          if (data == "Deleted Successfully ...")
+              alert(base + "/RateCardMaster/Index");
+          location.replace(base + "/RateCardMaster/Index");
+
+
+      });
+
+                }
+
+                return false;
+
+
+            });//.......end
+
+
+
+
+
+} );
+
+
+
+
+
+
+
+    </script>
+
+}
+
+

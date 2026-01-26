@@ -1,0 +1,157 @@
+@model IEnumerable<ClubMembership.Models.GovernmentProof>
+@{
+    ViewBag.Title = "Government Proof Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">
+                    <i class="fas fa-id-card me-2"></i> Government Proof Management
+                </h3>
+            </div>
+        </div>
+
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No Government Proof Documents Found</h5>
+                    <p class="text-muted">Government proof documents uploaded by members will appear here.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Member Name</th>
+                                <th>Document Type</th>
+                                <th>File Name</th>
+                                <th>Document ID</th>
+                                <th>File Size</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.MemberShipMaster != null)
+                                        {
+                                            <span>@item.MemberShipMaster.Member_Name</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Member not found</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            string fileExtension = "";
+                                            if (!string.IsNullOrEmpty(item.GovPath))
+                                            {
+                                                fileExtension = System.IO.Path.GetExtension(item.GovPath).ToLower();
+                                            }
+                                            string documentType;
+                                            switch (fileExtension)
+                                            {
+                                                case ".pdf":
+                                                    documentType = "PDF Document";
+                                                    break;
+                                                case ".jpg":
+                                                case ".jpeg":
+                                                    documentType = "JPEG Image";
+                                                    break;
+                                                case ".png":
+                                                    documentType = "PNG Image";
+                                                    break;
+                                                case ".gif":
+                                                    documentType = "GIF Image";
+                                                    break;
+                                                default:
+                                                    documentType = "Document";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="badge bg-info">@documentType</span>
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-file me-2"></i>
+                                        @System.IO.Path.GetFileName(item.GovPath)
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-hashtag me-2"></i>
+                                        @item.Id
+                                    </td>
+                                    <td>
+                                        @{
+                                            string filePath = Server.MapPath(item.GovPath);
+                                            string fileSize = "Unknown";
+                                            if (System.IO.File.Exists(filePath))
+                                            {
+                                                var fileInfo = new System.IO.FileInfo(filePath);
+                                                long bytes = fileInfo.Length;
+                                                if (bytes < 1024)
+                                                {
+                                                    fileSize = string.Format("{0} B", bytes);
+                                                }
+                                                else if (bytes < 1024 * 1024)
+                                                {
+                                                    fileSize = string.Format("{0:F1} KB", (double)bytes / 1024);
+                                                }
+                                                else if (bytes < 1024 * 1024 * 1024)
+                                                {
+                                                    fileSize = string.Format("{0:F1} MB", (double)bytes / (1024 * 1024));
+                                                }
+                                                else
+                                                {
+                                                    fileSize = string.Format("{0:F1} GB", (double)bytes / (1024 * 1024 * 1024));
+                                                }
+                                            }
+                                        }
+                                        <span class="text-muted">@fileSize</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a href="@Url.Action("Download", new { id = item.Id })" 
+                                               class="btn btn-sm btn-outline-primary" 
+                                               title="Download">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                            <a href="@Url.Action("Details", new { id = item.Id })" 
+                                               class="btn btn-sm btn-outline-info" 
+                                               title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="@Url.Action("Delete", new { id = item.Id })" 
+                                               class="btn btn-sm btn-outline-danger" 
+                                               title="Delete"
+                                               onclick="return confirm('Are you sure you want to delete this government proof document?')">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Add any additional JavaScript functionality here
+            console.log('Government Proof Management page loaded');
+        });
+    </script>
+}

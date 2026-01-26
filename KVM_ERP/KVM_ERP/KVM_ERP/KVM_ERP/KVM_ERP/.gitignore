@@ -1,0 +1,31 @@
+# Visual Studio
+/.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# Logs
+**/*.log
+
+# NuGet packages - keep packages folder tracked unless using restore
+#!packages/
+
+# Rider/ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# VS Code
+.vscode/
+
+# ASP.NET temp
+App_Data/Temp/
+

@@ -1,0 +1,834 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CHAKRA_ERPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="CHAKRA_ERPEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="PR_ACCOUNTINGYEAR_ID_CHK" ReturnType="Collection(CHAKRA_ERPModel.PR_ACCOUNTINGYEAR_ID_CHK_Result)">
+      <Parameter Name="PFYear" Mode="In" Type="Int32" />
+      <Parameter Name="PTYear" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" ReturnType="Collection(CHAKRA_ERPModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result)">
+      <Parameter Name="PCompId" Mode="In" Type="Int32" />
+      <Parameter Name="PYrId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="AspNetRoles" EntityType="CHAKRA_ERPModel.AspNetRole" />
+    <EntitySet Name="AspNetUsers" EntityType="CHAKRA_ERPModel.AspNetUser" />
+    <EntitySet Name="VW_USER_DETAILS" EntityType="CHAKRA_ERPModel.VW_USER_DETAILS" />
+    <FunctionImport Name="pr_SearchAccountGroup" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchAccountGroup_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchAccountHeadMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchAccountHeadMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchCompanyMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchCompanyMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchDepartmentMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchDepartmentMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchDesignationMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchDesignationMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Search_Roles" ReturnType="Collection(CHAKRA_ERPModel.pr_Search_Roles_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchRegionMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchRegionMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchStateMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchStateMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_USER_MENU_DETAIL_ASSGN">
+      <Parameter Name="PKUSRID" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchBrandMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchBrandMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchModelMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchModelMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchColourMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchColourMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchCategoryTypeMaster01" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchCategoryTypeMaster01_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchSchemeMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchSchemeMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLoanTypeMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchLoanTypeMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchTestMaster">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Employoee_Master_Link_Ctrl_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_Employoee_Master_Link_Ctrl_Assgn_Result)">
+      <Parameter Name="PCateId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchEmployeeMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchEmployeeMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchCategory_Master" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchCategory_Master_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchDealerMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchDealerMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PCateType" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLocationMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchLocationMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_FRM_VHLNO_AMOUNT_NOI" ReturnType="Collection(CHAKRA_ERPModel.pr_FRM_VHLNO_AMOUNT_NOI_Result)">
+      <Parameter Name="PCOMPYID" Mode="In" Type="Int32" />
+      <Parameter Name="PLOANMID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchBankMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchBankMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLoanStatusMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchLoanStatusMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PCOMPYID" Mode="In" Type="Int32" />
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="PSDATE" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDATE" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="Pr_Loan_Status_Pending_Amount_Assgn" ReturnType="Collection(CHAKRA_ERPModel.Pr_Loan_Status_Pending_Amount_Assgn_Result)">
+      <Parameter Name="PCompYId" Mode="In" Type="Int32" />
+      <Parameter Name="PLoanMId" Mode="In" Type="Int32" />
+      <Parameter Name="PCateId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Customer_Code_Search_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_Customer_Code_Search_Assgn_Result)">
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Receipt_Customer_Code_Search_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_Receipt_Customer_Code_Search_Assgn_Result)">
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Receipt_Detail_Ctrl_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_Receipt_Detail_Ctrl_Assgn_Result)">
+      <Parameter Name="PRCPTMID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchReceiptMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchReceiptMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PCOMPYID" Mode="In" Type="Int32" />
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="PSDATE" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDATE" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_LoanLateFee_Customer_Code_Search_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_LoanLateFee_Customer_Code_Search_Assgn_Result)">
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Late_Fee_Master_Ctrl_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_Late_Fee_Master_Ctrl_Assgn_Result)">
+      <Parameter Name="PLFMID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLoanNocStatusMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchLoanNocStatusMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PCOMPYID" Mode="In" Type="Int32" />
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="PSDATE" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDATE" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Loanstatus_Customer_Code_Search_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_Loanstatus_Customer_Code_Search_Assgn_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Loan_Status_Detail_Ctrl_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_Loan_Status_Detail_Ctrl_Assgn_Result)">
+      <Parameter Name="PLOANMID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLoanLateeFee" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchLoanLateeFee_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PCOMPYID" Mode="In" Type="Int32" />
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="PSDATE" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDATE" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchBranchMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchBranchMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Search_LOC_Status_Grid_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_Search_LOC_Status_Grid_Assgn_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PSDATE" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDATE" Mode="In" Type="DateTime" />
+      <Parameter Name="PKUSRID" Mode="In" Type="String" />
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLoanLateeFeeMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchLoanLateeFeeMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PCOMPYID" Mode="In" Type="Int32" />
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="PSDATE" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDATE" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLoanMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchLoanMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PCOMPYID" Mode="In" Type="Int32" />
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="PSDATE" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDATE" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchCustomerMaster" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchCustomerMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="type" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchExpenseDetail" ReturnType="Collection(CHAKRA_ERPModel.pr_SearchExpenseDetail_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PCOMPYID" Mode="In" Type="Int32" />
+      <Parameter Name="PBRNCHID" Mode="In" Type="Int32" />
+      <Parameter Name="PSDATE" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDATE" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Account_Head_Search_Assgn" ReturnType="Collection(CHAKRA_ERPModel.pr_Account_Head_Search_Assgn_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="PR_ACCOUNTINGYEAR_ID_CHK_Result">
+    <Property Type="Int32" Name="YRID" Nullable="false" />
+    <Property Type="DateTime" Name="FDATE" Nullable="false" Precision="16" />
+    <Property Type="DateTime" Name="TDATE" Nullable="false" Precision="16" />
+    <Property Type="String" Name="YRDESC" Nullable="false" MaxLength="15" />
+    <Property Type="String" Name="CUSRID" Nullable="false" MaxLength="100" />
+    <Property Type="DateTime" Name="PRCSDATE" Nullable="false" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+    <Property Type="Int32" Name="COMPYID" Nullable="false" />
+    <Property Type="Int32" Name="COMPID" Nullable="false" />
+    <Property Type="Int32" Name="YRID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="AspNetRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Discriminator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="RMenuType" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="RControllerName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="RMenuGroupId" Type="Int16" />
+    <Property Name="RMenuGroupOrder" Type="Int16" />
+    <Property Name="RMenuIndex" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="SDPTID" Type="Int32" Nullable="false" />
+    <Property Name="RImageClassName" Type="String" MaxLength="1050" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Discriminator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="NPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BrnchId" Type="Int32" Nullable="false" />
+    <Property Name="UBrnchName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DBrnchId" Type="Int32" Nullable="false" />
+    <Property Name="DeptName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="VW_USER_DETAILS">
+    <Key>
+      <PropertyRef Name="GroupId" />
+      <PropertyRef Name="GroupName" />
+    </Key>
+    <Property Name="GroupId" Type="Int32" Nullable="false" />
+    <Property Name="GroupName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="pr_SearchAccountGroup_Result">
+    <Property Type="String" Name="ACHEADGCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ACHEADGID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchAccountHeadMaster_Result">
+    <Property Type="String" Name="ACHEADCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ACHEADID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchCompanyMaster_Result">
+    <Property Type="String" Name="COMPCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="COMPPHN1" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPCPRSN" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPMAIL" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="COMPID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchDepartmentMaster_Result">
+    <Property Type="String" Name="DEPTCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DEPTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="DEPTID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchDesignationMaster_Result">
+    <Property Type="String" Name="DSGNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DSGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="DSGNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_Search_Roles_Result">
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Descp" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="SDPTNAME" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchRegionMaster_Result">
+    <Property Type="String" Name="REGNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="REGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="REGNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchStateMaster_Result">
+    <Property Type="String" Name="STATECODE" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="STATEGSTCODE" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="STATEDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="STATETYPE" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="STATEID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchBrandMaster_Result">
+    <Property Type="String" Name="BRNDCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="BRNDDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="BRNDID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchModelMaster_Result">
+    <Property Type="String" Name="MDLCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="MDLDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="MDLID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchColourMaster_Result">
+    <Property Type="String" Name="CLRCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CLRDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="CLRID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchCategoryTypeMaster01_Result">
+    <Property Type="String" Name="CATETCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATETDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="CATETID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchSchemeMaster_Result">
+    <Property Type="String" Name="SCHMCODE" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="SCHMDN" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="SCHMRATE" Nullable="true" />
+    <Property Type="Int32" Name="SCHMDCHRG" Nullable="true" />
+    <Property Type="Int32" Name="SCHMMONTH" Nullable="true" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="SCHMID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchLoanTypeMaster_Result">
+    <Property Type="String" Name="LOANTCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LOANTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LOANTID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_Employoee_Master_Link_Ctrl_Assgn_Result">
+    <Property Type="Int32" Name="CATEID" Nullable="false" />
+    <Property Type="String" Name="CATECODE" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="DSGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="BRNCHID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchEmployeeMaster_Result">
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEPNAME" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="CATEPHN3" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATEMAIL" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEAUTRNO" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="CATEDRVLSNO" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="DSGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DEPTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="CATEID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchCategory_Master_Result">
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEADDR" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="CATEID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchDealerMaster_Result">
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEADDR" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="CATEID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchLocationMaster_Result">
+    <Property Type="String" Name="LOCTCODE" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="LOCTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="STATEDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LOCTID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_FRM_VHLNO_AMOUNT_NOI_Result">
+    <Property Type="Int32" Name="COMPYID" Nullable="true" />
+    <Property Type="Int32" Name="LOANMID" Nullable="false" />
+    <Property Type="Decimal" Name="PAMT" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="IAMT" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="IWAMT" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="LOPAMT" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="DCAMT" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="ADVAMT" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="STAMT" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="FIAMT" Nullable="true" Precision="38" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchBankMaster_Result">
+    <Property Type="String" Name="BANKCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="BANKDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="BANKID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchLoanStatusMaster_Result">
+    <Property Type="DateTime" Name="LOANSDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="LOANSMDNO" Nullable="true" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LOANSMID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="Pr_Loan_Status_Pending_Amount_Assgn_Result">
+    <Property Type="Decimal" Name="PAMT" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="IAMT" Nullable="true" Precision="38" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="pr_Customer_Code_Search_Assgn_Result">
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEADDR" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATEPHN1" Nullable="true" MaxLength="75" />
+    <Property Type="Int32" Name="BRNCHID" Nullable="true" />
+    <Property Type="Int32" Name="CATEID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_Receipt_Customer_Code_Search_Assgn_Result">
+    <Property Type="String" Name="LOAN_CATE_CODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="BRNCHNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="LOANAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="EMIAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="LOANSDATE" Nullable="true" MaxLength="10" />
+    <Property Type="Int32" Name="CATEID" Nullable="false" />
+    <Property Type="Int32" Name="BRNCHID" Nullable="false" />
+    <Property Type="Int32" Name="LOANMID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_Receipt_Detail_Ctrl_Assgn_Result">
+    <Property Type="Int32" Name="RCPTDID" Nullable="false" />
+    <Property Type="Int32" Name="RCPTMID" Nullable="false" />
+    <Property Type="Int32" Name="LOANMID" Nullable="false" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="LOANAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="EMIAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTNOI" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTPAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTIAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTLFEE" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="DateTime" Name="RCPTDDATE" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="RCPTFDATE" Nullable="true" Precision="16" />
+    <Property Type="Decimal" Name="RCPTIWAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTLOPAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTDCAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTADVAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTSTAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTFIAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="15" />
+    <Property Type="DateTime" Name="LOANSDATE" Nullable="true" Precision="23" />
+    <Property Type="String" Name="BRNCHNAME" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchReceiptMaster_Result">
+    <Property Type="DateTime" Name="RCPTDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="RCPTNO" Nullable="true" />
+    <Property Type="String" Name="DRCPTNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="MODEDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="RCPTGAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="RCPTMID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_LoanLateFee_Customer_Code_Search_Assgn_Result">
+    <Property Type="String" Name="LOAN_CATE_CODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="CATEADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="BRNDDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="CLRDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="MDLDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="KEYNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="ENGNO" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="VHLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="LOANAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="LOANRATE" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="ITLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="LOANMID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_Late_Fee_Master_Ctrl_Assgn_Result">
+    <Property Type="Int32" Name="LFMID" Nullable="false" />
+    <Property Type="Int32" Name="COMPYID" Nullable="true" />
+    <Property Type="DateTime" Name="LFMDATE" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="LFMNO" Nullable="true" />
+    <Property Type="String" Name="LFMDNO" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="LOANMID" Nullable="true" />
+    <Property Type="Decimal" Name="LFMAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="LFMRMKS" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="DISPSTATUS" Nullable="true" />
+    <Property Type="DateTime" Name="PRCSDATE" Nullable="true" Precision="23" />
+    <Property Type="String" Name="CUSRID" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="LMUSRID" Nullable="false" />
+    <Property Type="Int32" Name="CATEID" Nullable="false" />
+    <Property Type="Int32" Name="LOANNO" Nullable="false" />
+    <Property Type="String" Name="CATEADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="CATECODE" Nullable="false" MaxLength="15" />
+    <Property Type="String" Name="CATENAME" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="BRNDDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="CLRDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="MDLDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="KEYNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="ENGNO" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="VHLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="LOANAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="LOANRATE" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="ITLAMT" Nullable="true" Precision="18" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchLoanNocStatusMaster_Result">
+    <Property Type="DateTime" Name="LNMDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="LNMNO" Nullable="true" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="VHLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LNMID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_Loanstatus_Customer_Code_Search_Assgn_Result">
+    <Property Type="String" Name="LOAN_CATE_CODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="CATEADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="BRNDDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="CLRDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="MDLDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="KEYNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="ENGNO" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="VHLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="LOANAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="LOANRATE" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="ITLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTPAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTIAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="LOANMID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_Loan_Status_Detail_Ctrl_Assgn_Result">
+    <Property Type="String" Name="BRNDDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="CLRDESC" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="CATECODE" Nullable="false" MaxLength="15" />
+    <Property Type="String" Name="MDLDESC" Nullable="false" MaxLength="100" />
+    <Property Type="Decimal" Name="RCPTPAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="RCPTIAMT" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="LOANMID" Nullable="false" />
+    <Property Type="DateTime" Name="LOANDATE" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="COMPYID" Nullable="true" />
+    <Property Type="Int32" Name="BRNCHID" Nullable="false" />
+    <Property Type="Int32" Name="LOANNO" Nullable="false" />
+    <Property Type="String" Name="DLOANNO" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="CATEID" Nullable="false" />
+    <Property Type="String" Name="CATENAME" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="CATEADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="CATEPHN1" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATEPHN2" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LOANGNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LOANGADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="LOANGPHN1" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LOANGPHN2" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="BRNDID" Nullable="false" />
+    <Property Type="Int32" Name="MDLID" Nullable="false" />
+    <Property Type="Int32" Name="CLRID" Nullable="false" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="ENGNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="KEYNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CHANO" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="VHLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="ITLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="LOANAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="SCHMID" Nullable="false" />
+    <Property Type="Decimal" Name="LOANRATE" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="LOANDCHRG" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="DateTime" Name="LOANSDATE" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="LOANEDATE" Nullable="true" Precision="23" />
+    <Property Type="Decimal" Name="EMIAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="INSID" Nullable="false" />
+    <Property Type="String" Name="INSPLYNO" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="INSDATE" Nullable="true" Precision="23" />
+    <Property Type="Decimal" Name="INSAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="DateTime" Name="RNWDATE" Nullable="true" Precision="23" />
+    <Property Type="Decimal" Name="RNWAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="DLRID" Nullable="false" />
+    <Property Type="Int32" Name="SDLRID" Nullable="true" />
+    <Property Type="String" Name="SDLRNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="INVNO" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="INVDATE" Nullable="true" Precision="23" />
+    <Property Type="Decimal" Name="INVAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="LOANPDTYPE" Nullable="false" />
+    <Property Type="Int32" Name="LOANTID" Nullable="false" />
+    <Property Type="String" Name="CONSMNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CUSRID" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="LMUSRID" Nullable="true" />
+    <Property Type="Int16" Name="DISPSTATUS" Nullable="false" />
+    <Property Type="String" Name="LOAN_CATE_CODE" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="PRCSDATE" Nullable="false" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchLoanLateeFee_Result">
+    <Property Type="DateTime" Name="LFMDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="LFMNO" Nullable="true" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LFMID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchBranchMaster_Result">
+    <Property Type="String" Name="BRNCHPCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="BRNCHNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="BRNCHADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="BRNCHPHN1" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="STATEDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LOCTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="BRNCHID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_Search_LOC_Status_Grid_Assgn_Result">
+    <Property Type="DateTime" Name="LOANDATE" Nullable="true" Precision="16" />
+    <Property Type="String" Name="LOANNO" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="VHLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LOANMID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchLoanLateeFeeMaster_Result">
+    <Property Type="DateTime" Name="LFMDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="LFMNO" Nullable="true" />
+    <Property Type="String" Name="LOAN_CATE_CODE" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="LFMAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LFMID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchLoanMaster_Result">
+    <Property Type="DateTime" Name="LOANDATE" Nullable="true" Precision="16" />
+    <Property Type="String" Name="LOANNO" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LOAN_CATE_CODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="VHLNO" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="VHLAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="LOANMID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchCustomerMaster_Result">
+    <Property Type="String" Name="BRNCHNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEPROOFNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEPHN1" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="CATEID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchExpenseDetail_Result">
+    <Property Type="DateTime" Name="RCPTDATE" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="RCPTNO" Nullable="true" />
+    <Property Type="String" Name="DRCPTNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="RCPTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="RCPTGAMT" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="RCPTMID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_Account_Head_Search_Assgn_Result">
+    <Property Type="String" Name="ACHEADDESC" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="ACHEADID" Nullable="false" />
+  </ComplexType>
+</Schema>

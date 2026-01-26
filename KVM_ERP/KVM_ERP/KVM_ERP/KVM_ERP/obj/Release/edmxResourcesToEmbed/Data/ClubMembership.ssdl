@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ClubMembershipDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar(max)" />
+    <Property Name="PasswordHash" Type="nvarchar(max)" />
+    <Property Name="SecurityStamp" Type="nvarchar(max)" />
+    <Property Name="FirstName" Type="nvarchar(max)" />
+    <Property Name="LastName" Type="nvarchar(max)" />
+    <Property Name="Email" Type="nvarchar(max)" />
+    <Property Name="Discriminator" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="NPassword" Type="nvarchar" MaxLength="50" />
+    <Property Name="BrnchId" Type="int" Nullable="false" />
+    <Property Name="UBrnchName" Type="nvarchar" MaxLength="100" />
+    <Property Name="DBrnchId" Type="int" Nullable="false" />
+    <Property Name="DeptName" Type="nvarchar" MaxLength="100" />
+    <Property Name="MobileNo" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="DOB" Type="datetime" Nullable="false" />
+    <Property Name="Gender" Type="nvarchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'ClubMembershipDB.dbo.VW_USER_DETAILS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VW_USER_DETAILS">
+    <Key>
+      <PropertyRef Name="GroupId" />
+      <PropertyRef Name="GroupName" />
+    </Key>
+    <Property Name="GroupId" Type="int" Nullable="false" />
+    <Property Name="GroupName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar(max)" />
+  </EntityType>
+  <Function Name="PR_ACCOUNTINGYEAR_ID_CHK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PFYear" Type="int" Mode="In" />
+    <Parameter Name="PTYear" Type="int" Mode="In" />
+  </Function>
+  <Function Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCompId" Type="int" Mode="In" />
+    <Parameter Name="PYrId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Search_Roles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchAccountGroup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchAccountHeadMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchBloodGroupMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchCompanyMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchEmployeeMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchStateMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_USER_MENU_DETAIL_ASSGN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PKUSRID" Type="varchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="ClubMembershipDBModelStoreContainer">
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VW_USER_DETAILS" EntityType="Self.VW_USER_DETAILS" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VW_USER_DETAILS].[GroupId] AS [GroupId], 
+    [VW_USER_DETAILS].[GroupName] AS [GroupName], 
+    [VW_USER_DETAILS].[UserName] AS [UserName]
+    FROM [dbo].[VW_USER_DETAILS] AS [VW_USER_DETAILS]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

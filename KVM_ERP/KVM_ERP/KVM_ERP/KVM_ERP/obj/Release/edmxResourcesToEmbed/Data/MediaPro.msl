@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MEDIAPRO_ERPModelStoreContainer" CdmEntityContainer="MEDIAPRO_ERPEntities">
+    <EntitySetMapping Name="VW_USER_DETAILS">
+      <EntityTypeMapping TypeName="MEDIAPRO_ERPModel.VW_USER_DETAILS">
+        <MappingFragment StoreEntitySet="VW_USER_DETAILS">
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="PR_ACCOUNTINGYEAR_ID_CHK" FunctionName="MEDIAPRO_ERPModel.Store.PR_ACCOUNTINGYEAR_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.PR_ACCOUNTINGYEAR_ID_CHK_Result">
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+          <ScalarProperty Name="YRDESC" ColumnName="YRDESC" />
+          <ScalarProperty Name="YRID1" ColumnName="YRID1" />
+          <ScalarProperty Name="FDATE" ColumnName="FDATE" />
+          <ScalarProperty Name="TDATE" ColumnName="TDATE" />
+          <ScalarProperty Name="YRDESC1" ColumnName="YRDESC1" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+          <ScalarProperty Name="PRCSDATE" ColumnName="PRCSDATE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" FunctionName="MEDIAPRO_ERPModel.Store.PR_COMPANYACCOUNTINGDETAIL_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_CompanyDetail_Flx_Assgn" FunctionName="MEDIAPRO_ERPModel.Store.pr_CompanyDetail_Flx_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_CompanyDetail_Flx_Assgn_Result">
+          <ScalarProperty Name="COMPDID" ColumnName="COMPDID" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+          <ScalarProperty Name="COMPPONAME" ColumnName="COMPPONAME" />
+          <ScalarProperty Name="COMPPOADDR" ColumnName="COMPPOADDR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountGroup" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchAccountGroup">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchAccountGroup_Result">
+          <ScalarProperty Name="ACHEADGCODE" ColumnName="ACHEADGCODE" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADGID" ColumnName="ACHEADGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountHeadMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchAccountHeadMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchAccountHeadMaster_Result">
+          <ScalarProperty Name="ACHEADCODE" ColumnName="ACHEADCODE" />
+          <ScalarProperty Name="ACHEADDESC" ColumnName="ACHEADDESC" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADID" ColumnName="ACHEADID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCompanyMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchCompanyMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchCompanyMaster_Result">
+          <ScalarProperty Name="COMPCODE" ColumnName="COMPCODE" />
+          <ScalarProperty Name="COMPNAME" ColumnName="COMPNAME" />
+          <ScalarProperty Name="COMPADDR" ColumnName="COMPADDR" />
+          <ScalarProperty Name="COMPPHN1" ColumnName="COMPPHN1" />
+          <ScalarProperty Name="COMPCPRSN" ColumnName="COMPCPRSN" />
+          <ScalarProperty Name="COMPMAIL" ColumnName="COMPMAIL" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDepartmentMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchDepartmentMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchDepartmentMaster_Result">
+          <ScalarProperty Name="DEPTCODE" ColumnName="DEPTCODE" />
+          <ScalarProperty Name="DEPTDESC" ColumnName="DEPTDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DEPTID" ColumnName="DEPTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDesignationMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchDesignationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchDesignationMaster_Result">
+          <ScalarProperty Name="DSGNCODE" ColumnName="DSGNCODE" />
+          <ScalarProperty Name="DSGNDESC" ColumnName="DSGNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DSGNID" ColumnName="DSGNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchEmployeeMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchEmployeeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchEmployeeMaster_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="DSGNDESC" ColumnName="DSGNDESC" />
+          <ScalarProperty Name="REGNDESC" ColumnName="REGNDESC" />
+          <ScalarProperty Name="CATECPNAME" ColumnName="CATECPNAME" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="CATEEMAIL" ColumnName="CATEEMAIL" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLocationMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchLocationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchLocationMaster_Result">
+          <ScalarProperty Name="LOCTCODE" ColumnName="LOCTCODE" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="REGNDESC" ColumnName="REGNDESC" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LOCTID" ColumnName="LOCTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchRegionMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchRegionMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchRegionMaster_Result">
+          <ScalarProperty Name="REGNCODE" ColumnName="REGNCODE" />
+          <ScalarProperty Name="REGNDESC" ColumnName="REGNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="REGNID" ColumnName="REGNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchStateMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchStateMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchStateMaster_Result">
+          <ScalarProperty Name="STATECODE" ColumnName="STATECODE" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="REGNDESC" ColumnName="REGNDESC" />
+          <ScalarProperty Name="STATETYPE" ColumnName="STATETYPE" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="STATEID" ColumnName="STATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Search_Roles" FunctionName="MEDIAPRO_ERPModel.Store.pr_Search_Roles">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_Search_Roles_Result">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Descp" ColumnName="Descp" />
+          <ScalarProperty Name="SDPTNAME" ColumnName="SDPTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="MEDIAPRO_ERPModel.AspNetUser">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+          <ScalarProperty Name="DBrnchId" ColumnName="DBrnchId" />
+          <ScalarProperty Name="UBrnchName" ColumnName="UBrnchName" />
+          <ScalarProperty Name="BrnchId" ColumnName="BrnchId" />
+          <ScalarProperty Name="NPassword" ColumnName="NPassword" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCategoryMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchCategoryMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchCategoryMaster_Result">
+          <ScalarProperty Name="ACCODE" ColumnName="ACCODE" />
+          <ScalarProperty Name="ACDESC" ColumnName="ACDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACID" ColumnName="ACID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchEditionMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchEditionMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchEditionMaster_Result">
+          <ScalarProperty Name="EDTNCODE" ColumnName="EDTNCODE" />
+          <ScalarProperty Name="EDTNDESC" ColumnName="EDTNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="EDTNID" ColumnName="EDTNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLanguageMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchLanguageMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchLanguageMaster_Result">
+          <ScalarProperty Name="LANGCODE" ColumnName="LANGCODE" />
+          <ScalarProperty Name="LANGDESC" ColumnName="LANGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LANGID" ColumnName="LANGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchMediaUnitMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchMediaUnitMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchMediaUnitMaster_Result">
+          <ScalarProperty Name="MUNITCODE" ColumnName="MUNITCODE" />
+          <ScalarProperty Name="MUNITDESC" ColumnName="MUNITDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="MUNITID" ColumnName="MUNITID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchPublicationTypeMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchPublicationTypeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchPublicationTypeMaster_Result">
+          <ScalarProperty Name="PUBLNTCODE" ColumnName="PUBLNTCODE" />
+          <ScalarProperty Name="PUBLNTDESC" ColumnName="PUBLNTDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="PUBLNTID" ColumnName="PUBLNTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchPositionMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchPositionMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchPositionMaster_Result">
+          <ScalarProperty Name="POSTNCODE" ColumnName="POSTNCODE" />
+          <ScalarProperty Name="POSTNDESC" ColumnName="POSTNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="POSTNID" ColumnName="POSTNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchHSNCodeMaster" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchHSNCodeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchHSNCodeMaster_Result">
+          <ScalarProperty Name="HSNCODE" ColumnName="HSNCODE" />
+          <ScalarProperty Name="HSNDESC" ColumnName="HSNDESC" />
+          <ScalarProperty Name="TAXEXPRN" ColumnName="TAXEXPRN" />
+          <ScalarProperty Name="CGSTEXPRN" ColumnName="CGSTEXPRN" />
+          <ScalarProperty Name="SGSTEXPRN" ColumnName="SGSTEXPRN" />
+          <ScalarProperty Name="IGSTEXPRN" ColumnName="IGSTEXPRN" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="HSNID" ColumnName="HSNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchReleaseOrder" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchReleaseOrder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchReleaseOrder_Result">
+          <ScalarProperty Name="RODATE" ColumnName="RODATE" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="NETTAMT" ColumnName="NETTAMT" />
+          <ScalarProperty Name="RCOUNT" ColumnName="RCOUNT" />
+          <ScalarProperty Name="BCOUNT" ColumnName="BCOUNT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_RO_Publication_Edition_List" FunctionName="MEDIAPRO_ERPModel.Store.pr_RO_Publication_Edition_List">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_RO_Publication_Edition_List_Result">
+          <ScalarProperty Name="EDTNID" ColumnName="EDTNID" />
+          <ScalarProperty Name="EDTNDESC" ColumnName="EDTNDESC" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchInvoice" FunctionName="MEDIAPRO_ERPModel.Store.pr_SearchInvoice">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_SearchInvoice_Result">
+          <ScalarProperty Name="BILLDATE" ColumnName="BILLDATE" />
+          <ScalarProperty Name="BILLNID" ColumnName="BILLNID" />
+          <ScalarProperty Name="BILLPRNNO" ColumnName="BILLPRNNO" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="NETTAMT" ColumnName="NETTAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="BILLMID" ColumnName="BILLMID" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillMasterAmountWiseClntSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillMasterAmountWiseClntSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillMasterAmountWiseClntSlct_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillMasterParyWiseClntSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillMasterParyWiseClntSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillMasterParyWiseClntSlct_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillMasterPrcntWiseClntSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillMasterPrcntWiseClntSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillMasterPrcntWiseClntSlct_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillMasterSpaceWiseClntSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillMasterSpaceWiseClntSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillMasterSpaceWiseClntSlct_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailPublicationAmountCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailPublicationAmountCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailPublicationAmountCbxSlct_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailPublicationPartyCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailPublicationPartyCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailPublicationPartyCbxSlct_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailPublicationPrcntCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailPublicationPrcntCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailPublicationPrcntCbxSlct_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailPublicationSpaceCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailPublicationSpaceCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailPublicationSpaceCbxSlct_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailROAmountCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailROAmountCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailROAmountCbxSlct_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailROParyCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailROParyCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailROParyCbxSlct_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailROPrcntCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailROPrcntCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailROPrcntCbxSlct_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailROSpaceCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailROSpaceCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailROSpaceCbxSlct_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_ReleaseOrderDetailCtrlAssgn" FunctionName="MEDIAPRO_ERPModel.Store.pr_ReleaseOrderDetailCtrlAssgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_ReleaseOrderDetailCtrlAssgn_Result">
+          <ScalarProperty Name="MUNITCODE" ColumnName="MUNITCODE" />
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+          <ScalarProperty Name="EDTNIDS" ColumnName="EDTNIDS" />
+          <ScalarProperty Name="EDTNDESC" ColumnName="EDTNDESC" />
+          <ScalarProperty Name="DORTYPE" ColumnName="DORTYPE" />
+          <ScalarProperty Name="DORSTATUS" ColumnName="DORSTATUS" />
+          <ScalarProperty Name="CANLSTATUS" ColumnName="CANLSTATUS" />
+          <ScalarProperty Name="DORNARTN" ColumnName="DORNARTN" />
+          <ScalarProperty Name="SPACE" ColumnName="SPACE" />
+          <ScalarProperty Name="RATE" ColumnName="RATE" />
+          <ScalarProperty Name="GAMT" ColumnName="GAMT" />
+          <ScalarProperty Name="MUNITID" ColumnName="MUNITID" />
+          <ScalarProperty Name="PBILLDID" ColumnName="PBILLDID" />
+          <ScalarProperty Name="BILLDID" ColumnName="BILLDID" />
+          <ScalarProperty Name="BLDTYPE" ColumnName="BLDTYPE" />
+          <ScalarProperty Name="BLDSPACE" ColumnName="BLDSPACE" />
+          <ScalarProperty Name="BLDAMT" ColumnName="BLDAMT" />
+          <ScalarProperty Name="BLDPRCNT" ColumnName="BLDPRCNT" />
+          <ScalarProperty Name="PEDTNID" ColumnName="PEDTNID" />
+          <ScalarProperty Name="DORCAPTN" ColumnName="DORCAPTN" />
+          <ScalarProperty Name="NOP" ColumnName="NOP" />
+          <ScalarProperty Name="BAmt" ColumnName="BAmt" />
+          <ScalarProperty Name="BPrcnt" ColumnName="BPrcnt" />
+          <ScalarProperty Name="PRMTYPE" ColumnName="PRMTYPE" />
+          <ScalarProperty Name="PRMEXPRN" ColumnName="PRMEXPRN" />
+          <ScalarProperty Name="EXPNTYPE" ColumnName="EXPNTYPE" />
+          <ScalarProperty Name="CMSNMODE" ColumnName="CMSNMODE" />
+          <ScalarProperty Name="CMSNPRCNT" ColumnName="CMSNPRCNT" />
+          <ScalarProperty Name="ACDESC" ColumnName="ACDESC" />
+          <ScalarProperty Name="POSTNDESC" ColumnName="POSTNDESC" />
+          <ScalarProperty Name="SIZE" ColumnName="SIZE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Get_Client_Address_Detail" FunctionName="MEDIAPRO_ERPModel.Store.pr_Get_Client_Address_Detail">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_Get_Client_Address_Detail_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="CLNTADDR" ColumnName="CLNTADDR" />
+          <ScalarProperty Name="STATETYPE" ColumnName="STATETYPE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Billing_Release_Order_DOR_Ctrl_Assgn" FunctionName="MEDIAPRO_ERPModel.Store.pr_Billing_Release_Order_DOR_Ctrl_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_Billing_Release_Order_DOR_Ctrl_Assgn_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Billing_Release_Order_No_Ctrl_Assgn" FunctionName="MEDIAPRO_ERPModel.Store.pr_Billing_Release_Order_No_Ctrl_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_Billing_Release_Order_No_Ctrl_Assgn_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailRODORSpaceCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailRODORSpaceCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailRODORSpaceCbxSlct_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailRODORAmountCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailRODORAmountCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailRODORAmountCbxSlct_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailRODORPartyCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailRODORPartyCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailRODORPartyCbxSlct_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailRODORPrcntCbxSlct" FunctionName="MEDIAPRO_ERPModel.Store.pr_BillDetailRODORPrcntCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MEDIAPRO_ERPModel.pr_BillDetailRODORPrcntCbxSlct_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

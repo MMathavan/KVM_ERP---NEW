@@ -1,0 +1,181 @@
+@{
+    ViewBag.Title = "Application Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">
+                    <i class="fas fa-users me-2"></i> Application Roles
+                </h3>
+                <a href="@Url.Action("Create", "Roles")" class="btn btn-light btn-sm">
+                    <i class="fas fa-plus-circle me-1"></i> Add New
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="rolesTable" class="table table-hover table-striped w-100">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Role Name</th>
+                            <th>Description</th>
+                            <th>Department</th>
+                            <th>Menu name</th>
+                            <th>Controller Name</th>
+                            <th>Menu Group</th>
+                            <th>Order</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#rolesTable').DataTable({
+                ajax: {
+                    url: '@Url.Action("GetAjaxData","Roles")',
+                    type: 'GET',
+                    dataSrc: 'data',
+                    error: function (xhr, status, err) {
+                        console.error('DataTables AJAX error:', status, err, xhr.status, xhr.responseText);
+                        alert('Failed to load roles: ' + (xhr.statusText || status));
+                    }
+                },
+                columns: [
+                    {
+                        data: 'RoleName',
+                        className: 'fw-semibold'
+                    },
+                    {
+                        data: 'Description',
+                        render: function (data) {
+                            return data ? data : '<span class="text-muted fst-italic">No description</span>';
+                        }
+                    },
+                    { data: 'Department' },
+                    {
+                        data: 'MenuName',
+                        render: function (data) {
+                            return data ? data : '<span class="text-muted">-</span>';
+                        }
+                    },
+                    {
+                        data: 'ControllerName',
+                        render: function (data) {
+                            return data ? data : '<span class="text-muted">-</span>';
+                        }
+                    },
+                    {
+                        data: 'MenuIndex',
+                        render: function (data) {
+                            return data ? data : '<span class="text-muted">-</span>';
+                        }
+                    },
+                    {
+                        data: 'Order',
+                        className: 'text-center',
+                        render: function (data) {
+                            return data ? data : '<span class="text-muted">-</span>';
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-end',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="btn-group" role="group">
+                                        <a href="/Roles/Edit?id=${encodeURIComponent(row.RoleName)}" class="btn btn-outline-secondary btn-sm" title="Edit">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                        <a href="/Roles/Delete?id=${encodeURIComponent(row.RoleName)}" class="btn btn-outline-danger btn-sm" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                `;
+                        }
+                    }
+                ],
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                pageLength: 10,
+                dom: '<"row mb-3"<"col-md-6"l><"col-md-6"f>>rt<"row mt-3"<"col-md-6"i><"col-md-6"p>>',
+                responsive: true,
+                scrollX: false,
+                autoWidth: true,
+                fixedColumns: false,
+                language: {
+                    lengthMenu: "Show _MENU_ entries",
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search...",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries"
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .card {
+        border-radius: 8px;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        background-color: #f8f9fa !important;
+        color: #495057;
+    }
+
+    .btn-group .btn {
+        margin-left: 0.25rem;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 1rem;
+    }
+
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.75rem;
+        border: 1px solid transparent;
+    }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #2c3e50;
+            border-color: #2c3e50;
+            color: white !important;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.03);
+    }
+</style>

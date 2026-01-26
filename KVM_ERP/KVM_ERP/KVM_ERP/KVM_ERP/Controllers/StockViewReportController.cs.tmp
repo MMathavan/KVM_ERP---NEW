@@ -1,0 +1,441 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using KVM_ERP.Models;
+using ClosedXML.Excel;
+using System.IO;
+
+namespace KVM_ERP.Controllers
+{
+    [SessionExpire]
+    public class StockViewReportController : Controller
+    {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
+        // GET: StockViewReport
+        [Authorize(Roles = "StockViewReportIndex")]
+        public ActionResult Index()
+        {
+            ViewBag.Title = "Stock View Report";
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult GetStockData(string fromDate, string toDate, string tab = "HL")
+        {
+            try
+            {
+                DateTime from = DateTime.Parse(fromDate);
+                DateTime to = DateTime.Parse(toDate);
+
+                System.Diagnostics.Debug.WriteLine($"GetStockData called - From: {from:yyyy-MM-dd}, To: {to:yyyy-MM-dd}, Tab: {tab}");
+
+                // Get stock data from TRANSACTION_PRODUCT_CALCULATION table
+                var stockData = GetStockViewReportData(from, to, tab);
+
+                return Json(new { success = true, data = stockData }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in GetStockData: {ex.Message}");
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ExportToExcel(string fromDate, string toDate)
+        {
+            try
+            {
+                DateTime from = DateTime.Parse(fromDate);
+                DateTime to = DateTime.Parse(toDate);
+
+                // Get all stock data
+                var allStockData = GetStockViewReportData(from, to, "ALL");
+
+                using (var workbook = new XLWorkbook())
+                {
+                    // Create tabs: Overall, Head On, Head Less, etc.
+                    var receivedTypes = allStockData
+                        .Select(x => string.IsNullOrWhiteSpace(x.ReceivedType) ? "Unknown" : x.ReceivedType)
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .ToList();
+                    
+                    // Tab 1: Overall (all data)
+                    CreateExcelSheet(workbook, "Overall", allStockData, to);
+                    
+                    // Tab 2+: Individual ReceivedTypes
+                    foreach (var receivedType in receivedTypes)
+                    {
+                        var filteredData = allStockData.Where(x => 
+                            (string.IsNullOrWhiteSpace(x.ReceivedType) ? "Unknown" : x.ReceivedType) == receivedType
+                        ).ToList();
+                        
+                        if (filteredData.Any())
+                        {
+                            // Ensure sheet name is valid (max 31 chars, no special chars)
+                            string sheetName = receivedType;
+                            if (string.IsNullOrWhiteSpace(sheetName))
+                            {
+                                sheetName = "Unknown";
+                            }
+                            // Remove invalid characters for Excel sheet names
+                            sheetName = sheetName.Replace("/", "-").Replace("\\", "-").Replace("?", "").Replace("*", "").Replace("[", "").Replace("]", "");
+                            // Limit to 31 characters (Excel limit)
+                            if (sheetName.Length > 31)
+                            {
+                                sheetName = sheetName.Substring(0, 31);
+                            }
+                            
+                            CreateExcelSheet(workbook, sheetName, filteredData, to);
+                        }
+                    }
+
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            $"StockViewReport_{to:yyyyMMdd}.xlsx");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error exporting to Excel: " + ex.Message;
+                return RedirectToAction("Index");
+            }
+        }
+
+        private void CreateExcelSheet(XLWorkbook workbook, string sheetName, List<StockViewReportData> stockData, DateTime toDate)
+        {
+            var worksheet = workbook.Worksheets.Add(sheetName);
+
+            // Add main header - "STOCK AS ON dd/MM/yyyy"
+            int row = 1;
+            worksheet.Cell(row, 1).Value = $"STOCK AS ON {toDate:dd/MM/yyyy}";
+            worksheet.Cell(row, 1).Style.Font.Bold = true;
+            worksheet.Cell(row, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            worksheet.Range(row, 1, row, 20).Merge();
+                    
+                    // Add column headers - Row 1
+                    row++;
+                    worksheet.Cell(row, 1).Value = "PARTICULARS";
+                    worksheet.Cell(row, 20).Value = "TOTAL NO. OF SLABS";
+                    
+                    // Merge PARTICULARS cell from row 2 to row 3
+                    worksheet.Range(row, 1, row + 1, 1).Merge();
+                    // Merge TOTAL NO. OF SLABS cell from row 2 to row 3
+                    worksheet.Range(row, 20, row + 1, 20).Merge();
+                    
+                    // Add column headers - Row 2 (Size columns)
+                    row++;
+                    worksheet.Cell(row, 2).Value = "U - 5";
+                    worksheet.Cell(row, 3).Value = "6 - 8";
+                    worksheet.Cell(row, 4).Value = "8 - 12";
+                    worksheet.Cell(row, 5).Value = "13 - 15";
+                    worksheet.Cell(row, 6).Value = "16 - 20";
+                    worksheet.Cell(row, 7).Value = "21 - 25";
+                    worksheet.Cell(row, 8).Value = "26 - 30";
+                    worksheet.Cell(row, 9).Value = "31 - 35";
+                    worksheet.Cell(row, 10).Value = "36 - 40";
+                    worksheet.Cell(row, 11).Value = "41 - 50";
+                    worksheet.Cell(row, 12).Value = "51 - 60";
+                    worksheet.Cell(row, 13).Value = "61 - 70";
+                    worksheet.Cell(row, 14).Value = "71 - 90";
+                    worksheet.Cell(row, 15).Value = "91 - 110";
+                    worksheet.Cell(row, 16).Value = "111 - 130";
+                    worksheet.Cell(row, 17).Value = "131 - 150";
+                    worksheet.Cell(row, 18).Value = "151 - 200";
+                    
+                    // Style headers
+                    worksheet.Range(2, 1, 3, 20).Style.Font.Bold = true;
+                    worksheet.Range(2, 1, 3, 20).Style.Fill.BackgroundColor = XLColor.LightGray;
+                    worksheet.Range(2, 1, 3, 20).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Range(2, 1, 3, 20).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Range(2, 1, 3, 20).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+            // Add data rows
+            row++;
+            int itemNumber = 1;
+            foreach (var item in stockData)
+            {
+                // Product Name Row (merged across all columns except last)
+                worksheet.Cell(row, 1).Value = $"{itemNumber}. {item.ProductName}";
+                worksheet.Range(row, 1, row, 19).Merge();
+                worksheet.Cell(row, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Cell(row, 1).Style.Font.Bold = true;
+                worksheet.Cell(row, 20).Value = item.TotalSlabs;
+                worksheet.Cell(row, 20).Style.Fill.BackgroundColor = XLColor.FromArgb(255, 193, 7); // Yellow/Orange
+                worksheet.Cell(row, 20).Style.Font.Bold = true;
+                row++;
+
+                // OPENING STOCK Row (data up to toDate - 1)
+                worksheet.Cell(row, 1).Value = "OPENING STOCK";
+                worksheet.Cell(row, 2).Value = item.OpeningUS;
+                worksheet.Cell(row, 3).Value = item.OpeningSize6_8;
+                worksheet.Cell(row, 4).Value = item.OpeningSize8_12;
+                worksheet.Cell(row, 5).Value = item.OpeningSize13_15;
+                worksheet.Cell(row, 6).Value = item.OpeningSize16_20;
+                worksheet.Cell(row, 7).Value = item.OpeningSize21_25;
+                worksheet.Cell(row, 8).Value = item.OpeningSize26_30;
+                worksheet.Cell(row, 9).Value = item.OpeningSize31_35;
+                worksheet.Cell(row, 10).Value = item.OpeningSize36_40;
+                worksheet.Cell(row, 11).Value = item.OpeningSize41_50;
+                worksheet.Cell(row, 12).Value = item.OpeningSize51_60;
+                worksheet.Cell(row, 13).Value = item.OpeningSize61_70;
+                worksheet.Cell(row, 14).Value = item.OpeningSize71_90;
+                worksheet.Cell(row, 15).Value = item.OpeningSize91_110;
+                worksheet.Cell(row, 16).Value = item.OpeningSize111_130;
+                worksheet.Cell(row, 17).Value = item.OpeningSize131_150;
+                worksheet.Cell(row, 18).Value = item.OpeningSize151_200;
+                worksheet.Cell(row, 20).Value = item.OpeningTotalSlabs;
+                worksheet.Range(row, 1, row, 20).Style.Fill.BackgroundColor = XLColor.FromArgb(227, 242, 253); // Light Blue
+                row++;
+
+                // PRODUCTION Row (data on toDate only)
+                worksheet.Cell(row, 1).Value = "PRODUCTION";
+                worksheet.Cell(row, 2).Value = item.ProductionUS;
+                worksheet.Cell(row, 3).Value = item.ProductionSize6_8;
+                worksheet.Cell(row, 4).Value = item.ProductionSize8_12;
+                worksheet.Cell(row, 5).Value = item.ProductionSize13_15;
+                worksheet.Cell(row, 6).Value = item.ProductionSize16_20;
+                worksheet.Cell(row, 7).Value = item.ProductionSize21_25;
+                worksheet.Cell(row, 8).Value = item.ProductionSize26_30;
+                worksheet.Cell(row, 9).Value = item.ProductionSize31_35;
+                worksheet.Cell(row, 10).Value = item.ProductionSize36_40;
+                worksheet.Cell(row, 11).Value = item.ProductionSize41_50;
+                worksheet.Cell(row, 12).Value = item.ProductionSize51_60;
+                worksheet.Cell(row, 13).Value = item.ProductionSize61_70;
+                worksheet.Cell(row, 14).Value = item.ProductionSize71_90;
+                worksheet.Cell(row, 15).Value = item.ProductionSize91_110;
+                worksheet.Cell(row, 16).Value = item.ProductionSize111_130;
+                worksheet.Cell(row, 17).Value = item.ProductionSize131_150;
+                worksheet.Cell(row, 18).Value = item.ProductionSize151_200;
+                worksheet.Cell(row, 20).Value = item.ProductionTotalSlabs;
+                worksheet.Range(row, 1, row, 20).Style.Fill.BackgroundColor = XLColor.FromArgb(173, 216, 230); // Blue
+                worksheet.Range(row, 1, row, 20).Style.Font.FontColor = XLColor.Blue;
+                row++;
+
+                // TOTAL Row (Opening + Production)
+                worksheet.Cell(row, 1).Value = "TOTAL";
+                worksheet.Cell(row, 2).Value = item.TotalUS;
+                worksheet.Cell(row, 3).Value = item.TotalSize6_8;
+                worksheet.Cell(row, 4).Value = item.TotalSize8_12;
+                worksheet.Cell(row, 5).Value = item.TotalSize13_15;
+                worksheet.Cell(row, 6).Value = item.TotalSize16_20;
+                worksheet.Cell(row, 7).Value = item.TotalSize21_25;
+                worksheet.Cell(row, 8).Value = item.TotalSize26_30;
+                worksheet.Cell(row, 9).Value = item.TotalSize31_35;
+                worksheet.Cell(row, 10).Value = item.TotalSize36_40;
+                worksheet.Cell(row, 11).Value = item.TotalSize41_50;
+                worksheet.Cell(row, 12).Value = item.TotalSize51_60;
+                worksheet.Cell(row, 13).Value = item.TotalSize61_70;
+                worksheet.Cell(row, 14).Value = item.TotalSize71_90;
+                worksheet.Cell(row, 15).Value = item.TotalSize91_110;
+                worksheet.Cell(row, 16).Value = item.TotalSize111_130;
+                worksheet.Cell(row, 17).Value = item.TotalSize131_150;
+                worksheet.Cell(row, 18).Value = item.TotalSize151_200;
+                worksheet.Cell(row, 20).Value = item.TotalSlabs;
+                worksheet.Range(row, 1, row, 20).Style.Fill.BackgroundColor = XLColor.FromArgb(212, 237, 218); // Light Green
+                worksheet.Range(row, 1, row, 20).Style.Font.Bold = true;
+                row++;
+
+                // RATE Row (all zeros)
+                worksheet.Cell(row, 1).Value = "RATE";
+                for (int col = 2; col <= 20; col++)
+                {
+                    worksheet.Cell(row, col).Value = 0;
+                }
+                worksheet.Range(row, 1, row, 20).Style.Fill.BackgroundColor = XLColor.FromArgb(248, 215, 218); // Light Red
+                row++;
+
+                // AMOUNT Row (all zeros)
+                worksheet.Cell(row, 1).Value = "AMOUNT";
+                for (int col = 2; col <= 20; col++)
+                {
+                    worksheet.Cell(row, col).Value = 0;
+                }
+                worksheet.Range(row, 1, row, 20).Style.Fill.BackgroundColor = XLColor.FromArgb(209, 236, 241); // Light Cyan
+                row++;
+
+                itemNumber++;
+            }
+
+            // Add borders to all data cells
+            worksheet.Range(2, 1, row - 1, 20).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Range(2, 1, row - 1, 20).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+            
+            // Center align all data cells
+            worksheet.Range(4, 2, row - 1, 20).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+            // Auto-fit columns
+            worksheet.Columns().AdjustToContents();
+        }
+
+        private List<StockViewReportData> GetStockViewReportData(DateTime fromDate, DateTime toDate, string tab)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"GetStockViewReportData - From: {fromDate:yyyy-MM-dd}, To: {toDate:yyyy-MM-dd}, Tab: {tab}");
+
+                var stockData = new List<StockViewReportData>();
+                DateTime openingStockDate = toDate.AddDays(-1);
+
+                // Get all transaction data with packing master info
+                var allData = (from tpc in db.TransactionProductCalculations
+                               join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
+                               join m in db.MaterialMasters on td.MTRLID equals m.MTRLID
+                               join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
+                               join packing in db.PackingMasters on tpc.PACKMID equals packing.PACKMID
+                               join grade in db.GradeMasters on tpc.GRADEID equals grade.GRADEID into gradeLeft
+                               from grade in gradeLeft.DefaultIfEmpty()
+                               join color in db.ProductionColourMasters on tpc.PCLRID equals color.PCLRID into colorLeft
+                               from color in colorLeft.DefaultIfEmpty()
+                               join rcvdType in db.ReceivedTypeMasters on tpc.RCVDTID equals rcvdType.RCVDTID into rcvdLeft
+                               from rcvdType in rcvdLeft.DefaultIfEmpty()
+                               where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
+                                     && (m.DISPSTATUS == 0 || m.DISPSTATUS == null)
+                                     && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
+                                     && tm.TRANDATE <= toDate
+                               select new {
+                                   tm.TRANDATE,
+                                   ProductId = m.MTRLID,
+                                   ProductName = m.MTRLDESC,
+                                   PackingMasterId = packing.PACKMID,
+                                   PackingMasterName = packing.PACKMDESC,
+                                   KGWGT = tpc.KGWGT,
+                                   GradeName = grade != null ? grade.GRADEDESC : "",
+                                   ColorName = color != null ? color.PCLRDESC : "",
+                                   ReceivedTypeName = rcvdType != null ? rcvdType.RCVDTDESC : "",
+                                   Calculation = tpc
+                               }).ToList();
+
+                // Group by packing master and product
+                var groupedByPackingAndProduct = allData
+                    .GroupBy(x => new { x.PackingMasterId, x.PackingMasterName, x.ProductId, x.ProductName, x.KGWGT, x.GradeName, x.ColorName, x.ReceivedTypeName })
+                    .ToList();
+
+                foreach (var productGroup in groupedByPackingAndProduct)
+                {
+                    // Get column headers for this packing master from PackingTypeMaster
+                    var columnHeaders = db.PackingTypeMasters
+                        .Where(pt => pt.PACKMID == productGroup.Key.PackingMasterId 
+                                  && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null)
+                                  && !pt.PACKTMDESC.ToUpper().Contains("BKN")
+                                  && !pt.PACKTMDESC.ToUpper().Contains("BROKEN"))
+                        .OrderBy(pt => pt.PACKTMCODE)
+                        .Select(pt => pt.PACKTMDESC)
+                        .ToList();
+
+                    // Split data into opening and production
+                    var openingData = productGroup.Where(x => x.TRANDATE <= openingStockDate).ToList();
+                    var productionData = productGroup.Where(x => x.TRANDATE == toDate).ToList();
+
+                    // Build dynamic data arrays
+                    var openingDataArray = new List<decimal>();
+                    var productionDataArray = new List<decimal>();
+                    var totalDataArray = new List<decimal>();
+
+                    // Get PCK values (PCK1-PCK17)
+                    var pckProperties = new[] { "PCK1", "PCK2", "PCK3", "PCK4", "PCK5", "PCK6", "PCK7", "PCK8", "PCK9", "PCK10", "PCK11", "PCK12", "PCK13", "PCK14", "PCK15", "PCK16", "PCK17" };
+                    
+                    for (int i = 0; i < columnHeaders.Count && i < pckProperties.Length; i++)
+                    {
+                        var prop = typeof(TransactionProductCalculation).GetProperty(pckProperties[i]);
+                        
+                        decimal openingSum = 0;
+                        foreach (var item in openingData)
+                        {
+                            var value = prop.GetValue(item.Calculation);
+                            openingSum += value != null ? (decimal)value : 0;
+                        }
+                        openingDataArray.Add(openingSum);
+
+                        decimal productionSum = 0;
+                        foreach (var item in productionData)
+                        {
+                            var value = prop.GetValue(item.Calculation);
+                            productionSum += value != null ? (decimal)value : 0;
+                        }
+                        productionDataArray.Add(productionSum);
+
+                        totalDataArray.Add(openingSum + productionSum);
+                    }
+
+                    // Calculate totals
+                    decimal openingTotal = openingDataArray.Sum();
+                    decimal productionTotal = productionDataArray.Sum();
+                    decimal total = totalDataArray.Sum();
+
+                    // Create StockViewReportData item
+                    var item = new StockViewReportData
+                    {
+                        ProductName = $"{productGroup.Key.ProductName} 6 x {productGroup.Key.KGWGT:F1}" +
+                                     (!string.IsNullOrEmpty(productGroup.Key.GradeName) ? $" - {productGroup.Key.GradeName}" : "") +
+                                     (!string.IsNullOrEmpty(productGroup.Key.ColorName) ? $" - {productGroup.Key.ColorName}" : "") +
+                                     (!string.IsNullOrEmpty(productGroup.Key.ReceivedTypeName) ? $" - {productGroup.Key.ReceivedTypeName}" : ""),
+                        ReceivedType = string.IsNullOrWhiteSpace(productGroup.Key.PackingMasterName) ? "Unknown" : productGroup.Key.PackingMasterName,
+                        PackingMasterId = productGroup.Key.PackingMasterId,
+                        
+                        // Dynamic columns
+                        ColumnHeaders = columnHeaders,
+                        OpeningData = openingDataArray,
+                        OpeningTotalSlabs = openingTotal,
+                        ProductionData = productionDataArray,
+                        ProductionTotalSlabs = productionTotal,
+                        TotalData = totalDataArray,
+                        TotalSlabs = total
+                    };
+
+                    stockData.Add(item);
+                }
+
+                System.Diagnostics.Debug.WriteLine($"Combined into {stockData.Count} products");
+                stockData = stockData.OrderBy(x => x.ReceivedType).ThenBy(x => x.ProductName).ToList();
+                
+                return stockData;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in GetStockViewReportData: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                return new List<StockViewReportData>();
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+
+    // Model for Stock View Report Data with Dynamic Columns
+    public class StockViewReportData
+    {
+        public string ProductName { get; set; }
+        public string ReceivedType { get; set; }
+        public int PackingMasterId { get; set; }
+        
+        // Dynamic column headers for this packing type
+        public List<string> ColumnHeaders { get; set; }
+        
+        // Opening Stock (up to toDate - 1) - Dynamic data
+        public List<decimal> OpeningData { get; set; }
+        public decimal OpeningTotalSlabs { get; set; }
+        
+        // Production (on toDate only) - Dynamic data
+        public List<decimal> ProductionData { get; set; }
+        public decimal ProductionTotalSlabs { get; set; }
+        
+        // Total (Opening + Production) - Dynamic data
+        public List<decimal> TotalData { get; set; }
+        public decimal TotalSlabs { get; set; }
+    }
+}

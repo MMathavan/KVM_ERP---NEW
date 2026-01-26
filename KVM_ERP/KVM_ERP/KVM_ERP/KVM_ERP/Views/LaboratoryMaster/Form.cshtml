@@ -1,0 +1,201 @@
+@model KVM_ERP.Models.LaboratoryMaster
+@{
+    ViewBag.Title = "Laboratory Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .form-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .form-body {
+        padding: 30px;
+        background: white;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .control-label {
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .req {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+    
+    .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+        background-color: white;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3436;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .msg {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">
+                <i class="fa fa-flask"></i>
+                Laboratory Master
+            </h1>
+        </div>
+
+        <div class="form-body">
+            @Html.Raw(ViewBag.msg)
+
+            @using (Html.BeginForm("savedata", "LaboratoryMaster", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.LABOID)
+
+                <div class="section-title">
+                    <i class="fa fa-info-circle"></i> Laboratory Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(m => m.LABODESC) <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.LABODESC, new { @class = "form-control", @placeholder = "Enter laboratory description" })
+                            @Html.ValidationMessageFor(m => m.LABODESC, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(m => m.LABOCODE) <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.LABOCODE, new { @class = "form-control", @placeholder = "Enter laboratory code" })
+                            @Html.ValidationMessageFor(m => m.LABOCODE, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.DISPSTATUS, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.DISPSTATUS, ViewBag.DISPSTATUS as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Save Laboratory
+                    </button>
+                    <a href="@Url.Action("Index", "LaboratoryMaster")" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function() {
+            // Auto-format laboratory code to uppercase
+            $('#LABOCODE').on('input', function() {
+                this.value = this.value.toUpperCase();
+            });
+            
+            // Auto-format laboratory description to title case
+            $('#LABODESC').on('blur', function() {
+                this.value = this.value.replace(/\w\S*/g, function(txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
+            });
+        });
+    </script>
+}

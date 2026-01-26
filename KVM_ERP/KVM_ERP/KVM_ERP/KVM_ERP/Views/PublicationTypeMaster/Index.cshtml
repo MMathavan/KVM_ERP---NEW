@@ -1,0 +1,130 @@
+﻿@model IEnumerable<ClubMembership.Models.PublicationTypeMaster>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>  Publication Type Master <a class="btn btn-danger btn-sm pull-right" style="padding:3px;margin:0 0 10px" href="@Url.Action("Form", "PublicationTypeMaster")"><i class="fa fa-plus-square "></i> Add New </a> <div class="clearfix"> </div></h3>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class=" ">
+                        <div class="panel-body">
+
+                            <table id="example" class="display" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>ID</th>
+                                        <th>Edit / Delete</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>ID</th>
+                                        <th>Edit / Delete</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <script type="text/javascript" class="init">
+
+        var editor; // use a global for the submit and return data rendering in the examples
+        $(document).ready(function() {
+
+        table=$('#example').DataTable( {
+            ajax: "@Url.Action("GetAjaxData", "PublicationTypeMaster")",//"/CostFactorMaster/GetAjaxData",
+		        columns: [
+                    { data: "PUBLNTCODE" },
+                    { data: "PUBLNTDESC" },
+                    { data: "DISPSTATUS" },
+                    { data: "PUBLNTID", "visible": false },
+			        {
+			            mRender: function (data, type, row) {
+                            return '<a href="@Url.Action("Form", "PublicationTypeMaster")/' + row["PUBLNTID"] + '"   class="editor_edit btn btn-warning btn-sm" ><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a href="#" id="' + row["PUBLNTID"] + '\" class="editor_remove btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i></a>'
+			            }
+			            //data: null,
+				        //className: "center",
+				        //defaultContent: '<a href="" class="editor_edit btn btn-warning btn-sm">Edit</a> &nbsp; <a href="" class="editor_remove btn btn-sm btn-danger">Delete</a>'
+			        }
+		        ]
+        });
+
+  //          alert("4");
+            //--------------Delete Record----------------//
+            $(document).on("click", "a.editor_remove", function () {
+                var r = confirm("Are you sure to delete this record ?");
+                if (r == true) {
+                    var idx = $(this).attr('id');
+                    base = window.location.origin;
+                    $.post(base + "/PublicationTypeMaster/Del",
+                          {
+                              id: idx, fld: ""
+                          },
+                        function (data, status) {
+                            if (data == "Deleted Successfully ...")
+                                location.replace(base + "/PublicationTypeMaster/Index");
+                            else if (data == "") alert("You are not authorize to Delete..!");
+                            else
+                                alert(data);
+                        });
+                }
+                return false;
+            });//end
+
+
+  //      alert("5");
+
+        $("#from").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: 'dd-mm-yy',
+            onClose: function (selectedDate) {
+                $("#to").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#to").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: 'dd-mm-yy',
+            onClose: function (selectedDate) {
+                $("#from").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+
+
+   //     alert("6");
+
+
+
+} );
+
+
+
+    </script>
+
+}
+
+

@@ -1,0 +1,427 @@
+@model KVM_ERP.Models.CustomerMaster
+@{
+    ViewBag.Title = "Customer Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .form-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .form-body {
+        padding: 30px;
+        background: white;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .control-label {
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .req {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+    
+    .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+        background-color: white;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3436;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .msg {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">
+                <i class="fa-solid fa-person"></i>
+                Customer Master
+            </h1>
+        </div>
+
+        <div class="form-body">
+            @Html.Raw(ViewBag.msg)
+
+            @using (Html.BeginForm("savedata", "CustomerMaster", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.CATEID)
+
+                <div class="section-title">
+                    <i class="fa fa-info-circle"></i> Basic Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(m => m.CATENAME) <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.CATENAME, new { @class = "form-control", @placeholder = "Enter customer name" })
+                            @Html.ValidationMessageFor(m => m.CATENAME, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(m => m.CATEDNAME) <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.CATEDNAME, new { @class = "form-control", @placeholder = "Enter display name" })
+                            @Html.ValidationMessageFor(m => m.CATEDNAME, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(m => m.CATECODE) <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.CATECODE, new { @class = "form-control", @placeholder = "Enter customer code" })
+                            @Html.ValidationMessageFor(m => m.CATECODE, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_CRDTPRD, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_CRDTPRD, new { @class = "form-control", @type = "number", @placeholder = "Enter credit note" })
+                            @Html.ValidationMessageFor(m => m.CATE_CRDTPRD, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <i class="fa fa-map-marker"></i> Address Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEADDR1, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEADDR1, new { @class = "form-control", @placeholder = "Enter address line 1" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEADDR2, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEADDR2, new { @class = "form-control", @placeholder = "Enter address line 2" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEADDR3, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEADDR3, new { @class = "form-control", @placeholder = "Enter address line 3" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEADDR4, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEADDR4, new { @class = "form-control", @placeholder = "Enter address line 4" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEADDR5, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEADDR5, new { @class = "form-control", @placeholder = "Enter pincode" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(m => m.STATEID) <span class="req">*</span></label>
+                            @Html.DropDownListFor(model => model.STATEID, ViewBag.STATEID as List<SelectListItem>, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.STATEID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(m => m.LOCTID) <span class="req">*</span></label>
+                            @Html.DropDownListFor(model => model.LOCTID, ViewBag.LOCTID as List<SelectListItem>, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.LOCTID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <i class="fa fa-phone"></i> Contact Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEPHN1, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEPHN1, new { @class = "form-control", @placeholder = "Enter landline 1" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEPHN2, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEPHN2, new { @class = "form-control", @placeholder = "Enter landline 2" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEPHN3, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEPHN3, new { @class = "form-control", @placeholder = "Enter mobile 1" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEPHN4, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEPHN4, new { @class = "form-control", @placeholder = "Enter mobile 2" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEPNAME, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEPNAME, new { @class = "form-control", @placeholder = "Enter contact person name" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATEMAIL, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATEMAIL, new { @class = "form-control", @type = "email", @placeholder = "Enter email address" })
+                            @Html.ValidationMessageFor(m => m.CATEMAIL, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <i class="fa fa-file-text"></i> License & Tax Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_GST_NO, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_GST_NO, new { @class = "form-control", @placeholder = "Enter GST number" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_PAN_NO, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_PAN_NO, new { @class = "form-control", @placeholder = "Enter PAN number" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_TAN_NO, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_TAN_NO, new { @class = "form-control", @placeholder = "Enter TAN number" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_PEST_LIC_NO, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_PEST_LIC_NO, new { @class = "form-control", @placeholder = "Enter pesticide licence number" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_SEED_LIC_NO, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_SEED_LIC_NO, new { @class = "form-control", @placeholder = "Enter seed licence number" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <i class="fa fa-bank"></i> Banking Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_BANK_NAME, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_BANK_NAME, new { @class = "form-control", @placeholder = "Enter bank name" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_BRNCH_NAME, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_BRNCH_NAME, new { @class = "form-control", @placeholder = "Enter branch name" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_IFSC_CODE, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_IFSC_CODE, new { @class = "form-control", @placeholder = "Enter IFSC code" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_ACNO, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_ACNO, new { @class = "form-control", @placeholder = "Enter account number" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_IBAN_CODE, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_IBAN_CODE, new { @class = "form-control", @placeholder = "Enter IBAN code" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_SWIFT_CODE, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_SWIFT_CODE, new { @class = "form-control", @placeholder = "Enter SWIFT code" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CATE_DSGNDESC, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.CATE_DSGNDESC, new { @class = "form-control", @placeholder = "Enter designation description" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <i class="fa fa-cog"></i> Status Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.DISPSTATUS, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.DISPSTATUS, ViewBag.DISPSTATUS as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Save Customer
+                    </button>
+                    <a href="@Url.Action("Index", "CustomerMaster")" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function() {
+            // Auto-format customer code to uppercase
+            $('#CATECODE').on('input', function() {
+                this.value = this.value.toUpperCase();
+            });
+            
+            // Auto-format customer name to title case
+            $('#CATENAME, #CATEDNAME, #CATEPNAME').on('blur', function() {
+                this.value = this.value.replace(/\w\S*/g, function(txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
+            });
+        });
+    </script>
+}

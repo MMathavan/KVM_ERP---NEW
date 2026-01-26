@@ -1,0 +1,166 @@
+@model KVM_ERP.Models.AccountViewModels.SelectGroupRolesViewModel
+@{
+    ViewBag.Title = "Group Role Permissions";
+    // Transaction roles: All transaction-related and raw material-related roles
+    var transactionRoles = Model.Roles.Where(r => 
+        r.RoleName.Contains("RawMaterialIntake") ||      // RawMaterialIntake* (without 's')
+        r.RoleName.Contains("RawMaterialInvoice") ||     // RawMaterialInvoice* (old name)
+        r.RoleName.Contains("StockView") || 
+        r.RoleName.Contains("PurchaseInvoice") || 
+        r.RoleName.Contains("Print")
+    ).ToList();
+    
+    // Master roles: Everything else (not in transactionRoles)
+    var masterRoles = Model.Roles.Where(r => !transactionRoles.Contains(r)).ToList();
+}
+
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">
+                <i class="bi bi-shield-lock me-2"></i>Permissions for Group: @Model.GroupName
+            </h2>
+        </div>
+
+        <div class="card-body">
+            @using (Html.BeginForm("GroupRoles", "Groups", FormMethod.Post, new { encType = "multipart/form-data", name = "myform" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.GroupName)
+                @Html.HiddenFor(model => model.GroupId)
+
+                <div class="mb-4">
+                    <h4 class="text-primary">Select Role Permissions for @Model.GroupName</h4>
+                    <p class="text-muted">Toggle between permission categories</p>
+
+                    <!-- Category Toggle Buttons -->
+                    <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
+                        <label class="btn btn-outline-success active" id="masters-toggle">
+                            <input type="radio" name="options" autocomplete="off" checked>
+                            <i class="bi bi-gear-wide-connected me-1"></i>Masters
+                        </label>
+                        <label class="btn btn-outline-info" id="transactions-toggle">
+                            <input type="radio" name="options" autocomplete="off">
+                            <i class="bi bi-arrow-repeat me-1"></i>Transactions
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Masters Permissions Section -->
+                <div class="permission-category mb-5" id="masters-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                        <h5 class="mb-0 text-success">
+                            <i class="bi bi-gear-wide-connected me-2"></i>Masters Permissions
+                        </h5>
+                    </div>
+
+                    <div class="row">
+                        @for (int i = 0; i < masterRoles.Count; i++)
+                        {
+                            var originalIndex = Model.Roles.IndexOf(masterRoles[i]);
+                            @Html.HiddenFor(model => model.Roles[originalIndex].RoleName)
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    @Html.CheckBoxFor(model => model.Roles[originalIndex].Selected, new { @class = "form-check-input", role = "switch", id = "master-" + i })
+                                    <label class="form-check-label" for="@("master-" + i)">
+                                        @masterRoles[i].RoleName
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Transactions Permissions Section -->
+                <div class="permission-category mb-5 d-none" id="transactions-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                        <h5 class="mb-0 text-info">
+                            <i class="bi bi-arrow-repeat me-2"></i>Transactions Permissions
+                        </h5>
+                    </div>
+
+                    <div class="row">
+                        @for (int i = 0; i < transactionRoles.Count; i++)
+                        {
+                            var originalIndex = Model.Roles.IndexOf(transactionRoles[i]);
+                            @Html.HiddenFor(model => model.Roles[originalIndex].RoleName)
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    @Html.CheckBoxFor(model => model.Roles[originalIndex].Selected, new { @class = "form-check-input", role = "switch", id = "trans-" + i })
+                                    <label class="form-check-label" for="@("trans-" + i)">
+                                        @transactionRoles[i].RoleName
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 mt-5">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save-fill me-2"></i>Save Permissions
+                    </button>
+                    @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-outline-secondary px-4" })
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 8px;
+        max-width: 1000px;
+        margin: 2rem auto;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    .permission-category {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+
+    .form-check-input {
+        width: 3em;
+        height: 1.5em;
+    }
+
+    .btn {
+        min-width: 160px;
+    }
+
+    .btn-group-toggle .btn {
+        min-width: 120px;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            // Masters toggle button
+            $('#masters-toggle').click(function () {
+                $('#masters-section').removeClass('d-none');
+                $('#transactions-section').addClass('d-none');
+                $(this).removeClass('btn-outline-success').addClass('btn-success');
+                $('#transactions-toggle').removeClass('btn-info').addClass('btn-outline-info');
+            });
+
+            // Transactions toggle button
+            $('#transactions-toggle').click(function () {
+                $('#transactions-section').removeClass('d-none');
+                $('#masters-section').addClass('d-none');
+                $(this).removeClass('btn-outline-info').addClass('btn-info');
+                $('#masters-toggle').removeClass('btn-success').addClass('btn-outline-success');
+            });
+        });
+    </script>
+}

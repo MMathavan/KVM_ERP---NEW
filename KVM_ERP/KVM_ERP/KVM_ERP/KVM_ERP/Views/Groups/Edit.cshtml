@@ -1,0 +1,80 @@
+﻿@model KVM_ERP.Models.Group
+@{
+    ViewBag.Title = "Edit Group";
+}
+
+<div class="container">
+    <div class="card shadow" style="max-width: 600px; margin: 2rem auto;">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">
+                <i class="bi bi-pencil-square me-2"></i>Edit Group
+            </h2>
+        </div>
+
+        <div class="card-body">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+
+                <!-- Header Section -->
+                <div class="mb-4">
+                    <h3 class="h5 text-primary">Group Information</h3>
+                    <p class="text-muted">Update the group details</p>
+                </div>
+
+                @Html.ValidationSummary(true, "", new { @class = "alert alert-danger mb-4" })
+
+                <!-- Name Field -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold d-block mb-2">Name</label>
+                    @Html.EditorFor(model => model.Name, new
+                    {
+                        htmlAttributes = new
+                        {
+                            @class = "form-control",
+                            placeholder = "Enter group name",
+                            style = "max-width: 400px;"
+                        }
+                    })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger small" })
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save-fill me-2"></i>Save Changes
+                    </button>
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-outline-secondary px-4" })
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 8px;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem 2rem;
+    }
+
+    .form-control {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .btn {
+        min-width: 140px;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

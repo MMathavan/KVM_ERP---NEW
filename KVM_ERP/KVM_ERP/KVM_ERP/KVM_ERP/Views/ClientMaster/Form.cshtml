@@ -1,0 +1,249 @@
+﻿@using ClubMembership.Models
+@model  ClubMembership.Models.ClientMaster
+@{
+    ViewBag.Title = "Client Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .req {
+        color: red;
+        font-size: 15px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>  @ViewBag.Title  <div class="clearfix"> </div></h3>
+        </div>
+
+        @Html.Raw(ViewBag.msg)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel-body">
+                    <form action="@Url.Content("~/ClientMaster/savedata")" method="post" accept-charset="utf-8" id="customermasterform" data-ng-controller="myController" name="customermasterform" onsubmit="return validate();">
+
+
+                        @Html.ValidationSummary(true)
+
+                        <fieldset id="CustomerMasterForm_info">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="col-md-4 hidden">
+                                        <div class="form-group">
+                                            <label>Primary  </label>
+                                            @Html.TextBoxFor(model => Model.CLNTID, new { @class = "form-control  CLNTID", @id = "CLNTID" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Name <span class="req"> *</span> </label>
+                                            @Html.TextBoxFor(model => Model.CLNTNAME, new { @class = "form-control  CLNTNAME", @id = "CLNTNAME", tabindex = "1" })
+                                            <input type="text" value="@Model.CLNTNAME" name="i_CLNTNAME" hidden />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Code <span class="req"> *</span></label>
+                                            @Html.TextBoxFor(model => Model.CLNTCODE, new { @class = "form-control CLNTCODE", @id = "CLNTCODE", @required = "required", tabindex = "2" })
+                                            <input type="text" value="@Model.CLNTCODE" name="i_CLNTCODE" hidden />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Status </label>
+                                            @Html.DropDownList("DISPSTATUS", null, new { @class = "form-control", tabindex = "3" })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Address <span class="req"> *</span></label>
+                                            @Html.TextAreaFor(model => Model.CLNTADDR, new { @class = "form-control  CLNTADDR", @id = "CLNTADDR", @rows = "6", @cols = "6", tabindex = "4" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Contact Person</label>
+                                            @Html.TextBoxFor(model => Model.CLNTPNAME, new { @class = "form-control  CLNTPNAME", @id = "CLNTPNAME", tabindex = "5" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Mail </label>
+                                            @Html.TextBoxFor(model => Model.CLNTMAIL, new { @class = "form-control  CLNTMAIL", @id = "CLNTMAIL", tabindex = "6" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Phone No. 1 @*<span class="req"> *</span>*@</label>
+                                            @Html.TextBoxFor(model => Model.CLNTPHN1, new { @class = "form-control  CLNTPHN1", @id = "CLNTPHN1", tabindex = "7" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Phone No. 2</label>
+                                            @Html.TextBoxFor(model => Model.CLNTPHN2, new { @class = "form-control  CLNTPHN2", @id = "CLNTPHN2", tabindex = "8" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Phone No. 3</label>
+                                            @Html.TextBoxFor(model => Model.CLNTPHN3, new { @class = "form-control  CLNTPHN3", @id = "CLNTPHN3", tabindex = "9" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Phone No. 4</label>
+                                            @Html.TextBoxFor(model => Model.CLNTPHN4, new { @class = "form-control  CLNTPHN4", @id = "CLNTPHN4", tabindex = "10" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>State <span class="req"> *</span></label>
+                                            @Html.DropDownList("STATEID", null, "Select State", new { @class = "form-control STATEID", @id = "STATEID", @required = "required", tabindex = "11"@*, @onchange = "StateDetail()"*@ })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>GSTIN No.</label>
+                                            @Html.TextBoxFor(model => Model.CLNTGSTNO, new { @class = "form-control  CLNTGSTNO", @id = "CLNTGSTNO", tabindex = "12" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>PAN No.</label>
+                                            @Html.TextBoxFor(model => Model.CLNTPANNO, new { @class = "form-control  CLNTPANNO", @id = "CLNTPANNO", tabindex = "13" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 hidden">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>CUSRID </label>
+                                            @Html.TextBoxFor(model => Model.CUSRID, new { @class = "form-control CUSRID", @id = "CUSRID" })
+                                            @Html.ValidationMessageFor(model => model.CUSRID)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>LMUSRID </label>
+                                            @Html.TextBoxFor(model => Model.LMUSRID, new { @class = "form-control  LMUSRID readonly", @id = "LMUSRID" })
+                                            @Html.ValidationMessageFor(model => model.LMUSRID)
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-sm pull-right" tabindex="1001" />
+
+                            <input type="button" name="back" value="Go Back" class="btn btn-primary btn-sm pull-left" onclick="JavaScript:history.back()" tabindex="1002" />
+
+
+
+                        </fieldset>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+    //alert("1");
+        $('.msg').delay(1200).fadeOut(1000);
+        $(".CLNTCODE").keyup(function () {//...capitalize each
+
+          //  $(this).val($(this).val().toUpperCase());
+        });
+
+
+
+    $(function () { //-----date controls-------------
+            //alert("a")
+            $(".datepicker").datepicker({ dateFormat: 'dd/mm/yy', });
+
+            if ($(".CATEID").val() == 0) {
+                //var dt = new Date();
+                //var month = dt.getMonth() + 1;
+                //var date = dt.getDate() + "/" + month + "/" + dt.getFullYear();
+                //$(".CATEDOJ").val(date);
+
+            }//--------------End---------
+            else {
+
+            }
+        });
+
+
+
+    function validate()
+    {
+
+            if ($(".CLNTNAME").val() == "") {
+                alert("Please Enter the Client Name");
+                $(".CLNTNAME").focus();
+                return false;
+        }
+
+        if ($(".CLNTCODE").val() == "") {
+            alert("Please Enter the Client Code");
+            $(".CLNTCODE").focus();
+            return false;
+        }
+
+        if ($(".CLNTADDR").val() == "") {
+            alert("Please Enter the Client Address");
+            $(".CLNTADDR").focus();
+            return false;
+        }
+
+
+        if ($(".STATEID").val() == "") {
+            alert("Please Select State");
+            $(".STATEID").focus();
+            return false;
+        }
+
+
+        }//End of validation
+
+
+
+        $(document).ready(function () {
+
+
+
+        })
+
+
+
+    </script>
+
+}
+
+

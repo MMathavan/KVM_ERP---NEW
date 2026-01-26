@@ -1,0 +1,170 @@
+@{
+    ViewBag.Title = "BloodGroup Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">
+                    <i class="fa-solid fa-droplet me-2"></i> BloodGroup Master
+                </h3>
+                <a href="@Url.Action("Form", "BloodGroupMaster")" class="btn btn-light btn-sm">
+                    <i class="fas fa-plus-circle me-1"></i> Add New
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="eg" class="table table-hover table-striped w-100">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Code</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th class="d-none">ID</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" class="init">
+        $(document).ready(function() {
+            var table = $('#eg').DataTable({
+                processing: true,
+                serverSide: true, // Enable server-side processing
+                ajax: {
+                    url: "@Url.Action("GetAjaxData", "BloodGroupMaster")",
+                    type: "POST",
+                    data: function(d) {
+                        // Map DataTables parameters to what your action expects
+                        d.sSearch = d.search.value;
+                        d.iDisplayStart = d.start;
+                        d.iDisplayLength = d.length;
+                        d.sEcho = d.draw;
+                        d.iSortCol_0 = d.order[0].column;
+                        d.sSortDir_0 = d.order[0].dir;
+                    },
+                    error: function(xhr, error, thrown) {
+                        console.error("DataTables error:", xhr.responseText);
+                    }
+                },
+                columns: [
+                    { data: "BLDGCODE" },
+                    { data: "BLDGDESC" },
+                    { data: "DISPSTATUS" },
+                    { data: "BLDGID", visible: false },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return '<div class="btn-group" role="group">' +
+                                   '<a href="@Url.Action("Form", "BloodGroupMaster")/' + row.BLDGID + '" class="btn btn-outline-secondary btn-sm" title="Edit">' +
+                                   '<i class="fas fa-pencil-alt"></i></a>' +
+                                   '<a href="#" id="' + row.BLDGID + '" class="btn btn-outline-danger btn-sm editor_remove" title="Delete">' +
+                                   '<i class="fas fa-trash-alt"></i></a>' +
+                                   '</div>';
+                        },
+                        className: "text-end"
+                    }
+                ],
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                pageLength: 10,
+                dom: '<"row mb-3"<"col-md-6"l><"col-md-6"f>>rt<"row mt-3"<"col-md-6"i><"col-md-6"p>>',
+                responsive: true,
+                scrollX: false,  // Add this to disable horizontal scrolling
+                autoWidth: true, // Change to true to allow natural column widths
+                fixedColumns: false, // Ensure fixed columns are disabled
+                language: {
+                    lengthMenu: "Show _MENU_ entries",
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search...",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries"
+                }
+            });
+
+            // Delete record functionality - unchanged
+            $(document).on("click", "a.editor_remove", function (e) {
+                e.preventDefault();
+                var r = confirm("Are you sure to delete this record?");
+                if (r == true) {
+                    var idx = $(this).attr('id');
+                    var base = window.location.origin;
+                    $.post(base + "/BloodGroupMaster/Del",
+                        {
+                            id: idx,
+                            fld: ""
+                        },
+                        function (data, status) {
+                            if (data == "Deleted Successfully ...") {
+                                table.ajax.reload();
+                            } else if (data == "") {
+                                alert("You are not authorized to Delete!");
+                            } else {
+                                alert(data);
+                            }
+                        });
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .card {
+        border-radius: 8px;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        background-color: #f8f9fa !important;
+        color: #495057;
+    }
+
+    .btn-group .btn {
+        margin-left: 0.25rem;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 1rem;
+    }
+
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.75rem;
+        border: 1px solid transparent;
+    }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #2c3e50;
+            border-color: #2c3e50;
+            color: white !important;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.03);
+    }
+</style>

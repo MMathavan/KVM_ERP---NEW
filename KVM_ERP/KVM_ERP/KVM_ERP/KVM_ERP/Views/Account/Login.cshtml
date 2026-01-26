@@ -1,0 +1,323 @@
+@model KVM_ERP.Models.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Login.cshtml";
+}
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --border-color: #ddd;
+        --text-color: #333;
+        --active-color: #3498db;
+    }
+
+    /* Google Fonts will be imported in the head section */
+
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .login-card {
+        width: 420px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .login-header {
+        text-align: center;
+        padding: 40px 0 20px;
+    }
+
+    .logo {
+        width: 120px;
+        height: auto;
+    }
+
+    .company-name {
+        font-family: 'Poppins', 'Inter', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #2c3e50;
+        margin-top: 20px;
+        text-align: center;
+        line-height: 1.1;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    
+
+    .login-body {
+        padding: 0 30px 30px;
+    }
+
+    /* Animated form groups (for username and password only) */
+    .form-group.animated {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    /* Static form group (for date picker) */
+    .form-group.static {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 15px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+    /* Animated label styles */
+    .form-group.animated .form-label {
+        position: absolute;
+        left: 12px;
+        top: 15px;
+        color: #999;
+        font-size: 14px;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .form-group.animated .form-control:focus + .form-label,
+    .form-group.animated .form-control:not(:placeholder-shown) + .form-label {
+        top: 5px;
+        font-size: 11px;
+        color: var(--active-color);
+        background: white;
+        padding: 0 5px;
+    }
+
+    /* Static label styles */
+    .form-group.static .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: var(--text-color);
+    }
+
+    .form-control:focus {
+        border-color: var(--active-color);
+        outline: none;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 14px 16px;
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 12px;
+        letter-spacing: 0.3px;
+        box-shadow: 0 8px 20px rgba(44, 62, 80, 0.25);
+        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+    }
+
+        .btn-login:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(44, 62, 80, 0.3);
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 16px rgba(44, 62, 80, 0.25);
+        }
+
+        .btn-login:focus-visible {
+            outline: 3px solid rgba(52, 152, 219, 0.35);
+    }
+
+    .subscription-expired {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .subscription-expired i {
+        font-size: 1.2rem;
+        margin-right: 8px;
+    }
+
+    .subscription-expired strong {
+        display: block;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    .renewal-message {
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 0.95rem;
+    }
+
+    .renewal-message i {
+        margin-right: 8px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+
+    .alert-info {
+        background-color: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+    }
+
+    .text-danger {
+        color: #e74c3c !important;
+        font-size: 0.875rem;
+        margin-top: 5px;
+    }
+
+    .hide {
+        display: none !important;
+    }
+</style>
+
+<div class="login-card">
+    @if (TempData["RegistrationSuccess"] != null)
+    {
+        <div class="modal fade" id="registrationSuccessModal" tabindex="-1" aria-labelledby="registrationSuccessLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="registrationSuccessLabel">Registration Successful</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @TempData["RegistrationSuccess"]
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var modal = new bootstrap.Modal(document.getElementById('registrationSuccessModal'));
+                modal.show();
+            });
+        </script>
+    }
+    <div class="login-header">
+        <img src="~/Content/images/logo-small.png" class="logo" alt="MARINEX Logo">
+        <div class="company-name">MARINEX</div>
+    </div>
+    <div class="login-body">
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            
+            // Success/Error Messages from TempData
+            if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success renewal-message">
+                    <i class="fa fa-check-circle"></i>
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            
+            if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger renewal-message">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+            
+            if (TempData["InfoMessage"] != null)
+            {
+                <div class="alert alert-info renewal-message">
+                    <i class="fa fa-info-circle"></i>
+                    @TempData["InfoMessage"]
+                </div>
+            }
+            
+            if (ViewBag.ReturnUrl != null)
+            {
+                @Html.Hidden("returnUrl", (string)ViewBag.ReturnUrl)
+            }
+
+            @Html.ValidationMessageFor(m => m.COMPID)
+            @Html.DropDownList("COMPID", null, new { @class = "hide" })
+
+            @* Display database connection error if present *@
+            if (ViewBag.DatabaseError != null)
+            {
+                <div class="alert alert-warning" style="margin-bottom: 20px; padding: 15px; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; color: #856404;">
+                    <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                    @ViewBag.DatabaseError
+                </div>
+            }
+
+            <div class="form-group static">
+                <label class="form-label">Username</label>
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autocomplete = "off" })
+                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group static">
+                <label class="form-label">Password</label>
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "off" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.DropDownList("COMPYID", null, new { @class = "hide" })
+    
+            <div class="form-group static hide">
+                <label class="form-label">Date</label>
+                @Html.TextBoxFor(m => m.LDATE, new { @class = "form-control LDATE", id = "LDATE", Value = @System.Web.HttpContext.Current.Session["LDATE"], data_Val = false })
+            </div>
+
+            <button type="submit" class="btn-login">Log in</button>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        localStorage.clear();
+        $(function () {
+            $("#LDATE").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                dateFormat: 'dd-mm-yy',
+            });
+        });
+    </script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

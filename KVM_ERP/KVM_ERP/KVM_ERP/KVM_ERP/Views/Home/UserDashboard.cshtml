@@ -1,0 +1,449 @@
+@model ClubMembership.Models.UserDashboardViewModel
+@{
+	ViewBag.Title = "My Dashboard";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	
+	// Create a safe model reference
+	var safeModel = Model ?? new ClubMembership.Models.UserDashboardViewModel
+	{
+		Member = null,
+		RecentPayments = new List<ClubMembership.Models.MemberShipPaymentDetail>(),
+		Children = new List<ClubMembership.Models.MemberShipFamilyDetail>(),
+		OrganizationDetails = new List<ClubMembership.Models.MemberShipODetail>(),
+		CurrentPlan = null,
+		NextRenewalDate = null,
+		DaysToRenewal = 0,
+		TotalPaid = 0,
+		TotalPayments = 0,
+		MemberSince = DateTime.Now,
+		IsActive = false
+	};
+}
+
+@section Styles {
+	<style>
+		:root { --surface: rgba(255,255,255,.6); --border: rgba(255,255,255,.35); --shadow: 0 10px 30px rgba(18, 38, 63, .12); --primary: #6a5ef1; --primary-2: #a26bfa; --success: #22c55e; --danger: #ef4444; }
+		.dashboard-bg { position:relative; background: radial-gradient(80% 80% at 100% 0%, #e9e7ff 0%, #f6f7ff 40%, #ffffff 100%); border-radius:18px; overflow:hidden; }
+		.floating-blur { position:absolute; inset:auto -80px -80px auto; width:260px; height:260px; background: radial-gradient(50% 50% at 50% 50%, #a26bfa55 0%, transparent 70%); filter: blur(30px); }
+		.user-header { display:flex; align-items:center; justify-content:space-between; padding:24px 22px; }
+		.user-id { display:flex; align-items:center; gap:14px; }
+		.avatar { width:48px; height:48px; border-radius:50%; background: linear-gradient(135deg, var(--primary), var(--primary-2)); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; box-shadow: var(--shadow); }
+		.user-sub { color:#6c757d; }
+		.status-pill { padding:8px 12px; border-radius:999px; color:#fff; font-weight:600; box-shadow: var(--shadow); }
+		.badge-active { background: linear-gradient(135deg, #10b981, #22c55e); }
+		.badge-inactive { background: linear-gradient(135deg, #ef4444, #f97316); }
+		.badge-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
+		.badge-warning { background: linear-gradient(135deg, #f59e0b, #f97316); }
+		.badge-info { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+
+		.user-card { background: var(--surface); backdrop-filter: blur(8px); border: 1px solid var(--border); border-radius:16px; box-shadow: var(--shadow); padding:18px; margin-bottom:18px; transition: transform .25s ease, box-shadow .25s ease; }
+		.user-card:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(18, 38, 63, .18); }
+		/* Ensure all KPI cards are same size (slightly smaller) */
+		.kpi { text-align:center; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:140px; }
+		.kpi h3 { margin:2px 0 0 0; font-size:1.9rem; letter-spacing:.2px; }
+		.kpi .desc { color:#6b7280; font-weight:600; font-size:.9rem; }
+		.kpi .renewal-status { margin-top: 8px; }
+		.kpi .renewal-status small { font-weight: 600; }
+		.kpi .shine { position:absolute; inset:-1px; border-radius:16px; background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.25) 35%, transparent 70%); transform: translateX(-120%); animation: shine 2.2s ease-in-out .2s infinite; pointer-events:none; }
+		@@keyframes shine { to { transform: translateX(120%); } }
+
+		.ring-wrap { display:flex; align-items:center; justify-content:center; height:90px; }
+		.ring { --p: 0; width:100px; height:100px; border-radius:50%; background: conic-gradient(var(--primary) calc(var(--p)*1%), #e9e9f3 0); display:grid; place-items:center; position:relative; transition: --p 1s linear; }
+		/* Fix layering so the number is visible */
+		.ring::after { content:""; position:absolute; inset:8px; background: #fff; border-radius:50%; z-index:0; }
+		.ring > span { position:relative; font-weight:800; color:#111827; z-index:1; font-size:1.25rem; line-height:1; }
+
+		/* Make all top KPI cards equal height visually */
+		.row > [class*="col-md-3"] .user-card.kpi { height: 140px; }
+		.ring-label { color:#6b7280; text-align:center; margin-top:8px; font-weight:600; }
+
+		/* New Days Remaining card design */
+		.days-card { position:relative; overflow:hidden; }
+		.days-card::before { content:""; position:absolute; inset:-40% -40% auto auto; width:160px; height:160px; background: radial-gradient(50% 50% at 50% 50%, rgba(162,107,250,0.2) 0%, transparent 70%); filter:blur(20px); opacity:.35; }
+		
+		.urgency-badge { 
+			position: absolute; 
+			top: 8px; 
+			right: 8px; 
+			padding: 4px 8px; 
+			border-radius: 12px; 
+			color: white; 
+			font-weight: 600; 
+			z-index: 2; 
+			box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+		}
+		.days-card .meter-wrap { display:flex; align-items:center; justify-content:center; height:90px; }
+		.days-card .meter { --p:0; --fill: var(--primary); --track:#eef2ff; width:100px; height:100px; border-radius:50%; background: conic-gradient(var(--fill) calc(var(--p)*1%), var(--track) 0); position:relative; transition: --p 1s ease, --fill .2s ease; z-index:0; }
+		/* Replace pseudo inner circle with real element to avoid stacking issues */
+		.days-card .meter-inner { position:absolute; inset:12px; background:#fff; border-radius:50%; box-shadow: inset 0 2px 6px rgba(16,24,40,.06); display:flex; align-items:center; justify-content:center; z-index:1; }
+		.days-card .value { font-weight:800; color:#111827; font-size:1.35rem; line-height:1.1; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+		.days-card .value .days-unit { font-weight:600; font-size:.75rem; color:#6b7280; margin-top:4px; letter-spacing:.2px; }
+		.days-card .caption { color:#6b7280; font-weight:600; margin-top:8px; }
+
+		.table-sm td, .table-sm th { padding:.6rem; vertical-align:middle; }
+		.table-striped tbody tr { transition: background .2s ease, transform .15s ease; }
+		.table-striped tbody tr:hover { background: #f7f7ff; transform: translateX(2px); }
+
+		.btn-gradient { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color:#fff; border:none; box-shadow: var(--shadow); }
+		.btn-gradient:hover { filter: brightness(1.05); transform: translateY(-1px); }
+		.btn-soft { background: #fff; border:1px solid var(--border); }
+		
+		/* Renewal urgency styles */
+		.renewal-urgent { background: linear-gradient(135deg, #f59e0b, #f97316) !important; }
+		.renewal-critical { background: linear-gradient(135deg, #ef4444, #dc2626) !important; }
+		.renewal-available { background: linear-gradient(135deg, #10b981, #22c55e) !important; }
+		
+		.alert-warning { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #92400e; }
+		.alert-warning small { color: #92400e; }
+		
+		.text-muted small { font-size: 0.8rem; }
+		
+		/* Critical renewal pulsing animation */
+		@@keyframes pulse-critical {
+			0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+			50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+		}
+		
+		.renewal-critical {
+			animation: pulse-critical 2s infinite;
+		}
+		
+		/* Urgent renewal subtle pulse */
+		@@keyframes pulse-urgent {
+			0%, 100% { transform: scale(1); }
+			50% { transform: scale(1.02); }
+		}
+		
+		.renewal-urgent {
+			animation: pulse-urgent 3s infinite;
+		}
+
+		.fade-up { opacity:0; transform: translateY(14px); transition: all .45s ease; }
+		.fade-up.in-view { opacity:1; transform: translateY(0); }
+	</style>
+}
+
+	<div class="container-fluid py-3">
+		@if (safeModel.Member == null)
+		{
+			<div class="alert alert-warning" role="alert">
+				<h4 class="alert-heading">No Member Record Found</h4>
+				<p>We couldn't find your member record. Please contact the administrator or try logging in again.</p>
+				<hr>
+				<p class="mb-0">
+					<a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login Again</a>
+					<a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Go to Home</a>
+				</p>
+			</div>
+		}
+		else
+		{
+			<div class="dashboard-bg mb-3">
+				<div class="floating-blur"></div>
+				<div class="user-header">
+					<div class="user-id">
+						<div class="avatar">@safeModel.Member.Member_Name.Substring(0,1).ToUpper()</div>
+						<div>
+							<h3 class="mb-0">Welcome, @safeModel.Member.Member_Name</h3>
+							<div class="user-sub">Member No: @safeModel.Member.MemberNo | Since @safeModel.MemberSince.ToString("dd-MMM-yyyy")</div>
+						</div>
+					</div>
+					<div class="d-flex align-items-center gap-2">
+						@if (safeModel.DaysToRenewal <= 30 && safeModel.DaysToRenewal > 0)
+						{
+							var urgencyClass = safeModel.DaysToRenewal <= 7 ? "badge-danger" : 
+											safeModel.DaysToRenewal <= 15 ? "badge-warning" : "badge-info";
+							var urgencyText = safeModel.DaysToRenewal <= 7 ? "Critical" : 
+											safeModel.DaysToRenewal <= 15 ? "Urgent" : "Due Soon";
+							
+							<span class="status-pill @urgencyClass">
+								<i class="fas fa-exclamation-triangle me-1"></i>@urgencyText
+							</span>
+						}
+						<span class="status-pill @(safeModel.IsActive ? "badge-active" : "badge-inactive")">@(safeModel.IsActive ? "Active" : "Inactive")</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-3 fade-up">
+					<div class="user-card kpi">
+						<div class="shine"></div>
+						<h3 class="counter" data-target="@safeModel.TotalPayments">0</h3>
+						<div class="desc">Payments</div>
+					</div>
+				</div>
+				<div class="col-md-3 fade-up">
+					<div class="user-card kpi">
+						<div class="shine"></div>
+						<h3 class="counter" data-target="@safeModel.TotalPaid" data-money="true">0 INR</h3>
+						<div class="desc">Total Paid</div>
+					</div>
+				</div>
+				<div class="col-md-3 fade-up">
+					<div class="user-card kpi days-card">
+						@if (safeModel.DaysToRenewal <= 30 && safeModel.DaysToRenewal > 0)
+						{
+							var urgencyClass = safeModel.DaysToRenewal <= 7 ? "badge-danger" : 
+											safeModel.DaysToRenewal <= 15 ? "badge-warning" : "badge-info";
+							var urgencyText = safeModel.DaysToRenewal <= 7 ? "Critical" : 
+											safeModel.DaysToRenewal <= 15 ? "Urgent" : "Due Soon";
+							
+							<div class="urgency-badge @urgencyClass">
+								<small>@urgencyText</small>
+							</div>
+						}
+						<div class="meter-wrap">
+							<div class="meter" id="daysMeter">
+								<div class="meter-inner">
+									<div class="value"><span class="days-num">@(safeModel.NextRenewalDate.HasValue ? safeModel.DaysToRenewal.ToString() : "0")</span><span class="days-unit">Days</span></div>
+								</div>
+							</div>
+						</div>
+						<div class="caption">Days Remaining</div>
+					</div>
+				</div>
+				<div class="col-md-3 fade-up">
+					<div class="user-card kpi">
+						<h3>@(safeModel.NextRenewalDate.HasValue ? safeModel.NextRenewalDate.Value.ToString("dd-MMM-yyyy") : "—")</h3>
+						<div class="desc">Next Renewal</div>
+						@if (safeModel.DaysToRenewal <= 30 && safeModel.DaysToRenewal > 0)
+						{
+							<div class="renewal-status">
+								<small class="text-@(safeModel.DaysToRenewal <= 7 ? "danger" : safeModel.DaysToRenewal <= 15 ? "warning" : "info")">
+									<i class="fas fa-clock me-1"></i>@safeModel.DaysToRenewal day(s) left
+								</small>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+
+	<div class="row">
+		<div class="col-lg-8 fade-up">
+			<div class="user-card">
+				<h5 class="mb-3">Recent Payments</h5>
+				@if (safeModel.RecentPayments != null && safeModel.RecentPayments.Any())
+				{
+					<div class="table-responsive">
+						<table class="table table-striped table-sm">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Receipt</th>
+									<th>Plan</th>
+									<th>Type</th>
+									<th class="text-end">Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var p in safeModel.RecentPayments)
+								{
+									<tr>
+										<td>@p.Payment_Date.ToString("dd-MMM-yyyy")</td>
+										<td>@p.Payment_Receipt_No</td>
+										<td>@p.Payment_Plan</td>
+										<td>@p.Payment_Type</td>
+										<td class="text-end">@p.Amount.ToString("N2")</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				}
+				else
+				{
+					<div class="text-muted">No payments yet.</div>
+				}
+			</div>
+		</div>
+		<div class="col-lg-4 fade-up">
+			<div class="user-card">
+				<h5 class="mb-3">Current Plan</h5>
+				@if (safeModel.CurrentPlan != null)
+				{
+					<div><strong>@safeModel.CurrentPlan.MemberTypeDescription</strong></div>
+					<div class="text-muted">@safeModel.CurrentPlan.MembershipFee.ToString("N2") INR - @safeModel.CurrentPlan.NoOfYears year(s)</div>
+				}
+				else
+				{
+					<div class="text-muted">No plan found.</div>
+				}
+				<div class="mt-3">
+					@if (safeModel.DaysToRenewal <= 30 && safeModel.DaysToRenewal > 0)
+					{
+						var buttonClass = safeModel.DaysToRenewal <= 7 ? "renewal-critical" : 
+										safeModel.DaysToRenewal <= 15 ? "renewal-urgent" : "renewal-available";
+						var urgencyText = safeModel.DaysToRenewal <= 7 ? "Critical" : 
+										safeModel.DaysToRenewal <= 15 ? "Urgent" : "Due Soon";
+						
+						<button type="button" class="btn @buttonClass btn-sm" id="openRenewalBtn" data-member-id="@safeModel.Member.MemberID">
+							<i class="fas fa-redo me-2"></i>Quick Renew
+						</button>
+						<small class="text-muted d-block mt-1">
+							<i class="fas fa-clock me-1"></i>@urgencyText - Renewal due in @safeModel.DaysToRenewal day(s)
+						</small>
+					}
+					else if (safeModel.DaysToRenewal <= 0)
+					{
+						<div class="alert alert-warning py-2 px-3 mb-0">
+							<small><i class="fas fa-exclamation-triangle me-1"></i>Membership expired</small>
+						</div>
+					}
+					else
+					{
+						<div class="text-muted">
+							<small><i class="fas fa-calendar-check me-1"></i>Renewal available in @(safeModel.DaysToRenewal - 30) more day(s)</small>
+						</div>
+					}
+				</div>
+			</div>
+
+			<div class="user-card fade-up">
+				<h5 class="mb-3">Contact</h5>
+				<div>@safeModel.Member.Member_EmailID</div>
+				<div>@safeModel.Member.Member_Mobile_No</div>
+				<div>@safeModel.Member.Member_City</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-6 fade-up">
+			<div class="user-card">
+				<h5 class="mb-3">Organization Details</h5>
+				@if (safeModel.OrganizationDetails != null && safeModel.OrganizationDetails.Any())
+				{
+					<ul class="mb-0">
+						@foreach (var o in safeModel.OrganizationDetails)
+						{
+							<li><strong>@o.OrganizationName</strong> | @o.CurrentDesignation (Since @o.SinceYear)</li>
+						}
+					</ul>
+				}
+				else
+				{
+					<div class="text-muted">No organization details added.</div>
+				}
+			</div>
+		</div>
+		<div class="col-lg-6 fade-up">
+			<div class="user-card">
+				<h5 class="mb-3">Children</h5>
+				@if (safeModel.Children != null && safeModel.Children.Any())
+				{
+					<ul class="mb-0">
+						@foreach (var c in safeModel.Children)
+						{
+							<li>@c.Child_Name - @c.Child_Age years</li>
+						}
+					</ul>
+				}
+				else
+				{
+					<div class="text-muted">No children details added.</div>
+				}
+			</div>
+		</div>
+	</div>
+		}
+</div>
+
+<!-- Renewal Modal Container -->
+<div class="modal fade" id="renewalModal" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg">
+		<div class="modal-content" id="renewalModalContent"></div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		(function () {
+			var counters = document.querySelectorAll('.counter');
+			counters.forEach(function (el) {
+				var target = parseFloat(el.getAttribute('data-target') || '0');
+				var isMoney = el.getAttribute('data-money') === 'true';
+				var start = 0;
+				var duration = 900;
+				var startTs;
+				function step(ts) {
+					if (!startTs) startTs = ts;
+					var p = Math.min((ts - startTs) / duration, 1);
+					var val = Math.floor(p * target);
+					el.textContent = isMoney ? val.toLocaleString() + ' INR' : val.toLocaleString();
+					if (p < 1) requestAnimationFrame(step);
+				}
+				requestAnimationFrame(step);
+			});
+
+			// New Days Remaining meter
+			var meter = document.getElementById('daysMeter');
+			if (meter) {
+				var valEl = meter.querySelector('.value');
+				var daysLeftText = (valEl && valEl.textContent) ? valEl.textContent.trim() : '0';
+				var daysLeft = parseInt(daysLeftText, 10);
+				if (isNaN(daysLeft)) daysLeft = 0;
+				var planYears = @((safeModel.CurrentPlan != null ? safeModel.CurrentPlan.NoOfYears : 1));
+				var periodDays = Math.max(1, planYears * 365);
+				var usedDays = Math.min(periodDays, Math.max(0, periodDays - daysLeft));
+				var percent = Math.round((usedDays / periodDays) * 100);
+				meter.style.setProperty('--p', percent);
+				// Color thresholds
+				var fill = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+				if (daysLeft <= 7) {
+					fill = getComputedStyle(document.documentElement).getPropertyValue('--danger').trim();
+				} else if (daysLeft <= 30) {
+					fill = '#f59e0b'; // amber for urgency
+				} else {
+					fill = getComputedStyle(document.documentElement).getPropertyValue('--success').trim();
+				}
+				meter.style.setProperty('--fill', fill || '#6a5ef1');
+			}
+
+			var obs = new IntersectionObserver(function(entries){
+				entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); } });
+			}, { threshold: .15 });
+			document.querySelectorAll('.fade-up').forEach(function(el){ obs.observe(el); });
+
+			var openBtn = document.getElementById('openRenewalBtn');
+			if (openBtn) {
+				openBtn.addEventListener('click', function(){
+					var memberId = this.getAttribute('data-member-id');
+					var url = '@Url.Action("RenewalPopup","Home")' + '?memberId=' + encodeURIComponent(memberId);
+					var container = document.getElementById('renewalModalContent');
+					container.innerHTML = '<div class="p-5 text-center">Loading...</div>';
+					fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+						.then(function(r){ return r.text(); })
+						.then(function(html){
+							container.innerHTML = html;
+							if (window.bootstrap) {
+								var modal = new bootstrap.Modal(document.getElementById('renewalModal'));
+								modal.show();
+							}
+						});
+				});
+			}
+			
+			// Add renewal urgency notification
+			var daysToRenewal = @safeModel.DaysToRenewal;
+			if (daysToRenewal <= 30 && daysToRenewal > 0) {
+				var urgencyLevel = daysToRenewal <= 7 ? 'critical' : daysToRenewal <= 15 ? 'urgent' : 'due soon';
+				var message = 'Your membership renewal is ' + urgencyLevel + '. Please renew to maintain your active status.';
+				
+				// Show browser notification if supported
+				if ('Notification' in window && Notification.permission === 'granted') {
+					new Notification('Membership Renewal Reminder', {
+						body: message,
+						icon: '/favicon.ico',
+						tag: 'renewal-reminder'
+					});
+				}
+				
+				// Add console log for debugging
+				console.log('Renewal reminder: ' + message);
+			}
+		})();
+	</script>
+}
+
+

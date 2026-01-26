@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "Production Release Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+
+            <h3 class="panel-title">
+                <i class="fa fa-bar-chart-o fa-fw"></i>  @ViewBag.Title
+                <a class="btn btn-success btn-sm pull-right" style="padding:3px;margin:0 0 10px" href="@Url.Action("Form", "ProductionReleaseOrder")"><i class="fa fa-plus-square "></i> Add New </a> <div class="clearfix"> </div>
+            </h3>
+
+            @*<h3 class="panel-title">
+                    <i class="fa fa-bar-chart-o fa-fw"></i>  Client Order
+                    <li class="dropdown pull-right">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle btn-lg pull-right"
+                                data-toggle="dropdown">
+                            Create New <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href=@Url.Action("DForm", "ClientOrder")>Direct</a></li>
+                            <li><a href=@Url.Action("QForm", "ClientOrder")>Quotation</a></li>
+                        </ul>
+                    </li>
+                    <div class="clearfix"> </div>
+
+                </h3>*@
+
+
+        </div>
+
+
+        <div class="col-lg-12" style="margin-top:10px">
+            <div class="alert alert-info  center-block " style="text-align:center">
+
+                <form action="#" method="post" accept-charset="utf-8" id="exportcartingorderform" data-ng-controller="myController" name="exportcartingorderform">
+                    <input type="text" value="@System.Web.HttpContext.Current.Session["Group"]" id="F_KUSRID" class="hidden" />
+                    <label for="from">From</label>
+                    <input type="text" id="from" name="from" value="@System.Web.HttpContext.Current.Session["SDATE"]">
+                    <label for="to">to</label>
+                    <input type="text" id="to" name="to" value="@System.Web.HttpContext.Current.Session["EDATE"]">
+                    <input type="submit" name="submit" value="Search" class="btn btn-danger btn-sm" />
+                </form>
+
+            </div>
+        </div>
+
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class=" ">
+                        <div class="panel-body">
+
+                            <table id="example" class="display" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>RO Number</th>
+                                        <th>Client Name</th>
+                                        <th>Amount</th>
+                                        <th>Created by</th>
+                                        <th>Status</th>
+                                        <th>ID</th>
+                                        <th>Edit / Delete</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>RO Number</th>
+                                        <th>Client Name</th>
+                                        <th>Amount</th>
+                                        <th>Created by</th>
+                                        <th>Status</th>
+                                        <th>ID</th>
+                                        <th>Edit / Delete</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:1200px;">
+        <div class="modal-content  clearfix">
+
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+@section Scripts {
+
+
+
+    <script type="text/javascript" class="init">
+
+
+
+var editor; // use a global for the submit and return data rendering in the examples
+
+$(document).ready(function() {
+
+table=$('#example').DataTable( {
+    ajax: "@Url.Action("GetAjaxData", "ProductionReleaseOrder")",
+        "order": [[1, "desc"]],
+        stateSave: true,
+        "language": {
+            "lengthMenu": '_MENU_ rows',
+            "search": '<i class="fa fa-search"></i>',
+            "searchPlaceholder": "search",
+            "paginate": {
+                "previous": '<i class="fa fa-angle-left"></i>',
+                "next": '<i class="fa fa-angle-right"></i>'
+            }
+        },
+		columns: [
+            { data: "RODATE" },
+            { data: "RONID" },
+            { data: "CLNTNAME" },
+            { data: "RONAMT" },
+            { data: "CUSRID" },
+            { data: "DISPSTATUS" },
+            { data: "ROID", "visible": false },
+			{
+
+                mRender: function (data, type, row) {
+                    return '<a href="@Url.Action("Form", "ProductionReleaseOrder")/' + row["ROID"] + '"   class="editor_edit btn btn-warning btn-sm" ><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a href="@Url.Action("PrintView", "ProductionReleaseOrder")/' + row["ROID"] + '-0"   class="editor_print btn btn-success btn-sm"  target="_blank" ><i class="glyphicon glyphicon-print"></i></a>&nbsp;<a href="@Url.Action("PrintView", "ProductionReleaseOrder")/' + row["ROID"] + '-1"   class="editor_print btn btn-warning btn-sm"  target="_blank" ><i class="glyphicon glyphicon-print"></i></a>&nbsp;<a href="#" id="' + row["ROID"] + '\" class="editor_remove btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i></a>'
+			    }
+			}
+		]
+    });
+
+
+//alert("4");
+
+            $("#from").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat: 'dd-mm-yy',
+                onClose: function (selectedDate) {
+                    $("#to").datepicker("option", "minDate", selectedDate);
+                }
+            });
+            $("#to").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat: 'dd-mm-yy',
+                onClose: function (selectedDate) {
+                    $("#from").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+
+
+//alert("5");
+    //..........delete function
+            $(document).on("click", "a.editor_remove", function () {
+
+                var r = confirm("Are you sure to delete this record ?");
+
+                if (r == true) {
+
+
+                    var idx = $(this).attr('id');
+
+                    base = window.location.origin;
+
+
+
+                    $.post(base + "/ProductionReleaseOrder/Del",
+      {
+          id: idx, fld: "PRODUCTIONRELEASEORDER"
+      },
+      function (data, status) {
+
+          alert(data);
+
+          if (data == "Deleted Successfully ...")
+              location.replace(base + "/ProductionReleaseOrder/Index");
+
+
+      });
+
+                }
+
+                return false;
+
+
+            });//.......end
+
+
+
+
+
+} );
+
+
+    </script>
+
+}
+
+

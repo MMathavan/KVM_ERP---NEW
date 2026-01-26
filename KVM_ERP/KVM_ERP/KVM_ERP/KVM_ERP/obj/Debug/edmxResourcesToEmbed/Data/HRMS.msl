@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SYNCModelStoreContainer" CdmEntityContainer="NHRMS_ERPEntities">
+    <FunctionImportMapping FunctionImportName="SP_UNITMASTER_INSRT" FunctionName="SYNCModel.Store.SP_UNITMASTER_INSRT" />
+    <FunctionImportMapping FunctionImportName="pr_Search_Roles" FunctionName="SYNCModel.Store.pr_Search_Roles">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_Search_Roles_Result">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Descp" ColumnName="Descp" />
+          <ScalarProperty Name="SDPTNAME" ColumnName="SDPTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountGroup" FunctionName="SYNCModel.Store.pr_SearchAccountGroup">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchAccountGroup_Result">
+          <ScalarProperty Name="ACHEADGCODE" ColumnName="ACHEADGCODE" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADGID" ColumnName="ACHEADGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountHeadMaster" FunctionName="SYNCModel.Store.pr_SearchAccountHeadMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchAccountHeadMaster_Result">
+          <ScalarProperty Name="ACHEADCODE" ColumnName="ACHEADCODE" />
+          <ScalarProperty Name="ACHEADDESC" ColumnName="ACHEADDESC" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADID" ColumnName="ACHEADID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCompanyMaster" FunctionName="SYNCModel.Store.pr_SearchCompanyMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchCompanyMaster_Result">
+          <ScalarProperty Name="COMPCODE" ColumnName="COMPCODE" />
+          <ScalarProperty Name="COMPNAME" ColumnName="COMPNAME" />
+          <ScalarProperty Name="COMPADDR" ColumnName="COMPADDR" />
+          <ScalarProperty Name="COMPPHN1" ColumnName="COMPPHN1" />
+          <ScalarProperty Name="COMPCPRSN" ColumnName="COMPCPRSN" />
+          <ScalarProperty Name="COMPMAIL" ColumnName="COMPMAIL" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCostFactorMaster" FunctionName="SYNCModel.Store.pr_SearchCostFactorMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchCostFactorMaster_Result">
+          <ScalarProperty Name="CFMODE" ColumnName="CFMODE" />
+          <ScalarProperty Name="CFDESC" ColumnName="CFDESC" />
+          <ScalarProperty Name="CFEXPR" ColumnName="CFEXPR" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CFID" ColumnName="CFID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCustomerMaster" FunctionName="SYNCModel.Store.pr_SearchCustomerMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchCustomerMaster_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATETDESC" ColumnName="CATETDESC" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEPNAME" ColumnName="CATEPNAME" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="CATEMAIL" ColumnName="CATEMAIL" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDepartmentMaster" FunctionName="SYNCModel.Store.pr_SearchDepartmentMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchDepartmentMaster_Result">
+          <ScalarProperty Name="DEPTCODE" ColumnName="DEPTCODE" />
+          <ScalarProperty Name="DEPTDESC" ColumnName="DEPTDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DEPTID" ColumnName="DEPTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDesignationMaster" FunctionName="SYNCModel.Store.pr_SearchDesignationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchDesignationMaster_Result">
+          <ScalarProperty Name="DSGNCODE" ColumnName="DSGNCODE" />
+          <ScalarProperty Name="DSGNDESC" ColumnName="DSGNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DSGNID" ColumnName="DSGNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchEmployeeMaster" FunctionName="SYNCModel.Store.pr_SearchEmployeeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchEmployeeMaster_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEPNAME" ColumnName="CATEPNAME" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="CATEMAIL" ColumnName="CATEMAIL" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchHSNCodeMaster" FunctionName="SYNCModel.Store.pr_SearchHSNCodeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchHSNCodeMaster_Result">
+          <ScalarProperty Name="HSNCODE" ColumnName="HSNCODE" />
+          <ScalarProperty Name="HSNDESC" ColumnName="HSNDESC" />
+          <ScalarProperty Name="TAXEXPRN" ColumnName="TAXEXPRN" />
+          <ScalarProperty Name="CGSTEXPRN" ColumnName="CGSTEXPRN" />
+          <ScalarProperty Name="SGSTEXPRN" ColumnName="SGSTEXPRN" />
+          <ScalarProperty Name="IGSTEXPRN" ColumnName="IGSTEXPRN" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="HSNID" ColumnName="HSNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLocationMaster" FunctionName="SYNCModel.Store.pr_SearchLocationMaster" />
+    <FunctionImportMapping FunctionImportName="pr_SearchMaterialGroupMaster" FunctionName="SYNCModel.Store.pr_SearchMaterialGroupMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchMaterialGroupMaster_Result">
+          <ScalarProperty Name="MTRLGCODE" ColumnName="MTRLGCODE" />
+          <ScalarProperty Name="MTRLGDESC" ColumnName="MTRLGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="MTRLGID" ColumnName="MTRLGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchMaterialMaster" FunctionName="SYNCModel.Store.pr_SearchMaterialMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchMaterialMaster_Result">
+          <ScalarProperty Name="MTRLCODE" ColumnName="MTRLCODE" />
+          <ScalarProperty Name="MTRLGDESC" ColumnName="MTRLGDESC" />
+          <ScalarProperty Name="MTRLDESC" ColumnName="MTRLDESC" />
+          <ScalarProperty Name="PACKMDESC" ColumnName="PACKMDESC" />
+          <ScalarProperty Name="UNITCODE" ColumnName="UNITCODE" />
+          <ScalarProperty Name="HSNCODE" ColumnName="HSNCODE" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="MTRLID" ColumnName="MTRLID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="SYNCModel.AspNetUser">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+          <ScalarProperty Name="DBrnchId" ColumnName="DBrnchId" />
+          <ScalarProperty Name="UBrnchName" ColumnName="UBrnchName" />
+          <ScalarProperty Name="BrnchId" ColumnName="BrnchId" />
+          <ScalarProperty Name="NPassword" ColumnName="NPassword" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="PR_ACCOUNTINGYEAR_ID_CHK" FunctionName="SYNCModel.Store.PR_ACCOUNTINGYEAR_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.PR_ACCOUNTINGYEAR_ID_CHK_Result">
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+          <ScalarProperty Name="YRDESC" ColumnName="YRDESC" />
+          <ScalarProperty Name="YRID1" ColumnName="YRID1" />
+          <ScalarProperty Name="FDATE" ColumnName="FDATE" />
+          <ScalarProperty Name="TDATE" ColumnName="TDATE" />
+          <ScalarProperty Name="YRDESC1" ColumnName="YRDESC1" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+          <ScalarProperty Name="PRCSDATE" ColumnName="PRCSDATE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" FunctionName="SYNCModel.Store.PR_COMPANYACCOUNTINGDETAIL_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="VW_USER_DETAILS">
+      <EntityTypeMapping TypeName="SYNCModel.VW_USER_DETAILS">
+        <MappingFragment StoreEntitySet="VW_USER_DETAILS">
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchSalesEInvoice" FunctionName="SYNCModel.Store.pr_SearchSalesEInvoice">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SYNCModel.pr_SearchSalesEInvoice_Result">
+          <ScalarProperty Name="TRANDATE" ColumnName="TRANDATE" />
+          <ScalarProperty Name="TRANDNO" ColumnName="TRANDNO" />
+          <ScalarProperty Name="TRANREFNO" ColumnName="TRANREFNO" />
+          <ScalarProperty Name="TRANREFNAME" ColumnName="TRANREFNAME" />
+          <ScalarProperty Name="TRANNAMT" ColumnName="TRANNAMT" />
+          <ScalarProperty Name="ACKNO" ColumnName="ACKNO" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="TRANMID" ColumnName="TRANMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

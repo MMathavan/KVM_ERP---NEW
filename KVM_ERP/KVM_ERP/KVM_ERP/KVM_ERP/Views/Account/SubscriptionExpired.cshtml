@@ -1,0 +1,337 @@
+@{
+    ViewBag.Title = "Subscription Expired";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Expired - KVM ERP</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .subscription-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subscription-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24, #ff9ff3, #54a0ff);
+        }
+
+        .expired-icon {
+            font-size: 5rem;
+            color: #e74c3c;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @@keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .expired-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .expired-subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .expiry-details {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .expiry-details h4 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .expiry-date {
+            font-size: 1.3rem;
+            color: #e74c3c;
+            font-weight: 700;
+        }
+
+        .plan-info {
+            font-size: 1.1rem;
+            color: #34495e;
+            margin-top: 10px;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .contact-section h4 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .contact-info {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .contact-info i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .btn-renew {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+
+        .btn-renew:hover {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-renew i {
+            margin-right: 8px;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .btn-back:hover {
+            background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            color: white;
+            text-decoration: none;
+        }
+
+        .features-lost {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .features-lost h5 {
+            color: #c53030;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .features-list li {
+            padding: 8px 0;
+            color: #4a5568;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .features-list i {
+            color: #e53e3e;
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .renewal-benefits {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .renewal-benefits h5 {
+            color: #22543d;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .benefits-list li {
+            padding: 8px 0;
+            color: #2d3748;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .benefits-list li:last-child {
+            border-bottom: none;
+        }
+
+        .benefits-list i {
+            color: #38a169;
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        @@media (max-width: 768px) {
+            .subscription-container {
+                padding: 40px 20px;
+                margin: 20px;
+            }
+            
+            .expired-title {
+                font-size: 2rem;
+            }
+            
+            .expired-icon {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="subscription-container">
+        <div class="expired-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        
+        <h1 class="expired-title">Subscription Expired</h1>
+        <p class="expired-subtitle">
+            Your access to KVM ERP system has been suspended due to an expired subscription.
+        </p>
+
+        <div class="expiry-details">
+            <h4><i class="fas fa-calendar-times"></i> Subscription Details</h4>
+            <div class="expiry-date">
+                Expired on: @ViewBag.ExpiryDate
+            </div>
+            <!-- <div class="plan-info">
+                Plan: @(ViewBag.PlanName ?? "Basic")
+            </div> -->
+        </div>
+
+        <!-- <div class="features-lost">
+            <h5><i class="fas fa-lock"></i> Currently Unavailable Features</h5>
+            <ul class="features-list">
+                <li><i class="fas fa-times-circle"></i> Raw Material Intake Management</li>
+                <li><i class="fas fa-times-circle"></i> Product Calculation Tools</li>
+                <li><i class="fas fa-times-circle"></i> Production Overview Reports</li>
+                <li><i class="fas fa-times-circle"></i> Quality Check Management</li>
+                <li><i class="fas fa-times-circle"></i> Master Data Management</li>
+                <li><i class="fas fa-times-circle"></i> User Management</li>
+            </ul>
+        </div> -->
+
+        <!-- <div class="renewal-benefits">
+            <h5><i class="fas fa-crown"></i> Renew to Restore Access</h5>
+            <ul class="benefits-list">
+                <li><i class="fas fa-check-circle"></i> Full ERP System Access</li>
+                <li><i class="fas fa-check-circle"></i> Advanced Calculation Tools</li>
+                <li><i class="fas fa-check-circle"></i> Comprehensive Reporting</li>
+                <li><i class="fas fa-check-circle"></i> Data Export Capabilities</li>
+                <li><i class="fas fa-check-circle"></i> Technical Support</li>
+                <li><i class="fas fa-check-circle"></i> Regular Updates</li>
+            </ul>
+        </div> -->
+
+        <div class="contact-section">
+            <h4><i class="fas fa-headset"></i> Contact Administrator</h4>
+            <div class="contact-info">
+                <div><i class="fas fa-envelope"></i> Email: support@fusiontec.com</div>
+                <div><i class="fas fa-phone"></i> Phone: +91 9841446699</div>
+                <div><i class="fas fa-clock"></i> Support Hours: 9:00 AM - 6:00 PM (Mon-Sat)</div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ViewBag.UserId))
+        {
+            <div style="margin: 30px 0; text-align: center;">
+                @using (Html.BeginForm("RenewSubscription", "Account", FormMethod.Post, new { style = "display: inline-block;" }))
+                {
+                    @Html.Hidden("userId", (string)ViewBag.UserId)
+                    @Html.Hidden("planName", (string)(ViewBag.PlanName ?? "Basic"))
+                    <button type="submit" class="btn-renew" onclick="return confirm('Are you sure you want to submit a renewal request? This will notify the administrator for approval.');">
+                        <i class="fas fa-sync-alt"></i> Renew Now
+                    </button>
+                }
+            </div>
+        }
+
+        <a href="@Url.Action("Login", "Account")" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to Login
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

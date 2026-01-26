@@ -1,0 +1,367 @@
+@model IEnumerable<ClubMembership.Models.EventMaster>
+@{
+    ViewBag.Title = "Notifications";
+}
+
+@using ClubMembership.Models
+@using ClubMembership.Controllers
+
+@section Styles {
+    <style>
+        .notifications-wrap { padding:16px; }
+        .page-title { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+        .page-title .icon { color:#0d6efd; }
+        .card-notification { border:1px solid #e9ecef; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04); margin-bottom:12px; }
+        .card-notification:hover { box-shadow:0 4px 14px rgba(0,0,0,0.08); }
+        .card-body-tight { padding:14px 16px; }
+        .notif-heading { font-weight:600; color:#212529; }
+        .notif-meta { color:#6c757d; font-size:0.9rem; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+        .notif-time { color:#0d6efd; font-weight:600; white-space:nowrap; }
+        .notif-caption { margin-top:6px; color:#495057; }
+        .notif-actions { margin-top:10px; display:flex; gap:8px; }
+        .empty-state { text-align:center; padding:32px 16px; color:#6c757d; }
+        .empty-state .icon { font-size:36px; color:#adb5bd; margin-bottom:8px; }
+        .sidebar-card { border:1px solid #e9ecef; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04); margin-bottom:12px; }
+        .sidebar-card .card-header { background:#f8f9fa; border-bottom:1px solid #e9ecef; font-weight:600; }
+        .list-people { list-style:none; padding:0; margin:0; }
+        .list-people li { display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px dashed #eef2f4; }
+        .list-people li:last-child { border-bottom:none; }
+        .avatar { width:32px; height:32px; border-radius:50%; object-fit:cover; background:#e9ecef; display:inline-block; }
+        .muted { color:#6c757d; font-size:0.9rem; }
+        @@media (min-width: 768px) { .notifications-container { max-width: 1140px; margin: 0 auto; } }
+
+        /* Simple modal styles */
+        .modal-backdrop-lite { position:fixed; inset:0; background:rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center; z-index:1050; }
+        .modal-card { width: 96%; max-width: 520px; background:#fff; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.2); overflow:hidden; animation: modalFadeIn 0.2s ease-out; }
+        .modal-card .modal-header { padding:14px 16px; background:#f8f9fa; border-bottom:1px solid #e9ecef; font-weight:600; display:flex; justify-content:space-between; align-items:center; }
+        .modal-card .modal-body { padding:20px; }
+        .modal-card .modal-footer { padding:12px 16px; background:#f8f9fa; border-top:1px solid #e9ecef; display:flex; gap:8px; justify-content:flex-end; }
+        .modal-close { background:none; border:none; font-size:20px; line-height:1; color:#6c757d; cursor:pointer; padding:4px; border-radius:4px; }
+        .modal-close:hover { background:#e9ecef; color:#495057; }
+        .form-note { width:100%; min-height:120px; resize:vertical; border:1px solid #dee2e6; border-radius:8px; padding:12px; font-family:inherit; font-size:14px; line-height:1.5; }
+        .form-note:focus { border-color:#0d6efd; box-shadow:0 0 0 0.2rem rgba(13,110,253,0.25); outline:none; }
+        .form-label { font-weight:600; margin-bottom:8px; display:block; color:#495057; }
+        @@keyframes modalFadeIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
+    </style>
+}
+
+<div class="container notifications-wrap">
+    <div class="notifications-container">
+        <div class="page-title">
+            <i class="fa-solid fa-bell icon"></i>
+            <h2 class="m-0">Notifications</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var e in Model)
+                    {
+                        <div class="card card-notification">
+                            <div class="card-body card-body-tight">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="notif-heading">@e.Heading</div>
+                                        <div class="notif-meta">
+                                            <span><i class="fa-solid fa-location-dot"></i> @e.EventLocation</span>
+                                        </div>
+                                    </div>
+                                    <div class="notif-time">
+                                        <i class="fa-regular fa-calendar"></i>
+                                        @e.EventTime.ToString("dd MMM yyyy, hh:mm tt")
+                                    </div>
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(e.Caption))
+                                {
+                                    <div class="notif-caption">@e.Caption</div>
+                                }
+
+                                <div class="notif-actions">
+                                    @using (Html.BeginForm("AcceptNotification", "Home", FormMethod.Post, new { @class = "d-inline", onsubmit = "return handleAccept(event," + e.EventId + ");" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="eventId" value="@e.EventId" />
+                                        <button type="submit" class="btn btn-sm btn-success"><i class="fa-solid fa-check"></i> Accept</button>
+                                    }
+                                    @using (Html.BeginForm("DeclineNotification", "Home", FormMethod.Post, new { @class = "d-inline", onsubmit = "return handleDecline(event," + e.EventId + ");" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="eventId" value="@e.EventId" />
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-xmark"></i> Decline</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="card card-notification">
+                        <div class="card-body empty-state">
+                            <div><i class="fa-regular fa-bell-slash icon"></i></div>
+                            <div>No event notifications for today.</div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-4">
+                <div class="sidebar-card card">
+                    <div class="card-header"><i class="fa-solid fa-cake-candles"></i> Today's Birthdays</div>
+                    <div class="card-body p-0">
+                        <ul class="list-people">
+                            @{
+                                var bm = ViewBag.BirthdaysMembers as IEnumerable<MemberShipMaster>;
+                                var bs = ViewBag.BirthdaysSpouses as IEnumerable<SpouseBirthday>;
+                                bool anyB = (bm != null && bm.Any()) || (bs != null && bs.Any());
+                            }
+                            @if (!anyB)
+                            {
+                                <li class="muted p-3">No birthdays today.</li>
+                            }
+                            else
+                            {
+                                if (bm != null)
+                                {
+                                    foreach (var m in bm)
+                                    {
+                                        <li>
+                                            <img class="avatar" src="@((string.IsNullOrWhiteSpace((string)m.Member_Photo_Path) ? Url.Content("~/Content/images/user.png") : Url.Content(m.Member_Photo_Path)))" alt="@m.Member_Name" />
+                                            <div>
+                                                <div>@m.Member_Name</div>
+                                                <div class="muted">Member</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <button type="button" class="btn btn-sm btn-primary" onclick="openWishModal(@m.MemberID, 'birthday', 'member', this)"><i class="fa-regular fa-paper-plane"></i> Wish</button>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                                if (bs != null)
+                                {
+                                    foreach (var s in bs)
+                                    {
+                                        <li>
+                                            <span class="avatar d-inline-flex align-items-center justify-content-center"><i class="fa-regular fa-user"></i></span>
+                                            <div>
+                                                <div>@s.Spouse_Name</div>
+                                                <div class="muted">Spouse of @s.Member_Name</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <button type="button" class="btn btn-sm btn-primary" onclick="openWishModal(@s.MemberID, 'birthday', 'spouse', this)"><i class="fa-regular fa-paper-plane"></i> Wish</button>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="sidebar-card card">
+                    <div class="card-header"><i class="fa-solid fa-heart"></i> Today's Anniversaries</div>
+                    <div class="card-body p-0">
+                        <ul class="list-people">
+                            @{
+                                var ann = ViewBag.Anniversaries as IEnumerable<AnniversaryItem>;
+                            }
+                            @if (ann == null || !ann.Any())
+                            {
+                                <li class="muted p-3">No anniversaries today.</li>
+                            }
+                            else
+                            {
+                                foreach (var a in ann)
+                                {
+                                    <li>
+                                        <span class="avatar d-inline-flex align-items-center justify-content-center"><i class="fa-solid fa-heart"></i></span>
+                                        <div>
+                                            <div>@a.Member_Name @if(!string.IsNullOrWhiteSpace((string)a.Spouse_Name)){<text>&amp; @a.Spouse_Name</text>}</div>
+                                            <div class="muted">Married on @(((DateTime)a.Date_Of_Marriage).ToString("dd MMM"))</div>
+                                        </div>
+                                        <div class="ms-auto">
+                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="openWishModal(@a.MemberID, 'anniversary', 'couple', this)"><i class="fa-regular fa-paper-plane"></i> Wish</button>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Wish Modal -->
+<div id="wishModal" class="modal-backdrop-lite" style="display: none;" aria-hidden="true">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span>Send Wish</span>
+            <button type="button" class="modal-close" onclick="closeWishModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="wishMemberId" />
+            <input type="hidden" id="wishType" />
+            <input type="hidden" id="wishRecipient" />
+            <div class="mb-3">
+                <label for="wishNote" class="form-label">Personal Message (Optional)</label>
+                <textarea id="wishNote" class="form-note" placeholder="Type your personal message here..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="ignoreWish()">
+                <i class="fa-solid fa-xmark"></i> Ignore
+            </button>
+            <button type="button" class="btn btn-primary" onclick="sendWishFromModal()">
+                <i class="fa-regular fa-paper-plane"></i> Send
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function handleAccept(ev, eventId) {
+        ev.preventDefault();
+        var form = ev.target;
+
+        var newTab = window.open('about:blank', '_blank');
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: new FormData(form)
+        }).then(r => r.json()).then(data => {
+            if (data && data.success && data.calendarUrl) {
+                if (newTab) {
+                    newTab.location = data.calendarUrl;
+                } else {
+                    window.location.href = data.calendarUrl;
+                }
+                location.reload();
+            } else if (newTab) {
+                newTab.close();
+            }
+        }).catch(() => {
+            if (newTab) newTab.close();
+        });
+        return false;
+    }
+    function handleDecline(ev, eventId) {
+        ev.preventDefault();
+        var form = ev.target;
+        fetch(form.action, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: new FormData(form)
+        }).then(r => r.json()).then(data => {
+            if (data && data.success) {
+                location.reload();
+            }
+        });
+        return false;
+    }
+
+    // Global context for wish modal state
+    var _wishCtx = { memberId: null, type: null, recipient: null, btn: null };
+
+    function openWishModal(memberId, type, recipient, btn) {
+        const modal = document.getElementById('wishModal');
+        if (!modal) {
+            // Fallback: simple prompt
+            var note = window.prompt('Type your personal message (optional). Click OK to send, or Cancel to send default.');
+            if (note === null) { note = ''; }
+            return sendWish(memberId, type, recipient, btn, note);
+        }
+        // Save context
+        _wishCtx.memberId = memberId;
+        _wishCtx.type = type;
+        _wishCtx.recipient = recipient;
+        _wishCtx.btn = btn || null;
+        // Populate modal fields and show
+        document.getElementById('wishMemberId').value = memberId;
+        document.getElementById('wishType').value = type;
+        document.getElementById('wishRecipient').value = recipient;
+        document.getElementById('wishNote').value = '';
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+        // Focus on textarea
+        setTimeout(() => document.getElementById('wishNote').focus(), 100);
+        // Bind Esc to close
+        function onKey(e){ if (e.key === 'Escape') { closeWishModal(); window.removeEventListener('keydown', onKey); } }
+        window.addEventListener('keydown', onKey);
+    }
+
+    function submitWish(note) {
+        const memberId = _wishCtx.memberId || document.getElementById('wishMemberId').value;
+        const type = _wishCtx.type || document.getElementById('wishType').value;
+        const recipient = _wishCtx.recipient || document.getElementById('wishRecipient').value;
+        const btn = _wishCtx.btn;
+        closeWishModal();
+        sendWish(memberId, type, recipient, btn, note);
+    }
+
+    function closeWishModal() {
+        const modal = document.getElementById('wishModal');
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function sendWishFromModal() {
+        const note = document.getElementById('wishNote').value;
+        submitWish(note);
+    }
+
+    function ignoreWish() {
+        closeWishModal();
+        // Reset button state if needed
+        if (_wishCtx.btn) {
+            _wishCtx.btn.disabled = false;
+            _wishCtx.btn.innerHTML = '<i class="fa-regular fa-paper-plane"></i> Wish';
+        }
+    }
+
+    // Anti-forgery token holder
+</script>
+@using (Html.BeginForm("SendWish", "Home", FormMethod.Post, new { id = "wishTokenForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+<script>
+    function getAntiForgeryToken() {
+        var tokenInput = document.querySelector('#wishTokenForm input[name="__RequestVerificationToken"]');
+        return tokenInput ? tokenInput.value : '';
+    }
+
+    function sendWish(memberId, type, recipient, btn, note) {
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending...'; }
+
+        const token = getAntiForgeryToken();
+        const params = new URLSearchParams({ memberId: memberId, type: type, recipient: recipient, note: (note || '') });
+        if (token) params.append('__RequestVerificationToken', token);
+
+        fetch('@Url.Action("SendWish", "Home")', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'RequestVerificationToken': token
+            },
+            body: params.toString()
+        }).then(async r => {
+            // Try to parse JSON; if not JSON, throw to catch
+            const text = await r.text();
+            try { return JSON.parse(text); } catch { throw new Error(text || 'Request failed'); }
+        }).then(data => {
+            if (data && data.success) {
+                if (btn) { btn.classList.remove('btn-primary','btn-outline-danger'); btn.classList.add('btn-success'); btn.innerHTML = '<i class="fa-regular fa-circle-check"></i> Sent'; }
+            } else {
+                alert((data && data.message) ? data.message : 'Failed to send');
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-regular fa-paper-plane"></i> Wish'; }
+            }
+        }).catch(err => {
+            alert(err && err.message ? ('Error sending wish: ' + err.message) : 'Error sending wish');
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-regular fa-paper-plane"></i> Wish'; }
+        });
+    }
+</script>

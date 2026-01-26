@@ -1,0 +1,471 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ClubMembershipDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar(max)" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="FirstName" Type="nvarchar(max)" />
+          <Property Name="LastName" Type="nvarchar(max)" />
+          <Property Name="Email" Type="nvarchar(max)" />
+          <Property Name="Discriminator" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="NPassword" Type="nvarchar" MaxLength="50" />
+          <Property Name="BrnchId" Type="int" Nullable="false" />
+          <Property Name="UBrnchName" Type="nvarchar" MaxLength="100" />
+          <Property Name="DBrnchId" Type="int" Nullable="false" />
+          <Property Name="DeptName" Type="nvarchar" MaxLength="100" />
+          <Property Name="MobileNo" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="DOB" Type="datetime" Nullable="false" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ClubMembershipDB.dbo.VW_USER_DETAILS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VW_USER_DETAILS">
+          <Key>
+            <PropertyRef Name="GroupId" />
+            <PropertyRef Name="GroupName" />
+          </Key>
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="GroupName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar(max)" />
+        </EntityType>
+        <Function Name="PR_ACCOUNTINGYEAR_ID_CHK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PFYear" Type="int" Mode="In" />
+          <Parameter Name="PTYear" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PCompId" Type="int" Mode="In" />
+          <Parameter Name="PYrId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="pr_Search_Roles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortIndex" Type="int" Mode="In" />
+          <Parameter Name="SortDirection" Type="char" Mode="In" />
+          <Parameter Name="StartRowNum" Type="int" Mode="In" />
+          <Parameter Name="EndRowNum" Type="int" Mode="In" />
+          <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+          <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="pr_SearchAccountGroup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortIndex" Type="int" Mode="In" />
+          <Parameter Name="SortDirection" Type="char" Mode="In" />
+          <Parameter Name="StartRowNum" Type="int" Mode="In" />
+          <Parameter Name="EndRowNum" Type="int" Mode="In" />
+          <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+          <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="pr_SearchAccountHeadMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortIndex" Type="int" Mode="In" />
+          <Parameter Name="SortDirection" Type="char" Mode="In" />
+          <Parameter Name="StartRowNum" Type="int" Mode="In" />
+          <Parameter Name="EndRowNum" Type="int" Mode="In" />
+          <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+          <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="pr_SearchBloodGroupMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortIndex" Type="int" Mode="In" />
+          <Parameter Name="SortDirection" Type="char" Mode="In" />
+          <Parameter Name="StartRowNum" Type="int" Mode="In" />
+          <Parameter Name="EndRowNum" Type="int" Mode="In" />
+          <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+          <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="pr_SearchCompanyMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortIndex" Type="int" Mode="In" />
+          <Parameter Name="SortDirection" Type="char" Mode="In" />
+          <Parameter Name="StartRowNum" Type="int" Mode="In" />
+          <Parameter Name="EndRowNum" Type="int" Mode="In" />
+          <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+          <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="pr_SearchEmployeeMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortIndex" Type="int" Mode="In" />
+          <Parameter Name="SortDirection" Type="char" Mode="In" />
+          <Parameter Name="StartRowNum" Type="int" Mode="In" />
+          <Parameter Name="EndRowNum" Type="int" Mode="In" />
+          <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+          <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="pr_SearchStateMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortIndex" Type="int" Mode="In" />
+          <Parameter Name="SortDirection" Type="char" Mode="In" />
+          <Parameter Name="StartRowNum" Type="int" Mode="In" />
+          <Parameter Name="EndRowNum" Type="int" Mode="In" />
+          <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+          <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="pr_USER_MENU_DETAIL_ASSGN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PKUSRID" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="ClubMembershipDBModelStoreContainer">
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VW_USER_DETAILS" EntityType="Self.VW_USER_DETAILS" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_USER_DETAILS].[GroupId] AS [GroupId], 
+    [VW_USER_DETAILS].[GroupName] AS [GroupName], 
+    [VW_USER_DETAILS].[UserName] AS [UserName]
+    FROM [dbo].[VW_USER_DETAILS] AS [VW_USER_DETAILS]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ClubMembershipDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BrnchId" Type="Int32" Nullable="false" />
+          <Property Name="UBrnchName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DBrnchId" Type="Int32" Nullable="false" />
+          <Property Name="DeptName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="DOB" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VW_USER_DETAILS">
+          <Key>
+            <PropertyRef Name="GroupId" />
+            <PropertyRef Name="GroupName" />
+          </Key>
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="GroupName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="ClubMembershipDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+          <EntitySet Name="VW_USER_DETAILS" EntityType="Self.VW_USER_DETAILS" />
+          <FunctionImport Name="PR_ACCOUNTINGYEAR_ID_CHK" ReturnType="Collection(ClubMembershipDBModel.PR_ACCOUNTINGYEAR_ID_CHK_Result)">
+            <Parameter Name="PFYear" Mode="In" Type="Int32" />
+            <Parameter Name="PTYear" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" ReturnType="Collection(ClubMembershipDBModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result)">
+            <Parameter Name="PCompId" Mode="In" Type="Int32" />
+            <Parameter Name="PYrId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_SearchAccountGroup" ReturnType="Collection(ClubMembershipDBModel.pr_SearchAccountGroup_Result)">
+            <Parameter Name="FilterTerm" Mode="In" Type="String" />
+            <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+            <Parameter Name="SortDirection" Mode="In" Type="String" />
+            <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+            <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_SearchAccountHeadMaster" ReturnType="Collection(ClubMembershipDBModel.pr_SearchAccountHeadMaster_Result)">
+            <Parameter Name="FilterTerm" Mode="In" Type="String" />
+            <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+            <Parameter Name="SortDirection" Mode="In" Type="String" />
+            <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+            <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_SearchCompanyMaster" ReturnType="Collection(ClubMembershipDBModel.pr_SearchCompanyMaster_Result)">
+            <Parameter Name="FilterTerm" Mode="In" Type="String" />
+            <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+            <Parameter Name="SortDirection" Mode="In" Type="String" />
+            <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+            <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_SearchEmployeeMaster">
+            <Parameter Name="FilterTerm" Mode="In" Type="String" />
+            <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+            <Parameter Name="SortDirection" Mode="In" Type="String" />
+            <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+            <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_USER_MENU_DETAIL_ASSGN" ReturnType="Collection(ClubMembershipDBModel.pr_USER_MENU_DETAIL_ASSGN_Result)">
+          <Parameter Name="PKUSRID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="pr_Search_Roles" ReturnType="Collection(ClubMembershipDBModel.pr_Search_Roles_Result)">
+            <Parameter Name="FilterTerm" Mode="In" Type="String" />
+            <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+            <Parameter Name="SortDirection" Mode="In" Type="String" />
+            <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+            <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_SearchStateMaster" ReturnType="Collection(ClubMembershipDBModel.pr_SearchStateMaster_Result)">
+            <Parameter Name="FilterTerm" Mode="In" Type="String" />
+            <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+            <Parameter Name="SortDirection" Mode="In" Type="String" />
+            <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+            <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_SearchBloodGroupMaster" ReturnType="Collection(ClubMembershipDBModel.pr_SearchBloodGroupMaster_Result)">
+            <Parameter Name="FilterTerm" Mode="In" Type="String" />
+            <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+            <Parameter Name="SortDirection" Mode="In" Type="String" />
+            <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+            <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+            <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="PR_ACCOUNTINGYEAR_ID_CHK_Result">
+          <Property Type="Int32" Name="YRID" Nullable="false" />
+          <Property Type="String" Name="YRDESC" Nullable="false" MaxLength="15" />
+          <Property Type="Int32" Name="YRID1" Nullable="false" />
+          <Property Type="DateTime" Name="FDATE" Nullable="false" Precision="16" />
+          <Property Type="DateTime" Name="TDATE" Nullable="false" Precision="16" />
+          <Property Type="String" Name="YRDESC1" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="CUSRID" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="PRCSDATE" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+          <Property Type="Int32" Name="COMPYID" Nullable="false" />
+          <Property Type="Int32" Name="COMPID" Nullable="false" />
+          <Property Type="Int32" Name="YRID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="pr_SearchAccountGroup_Result">
+          <Property Type="String" Name="ACHEADGCODE" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+          <Property Type="Int32" Name="ACHEADGID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_SearchAccountHeadMaster_Result">
+          <Property Type="String" Name="ACHEADCODE" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ACHEADDESC" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+          <Property Type="Int32" Name="ACHEADID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_SearchCompanyMaster_Result">
+          <Property Type="String" Name="COMPCODE" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="COMPNAME" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="COMPADDR" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="COMPPHN1" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="COMPCPRSN" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="COMPMAIL" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="COMPID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_USER_MENU_DETAIL_ASSGN_Result">
+          <Property Type="Int32" Name="MenuId" Nullable="false" />
+          <Property Type="String" Name="LinkText" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ActionName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ControllerName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Roles" Nullable="false" MaxLength="250" />
+          <Property Type="Int16" Name="MenuGId" Nullable="true" />
+          <Property Type="Int16" Name="MenuGIndex" Nullable="true" />
+          <Property Type="String" Name="ImageClassName" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="pr_Search_Roles_Result">
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Descp" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="SDPTNAME" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="RMenuType" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="RControllerName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="MENUDESC" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="RMenuGroupOrder" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_SearchStateMaster_Result">
+          <Property Type="Int32" Name="STATEID" Nullable="true" />
+          <Property Type="String" Name="STATECODE" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="STATEDESC" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="STATETYPE" Nullable="true" MaxLength="11" />
+        </ComplexType>
+        <ComplexType Name="pr_SearchBloodGroupMaster_Result">
+          <Property Type="Int32" Name="BLDGID" Nullable="true" />
+          <Property Type="String" Name="BLDGCODE" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="BLDGDESC" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ClubMembershipDBModelStoreContainer" CdmEntityContainer="ClubMembershipDBEntities">
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="ClubMembershipDBModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+                <ScalarProperty Name="NPassword" ColumnName="NPassword" />
+                <ScalarProperty Name="BrnchId" ColumnName="BrnchId" />
+                <ScalarProperty Name="UBrnchName" ColumnName="UBrnchName" />
+                <ScalarProperty Name="DBrnchId" ColumnName="DBrnchId" />
+                <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_USER_DETAILS">
+            <EntityTypeMapping TypeName="ClubMembershipDBModel.VW_USER_DETAILS">
+              <MappingFragment StoreEntitySet="VW_USER_DETAILS">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PR_ACCOUNTINGYEAR_ID_CHK" FunctionName="ClubMembershipDBModel.Store.PR_ACCOUNTINGYEAR_ID_CHK">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ClubMembershipDBModel.PR_ACCOUNTINGYEAR_ID_CHK_Result">
+                <ScalarProperty Name="YRID" ColumnName="YRID" />
+                <ScalarProperty Name="YRDESC" ColumnName="YRDESC" />
+                <ScalarProperty Name="YRID1" ColumnName="YRID1" />
+                <ScalarProperty Name="FDATE" ColumnName="FDATE" />
+                <ScalarProperty Name="TDATE" ColumnName="TDATE" />
+                <ScalarProperty Name="YRDESC1" ColumnName="YRDESC1" />
+                <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+                <ScalarProperty Name="PRCSDATE" ColumnName="PRCSDATE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" FunctionName="ClubMembershipDBModel.Store.PR_COMPANYACCOUNTINGDETAIL_ID_CHK">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ClubMembershipDBModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+                <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+                <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+                <ScalarProperty Name="YRID" ColumnName="YRID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_SearchAccountGroup" FunctionName="ClubMembershipDBModel.Store.pr_SearchAccountGroup">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchAccountGroup_Result">
+                <ScalarProperty Name="ACHEADGCODE" ColumnName="ACHEADGCODE" />
+                <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+                <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+                <ScalarProperty Name="ACHEADGID" ColumnName="ACHEADGID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_SearchAccountHeadMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchAccountHeadMaster">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchAccountHeadMaster_Result">
+                <ScalarProperty Name="ACHEADCODE" ColumnName="ACHEADCODE" />
+                <ScalarProperty Name="ACHEADDESC" ColumnName="ACHEADDESC" />
+                <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+                <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+                <ScalarProperty Name="ACHEADID" ColumnName="ACHEADID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_SearchCompanyMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchCompanyMaster">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchCompanyMaster_Result">
+                <ScalarProperty Name="COMPCODE" ColumnName="COMPCODE" />
+                <ScalarProperty Name="COMPNAME" ColumnName="COMPNAME" />
+                <ScalarProperty Name="COMPADDR" ColumnName="COMPADDR" />
+                <ScalarProperty Name="COMPPHN1" ColumnName="COMPPHN1" />
+                <ScalarProperty Name="COMPCPRSN" ColumnName="COMPCPRSN" />
+                <ScalarProperty Name="COMPMAIL" ColumnName="COMPMAIL" />
+                <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_SearchEmployeeMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchEmployeeMaster" />
+          <FunctionImportMapping FunctionImportName="pr_USER_MENU_DETAIL_ASSGN" FunctionName="ClubMembershipDBModel.Store.pr_USER_MENU_DETAIL_ASSGN">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_USER_MENU_DETAIL_ASSGN_Result">
+                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+                <ScalarProperty Name="LinkText" ColumnName="LinkText" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="Roles" ColumnName="Roles" />
+                <ScalarProperty Name="MenuGId" ColumnName="MenuGId" />
+                <ScalarProperty Name="MenuGIndex" ColumnName="MenuGIndex" />
+                <ScalarProperty Name="ImageClassName" ColumnName="ImageClassName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_Search_Roles" FunctionName="ClubMembershipDBModel.Store.pr_Search_Roles">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_Search_Roles_Result">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Descp" ColumnName="Descp" />
+                <ScalarProperty Name="SDPTNAME" ColumnName="SDPTNAME" />
+                <ScalarProperty Name="RMenuType" ColumnName="RMenuType" />
+                <ScalarProperty Name="RControllerName" ColumnName="RControllerName" />
+                <ScalarProperty Name="MENUDESC" ColumnName="MENUDESC" />
+                <ScalarProperty Name="RMenuGroupOrder" ColumnName="RMenuGroupOrder" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_SearchStateMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchStateMaster">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchStateMaster_Result">
+                <ScalarProperty Name="STATEID" ColumnName="STATEID" />
+                <ScalarProperty Name="STATECODE" ColumnName="STATECODE" />
+                <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+                <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+                <ScalarProperty Name="STATETYPE" ColumnName="STATETYPE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_SearchBloodGroupMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchBloodGroupMaster">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchBloodGroupMaster_Result">
+                <ScalarProperty Name="BLDGID" ColumnName="BLDGID" />
+                <ScalarProperty Name="BLDGCODE" ColumnName="BLDGCODE" />
+                <ScalarProperty Name="BLDGDESC" ColumnName="BLDGDESC" />
+                <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

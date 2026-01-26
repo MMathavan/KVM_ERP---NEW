@@ -1,0 +1,67 @@
+@model ClubMembership.Models.ContentSearchViewModel
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-3">
+    <form method="get" class="mb-3" action="@Url.Action("Search","Content")">
+        <div class="input-group input-group-lg">
+            <span class="input-group-text"><i class="fa fa-search"></i></span>
+            <input type="search" class="form-control" name="q" value="@Model.Query" placeholder="Search announcements, events..." />
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Query))
+    {
+        <h6 class="text-muted mb-3">Results for "@Model.Query"</h6>
+
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header"><i class="fa fa-bullhorn"></i> Announcements (@(Model.Announcements != null ? Model.Announcements.Count : 0))</div>
+                    <ul class="list-group list-group-flush">
+                        @if (Model.Announcements != null && Model.Announcements.Any())
+                        {
+                            foreach (var a in Model.Announcements)
+                            {
+                                <li class="list-group-item">
+                                    <div class="fw-semibold">@a.Heading</div>
+                                    <div class="text-muted small">@a.Caption</div>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="list-group-item text-muted">No results</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header"><i class="fa fa-calendar"></i> Events (@(Model.Events != null ? Model.Events.Count : 0))</div>
+                    <ul class="list-group list-group-flush">
+                        @if (Model.Events != null && Model.Events.Any())
+                        {
+                            foreach (var e in Model.Events)
+                            {
+                                <li class="list-group-item">
+                                    <div class="fw-semibold">@e.Heading</div>
+                                    <div class="text-muted small">@e.EventTime.ToString("dd MMM yyyy") • @e.EventLocation</div>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="list-group-item text-muted">No results</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

@@ -1,0 +1,334 @@
+@model KVM_ERP.Models.MaterialMaster
+@{
+    ViewBag.Title = "Material Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .form-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .form-body {
+        padding: 30px;
+        background: white;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .control-label {
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .req {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+    
+    .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+        background-color: white;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3436;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .msg {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    .form-control.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.15);
+    }
+    
+    .text-danger {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 5px;
+        display: block;
+        font-weight: 500;
+    }
+</style>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">
+                <i class="fa-solid fa-atom"></i>
+                Material Master
+            </h1>
+        </div>
+
+        <div class="form-body">
+            @Html.Raw(ViewBag.msg)
+
+            @using (Html.BeginForm("savedata", "MaterialMaster", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "materialForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.MTRLID)
+
+                <div class="section-title">
+                    <i class="fa fa-info-circle"></i> Material Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Code <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.MTRLCODE, new { @class = "form-control", @placeholder = "Enter material code", @id = "i_MTRLCODE", @maxlength = "15", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.MTRLCODE, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Material Description <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.MTRLDESC, new { @class = "form-control", @placeholder = "Enter material description", @id = "i_MTRLDESC", @maxlength = "100", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.MTRLDESC, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Group <span class="req">*</span></label>
+                            @Html.DropDownListFor(model => model.MTRLGID, ViewBag.MTRLGID as List<SelectListItem>, new { @class = "form-control", @id = "materialGroupDropdown" })
+                            @Html.ValidationMessageFor(m => m.MTRLGID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Type <span class="req">*</span></label>
+                            @Html.DropDownListFor(model => model.MTRLTID, ViewBag.MTRLTID as List<SelectListItem>, new { @class = "form-control", @id = "materialTypeDropdown" })
+                            @Html.ValidationMessageFor(m => m.MTRLTID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Unit <span class="req">*</span></label>
+                            @Html.DropDownListFor(model => model.UNITID, ViewBag.UNITID as List<SelectListItem>, new { @class = "form-control", @id = "unitDropdown" })
+                            @Html.ValidationMessageFor(m => m.UNITID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">HSN Code <span class="req">*</span></label>
+                            @Html.DropDownListFor(model => model.HSNID, ViewBag.HSNID as List<SelectListItem>, new { @class = "form-control", @id = "hsnCodeDropdown" })
+                            @Html.ValidationMessageFor(m => m.HSNID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Status</label>
+                            @Html.DropDownListFor(model => model.DISPSTATUS, ViewBag.DISPSTATUS as List<SelectListItem>, new { @class = "form-control", @id = "statusDropdown" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary" id="saveBtn">
+                        <i class="fa fa-save"></i> Save Material
+                    </button>
+                    <a href="@Url.Action("Index", "MaterialMaster")" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            // Debug: Let's see what model values we have
+            console.log('Model MTRLID:', '@Model.MTRLID');
+            console.log('Model DISPSTATUS:', '@Model.DISPSTATUS');
+            console.log('Initial dropdown value:', $('#statusDropdown').val());
+            
+            // Focus on first input
+            $('#i_MTRLCODE').focus();
+            
+            // Enhanced form validation
+            $('#materialForm').on('submit', function(e) {
+                var isValid = true;
+                var code = $('#i_MTRLCODE').val().trim();
+                var desc = $('#i_MTRLDESC').val().trim();
+                var materialGroup = $('#materialGroupDropdown').val();
+                var materialType = $('#materialTypeDropdown').val();
+                var unit = $('#unitDropdown').val();
+                var hsnCode = $('#hsnCodeDropdown').val();
+                
+                // Reset previous validation states
+                $('.form-control').removeClass('is-invalid');
+                
+                if (!code) {
+                    $('#i_MTRLCODE').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!desc) {
+                    $('#i_MTRLDESC').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!materialGroup || materialGroup === '') {
+                    $('#materialGroupDropdown').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!materialType || materialType === '') {
+                    $('#materialTypeDropdown').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!unit || unit === '') {
+                    $('#unitDropdown').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!hsnCode || hsnCode === '') {
+                    $('#hsnCodeDropdown').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    // Scroll to first invalid field
+                    $('.is-invalid').first().focus();
+                    return false;
+                }
+                
+                // Show loading state
+                var clickedBtn = $(document.activeElement);
+                if (clickedBtn.is('button[type="submit"]')) {
+                    clickedBtn.prop('disabled', true);
+                    var originalText = clickedBtn.html();
+                    clickedBtn.html('<i class="fa fa-spinner fa-spin"></i> Saving...');
+                    
+                    // Re-enable after 3 seconds (fallback)
+                    setTimeout(function() {
+                        clickedBtn.prop('disabled', false);
+                        clickedBtn.html(originalText);
+                    }, 3000);
+                }
+            });
+            
+            // Real-time validation feedback
+            $('#i_MTRLCODE, #i_MTRLDESC, #materialGroupDropdown, #materialTypeDropdown, #unitDropdown, #hsnCodeDropdown').on('input blur change', function() {
+                var $this = $(this);
+                if ($this.val().trim()) {
+                    $this.removeClass('is-invalid');
+                }
+            });
+            
+            // Auto-format code to uppercase and trigger validation
+            $('#i_MTRLCODE').on('input', function() {
+                this.value = this.value.toUpperCase();
+                // Trigger remote validation
+                $(this).valid();
+            });
+            
+            // Auto-format description to title case
+            $('#i_MTRLDESC').on('blur', function() {
+                var value = this.value.trim();
+                if (value) {
+                    this.value = value.toLowerCase().replace(/\b\w/g, function(l) {
+                        return l.toUpperCase();
+                    });
+                }
+            });
+        });
+    </script>
+}

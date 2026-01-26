@@ -1,0 +1,633 @@
+@model IEnumerable<ClubMembership.Models.AnnouncementMaster>
+@{
+    ViewBag.Title = "Announcements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        :root {
+            --primary-color: #4c8eea;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2c5aa0 100%);
+            color: white;
+            padding: 2.5rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(76, 142, 234, 0.25);
+        }
+
+        /* Announcement Cards */
+        .announcement-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            height: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .announcement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .announcement-image-wrap { position:relative; height: 220px; background: var(--light-color); overflow:hidden; }
+        .announcement-image { height: 100%; width: 100%; object-fit: cover; display:block; }
+        .announcement-overlay { position:absolute; inset:0; background: rgba(0,0,0,0.0); display:flex; align-items:center; justify-content:center; color:#fff; transition: background .2s ease, opacity .2s ease; opacity:0; }
+        .announcement-card:hover .announcement-overlay { background: rgba(0,0,0,0.25); opacity:1; }
+        .announcement-overlay .ovl { display:flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; background: rgba(0,0,0,0.55); }
+        .announcement-overlay i { font-size:16px; }
+        .announcement-noimg { height:220px; display:flex; align-items:center; justify-content:center; background:#f5f7fb; color:#9aa4b2; }
+
+        .announcement-body {
+            padding: 1.5rem;
+        }
+
+        .announcement-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .announcement-caption {
+            color: var(--secondary-color);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Clamp long captions on cards */
+        .clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+        /* Toolbar */
+        .tools-bar { background:#fff; border-radius: var(--border-radius); box-shadow: var(--box-shadow); padding: .75rem 1rem; margin-bottom: 1.25rem; display:flex; flex-wrap:wrap; gap:.75rem; align-items:center; }
+        .chip { background:#f5f7fb; color:#334155; border:1px solid #e3e7ef; padding:.35rem .75rem; border-radius:999px; cursor:pointer; user-select:none; }
+        .chip.active { background: var(--primary-color); color:#fff; border-color: var(--primary-color); }
+        .sort-select { border:1px solid #e5e7eb; border-radius:999px; padding:.35rem .6rem; font-size:.95rem; color:#334155; }
+
+        /* Scroll reveal */
+        .reveal { opacity:0; transform: translateY(10px); transition: opacity .28s ease, transform .28s ease; }
+        .reveal.show { opacity:1; transform: translateY(0); }
+
+        .announcement-footer {
+            padding: 1rem 1.5rem;
+            background: var(--light-color);
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        .announcement-date {
+            font-weight: 500;
+        }
+
+        .badge-new {
+            background: linear-gradient(45deg, var(--success-color), #20c997);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-text {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .search-section {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Announcement Modal */
+        .announcement-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(4px);
+        }
+        .announcement-modal-dialog {
+            position: relative;
+            width: 95%;
+            max-width: 900px;
+            margin: 3rem auto;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: modalIn 0.2s ease-out;
+        }
+        @@keyframes modalIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .announcement-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #eee;
+        }
+        .announcement-modal-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .announcement-modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.75rem;
+            line-height: 1;
+            cursor: pointer;
+            color: #666;
+        }
+        .announcement-modal-body {
+            padding: 0;
+        }
+        .announcement-modal-image {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            background: #f5f5f5;
+        }
+        .announcement-modal-content {
+            padding: 1.25rem 1.25rem 1.5rem;
+        }
+        .announcement-modal-caption {
+            color: var(--secondary-color);
+            margin: 0.25rem 0 0.75rem;
+        }
+        .announcement-modal-desc {
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        .announcement-modal-footer {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            padding-top: 0.75rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+        }
+        .am-actions { margin-left:auto; display:flex; gap:.5rem; }
+        .am-btn { border:1px solid #e5e7eb; background:#fff; color:#374151; border-radius:10px; padding:.4rem .65rem; font-size:.9rem; cursor:pointer; transition: background .2s ease, transform .1s ease; }
+        .am-btn:hover { background:#f3f4f6; }
+        .am-btn:active { transform: scale(0.98); }
+    </style>
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1 class="hero-title">Announcements</h1>
+            <p class="hero-subtitle">Stay updated with the latest news and important information from our club</p>
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i class="fas fa-bullhorn fa-2x mb-2"></i>
+                        <div class="fw-bold">@(Model != null ? Model.Count() : 0)</div>
+                        <small>Total Announcements</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+                        <div class="fw-bold">@(Model != null ? Model.Where(a => a.CreatedDate >= DateTime.Now.AddDays(-7)).Count() : 0)</div>
+                        <small>This Week</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tools-bar mt-3">
+            <div class="chip active" data-range="all">All</div>
+            <div class="chip" data-range="7">Last 7 days</div>
+            <div class="chip" data-range="30">This Month</div>
+            <div style="margin-left:auto"></div>
+            <label style="color:#6b7280; margin-right:6px;">Sort</label>
+            <select id="sortSelect" class="sort-select">
+                <option value="new">Newest</option>
+                <option value="old">Oldest</option>
+            </select>
+        </div>
+    </div>
+</section>
+
+<!-- Search + Tools Section -->
+<section class="search-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control search-input border-start-0" id="searchInput" placeholder="Search announcements...">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Announcements Grid -->
+<section class="container mb-5">
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4" id="announcementsGrid">
+            @foreach (var announcement in Model)
+            {
+                var resolvedMainImage = "";
+                if (!string.IsNullOrWhiteSpace(announcement.MainImage))
+                {
+                    if (announcement.MainImage.StartsWith("/Uploads/"))
+                    {
+                        resolvedMainImage = "~" + announcement.MainImage;
+                    }
+                    else if (announcement.MainImage.StartsWith("~"))
+                    {
+                        // Normalize to ensure it is "~/..."
+                        var trimmed = announcement.MainImage.Trim();
+                        if (trimmed == "~")
+                        {
+                            resolvedMainImage = ""; // invalid, treat as empty
+                        }
+                        else if (trimmed.StartsWith("~/"))
+                        {
+                            resolvedMainImage = trimmed;
+                        }
+                        else
+                        {
+                            resolvedMainImage = "~/" + trimmed.TrimStart('~', '/');
+                        }
+                    }
+                    else if (announcement.MainImage.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    {
+                        resolvedMainImage = announcement.MainImage;
+                    }
+                    else if (!announcement.MainImage.Contains("/"))
+                    {
+                        // Filename only; assume default announcements upload folder
+                        resolvedMainImage = "~/Uploads/Announcements/" + announcement.MainImage.TrimStart('/');
+                    }
+                    else
+                    {
+                        resolvedMainImage = "~/" + announcement.MainImage.TrimStart('/');
+                    }
+                }
+                // Final normalization and safe Url.Content usage
+                resolvedMainImage = (resolvedMainImage ?? string.Empty).Trim();
+                if (resolvedMainImage == "~") { resolvedMainImage = string.Empty; }
+                string imageSrc = "";
+                if (!string.IsNullOrWhiteSpace(resolvedMainImage))
+                {
+                    if (resolvedMainImage.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    {
+                        imageSrc = resolvedMainImage; // absolute URL, no Url.Content
+                    }
+                    else
+                    {
+                        // Ensure app-relative format
+                        if (resolvedMainImage.StartsWith("~") && !resolvedMainImage.StartsWith("~/"))
+                        {
+                            resolvedMainImage = "~/" + resolvedMainImage.Substring(1).TrimStart('/');
+                        }
+                        imageSrc = Url.Content(resolvedMainImage);
+                    }
+                }
+                <div class="col-lg-4 col-md-6 announcement-item reveal" data-created="@announcement.CreatedDate.ToString("o")">
+                    <div class="announcement-card" data-heading="@announcement.Heading" data-caption="@announcement.Caption" data-description="@announcement.Description" data-image="@imageSrc" data-date="@announcement.CreatedDate.ToString("dd MMM yyyy")" data-created="@announcement.CreatedDate.ToString("o")">
+                        @if (!string.IsNullOrEmpty(imageSrc))
+                        {
+                            <div class="announcement-image-wrap">
+                                <img class="announcement-image" src="@imageSrc" alt="@announcement.Heading" loading="lazy" onerror="this.style.display='none'; this.parentElement.innerHTML='\u003cdiv class=\\'announcement-noimg\\'\u003e\u003ci class=\\'fas fa-newspaper fa-3x\\'\u003e\u003c/i\u003e\u003c/div\u003e';" />
+                                <div class="announcement-overlay"><div class="ovl"><i class="fas fa-eye"></i><span>Preview</span></div></div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="announcement-noimg">
+                                <i class="fas fa-newspaper fa-3x"></i>
+                            </div>
+                        }
+                        
+                        <div class="announcement-body">
+                            @if (announcement.CreatedDate >= DateTime.Now.AddDays(-3))
+                            {
+                                <span class="badge-new mb-2">New</span>
+                            }
+                            <h5 class="announcement-title">@announcement.Heading</h5>
+                            <p class="announcement-caption clamp-2">@announcement.Caption</p>
+                        </div>
+                        
+                        <div class="announcement-footer">
+                            <i class="fas fa-clock"></i>
+                            <span class="announcement-date">@announcement.CreatedDate.ToString("dd MMM yyyy")</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <h3 class="empty-state-title">No Announcements Yet</h3>
+            <p class="empty-state-text">Check back later for updates and important information.</p>
+        </div>
+    }
+</section>
+
+<!-- Announcement Details Modal -->
+<div id="announcementModal" class="announcement-modal" aria-hidden="true">
+    <div class="announcement-modal-dialog" role="dialog" aria-modal="true">
+        <div class="announcement-modal-header">
+            <h5 id="amTitle" class="announcement-modal-title"></h5>
+            <button type="button" class="announcement-modal-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="announcement-modal-body">
+            <img id="amImage" class="announcement-modal-image" src="" alt="" loading="lazy">
+            <div class="announcement-modal-content">
+                <div id="amCaption" class="announcement-modal-caption"></div>
+                <div id="amDescription" class="announcement-modal-desc"></div>
+                <div class="announcement-modal-footer">
+                    <i class="fas fa-clock"></i>
+                    <span id="amDate"></span>
+                    <div class="am-actions">
+                        <button id="amShare" type="button" class="am-btn"><i class="fas fa-share"></i> Share</button>
+                        <button id="amDownload" type="button" class="am-btn"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Search functionality
+            $('#searchInput').on('keyup', function() {
+                var searchTerm = $(this).val().toLowerCase();
+                
+                $('.announcement-item').each(function() {
+                    var title = $(this).find('.announcement-title').text().toLowerCase();
+                    var caption = $(this).find('.announcement-caption').text().toLowerCase();
+                    
+                    if (title.includes(searchTerm) || caption.includes(searchTerm)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+            // Filter & Sort
+            function applyFilterSort(){
+                var activeRange = $('.tools-bar .chip.active').data('range') || 'all';
+                var sort = $('#sortSelect').val() || 'new';
+                var now = new Date();
+
+                // Filter
+                $('.announcement-item').each(function(){
+                    var createdIso = $(this).data('created');
+                    if(!createdIso){ $(this).show(); return; }
+                    if(activeRange === 'all'){ $(this).show(); return; }
+                    var dt = new Date(createdIso);
+                    var days = parseInt(activeRange);
+                    var cutoff = new Date(now.getTime() - days*24*60*60*1000);
+                    $(this).toggle(dt >= cutoff);
+                });
+
+                // Sort
+                var items = $('.announcement-item').get();
+                items.sort(function(a,b){
+                    var da = new Date($(a).data('created')).getTime();
+                    var db = new Date($(b).data('created')).getTime();
+                    return sort === 'new' ? (db - da) : (da - db);
+                });
+                $('#announcementsGrid').append(items);
+
+                // Reveal animation reset
+                revealInit();
+            }
+
+            $('.tools-bar .chip').on('click', function(){
+                $('.tools-bar .chip').removeClass('active');
+                $(this).addClass('active');
+                applyFilterSort();
+            });
+            $('#sortSelect').on('change', applyFilterSort);
+
+            // Scroll reveal
+            function revealInit(){
+                var items = document.querySelectorAll('.reveal');
+                var io = new IntersectionObserver(function(entries){
+                    entries.forEach(function(ent){ if(ent.isIntersecting){ ent.target.classList.add('show'); io.unobserve(ent.target); } });
+                }, { threshold: .12 });
+                items.forEach(function(el){ io.observe(el); });
+            }
+            revealInit();
+            applyFilterSort();
+
+            // Add smooth animations
+            $('.announcement-card').hover(
+                function() {
+                    $(this).addClass('shadow-lg');
+                },
+                function() {
+                    $(this).removeClass('shadow-lg');
+                }
+            );
+
+            // Card click -> open modal with full details
+            $('.announcement-card').on('click', function(e) {
+                // Avoid triggering when clicking interactive elements later
+                const card = $(this);
+                const title = card.data('heading') || '';
+                const caption = card.data('caption') || '';
+                const description = card.data('description') || '';
+                const image = card.data('image') || '';
+                const date = card.data('date') || '';
+
+                $('#amTitle').text(title);
+                $('#amCaption').text(caption);
+                $('#amDescription').text(description);
+                if (image) {
+                    $('#amImage').attr('src', image).show();
+                } else {
+                    $('#amImage').hide();
+                }
+                $('#amDate').text(date);
+
+                // Store for actions
+                $('#amShare').data({ title, caption, description, image, date });
+                $('#amDownload').data({ image, title });
+
+                $('#announcementModal').fadeIn(150).attr('aria-hidden', 'false');
+                $('body').css('overflow', 'hidden');
+            });
+
+            // Share handler with graceful fallback
+            $('#amShare').on('click', async function(){
+                const d = $(this).data();
+                const shareData = {
+                    title: d.title || 'Announcement',
+                    text: (d.title ? d.title + '\n' : '') + (d.caption || ''),
+                    url: window.location.origin + window.location.pathname
+                };
+                if (navigator.share) {
+                    try { await navigator.share(shareData); } catch (e) { /* user canceled or unsupported */ }
+                } else {
+                    // fallback: copy to clipboard
+                    const text = shareData.title + '\n' + shareData.text + '\n' + shareData.url;
+                    try { await navigator.clipboard.writeText(text); alert('Link copied to clipboard'); } catch(e){ alert('Copy this link: ' + shareData.url); }
+                }
+            });
+
+            // Download/Open image handler with fallback
+            $('#amDownload').on('click', function(){
+                const d = $(this).data();
+                const img = d.image;
+                if(!img){ alert('No image to download.'); return; }
+                try {
+                    const a = document.createElement('a');
+                    a.href = img;
+                    // try suggest filename from title
+                    const safeTitle = (d.title || 'announcement').replace(/[^a-z0-9-_]+/gi, '_').toLowerCase();
+                    const ext = img.split('.').pop().split(/[#?]/)[0].substr(0,5);
+                    a.download = safeTitle + (ext ? ('.' + ext) : '');
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } catch(e){
+                    window.open(img, '_blank');
+                }
+            });
+
+            // Close handlers
+            function closeAnnouncementModal() {
+                $('#announcementModal').fadeOut(150).attr('aria-hidden', 'true');
+                $('body').css('overflow', 'auto');
+            }
+            $('#announcementModal').on('click', function(e) {
+                if (e.target === this) { closeAnnouncementModal(); }
+            });
+            $('.announcement-modal-close').on('click', function() { closeAnnouncementModal(); });
+            $(document).on('keydown', function(e) {
+                if (e.key === 'Escape') { closeAnnouncementModal(); }
+            });
+        });
+    </script>
+}
+
+

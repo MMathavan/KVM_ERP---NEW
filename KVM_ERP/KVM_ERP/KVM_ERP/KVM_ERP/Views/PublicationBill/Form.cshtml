@@ -1,0 +1,1398 @@
+﻿@using ClubMembership.Models;
+@using ClubMembership.Data;
+@model  ClubMembership.Models.PublicationBillMasterList
+@{
+    ViewBag.Title = "Publication Bill";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :read-only {
+    }
+
+    /* ... so you might want to scope it */
+    input:read-only,
+    textarea:read-only,
+    [contenteditable]:read-only {
+        cursor: not-allowed;
+    }
+
+    .small {
+        border: 0;
+        width: 30px;
+        max-width: 25%;
+        background: none;
+    }
+
+    .stk {
+        background: #808080;
+        color: #fff;
+    }
+
+    .sm {
+        width: 50px;
+        max-width: 35%;
+    }
+
+    .batchno {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .spacer5 {
+        height: 10px;
+    }
+
+    #aaa {
+        height: 50px;
+    }
+
+    #CHCK_ALL:hover {
+        cursor: pointer;
+    }
+
+    #STFDIDS:hover {
+        cursor: pointer;
+    }
+
+</style>
+
+<div class="col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> @ViewBag.Title <div class="clearfix"> </div></h3>
+        </div>
+
+
+        <form action="@Url.Action("gstsavedata","PublicationBill")" class="disableonsubmit" method="post" accept-charset="utf-8" id="materialrequestform" data-ng-controller="myController" name="materialrequestform" enctype="multipart/form-data" onsubmit="return validate();">
+            <div class="panel-body fusion_frm">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>No</label>
+                                @Html.TextBoxFor(model => Model.masterdata[0].PBILLID, new { @class = "form-control hide PBILLID", @id = "PBILLID" })
+                                @Html.TextBoxFor(model => Model.masterdata[0].PBILLNO, new { @class = "form-control PBILLNO", @id = "PBILLNO", @data_Val = false, @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Bill No</label>
+                                @Html.TextBoxFor(model => Model.masterdata[0].PBILLDNO, new { @class = "form-control PBILLDNO", @id = "PBILLDNO", @tabindex = "1" })
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Date</label>
+                                @Html.TextBoxFor(model => Model.masterdata[0].PBILLDATE, "{0:dd/MM/yyyy}", new { @class = "form-control PBILLDATE datepicker", @id = "PBILLDATE", @data_val = "false", @tabindex = "2" })
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Status</label>
+                                @Html.DropDownList("DISPSTATUS", null, "Select", new { @class = "form-control DISPSTATUS", @id = "DISPSTATUS", tabindex = "-1" })
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>GST Type</label>
+                                @Html.DropDownList("PBILLTYPE", null, "Select", new { @class = "form-control PBILLTYPE", @id = "PBILLTYPE", @onchange="total(1)", tabindex = "-1" })
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Publication Name</label>
+                                @Html.DropDownList("PUBLNID", null, "Select Publication", new { @class = "form-control custom-select  select2  PUBLNID", @data_val = "true", @id = "PUBLNID", @name = "PUBLNID", @onchange = "GetRODetail()", @tabindex = "1" })
+                                @Html.TextBoxFor(model => Model.masterdata[0].PBILLTYPE, new { @class = "form-control PBILLTYPE hide", @id = "PBILLTYPE", tabindex = "-1" })
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Client Name</label>
+                                @Html.DropDownList("CLNTID", null, "Select Client", new { @class = "form-control custom-select  select2  CLNTID", @data_val = "true", @id = "CLNTID", @name = "CLNTID", @onchange = "GetRODetail()", @tabindex = "1" })
+                            </div>
+                        </div>
+                        <div class="hidden"><input type="text" id="s_chck" value="@ViewBag.CHECK" />  </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary" id="job_list">
+                            <div class="panel-heading navbar-inverse" id="aaa">
+                                Bill Details
+                            </div>
+                            <div class="table-responsive" id="job_list_inner">
+                                <input type="text" id="TDETAIL_IDX" value="0" name="TDETAIL_IDX[]" class="TDETAIL_IDX" style="display:none" />
+                                <table class='table table-striped table-bordered bootstrap-datatable' id="TDETAIL">
+                                    @{var m_id = 0;
+                                        if (Model.masterdata != null)
+                                        {
+                                            m_id = Model.masterdata[0].PBILLID;
+                                        }
+                                    }
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Ro Date</th>
+                                            <th>Ro No.</th>
+                                            <th>DOR</th>
+                                            <th>Edition</th>
+                                            <th>Bill Date</th>
+                                            <th>Bill No</th>
+                                            <th>Commission</th>
+                                            <th>Amount</th>
+
+                                            @*<th><a class="btn btn-sm btn-success navbar-right" id="add_detail"> <i class="fa fa-plus-square"></i> </a></th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody class="TDETAIL_BODY" id="TDETAIL_BODY">
+                                        @if (Model.detaildata_mod != null)
+                                        {
+                                            if (Model.detaildata_mod.Count != 0)
+                                            {
+
+                                                foreach (pr_Publicattion_RO_Flx_Assgn_Mod_Result details in Model.detaildata_mod)
+                                                {
+                                                    var st = ""; var bt = "";
+                                                    if (details.PBILLID > 0) { st = "checked"; bt = "true"; }
+                                                    else { bt = "false"; st = ""; }
+                                                    <tr class="item-row">
+                                                        <td class="col-lg-1" style="width:15px">
+                                                            <input type=checkbox id=STFDIDS class=STFDIDS name=STFDIDS value="" @st onchange='addcheck()' style='width:25px'>
+                                                            <input type=text id=boolSTFDIDS class='hide boolSTFDIDS' name=boolSTFDIDS value="@bt">
+                                                            <input class="PBILLDID hide" id="PBILLDID" name="PBILLDID" value="@details.PBILLDID">
+                                                            <input class="BILLID hide" id="BILLID" name="BILLID" value="@details.BillId">
+                                                            <input class="RODID hide" id="RODID" name="RODID" value="@details.RODID">
+                                                        </td>
+                                                        <td class="col-lg-2">
+                                                            <input class="form-control RODATE" id="RODATE" name="RODATE" value="@details.RODATE.ToString("dd/MM/yyyy")" readonly tabindex="-1">
+                                                            <div id="fkit">
+                                                                <div class="spacer5"></div>
+                                                                <label>Position</label>
+                                                                <input class="form-control POSTNDESC" id="POSTNDESC" name="POSTNDESC" value="@details.POSTNDESC" readonly tabindex="-1">
+                                                            </div>
+                                                        </td>
+                                                        <td class="col-lg-1">
+                                                            <input class="form-control RONId" id="RONId" name="RONId" value="@details.PrnROId" readonly tabindex="101">
+                                                        </td>
+                                                        <td class="col-lg-2">
+                                                            <input class="form-control DOR" id="DOR" name="DOR" value="@details.DOR.ToString("dd/MM/yyyy")" readonly tabindex="-1">
+                                                        </td>
+                                                        <td class="col-lg-2">
+                                                            <input class="form-control EDTNDESC" id="EDTNDESC" name="EDTNDESC" value="@details.EDTNDESCS" readonly tabindex="-1">
+                                                            <div id="fkit">
+                                                                <div class="spacer5"></div>
+                                                                <label>Ad Category</label>
+                                                                <input class="form-control ACDESC" id="ACDESC" name="ACDESC" value="@details.ACDESC" readonly tabindex="-1">
+                                                            </div>
+                                                        </td>
+
+                                                        <td class="col-lg-2">
+                                                            <input class="form-control BILLDATE" id="BILLDATE" name="BILLDATE" value="@details.BILLDATE.ToString("dd/MM/yyyy")" readonly tabindex="101">
+                                                            <div id="fkit">
+                                                                <div class="spacer5"></div>
+                                                                <label>Size</label>
+                                                                <input class="form-control SIZEDESC" id="SIZEDESC" name="SIZEDESC" value="@details.SIZE" readonly tabindex="-1">
+                                                            </div>
+                                                        </td>
+                                                        <td class="col-lg-1">
+                                                            <input class="form-control BILLNID" id="BILLNID" name="BILLNID" value="@details.BILLNID" readonly tabindex="101">
+                                                        </td>
+                                                        <td class="col-lg-1">
+                                                            <input class="form-control CMSNAMT" id="CMSNAMT" name="CMSNAMT" value="@details.RODAmt" readonly tabindex="101">
+                                                        </td>
+                                                        <td class="col-lg-2">
+                                                            <input class="form-control ROGAMT hide" id="ROGAMT" name="ROGAMT" value="@details.RODAmt" readonly tabindex="101">
+                                                            <input class="form-control RONAMT" id="RONAMT" name="RONAMT" value="@details.RODAmt" readonly tabindex="101">
+                                                        </td>
+                                                        @*<td><a class="btn btn-danger btn-sm" id="del_detail"> <i class="fa fa-trash-o"></i></a></td>*@
+
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                            <tr class="item-row">
+                                                <td class="col-lg-1" style="width:15px">
+                                                    <input type=checkbox id=STFDIDS class=STFDIDS name=STFDIDS value="" onchange='OnChangeCheckbox(this)' style='width:25px'>
+                                                    <input type=text id=boolSTFDIDS class='hide boolSTFDIDS' name=boolSTFDIDS value="">
+                                                    <input class="PBILLDID hide" id="PBILLDID" name="PBILLDID" value="0">
+                                                    <input class="BILLID hide" id="BILLID" name="BILLID" value="0">
+                                                    <input class="RODID hide" id="RODID" name="RODID" value="0">
+                                                </td>
+                                                <td class="col-lg-2">
+                                                    <input class="form-control RODATE" id="RODATE" name="RODATE" readonly tabindex="-1">
+                                                    <div id="fkit">
+                                                        <div class="spacer5"></div>
+                                                        <label>Position</label>
+                                                        <input class="form-control POSTNDESC" id="POSTNDESC" name="POSTNDESC" readonly tabindex="-1">
+                                                    </div>
+                                                </td>
+                                                <td class="col-lg-1">
+                                                    <input class="form-control RONId" id="RONId" name="RONId" readonly tabindex="101">
+                                                </td>
+                                                <td class="col-lg-2">
+                                                    <input class="form-control DOR" id="DOR" name="DOR" readonly tabindex="-1">
+                                                </td>
+                                                <td class="col-lg-2">
+                                                    <input class="form-control EDTNDESC" id="EDTNDESC" name="EDTNDESC" readonly tabindex="-1">
+                                                    <div id="fkit">
+                                                        <div class="spacer5"></div>
+                                                        <label>Ad Category</label>
+                                                        <input class="form-control ACDESC" id="ACDESC" name="ACDESC" readonly tabindex="-1">
+                                                    </div>
+                                                </td>
+
+                                                <td class="col-lg-2">
+                                                    <input class="form-control BILLDATE" id="BILLDATE" name="BILLDATE" readonly tabindex="101">
+                                                    <div id="fkit">
+                                                        <div class="spacer5"></div>
+                                                        <label>Size</label>
+                                                        <input class="form-control SIZEDESC" id="SIZEDESC" name="SIZEDESC" readonly tabindex="-1">
+                                                    </div>
+                                                </td>
+                                                <td class="col-lg-1">
+                                                    <input class="form-control BILLNID" id="BILLNID" name="BILLNID" readonly tabindex="101">
+                                                </td>
+                                                <td class="col-lg-1">
+                                                    <input class="form-control CMSNAMT" id="CMSNAMT" name="CMSNAMT" readonly tabindex="101">
+                                                </td>
+                                                <td class="col-lg-2">
+                                                    <input class="form-control ROGAMT hide" id="ROGAMT" name="ROGAMT" readonly tabindex="101">
+                                                    <input class="form-control RONAMT" id="RONAMT" name="RONAMT" readonly tabindex="101">
+                                                </td>
+                                                @*<td><a class="btn btn-danger btn-sm" id="del_detail"> <i class="fa fa-trash-o"></i></a></td>*@
+
+                                            </tr>
+
+                                        }
+                                    </tbody>
+
+                                </table>
+
+                                <table class='table table-striped table-bordered bootstrap-datatable'>
+                                    <tr>
+                                        <td class="col-lg-5"><a href='#' id='cfact' class='btn btn-success  btn-sm hide'><i class="fa fa-plus-square "></i>&nbsp; TAX</a>  </td>
+                                        <td class="col-lg-1" align="right">  Gross Amount </td>
+                                        <td class="col-lg-1" colspan="2">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].PBILLGAMT, new { @class = "form-control  PBILLGAMT", @id = "PBILLGAMT", @onkeypress = "IsAmount(event)", @onchange = "total(1)" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-lg-5"><a href='#' id='cfact' class='btn btn-success  btn-sm hide'><i class="fa fa-plus-square "></i>&nbsp; TAX</a>  </td>
+                                        <td class="col-lg-1" align="right">  Bold/Tick </td>
+                                        <td class="col-lg-1" colspan="2">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].BLDAMT, new { @class = "form-control  BLDAMT", @id = "BLDAMT", @onkeypress = "IsAmount(event)", @onchange = "total(1)" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-lg-9" align="right">Trade Discount </td>
+                                        <td class="col-lg-1" align="right"> 
+                                            @Html.DropDownList("DSCNTMODE", null, "Select", new { @class = "form-control DSCNTMODE", @id = "DSCNTMODE", @onchange = "total(1)", tabindex = "-1" })  
+                                        </td>
+                                        <td class="col-lg-1">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].DSCNTEXPRN, new { @class = "form-control  DSCNTEXPRN",  @id = "DSCNTEXPRN", @onkeypress = "IsAmount(event)", @onchange = "total(1)" })
+                                        </td>
+                                        <td class="col-lg-1" colspan="2">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].DSCNTAMT, new { @class = "form-control  DSCNTAMT", @id = "DSCNTAMT", @readonly= "readonly" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-lg-5"><a href='#' id='cfact' class='btn btn-success  btn-sm hide'><i class="fa fa-plus-square "></i>&nbsp; TAX</a>  </td>
+                                        <td class="col-lg-1" align="right">  ADDL.Trade Discount </td>
+                                        <td class="col-lg-1" colspan="2">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].ATDISCAMT, new { @class = "form-control  ATDISCAMT", @id = "ATDISCAMT", @onkeypress = "IsAmount(event)", @onchange = "total(1)" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-lg-5"><a href='#' id='cfact' class='btn btn-success  btn-sm hide'><i class="fa fa-plus-square "></i>&nbsp; TAX</a>  </td>
+                                        <td class="col-lg-1" align="right">  Box and Postage </td>
+                                        <td class="col-lg-1" colspan="2">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].PSTGAMT, new { @class = "form-control  PSTGAMT", @id = "PSTGAMT", @onkeypress = "IsAmount(event)", @onchange = "total(1)" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-lg-5"><a href='#' id='cfact' class='btn btn-success  btn-sm hide'><i class="fa fa-plus-square "></i>&nbsp; TAX</a>  </td>
+                                        <td class="col-lg-1" align="right">  CGST </td>
+                                        <td class="col-lg-1" colspan="2">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].PCGSTEXPRN, new { @class = "form-control  PCGSTEXPRN hide", @id = "PCGSTEXPRN", @readonly = true })
+                                            @Html.TextBoxFor(model => Model.masterdata[0].PCGSTAMT, new { @class = "form-control  PCGSTAMT", @id = "PCGSTAMT", @readonly = true })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-lg-5"><a href='#' id='cfact' class='btn btn-success  btn-sm hide'><i class="fa fa-plus-square "></i>&nbsp; TAX</a>  </td>
+                                        <td class="col-lg-1" align="right">  SGST </td>
+                                        <td class="col-lg-1" colspan="2">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].PSGSTEXPRN, new { @class = "form-control  PSGSTEXPRN hide", @id = "PSGSTEXPRN", @readonly = true })
+                                            @Html.TextBoxFor(model => Model.masterdata[0].PSGSTAMT, new { @class = "form-control  PSGSTAMT", @id = "PSGSTAMT", @readonly = true })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-lg-5"><a href='#' id='cfact' class='btn btn-success  btn-sm hide'><i class="fa fa-plus-square "></i>&nbsp; TAX</a>  </td>
+                                        <td class="col-lg-1" align="right">  IGST </td>
+                                        <td class="col-lg-1" colspan="2">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].PIGSTEXPRN, new { @class = "form-control  PIGSTEXPRN hide", @id = "PIGSTEXPRN", @readonly = true })
+                                            @Html.TextBoxFor(model => Model.masterdata[0].PIGSTAMT, new { @class = "form-control  PIGSTAMT", @id = "PIGSTAMT", @readonly = true })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-lg-5">   </td>
+                                        <td class="col-lg-1" align="right"> Net Amount </td>
+                                        <td class="col-lg-1" colspan="2">
+                                            @Html.TextBoxFor(model => Model.masterdata[0].PBILLNAMT, new { @class = "form-control PBILLNAMT ", @id = "PBILLNAMT", @readonly = true })
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.row (nested) -->
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-md-12 box-footer">
+                    <a href="@Url.Action("Index","PublicationBill")" class="btn btn-primary pull-left" tabindex="4012">Go Back</a>
+                    <input type="submit" name="submit" value="Submit" class="btn btn-success pull-right btn_submit" tabindex="4022" id="save" />
+                </div>
+                <!-- /.panel-body -->
+            </div>
+
+        </form>
+
+        <br />
+
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:auto;">
+    <div class="modal-dialog" style="width:1200px;">
+        <div class="modal-content">
+
+            <div id='myModalContent'></div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- /.modal -->
+
+@section Scripts {
+
+    <script>
+        $(window).bind("load", function () {
+            if ($(".PBILLID").val() == "")
+                $(".PBILLID").val(0);
+
+
+            count = 501;
+            $('.PBILLID').each(function (k) {
+                $("#TDETAIL :input:not([readonly='readonly']),#TDETAIL select,#TDETAIL a").attr('tabindex', count++);
+            });
+            return false;
+
+        });
+
+
+        function test001() {
+            count = 501;
+            $('.PBILLID').each(function (k) {
+                $("#TDETAIL :input:not([readonly='readonly']),#TDETAIL select,#TDETAIL a").attr('tabindex', count++);
+            });
+        }
+
+        $(function () { //-----date controls-------------
+            //$(".datepicker").datepicker({ dateFormat: 'dd/mm/yy', });
+            $(".datepicker").datepicker({ dateFormat: 'dd/mm/yy', maxDate: 0, });
+            //$('.datetime').datetimepicker({
+            //    dateFormat: 'dd/mm/yy',
+            //    timeFormat: 'hh:mm'
+            //});
+            if ($(".PBILLID").val() == 0) {
+                var dt = new Date();
+                var month = dt.getMonth() + 1;
+                var date = dt.getDate() + "/" + month + "/" + dt.getFullYear();
+                var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+                var datetme = time;
+                $(".PBILLDATE").val(date);
+                $(".DSCNTEXPRN").val(15);
+                $(".PCGSTEXPRN").val(2.5);
+                $(".PSGSTEXPRN").val(2.5);
+                $(".PIGSTEXPRN").val(5);
+
+                var usrname = '@Session["CUSRID"]';
+                var emplid = '@Session["EMPLID"]';
+
+                var grpname = '@Session["Group"]';
+
+
+            }//--------------End---------
+            else {
+
+                total(1);
+
+            }
+        });
+
+        $(function () {
+            var rowcount = $('#TDETAIL tbody tr').length;
+            $("#TDETAIL_IDX").val(rowcount);
+
+            $("#add_detail").click(function () {
+                if ($("#TDETAIL_IDX").val() != 0) {
+                    var $tableBody = $('#TDETAIL').find("tbody"),
+                        $trLast = $tableBody.find("tr:last"),
+                        $trNew = $trLast.clone();
+
+                    $trLast.after($trNew);
+
+                    // Clear input values
+                    $trNew.find("input:text, select, textarea").val("");
+
+                    var row_idx = parseInt($("#TDETAIL_IDX").val());
+                    $trNew.find(".TCOUNT").val(row_idx + 1);
+                    $trNew.find("#PBILLDID").val("0");
+
+                    $trNew.find("td:eq(2)").html("<td class='col-lg-2'><select id='RODID' class='RODID form-control custom-select  select2' name='RODID' onchange = 'GetReleaseOrderDetails(this)' tabindex='104'><option value=0>Select RO Details</option> </select><input class='form-control ROID' id='ROID' name='WORKDROIDESC' tabindex='-1'></td>");
+
+                    /***/
+                    $trNew.find(".RODID").empty();
+                    var clntid = $(".CLNTID").val();
+                    base = window.location.origin;
+                    var url = "@Url.Action("GetProductionROList", "ProductionInvoice")/" + clntid ;// base + "/Stuffing/GetCartingNo/" + CHAID;
+                    //alert(url);
+                    $.ajax({
+                        url: url,
+                        async: false,
+                        success: function (data) {
+                            //  alert(data);
+                            $trNew.find(".RODID").append("<option value='0' >Select RO Details</option>");
+                            $.each(data, function (key, val) {
+                                $trNew.find(".RODID").append("<option value=" + val.RODID + ">" + val.RODNO + "</option>");
+
+                            })
+                        }
+
+                        //---End of Post--------
+                    });
+                    /***/
+
+
+                    // Replace datepicker inputs
+                    //$trNew.find("td:eq(2)").html(
+                    //    "<input class='form-control DOR datepicker' name='DOR' placeholder='' tabindex='101'>" +
+                    //    "<div id='fkit'><div class='spacer5'></div>" +
+                    //    "<label>ADOR</label>" +
+                    //    "<input class='form-control ADOR datepicker' name='ADOR' placeholder='' tabindex='101'></div>"
+                    //);
+
+                    // Remove and reinitialize datepicker
+                    //$trNew.find('.datepicker').each(function () {
+                    //    $(this).removeAttr('id').removeClass('hasDatepicker');
+                    //    $(this).datepicker({ dateFormat: 'dd/mm/yy' });
+                    //});
+
+                    // Fix select2 for cloned row only
+                    $trNew.find('select.select2').each(function () {
+                        // Remove any leftover UI
+                        $(this).next('.select2-container').remove();
+
+                        // Clean up select2 traces
+                        $(this).removeAttr('data-select2-id')
+                            .removeClass('select2-hidden-accessible')
+                            .val('');
+
+                        // Optional: Make unique ID
+                        // $(this).attr('id', 'DORTYPE_' + row_idx);
+
+                        // Reinitialize select2
+                        $(this).select2({ width: 'resolve' });
+                    });
+
+                    // Update index
+                    $("#TDETAIL_IDX").val(row_idx + 1);
+                    $("#TDETAIL_BODY").show();
+
+                    regroup("TDETAIL");
+                    test001();
+                    ExecTMP();
+                } else {
+                    $('#TDETAIL_IDX').val("1");
+                    $("#TDETAIL_BODY").show();
+                }
+
+                return false;
+            });
+
+            // Initialize select2 for existing rows
+            $('.select2').select2({ width: 'resolve' });
+
+            // Initialize datepicker for existing rows
+            $('.datepicker').datepicker({ dateFormat: 'dd/mm/yy' });
+
+
+        });
+
+        function split(val) {//...autocomplete function
+            return val.split(/,\s*/)
+        }
+        function extractLast(term) {
+            return split(term).pop()
+        }
+
+        function GetHSNCodeDetail()
+        {
+            var hsnid = $(".HSNID").val();
+            var statetype = $(".BILLTID").val();
+            base = window.location.origin;
+            var url = "@Url.Action("GetHSNCodeDetail", "ProductionInvoice")/" + hsnid;// base + "/Stuffing/GetCartingNo/" + CHAID;
+            //alert(url);
+            $.ajax({
+                url: url,
+                async: false,
+                success: function (data) {
+                    //  alert(data);
+                    if (data != "") {
+                        var cgstexprn = data[0].CGSTEXPRN;
+                        var sgstexprn = data[0].SGSTEXPRN;
+                        var igstexprn = data[0].IGSTEXPRN;
+                        if (statetype == 0) {
+                            $('.BILLCGSTEXPRN').val(cgstexprn.toFixed(2));
+                            $('.BILLSGSTEXPRN').val(sgstexprn.toFixed(2));
+                            $('.BILLIGSTEXPRN').val(0);
+                        }
+                        else {
+                            $('.BILLCGSTEXPRN').val(0);
+                            $('.BILLSGSTEXPRN').val(0);
+                            $('.BILLIGSTEXPRN').val(igstexprn.toFixed(2));
+                        }
+                    }
+
+                }
+
+                //---End of Post--------
+            });
+        }
+
+        function formatDate_ddmmyyyy(dateInput) {
+            if (!dateInput) return "";
+
+            // Handle .NET date format like "/Date(1715472000000)/"
+            var match = /\/Date\((\d+)\)\//.exec(dateInput);
+            var date = match ? new Date(parseInt(match[1])) : new Date(dateInput);
+
+            if (isNaN(date)) return "";
+
+            var day = String(date.getDate()).padStart(2, '0');
+            var month = String(date.getMonth() + 1).padStart(2, '0');
+            var year = date.getFullYear();
+
+            return `${day}/${month}/${year}`;
+        }
+
+        function add_autocomplete($obj, controls) {
+
+            var oldFn = $.ui.autocomplete.prototype._renderItem;
+            $.ui.autocomplete.prototype._renderItem = function (ul, item) {
+                var re = new RegExp(this.term, "i");
+                var t = item.label.replace(re, "<strong style='font-weight:bold;background:#C7DFFE;border-radius:2px;border:1px solid #98B8E1'>" + this.term + "</strong>");
+                return $("<li></li>")
+                    .data("item.autocomplete", item)
+                    .append("<a>" + t + "</a>")
+                    .appendTo(ul);
+            };
+            $obj.autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: $obj.data("autocomplete-url"),
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                count = 0;
+                                item_str = "";
+                                var jsonArg = new Object();
+                                count = 0;
+                                $.each(item, function (i, data) {
+                                    switch (count) {
+                                        case 0:
+                                            jsonArg.label = data;
+                                            jsonArg.value = data;
+                                            break;
+                                        case 1:
+                                            jsonArg.id = data;
+                                            break;
+                                        case 2:
+                                            jsonArg.desc = data;
+                                            break;
+                                        case 3:
+                                            jsonArg.xparam1 = data;
+                                            break;
+                                        case 4:
+                                            jsonArg.xparam2 = data;
+                                            break;
+                                        case 5:
+                                            jsonArg.xparam3 = data;
+                                            break
+                                    }
+                                    count++
+                                });
+                                return jsonArg
+                            }))
+                        }
+                    })
+                },
+                search: function () {
+                    var term = extractLast(this.value);
+                    if (term.length < 1) {
+                        return false
+                    }
+                },
+                select: function (event, ui) {
+                    $(this).val(ui.item.label);
+                    count = 0;
+                    $.each(controls.split(','), function (index, value) {
+                        switch (count) {
+                            case 1:
+                                $("#" + value).val(ui.item.id);
+                                break;
+                            case 2:
+                                $("#" + value).val(ui.item.desc);
+                                break;
+                            case 3:
+                                $("#" + value).val(ui.item.xparam1);
+                                break;
+                            case 4:
+                                $("#" + value).val(ui.item.xparam2);
+                                break;
+                            case 5:
+                                $("#" + value).val(ui.item.xparam3);
+                                break
+                        }
+                        count++
+                    });
+
+                    LoadCOrderLocationDetails();
+                    //sccostfactor();
+                            return false
+                        },
+                        messages: {
+                            noResults: "",
+                            results: ""
+                        }
+                    })
+        }//..end of autocomplete
+
+        $(document).on("click", "#del_detail", function () {
+            var r = confirm("Are you sure to delete this record ?");
+            if (r == true) {
+                row = this.parentNode.parentNode.rowIndex;
+                row = row - 1;
+                var $tableBody = $('#TDETAIL').find("tbody")
+
+                $trCur = $tableBody.find("tr:eq(" + row + ")");
+                var det_id = $trCur.find(".BILLDID").val();
+
+                idx = $("#TDETAIL_IDX").val();
+                if (det_id != 0)
+                {
+
+                    base = window.location.origin;
+                    $.post(base + "/ProductionInvoice/Del_det",
+                                 {
+                                     id: det_id, fld: "NONMEDIABILLDETAIL"
+                                 },
+                               function (data, status) {
+                                   alert(data);
+
+                                   if (data == "Deleted Successfully ...") {
+                                       if (idx == 1) {
+                                           //alert("a");
+                                           var $tableBody = $('#TDETAIL').find("tbody")
+                                           $trCur = $tableBody.find("tr:eq(0)");
+                                           $trCur.find("input:text,select,textarea").val("");
+
+                                           total(1);
+                                       }
+                                       else
+                                           //alert("b");
+                                           //total(1);
+                                           location.reload(window.location.href);
+                                        //total(1);
+                                   }
+                                   regroup("TDETAIL");
+                                   //total(1);
+                               });//---End of post
+
+
+                }
+
+                else
+                {
+
+                    // idx = $("#TDETAIL_IDX").val();
+                    if (idx == 1) {
+
+                        var $tableBody = $('#TDETAIL').find("tbody")
+                        $trCur = $tableBody.find("tr:eq(0)");
+                        $trCur.find("input:text,select,textarea").val("");
+
+                        total(1);
+                    }
+                    else {
+                        $("#TDETAIL_BODY").show();
+                        var row = this.parentNode.parentNode;
+                        $(this).parents('.item-row').remove();
+                        $("#TDETAIL_IDX").val($("#TDETAIL_IDX").val() - 1);
+                        total(1);
+                    }
+                }
+
+                //total(1);
+            }
+            regroup("TDETAIL");
+            ExecTMP();
+        });
+
+        //...............Amend//
+        function pad(input) {
+            var BASE = "0000";
+            return input ? BASE.substr(0, 4 - Math.ceil(input / 10)) + input : BASE;
+        }
+
+        function newpad(input) {
+            var BASE = "0";
+            return input ? BASE.substr(0, 4 - Math.ceil(input / 10)) + input : BASE;
+        }
+
+        function regroup(tableID) {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+            var i = 0;
+            var j = 0;
+            for (j = (i + 1) ; j < rowCount; j++) {
+                //alert(i);
+                //alert(j);
+                document.getElementById(tableID).rows[j].cells[1].innerHTML = j;// + 1;
+            }
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+        }
+        function replaceAll(str, match, replacement) {
+            return str.replace(new RegExp(escapeRegExp(match), 'g'), replacement);
+        }
+
+        $(document).ready(function () {
+            $('input').on('drop', function () {
+                return false;
+            });
+        });
+
+
+    //
+
+    function IsAmount(event) {
+        //alert(event);
+        var $this = event;
+        if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
+            ((event.which < 48 || event.which > 57) &&
+                (event.which != 0 && event.which != 8))) {
+            event.preventDefault();
+        }
+
+        var text = event;
+        if ((event.which == 46) && (text.indexOf('.') == -1)) {
+            setTimeout(function () {
+                if ($this.val().substring($this.val().indexOf('.')).length > 3) {
+                    $this.val($this.val().substring(0, $this.val().indexOf('.') + 3));
+                }
+            }, 1);
+        }
+
+    }
+
+    function isNumberOnlyKey(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+
+    function ValidateOnlyNameAlpha(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        //alert(charCode);
+        if ((charCode > 64 && charCode < 91) || (charCode == 46) /*|| (charCode > 47 && charCode < 58)*/ || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32 || charCode == 38 || charCode == 45 || charCode == 39) {
+            return true;
+        }
+        return false;
+    }
+
+    function ValidateNewCustomerAlpha(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        //alert(charCode);
+        if ((charCode > 64 && charCode < 91) || (charCode == 46) || (charCode > 47 && charCode < 58) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32 || charCode == 38 || charCode == 45 || charCode == 39) {
+            return true;
+        }
+        return false;
+    }
+
+    function ValidateAlpha(e) {
+        var regex = new RegExp("^[a-zA-Z \s]+$");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+        else {
+            e.preventDefault();
+            //alert('Please Enter Alphabate');
+            return false;
+        }
+    }
+
+
+    function ValidateAlphaNumeric(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        //alert(charCode);
+        if ((charCode > 64 && charCode < 91) || (charCode > 47 && charCode < 58) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32) {
+            return true;
+        }
+        return false;
+    }
+
+    function checkemail(email) {
+        //alert(email);
+        if (email != "") {
+            //var regex = /^[a-zA-Z0-9\.\_]+\@@{1}[a-zA-Z0-9]+\.\w{2,4}$/;
+            //var regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            var regex = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+            if (!regex.test(email)) {
+                alert('Please Enter the Valid E-Mail ID !!');
+                $(".QMEMAILID").focus();
+            }
+        }
+    }
+
+    function emailvalidate(email) {
+        var aemail = email.val();// document.getElementById(email).value;
+        // alert(aemail);
+        //var lblError = document.getElementById("lblError");
+        //lblError.innerHTML = "";
+        //var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        var regex = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        if (!regex.test(aemail)) {
+            //lblError.innerHTML = "Invalid email address.";
+            //alert("Invalid email address. !!");
+            return false;
+            //email.value = "";
+            //email.focus();
+        }
+        else {
+            return true;
+        }
+    }
+
+
+    function ValidateNewCustomerAlpha(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        //alert(charCode);
+        if ((charCode > 64 && charCode < 91) || (charCode == 46) || (charCode > 47 && charCode < 58) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32 || charCode == 38 || charCode == 45 || charCode == 39) {
+            return true;
+        }
+        return false;
+    }
+
+    function ValidateOnlyNameAlpha(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        //alert(charCode);
+        if ((charCode > 64 && charCode < 91) || (charCode == 46) /*|| (charCode > 47 && charCode < 58)*/ || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32 || charCode == 38 || charCode == 45 || charCode == 39) {
+            return true;
+        }
+        return false;
+    }
+
+    function checkemail(email) {
+        //alert(email);
+        if (email != "") {
+            //var regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            var regex = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+            if (!regex.test(email)) {
+                alert('Please Enter the Valid E-Mail ID !!');
+                $(".QMEMAILID").focus();
+            }
+        }
+    }
+
+
+    function emailvalidate(email) {
+        var aemail = email;// document.getElementById(email).value;
+        //alert(aemail);
+        //var lblError = document.getElementById("lblError");
+        //lblError.innerHTML = "";
+        //var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        var expr = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        if (!expr.test(aemail)) {
+            //lblError.innerHTML = "Invalid email address.";
+            //alert("Invalid email address. !!");
+            return false;
+            //email.value = "";
+            //email.focus();
+        }
+        else {
+            return true;
+        }
+    }
+
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+
+    function addcheck() {
+
+        i = 0; j = 0;
+        //CHCK_ALL = $("#CHCK_ALL").is(':checked');
+        var tbl = $("#TDETAIL").find('tbody');
+        // alert(CHCK_ALL);
+
+        $(".STFDIDS").each(function () {
+            $trcur = tbl.find("tr:eq(" + i + ")");
+            test = $trcur.find("#STFDIDS").prop("checked");
+            //alert(test);
+            if (test == true) {
+                $trcur.find(".STFDIDS").prop("checked", true);
+                $(".boolSTFDIDS")[i].value = "true";
+            }
+            else {
+                $trcur.find(".STFDIDS").removeAttr("checked", true);
+                $(".boolSTFDIDS")[i].value = "false";
+            }
+
+            i++;
+
+        });
+        total(0);
+    }/*.....*/
+
+    function checkall() {
+        i = 0; j = 0;
+        CHCK_ALL = $("#CHCK_ALL").is(':checked');
+        var tbl = $("#TDETAIL").find('tbody');
+        // alert(CHCK_ALL);
+
+        $(".STFDIDS").each(function () {
+            $trcur = tbl.find("tr:eq(" + i + ")");
+            if (CHCK_ALL == true) {
+                $trcur.find(".STFDIDS").prop("checked", true);
+                $(".boolSTFDIDS")[i].value = "true";
+            }
+            else {
+                $trcur.find(".STFDIDS").removeAttr("checked", true);
+                $(".boolSTFDIDS")[i].value = "false";
+            }
+
+            i++;
+
+        });
+        total(0);
+    }/*.....*/
+
+    function Get_Publication_Details() {
+
+        id = $("#PUBLNID option:selected").val();
+        $(".PBILLTYPE").val(0);
+        if (id == "") { id = 0;}
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("GetPublicationDetails", "PublicationBill")/' + id, // we are calling json method
+            async: false,
+            dataType: 'json',
+            success: function (data) {
+
+                if (data != "") {
+                    $(".PBILLTYPE").val(data[0].STATETYPE);
+                } 
+            },
+            complete: function () {
+                GetRODetail();
+            },
+            error: function (ex) {
+                alert('Failed to data ' + ex);
+            }
+        });
+    }
+
+
+    function GetRODetail() {
+
+        var publnid = $(".PUBLNID option:selected").val();
+        var clntid = $(".CLNTID option:selected").val();
+
+        if (publnid == "") { publnid = 0; }
+        if (clntid == "") { clntid = 0; }
+        //alert(clntid);
+        $.ajax({
+            url: '@Url.Action("Get_Release_Order_Bill_GridDetail", "PublicationBill")/' + publnid + '~' + clntid, // we are calling json method
+            // dataType: 'json', //
+            success: function (data) {
+                //$("#job_list").html("");
+                //$("#job_list").html(data);
+                $("#TDETAIL_BODY").html("");
+                $("#TDETAIL_BODY").html(data);
+            },
+            complete: function () {
+                //sccostfactor();
+            },
+            error: function (ex) {
+                alert('Failed to data ' + ex);
+            }
+        });
+        }
+
+    function total(ctype) {
+
+        i = 0;
+
+        var rogamt = 0;
+        var ronamt = 0;
+        var pbillgamt = 0;
+        var pbillnamt = 0;
+
+        var bldamt = 0;
+        var atdiscamt = 0;
+        var pstgamt = 0;
+
+        var discmode = 0;
+        var discexprn = 0;
+        var discamt = 0;
+
+        discmode = $("#DSCNTMODE option:selected").val();
+        discexprn = $(".DSCNTEXPRN").val();
+        if (isNaN(discexprn) || discexprn == "") { discexprn = 0; }
+
+        statetype = $("#PBILLTYPE option:selected").val();//$(".PBILLTYPE").val();
+
+        if (statetype == 0) {
+            cgstexprn = 2.5;
+            sgstexprn = 2.5;
+            igstexprn = 0;
+
+        }
+        else {
+            cgstexprn = 0;
+            sgstexprn = 0;
+            igstexprn = 5;
+        }
+
+        $(".PCGSTEXPRN").val(cgstexprn);
+        $(".PSGSTEXPRN").val(sgstexprn);
+        $(".PIGSTEXPRN").val(igstexprn);
+
+        cgstamt = 0;
+        sgstamt = 0;
+        igstamt = 0;
+
+        $('.RODID').each(function () {
+
+            var ckb = $(".boolSTFDIDS")[i].value.trim();//$(this).is(':checked');
+            //alert(ckb);
+            var trantid = 0;//$("#TRANTID option:selected").val()
+            if (ckb == "true") {
+                rogamt = $(".ROGAMT")[i].value.trim();
+                if (isNaN(rogamt) || rogamt == "") { rogamt = 0;}
+
+                if (rogamt > 0) {
+                    if (discexprn > 0) {
+                        discamt = (rogamt * discexprn) / 100;
+                    }
+                    discamt = eval(discamt.toFixed(2));
+                }
+                ronamt = eval(rogamt) - eval(discamt);
+                ronamt = eval(ronamt.toFixed(2));
+                $(".RONAMT")[i].value = ronamt;
+                $(".CMSNAMT")[i].value = discamt;
+
+                pbillgamt += eval(rogamt);
+
+            }
+            i++;
+        });
+        //alert(ctype);
+        if (ctype == 1) { pbillgamt = $(".PBILLGAMT").val(); }
+        if (isNaN(pbillgamt) || pbillgamt == "") { pbillgamt = 0; }
+        pbillgamt = eval(pbillgamt).toFixed(2);
+        $(".PBILLGAMT").val(pbillgamt);
+        //Bold;
+        bldamt = $(".BLDAMT").val();
+        if (isNaN(bldamt) || bldamt == "") { bldamt = 0; }
+        bldamt = eval(bldamt).toFixed(2);
+        $(".BLDAMT").val(bldamt);
+
+        //AT Disc amt;
+        atdiscamt = $(".ATDISCAMT").val();
+        if (isNaN(atdiscamt) || atdiscamt == "") { atdiscamt = 0; }
+        atdiscamt = eval(atdiscamt).toFixed(2);
+        $(".ATDISCAMT").val(atdiscamt);
+
+        //Box ;
+        pstgamt = $(".PSTGAMT").val();
+        if (isNaN(pstgamt) || pstgamt == "") { pstgamt = 0; }
+        pstgamt = eval(pstgamt).toFixed(2);
+        $(".PSTGAMT").val(pstgamt);
+
+         if (pbillgamt > 0)
+        {
+            if (discexprn > 0)
+            {
+                discamt = (pbillgamt * discexprn) / 100;
+            }
+            discamt = eval(discamt.toFixed(2));
+        }
+        $(".DSCNTAMT").val(discamt);
+
+        cgstexprn = $(".PCGSTEXPRN").val();
+        sgstexprn = $(".PSGSTEXPRN").val();
+        igstexprn = $(".PIGSTEXPRN").val();
+
+        if (isNaN(cgstexprn) || cgstexprn == "") { cgstexprn = 0; $(".PCGSTEXPRN").val(0); }
+        if (isNaN(sgstexprn) || sgstexprn == "") { sgstexprn = 0; $(".PSGSTEXPRN").val(0); }
+        if (isNaN(igstexprn) || igstexprn == "") { igstexprn = 0; $(".PIGSTEXPRN").val(0); }
+
+        if (statetype == 1) {
+
+            cgstamt = 0;
+            cgstamt = Math.round(cgstamt).toFixed(2);
+
+            sgstamt = 0;
+            sgstamt = Math.round(sgstamt).toFixed(2);
+
+            igstamt = eval((pbillgamt - discamt) * igstexprn) / 100;
+            igstamt = Math.round(igstamt).toFixed(2);
+        }
+        else {
+            cgstamt = eval((pbillgamt - discamt) * cgstexprn) / 100;
+            cgstamt = Math.round(cgstamt).toFixed(2);
+
+            sgstamt = eval((pbillgamt - discamt) * sgstexprn) / 100;
+            sgstamt = Math.round(sgstamt).toFixed(2);
+
+            igstamt = 0;
+            igstamt = Math.round(igstamt).toFixed(2);
+        }
+
+        $(".PCGSTAMT").val(cgstamt);
+        $(".PSGSTAMT").val(sgstamt);
+        $(".PIGSTAMT").val(igstamt);
+
+
+
+        pbillnamt = ((eval(pbillgamt) + eval(bldamt) - eval(discamt) - eval(atdiscamt) + eval(pstgamt) + eval(cgstamt) + eval(sgstamt) + eval(igstamt)).toFixed(2));// + eval(TRANCGSTAMT) + eval(TRANSGSTAMT) + eval(TRANIGSTAMT) + eval(CF_ROW_TOTAL)).toFixed(2);
+        if (isNaN(pbillgamt)) { pbillgamt = 0; }
+        if (isNaN(pbillnamt)) { pbillnamt = 0; } else { pbillnamt = Math.round(pbillnamt); }
+
+        
+        $(".PBILLNAMT").val(pbillnamt);
+    }
+
+    function validate() {
+
+        flag = true;
+
+        var billno = $(".PBILLDNO").val();
+        if (billno == "") {
+            alert("Please Enter the Bill No.. !!");
+            $(".PBILLDNO").focus();
+            flag = false;
+            return false;
+        }
+
+        if ($(".PBILLDATE").val() == "") {
+            alert("Please Select the Bill Date !!");
+            $(".PBILLDATE").val("");
+            $(".PBILLDATE").focus();
+            flag = false;
+            return false;
+        }
+
+        var PUBLNID = $("#PUBLNID option:selected").val();
+        if (PUBLNID == "" || eval(PUBLNID) == 0) {
+            alert("Please Select Publication Properly !!");
+            $('.PUBLNID').select2('open');
+            flag = false;
+            return false;
+        }
+
+        var CLNTID = $("#CLNTID option:selected").val();
+        if (CLNTID == "" || eval(CLNTID) == 0) {
+            alert("Please Select Client Properly !!");
+            /*$(".CLNTID").focus();*/
+            $('.CLNTID').select2('open');
+            flag = false;
+            return false;
+        }
+
+        var PBILLTYPE = $("#PBILLTYPE option:selected").val();
+        if (PBILLTYPE == "") {
+            alert("Please Select GST Type Properly !!");
+            $(".PBILLTYPE").focus();
+            flag = false;
+            return false;
+        }
+
+        var chkinkbad = 1;
+
+        //
+
+        var inkbad = 0;
+        var pstatus = 0;
+
+        //Ink Grid Validation
+        if (chkinkbad > 0) {
+            //alert("ink");
+
+            $('#TDETAIL :text, #TDETAIL select, #TDETAIL textarea').each(function () {
+                //pstatus = 0;
+                //alert(this.id + " : " + this.value);
+                switch (this.id) {
+                    case "boolSTFDIDS":
+                        //if (pstatus == 0) {
+                            if ($.trim(this.value) == "" || $.trim(this.value) == 0) {
+                                alert("Please Select the RO Details Properly !!");
+                                inkbad++;
+                                this.focus();
+                            }
+                            if ($.trim(this.value) == "true") { pstatus = 1; } else { pstatus = 0; }
+                            if (inkbad >= 1) { flag = false; return false; }
+                            break;
+                        //}
+                    default:
+                        //alert(pstatus);
+                        if (pstatus == 1) {
+                            if ($.trim(this.value) == "") inkbad++;
+                        }
+
+                }
+            });
+
+            //alert(inkbad);
+            if (flag == true)
+            {
+                if (inkbad < 1) {
+                    var billnamt = $(".PBILLNAMT").val();
+                    if (billnamt == "" || billnamt == 0) {
+                        alert("Please Check the Amount Properly.. !!");
+                        //$(".PBILLDNO").focus();
+                        flag = false;
+                        return false;
+                    }
+                    //return true;
+
+                }
+                else {
+                    //alert("Please Check the Ink Detail before save");
+                    //$(".M_ITEMID").focus();
+                    flag = false;
+                    return false;
+                }
+            }
+
+        }
+
+
+
+        //alert(flag);
+        if (flag == true) {
+            //alert("y");
+            //document.getElementById('save').disabled = true;
+            var r = confirm("Are you sure to submit this record ?");
+            if (r == true) {
+                //$('#btn_submit').attr('disabled', true);
+                $('form').submit(function () {
+                    $(':submit').attr('disabled', 'disabled'); //disable on any form submit
+                });
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+
+
+    }
+
+    function ExecTMP() {
+        url = "@Url.Action("TMP_BILL_RODID_INSERT_DEL", "ProductionInvoice")";// "/NewReceipt/TMP_INSERT_DEL";
+        $.ajax({
+            url: url,
+            async: false,
+            success: function (data) {
+                //alert();
+            }
+        });
+        var k = 0;
+        $(".BILLDID").each(function () {
+            if ($(".RODID")[k].value > 0) {
+                var rodid = $(".RODID")[k].value;
+                var zramt = 0;
+                url = "@Url.Action("TMP_BILL_RODID_INSERT", "ProductionInvoice")/" + rodid ;//"/NewReceipt/TMP_INSERT?ids=" + rtid + ";" + tranmid + ";" + tranno + ";" + zramt;
+                //alert(url);
+                $.ajax({
+                    url: url,
+                    async: false,
+                    success: function (data) {
+                        //alert(data);
+
+                    }
+                });
+                // }
+            }
+            k++;
+        })
+
+    }
+//
+
+    </script>
+
+
+
+}
+

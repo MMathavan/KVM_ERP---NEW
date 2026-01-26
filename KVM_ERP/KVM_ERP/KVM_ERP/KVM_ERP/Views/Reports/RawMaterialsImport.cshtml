@@ -1,0 +1,138 @@
+@{
+    ViewBag.Title = "Raw Materials Import";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .reports-card { border: 1px solid #e9ecef; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,.06); }
+    .reports-header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #fff; padding: 20px 24px; }
+    .reports-title { margin: 0; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    .table-wrapper { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.06); padding: 10px; }
+    #reportTable thead th { background: #7f88e9; color: #fff; font-weight: 600; text-align: center; }
+    #reportTable tbody td { vertical-align: middle; text-align: center; }
+    .badge-range { background: #eef6ff; color: #0b5ed7; border: 1px solid #d6ecff; font-weight: 600; }
+    .small-muted { font-size: 12px; color: #6c757d; }
+</style>
+
+<div class="container-fluid py-3">
+    <div class="reports-card">
+        <div class="reports-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="reports-title">
+                    <i class="fa fa-file-excel"></i>
+                    Raw Materials Import
+                </h1>
+                <div>
+                    <span class="badge badge-range" id="rangeBadge">Select date range</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">From</label>
+                    <input type="date" id="fromDate" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">To</label>
+                    <input type="date" id="toDate" class="form-control" />
+                </div>
+                <div class="col-md-6 text-end">
+                    <a id="exportBtn" class="btn btn-success" href="#"><i class="fa fa-download"></i> Download as Excel</a>
+                    <div class="small-muted mt-1">Data updates automatically when you change the dates</div>
+                </div>
+            </div>
+
+            <div class="table-wrapper mt-3">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="reportTable">
+                        <thead>
+                            <tr>
+                                <th>Sno</th>
+                                <th>Date</th>
+                                <th>Supplier Code</th>
+                                <th>Supplier Name</th>
+                                <th>Vehicle No</th>
+                                <th>Client Weight</th>
+                                <th>No of Boxes</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    (function(){
+        function fmtDate(d){
+            try{ var dt = new Date(d); if(!isNaN(dt.getTime())) return dt.toISOString().split('T')[0]; }catch(e){}
+            return '';
+        }
+
+        let loadTimer = null;
+        function setBadge(fromDate, toDate){
+            var text = 'Select date range';
+            if (fromDate || toDate){
+                var f = fromDate ? fromDate.split('-').reverse().join('/') : '';
+                var t = toDate ? toDate.split('-').reverse().join('/') : '';
+                text = 'From: ' + (f||'-') + '  To: ' + (t||'-');
+            }
+            $('#rangeBadge').text(text);
+        }
+
+        function loadData(){
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+            setBadge(fromDate, toDate);
+            $.getJSON('@Url.Action("RawMaterialsImportData", "Reports")', { fromDate: fromDate, toDate: toDate })
+            .done(function(res){
+                var $tb = $('#reportTable tbody');
+                $tb.empty();
+                if(res && res.success && Array.isArray(res.data)){
+                    res.data.forEach(function(row, idx){
+                        var tr = '<tr>'+
+                            '<td>'+(idx+1)+'</td>'+
+                            '<td>'+ (row.Date ? row.Date : '') +'</td>'+
+                            '<td>'+ (row.SupplierCode||'') +'</td>'+
+                            '<td>'+ (row.SupplierName||'') +'</td>'+
+                            '<td>'+ (row.VehicleNo||'') +'</td>'+
+                            '<td>'+ ((row.ClientWeight||0).toFixed ? (parseFloat(row.ClientWeight)||0).toFixed(3) : row.ClientWeight) +'</td>'+
+                            '<td>'+ (row.NoOfBoxes||0) +'</td>'+
+                        '</tr>';
+                        $tb.append(tr);
+                    });
+                }
+            });
+        }
+
+        function triggerLoad(){
+            clearTimeout(loadTimer);
+            loadTimer = setTimeout(loadData, 300);
+        }
+        $('#fromDate, #toDate').on('change input', triggerLoad);
+        $('#exportBtn').on('click', function(e){
+            e.preventDefault();
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+            var url = '@Url.Action("RawMaterialsImportExcel", "Reports")' + '?fromDate=' + encodeURIComponent(fromDate||'') + '&toDate=' + encodeURIComponent(toDate||'');
+            window.location = url;
+        });
+        (function initRange(){
+            var today = new Date();
+            var start = new Date();
+            start.setDate(today.getDate() - 30);
+            $('#toDate').val(today.toISOString().split('T')[0]);
+            $('#fromDate').val(start.toISOString().split('T')[0]);
+            setBadge($('#fromDate').val(), $('#toDate').val());
+            loadData();
+        })();
+    })();
+</script>
+}
+
+

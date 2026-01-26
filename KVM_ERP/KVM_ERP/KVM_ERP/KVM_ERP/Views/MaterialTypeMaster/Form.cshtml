@@ -1,0 +1,297 @@
+@model KVM_ERP.Models.MaterialTypeMaster
+@{
+    ViewBag.Title = "Material Type Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .form-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .form-body {
+        padding: 30px;
+        background: white;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .control-label {
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .req {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+    
+    .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+        background-color: white;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3436;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .msg {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    .form-control.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.15);
+    }
+    
+    .text-danger {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 5px;
+        display: block;
+        font-weight: 500;
+    }
+</style>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">
+                <i class="fa fa-cubes"></i>
+                Material Type Master
+            </h1>
+        </div>
+
+        <div class="form-body">
+            @Html.Raw(ViewBag.msg)
+
+            @using (Html.BeginForm("savedata", "MaterialTypeMaster", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "materialTypeForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.MTRLTID)
+
+                <div class="section-title">
+                    <i class="fa fa-info-circle"></i> Material Type Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Code <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.MTRLTCODE, new { @class = "form-control", @placeholder = "Enter material type code", @id = "i_MTRLTCODE", @maxlength = "15", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.MTRLTCODE, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Material Description <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.MTRLTDESC, new { @class = "form-control", @placeholder = "Enter material description", @id = "i_MTRLTDESC", @maxlength = "100", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.MTRLTDESC, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Display Order <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.DISPORDER, new { @class = "form-control", @placeholder = "Enter display order", @id = "i_DISPORDER", @type = "number", @min = "1", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.DISPORDER, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Status</label>
+                            @Html.DropDownListFor(model => model.DISPSTATUS, ViewBag.DISPSTATUS as List<SelectListItem>, new { @class = "form-control", @id = "statusDropdown" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary" id="saveBtn">
+                        <i class="fa fa-save"></i> Save Material Type
+                    </button>
+                    <a href="@Url.Action("Index", "MaterialTypeMaster")" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            // Debug: Let's see what model values we have
+            console.log('Model MTRLTID:', '@Model.MTRLTID');
+            console.log('Model DISPSTATUS:', '@Model.DISPSTATUS');
+            console.log('Initial dropdown value:', $('#statusDropdown').val());
+            
+            // Focus on first input
+            $('#i_MTRLTCODE').focus();
+            
+            // Enhanced form validation
+            $('#materialTypeForm').on('submit', function(e) {
+                var isValid = true;
+                var code = $('#i_MTRLTCODE').val().trim();
+                var desc = $('#i_MTRLTDESC').val().trim();
+                var order = $('#i_DISPORDER').val().trim();
+                
+                // Reset previous validation states
+                $('.form-control').removeClass('is-invalid');
+                
+                if (!code) {
+                    $('#i_MTRLTCODE').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!desc) {
+                    $('#i_MTRLTDESC').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!order || parseInt(order) < 1) {
+                    $('#i_DISPORDER').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    // Scroll to first invalid field
+                    $('.is-invalid').first().focus();
+                    return false;
+                }
+                
+                // Show loading state
+                var clickedBtn = $(document.activeElement);
+                if (clickedBtn.is('button[type="submit"]')) {
+                    clickedBtn.prop('disabled', true);
+                    var originalText = clickedBtn.html();
+                    clickedBtn.html('<i class="fa fa-spinner fa-spin"></i> Saving...');
+                    
+                    // Re-enable after 3 seconds (fallback)
+                    setTimeout(function() {
+                        clickedBtn.prop('disabled', false);
+                        clickedBtn.html(originalText);
+                    }, 3000);
+                }
+            });
+            
+            // Real-time validation feedback
+            $('#i_MTRLTCODE, #i_MTRLTDESC, #i_DISPORDER').on('input blur', function() {
+                var $this = $(this);
+                if ($this.val().trim()) {
+                    $this.removeClass('is-invalid');
+                }
+            });
+            
+            // Auto-format code to uppercase and trigger validation
+            $('#i_MTRLTCODE').on('input', function() {
+                this.value = this.value.toUpperCase();
+                // Trigger remote validation
+                $(this).valid();
+            });
+            
+            // Auto-format description to title case
+            $('#i_MTRLTDESC').on('blur', function() {
+                var value = this.value.trim();
+                if (value) {
+                    this.value = value.toLowerCase().replace(/\b\w/g, function(l) {
+                        return l.toUpperCase();
+                    });
+                }
+            });
+            
+            // Ensure display order is positive number
+            $('#i_DISPORDER').on('input', function() {
+                var value = parseInt(this.value);
+                if (isNaN(value) || value < 1) {
+                    this.value = '';
+                }
+            });
+        });
+    </script>
+}

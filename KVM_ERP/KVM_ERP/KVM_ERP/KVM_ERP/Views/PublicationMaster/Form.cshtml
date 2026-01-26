@@ -1,0 +1,304 @@
+﻿@using ClubMembership.Models
+@model  ClubMembership.Models.PublicationMaster
+@{
+    ViewBag.Title = "Publication Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .req {
+        color: red;
+        font-size: 15px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>  @ViewBag.Title  <div class="clearfix"> </div></h3>
+        </div>
+
+        @Html.Raw(ViewBag.msg)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel-body">
+                    <form action="@Url.Content("~/PublicationMaster/savedata")" method="post" accept-charset="utf-8" id="customermasterform" data-ng-controller="myController" name="customermasterform" onsubmit="return validate();">
+
+
+                        @Html.ValidationSummary(true)
+
+                        <fieldset id="CustomerMasterForm_info">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="col-md-4 hidden">
+                                        <div class="form-group">
+                                            <label>Primary  </label>
+                                            @Html.TextBoxFor(model => Model.PUBLNID, new { @class = "form-control  PUBLNID", @id = "PUBLNID" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Name <span class="req"> *</span> </label>
+                                            @Html.TextBoxFor(model => Model.PUBLNNAME, new { @class = "form-control  PUBLNNAME", @id = "PUBLNNAME", @onchange = "GetDisplayname()", tabindex = "1" })
+                                            <input type="text" value="@Model.PUBLNNAME" name="i_PUBLNNAME" hidden />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Display Name <span class="req"> *</span> </label>
+                                            @Html.TextBoxFor(model => Model.PUBLNDNAME, new { @class = "form-control  PUBLNDNAME", @id = "PUBLNDNAME", tabindex = "1" })
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Address <span class="req"> *</span></label>
+                                            @Html.TextAreaFor(model => Model.PUBLNADDR, new { @class = "form-control  PUBLNADDR", @id = "PUBLNADDR", @rows = "6", @cols = "6", tabindex = "4" })
+                                        </div>
+                                    </div>
+                                   <div class="col-md-3">
+                                       <div class="form-group">
+                                           <label>Language <span class="req"> *</span></label>
+                                           @Html.DropDownList("LANGID", null, "Select Language", new {@class = "form-control LANGID",@id = "LANGID",@required = "required",tabindex = "11"@*, @onchange = "StateDetail()"*@})
+                                       </div>
+                                   </div>
+                                   <div class="col-md-3">
+                                       <div class="form-group">
+                                           <label>Publication Type <span class="req"> *</span></label>
+                                           @Html.DropDownList("PUBLNTID", null, "Select Type", new {@class = "form-control PUBLNTID",@id = "PUBLNTID",@required = "required",tabindex = "11"@*, @onchange = "StateDetail()"*@})
+                                       </div>
+                                   </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Contact Person</label>
+                                            @Html.TextBoxFor(model => Model.PUBLNCPRSN, new { @class = "form-control  PUBLNCPRSN", @id = "PUBLNCPRSN", tabindex = "5" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Mail </label>
+                                            @Html.TextBoxFor(model => Model.PUBLNEMAIL, new { @class = "form-control  PUBLNEMAIL", @id = "PUBLNEMAIL", tabindex = "6" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Phone No. 1 @*<span class="req"> *</span>*@</label>
+                                            @Html.TextBoxFor(model => Model.PUBLNPHN1, new { @class = "form-control  PUBLNPHN1", @id = "PUBLNPHN1", tabindex = "7" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Phone No. 2</label>
+                                            @Html.TextBoxFor(model => Model.PUBLNPHN2, new { @class = "form-control  PUBLNPHN2", @id = "PUBLNPHN2", tabindex = "8" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Phone No. 3</label>
+                                            @Html.TextBoxFor(model => Model.PUBLNPHN3, new { @class = "form-control  PUBLNPHN3", @id = "PUBLNPHN3", tabindex = "9" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Phone No. 4</label>
+                                            @Html.TextBoxFor(model => Model.PUBLNPHN4, new { @class = "form-control  PUBLNPHN4", @id = "PUBLNPHN4", tabindex = "10" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>State <span class="req"> *</span></label>
+                                            @Html.DropDownList("STATEID", null, "Select State", new
+                                            {
+                                                @class = "form-control STATEID",
+                                                @id = "STATEID",
+                                                @required = "required",
+                                                tabindex = "11"@*, @onchange = "StateDetail()"*@})
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>GSTIN No.</label>
+                                            @Html.TextBoxFor(model => Model.PUBLNGSTNO, new { @class = "form-control  PUBLNGSTNO", @id = "PUBLNGSTNO", tabindex = "12" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>PAN No.</label>
+                                            @Html.TextBoxFor(model => Model.PUBLNPANNO, new { @class = "form-control  PUBLNPANNO", @id = "PUBLNPANNO", tabindex = "13" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Code <span class="req"> *</span></label>
+                                            @Html.TextBoxFor(model => Model.PUBLNCODE, new { @class = "form-control PUBLNCODE", @id = "PUBLNCODE", @required = "required", tabindex = "2" })
+                                            <input type="text" value="@Model.PUBLNCODE" name="i_PUBLNCODE" hidden />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Ledger</label>
+                                            @Html.DropDownList("LDGRID", null, "Select Ledger", new { @class = "form-control custom-select  select2  LDGRID", @data_val = "true", @id = "LDGRID", @name = "LDGRID", @tabindex = "1" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Status </label>
+                                            @Html.DropDownList("DISPSTATUS", null, new { @class = "form-control", tabindex = "3" })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 hidden">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>CUSRID </label>
+                                            @Html.TextBoxFor(model => Model.CUSRID, new { @class = "form-control CUSRID", @id = "CUSRID" })
+                                            @Html.ValidationMessageFor(model => model.CUSRID)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>LMUSRID </label>
+                                            @Html.TextBoxFor(model => Model.LMUSRID, new { @class = "form-control  LMUSRID readonly", @id = "LMUSRID" })
+                                            @Html.ValidationMessageFor(model => model.LMUSRID)
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-sm pull-right" tabindex="1001" />
+
+                            <input type="button" name="back" value="Go Back" class="btn btn-primary btn-sm pull-left" onclick="JavaScript:history.back()" tabindex="1002" />
+
+
+
+                        </fieldset>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+    //alert("1");
+        $('.msg').delay(1200).fadeOut(1000);
+        $(".PUBLNCODE").keyup(function () {//...capitalize each
+
+          //  $(this).val($(this).val().toUpperCase());
+        });
+
+
+
+    $(function () { //-----date controls-------------
+            //alert("a")
+            $(".datepicker").datepicker({ dateFormat: 'dd/mm/yy', });
+
+            if ($(".CATEID").val() == 0) {
+                //var dt = new Date();
+                //var month = dt.getMonth() + 1;
+                //var date = dt.getDate() + "/" + month + "/" + dt.getFullYear();
+                //$(".CATEDOJ").val(date);
+
+            }//--------------End---------
+            else {
+
+            }
+        });
+
+        function GetDisplayname() {
+            var name = $(".PUBLNNAME").val();
+            $(".PUBLNDNAME").val(name);
+        }
+
+    function validate()
+    {
+
+            if ($(".PUBLNNAME").val() == "") {
+                alert("Please Enter the Publication Name");
+                $(".PUBLNNAME").focus();
+                return false;
+        }
+
+        if ($(".PUBLNDNAME").val() == "") {
+            alert("Please Enter the Publication Display Name");
+            $(".PUBLNDNAME").focus();
+            return false;
+        }
+
+        if ($(".PUBLNADDR").val() == "") {
+            alert("Please Enter the Publication Address");
+            $(".PUBLNADDR").focus();
+            return false;
+        }
+
+        if ($(".LANGID").val() == "") {
+            alert("Please Select Language");
+            $(".LANGID").focus();
+            return false;
+        }
+
+        if ($(".PUBLNTID").val() == "") {
+            alert("Please Select Publication Type");
+            $(".PUBLNTID").focus();
+            return false;
+        }
+
+        if ($(".STATEID").val() == "") {
+            alert("Please Select State");
+            $(".STATEID").focus();
+            return false;
+        }
+
+        if ($(".PUBLNCODE").val() == "") {
+            alert("Please Enter the Publication Code");
+            $(".PUBLNCODE").focus();
+            return false;
+        }
+
+        if ($(".ACHEADID").val() == "") {
+            alert("Please Select the Ledger");
+            $(".ACHEADID").focus();
+            return false;
+        }
+
+        }//End of validation
+
+
+
+        $(document).ready(function () {
+
+
+
+        })
+
+
+
+    </script>
+
+}
+
+

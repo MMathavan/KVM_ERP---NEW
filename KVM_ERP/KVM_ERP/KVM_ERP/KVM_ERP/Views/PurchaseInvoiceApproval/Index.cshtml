@@ -1,0 +1,532 @@
+@{
+    ViewBag.Title = "Invoice Approval";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: white;
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    .content-wrapper {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+        border: 1px solid #e9ecef;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .header-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .table-container { padding: 30px; background: white; }
+
+    #waitingTable, #approvedTable {
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+    }
+
+    #waitingTable thead th, #approvedTable thead th {
+        background: #9c88ff; /* purple shade */
+        color: white;
+        font-weight: 600;
+        padding: 15px 12px;
+        text-align: center;
+        border: none;
+        font-size: 14px;
+        border-right: 1px solid rgba(255,255,255,0.35);
+    }
+    #waitingTable thead th:last-child, #approvedTable thead th:last-child { border-right: none; }
+
+    #waitingTable tbody td, #approvedTable tbody td {
+        padding: 12px;
+        border-bottom: 1px solid #f0f0f0;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    #waitingTable tbody tr:hover, #approvedTable tbody tr:hover { background-color: #fef5ff; transition: all 0.2s ease; }
+
+    /* Date Filter Section Styling */
+    .date-filter-card {
+        background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 100%);
+        border: 1px solid #ffd6e7;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .form-label {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 10px 12px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #f5576c;
+        box-shadow: 0 0 0 0.2rem rgba(245, 87, 108, 0.25);
+    }
+    
+    #filterBtn {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    #filterBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+    }
+    
+    #clearBtn {
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        border: 2px solid #6c757d;
+        transition: all 0.3s ease;
+    }
+    
+    #clearBtn:hover {
+        background-color: #6c757d;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .amount-cell {
+        font-weight: 700;
+        color: #dc3545;
+        font-size: 15px;
+    }
+
+    .action-btn {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        margin: 0 2px;
+    }
+
+    .edit-btn {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+    }
+
+    .edit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+        color: white;
+    }
+
+    .print-btn {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        color: #333;
+    }
+
+    .print-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(168, 237, 234, 0.4);
+        color: #333;
+    }
+
+    /* Status Badge Styling */
+    .badge {
+        padding: 8px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 4px;  /* Changed from 20px to 4px for square/rectangular shape */
+        display: inline-block;
+        min-width: 100px;
+        text-align: center;
+    }
+    
+    /* Fix Admin badge near logo to be square/rectangular and compact like other pages */
+    .navbar .badge {
+        border-radius: 4px !important;  /* Square corners */
+        padding: 5px 12px !important;   /* More compact padding */
+        font-size: 13px !important;     /* Consistent font size */
+        font-weight: 600 !important;
+        min-width: auto !important;     /* Remove min-width for compact size */
+    }
+    
+    .bg-warning {
+        background-color: #ffc107 !important;
+    }
+    
+    /* Tab Styling */
+    .nav-tabs {
+        border-bottom: 3px solid #f093fb;
+    }
+    
+    .nav-tabs .nav-link {
+        border: none;
+        color: #6c757d;
+        font-weight: 600;
+        padding: 12px 25px;
+        margin-right: 5px;
+        border-radius: 8px 8px 0 0;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        color: #f5576c;
+        background-color: #fff5f8;
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: white;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        border: none;
+    }
+    
+    .tab-content {
+        padding-top: 20px;
+    }
+    
+    .bg-success {
+        background-color: #28a745 !important;
+    }
+</style>
+
+<div class="main-container">
+    <div class="content-wrapper">
+        <div class="header-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="header-title">
+                    <i class="fa fa-check-circle"></i>
+                    Invoice Approval
+                </h1>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <!-- Date Filter Section -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="row align-items-end">
+                                <div class="col-md-3">
+                                    <label for="fromDate" class="form-label fw-bold text-primary">
+                                        <i class="fa fa-calendar-alt"></i> From Date
+                                    </label>
+                                    <input type="date" id="fromDate" class="form-control border-2" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="toDate" class="form-label fw-bold text-primary">
+                                        <i class="fa fa-calendar-alt"></i> To Date
+                                    </label>
+                                    <input type="date" id="toDate" class="form-control border-2" />
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="filterBtn" class="btn btn-primary px-4">
+                                        <i class="fa fa-filter"></i> Filter
+                                    </button>
+                                    <button type="button" id="clearBtn" class="btn btn-outline-secondary px-4 ms-2">
+                                        <i class="fa fa-times"></i> Clear
+                                    </button>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <div id="filterStatus" class="mb-2">
+                                        <small class="text-success fw-bold" style="display: none;">
+                                            <i class="fa fa-check-circle"></i> 
+                                            <span id="filterText"></span>
+                                        </small>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="fa fa-info-circle"></i> 
+                                        Switch tabs to view different invoice statuses
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs for Waiting and Approved -->
+            <ul class="nav nav-tabs mb-3" id="invoiceTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="waiting-tab" data-bs-toggle="tab" data-bs-target="#waiting" type="button" role="tab">
+                        <i class="fa fa-clock"></i> Waiting for Approval
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="approved-tab" data-bs-toggle="tab" data-bs-target="#approved" type="button" role="tab">
+                        <i class="fa fa-check-circle"></i> Approved Invoice
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="invoiceTabContent">
+                <!-- Waiting for Approval Tab -->
+                <div class="tab-pane fade show active" id="waiting" role="tabpanel">
+                    <table id="waitingTable" class="display table table-striped" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>No</th>
+                                <th>Ref No</th>
+                                <th>Supplier Name</th>
+                                <th>Grand Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Date</th>
+                                <th>No</th>
+                                <th>Ref No</th>
+                                <th>Supplier Name</th>
+                                <th>Grand Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Approved Invoice Tab -->
+                <div class="tab-pane fade" id="approved" role="tabpanel">
+                    <table id="approvedTable" class="display table table-striped" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>No</th>
+                                <th>Ref No</th>
+                                <th>Supplier Name</th>
+                                <th>Grand Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Date</th>
+                                <th>No</th>
+                                <th>Ref No</th>
+                                <th>Supplier Name</th>
+                                <th>Grand Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.fn.dataTable.ext.errMode = 'console';
+
+            // Common DataTable configuration
+            function createTableConfig(status, statusBadgeClass) {
+                return {
+                    ajax: {
+                        url: '@Url.Action("GetAjaxData", "PurchaseInvoiceApproval")',
+                        type: 'GET',
+                        data: function(d) {
+                            // Add date filter parameters and status
+                            d.fromDate = $('#fromDate').val();
+                            d.toDate = $('#toDate').val();
+                            d.status = status;
+                        },
+                    dataSrc: function(json){
+                        if (json && Array.isArray(json.aaData)) return json.aaData;
+                        if (json && Array.isArray(json.data)) return json.data;
+                        if (Array.isArray(json)) return json;
+                        if (json && json.error) { console.error('Server error:', json.error); return []; }
+                        return [];
+                    },
+                    error: function(xhr, status, err){
+                        console.error('PurchaseInvoiceApproval GetAjaxData error:', status, err, xhr && xhr.responseText);
+                        alert('Failed to load data. Please check console for details.');
+                    }
+                },
+                columns: [
+                    { 
+                        data: 'TRANDATE',
+                        render: function(data, type, row) {
+                            if (data && type === 'display') {
+                                var date;
+                                // Handle JSON date format /Date(timestamp)/
+                                if (typeof data === 'string' && data.indexOf('/Date(') === 0) {
+                                    var timestamp = parseInt(data.substr(6));
+                                    date = new Date(timestamp);
+                                } else {
+                                    date = new Date(data);
+                                }
+                                
+                                if (!isNaN(date.getTime())) {
+                                    var day = String(date.getDate()).padStart(2, '0');
+                                    var month = String(date.getMonth() + 1).padStart(2, '0');
+                                    var year = date.getFullYear();
+                                    return day + '/' + month + '/' + year;
+                                }
+                            }
+                            return data;
+                        }
+                    },
+                    { data: 'TRANDNO' },
+                    { data: 'TRANREFNO' },
+                    { data: 'CATENAME' },
+                    { 
+                        data: 'TRANNAMT',
+                        render: function (data, type, row) {
+                            return '<span class="amount-cell">₹ ' + parseFloat(data).toFixed(2) + '</span>';
+                        }
+                    },
+                    {
+                        data: 'StatusDescription',
+                        render: function(data, type, row) {
+                            return '<span class="badge ' + statusBadgeClass + '">' + data + '</span>';
+                        }
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        render: function(data, type, row) {
+                            var buttons = '';
+                            // Show Edit button for all invoices (both waiting and approved)
+                            buttons += '<a href="@Url.Action("Form", "RawMaterialInvoice")?id=' + row.TRANMID + '&source=approval" class="btn action-btn edit-btn" title="Edit">' +
+                                      '<i class="fa fa-edit"></i> Edit</a>';
+                            // Always show Print button
+                            buttons += '<button class="btn action-btn print-btn" onclick="printInvoice(' + row.TRANMID + ')" title="Print">' +
+                                      '<i class="fa fa-print"></i> Print</button>';
+                            return buttons;
+                        }
+                    }
+                ],
+                    dom: '<"row mb-3"<"col-md-6"l><"col-md-6"f>>rt<"row mt-3"<"col-md-6"i><"col-md-6"p>>',
+                    responsive: true,
+                    pageLength: 25,
+                    order: [[0, 'desc']],
+                    language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        emptyTable: status === 'waiting' ? "No invoices waiting for approval" : "No approved invoices"
+                    }
+                };
+            }
+
+            // Initialize both tables
+            var waitingTable = $('#waitingTable').DataTable(createTableConfig('waiting', 'bg-warning text-dark'));
+            var approvedTable = $('#approvedTable').DataTable(createTableConfig('approved', 'bg-success text-white'));
+
+            // Function to update filter status display
+            function updateFilterStatus() {
+                var fromDate = $('#fromDate').val();
+                var toDate = $('#toDate').val();
+                var statusDiv = $('#filterStatus small');
+                var textSpan = $('#filterText');
+                
+                if (fromDate || toDate) {
+                    var filterText = 'Filtered: ';
+                    if (fromDate && toDate) {
+                        filterText += fromDate + ' to ' + toDate;
+                    } else if (fromDate) {
+                        filterText += 'From ' + fromDate;
+                    } else if (toDate) {
+                        filterText += 'Until ' + toDate;
+                    }
+                    textSpan.text(filterText);
+                    statusDiv.show();
+                } else {
+                    statusDiv.hide();
+                }
+            }
+
+            // Date Filter Event Handlers
+            $('#filterBtn').on('click', function() {
+                var fromDate = $('#fromDate').val();
+                var toDate = $('#toDate').val();
+                
+                // Validate date range
+                if (fromDate && toDate && fromDate > toDate) {
+                    alert('From Date cannot be greater than To Date');
+                    return;
+                }
+                
+                // Show loading state
+                $(this).html('<i class="fa fa-spinner fa-spin"></i> Filtering...');
+                $(this).prop('disabled', true);
+                
+                // Reload both tables with new filters
+                waitingTable.ajax.reload();
+                approvedTable.ajax.reload(function() {
+                    // Reset button state
+                    $('#filterBtn').html('<i class="fa fa-filter"></i> Filter');
+                    $('#filterBtn').prop('disabled', false);
+                    updateFilterStatus();
+                });
+            });
+
+            $('#clearBtn').on('click', function() {
+                $('#fromDate').val('');
+                $('#toDate').val('');
+                waitingTable.ajax.reload();
+                approvedTable.ajax.reload(function() {
+                    updateFilterStatus();
+                    $('#clearBtn').prop('disabled', false);
+                });
+            });
+
+            // Allow Enter key to trigger filter
+            $('#fromDate, #toDate').on('keypress', function(e) {
+                if (e.which === 13) { // Enter key
+                    $('#filterBtn').click();
+                }
+            });
+
+            // Set default date range (last 30 days) and update filter status
+            var today = new Date();
+            var thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(today.getDate() - 30);
+            
+            $('#toDate').val(today.toISOString().split('T')[0]);
+            $('#fromDate').val(thirtyDaysAgo.toISOString().split('T')[0]);
+            
+            // Show initial filter status
+            updateFilterStatus();
+        });
+
+        // Print Invoice Function
+        function printInvoice(tranmId) {
+            window.open('@Url.Action("Print", "PurchaseInvoiceApproval")?id=' + tranmId, '_blank');
+        }
+    </script>
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MARINEX - Login</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="@Url.Content("~/Content/plugins/morris.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/font-awesome-4.1.0/css/font-awesome.min.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    @*<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
+    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+    <!-- Bootstrap 5 CSS (replace with your own if bundled) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="page-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+    <!-- /#wrapper -->
+
+    @Scripts.Render("~/bundles/jquery")
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 5 JS (replace with your own if bundled) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="@Url.Content("~/Scripts/plugins/morris/raphael.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/plugins/morris/morris.min.js")"></script>
+    @*<script src="@Url.Content("~/Scripts/plugins/morris/morris.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/plugins/morris/morris-data.js")"></script>
+
+    <!-- Flot Charts JavaScript -->
+    <!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
+    <script src="@Url.Content("~/Scripts/plugins/flot/jquery.flot.js")"></script>
+    <script src="@Url.Content("~/Scripts/plugins/flot/jquery.flot.tooltip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/plugins/flot/jquery.flot.resize.js")"></script>
+    <script src="@Url.Content("~/Scripts/plugins/flot/jquery.flot.pie.js")"></script>
+    <script src="@Url.Content("~/Scripts/plugins/flot/flot-data.js")"></script>
+
+    @*<link rel="stylesheet" href="~/Content/foundation/css/foundation-datepicker.min.css">*@
+    @*<link rel="stylesheet" href="~/Content/foundation/css/example.css">*@
+    @*<script src="~/Content/foundation/foundation/js/foundation.min.js"></script>
+        <script src="~/Content/foundation/foundation/js/foundation/foundation.magellan.js"></script>*@
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

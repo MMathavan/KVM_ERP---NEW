@@ -1,0 +1,395 @@
+@using ClubMembership.Data;
+@model KVM_ERP.Models.Company
+@{
+    ViewBag.Title = "Company Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .form-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .form-body {
+        padding: 30px;
+        background: white;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .control-label {
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .req {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+    
+    .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+        background-color: white;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3436;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .msg {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">
+                <i class="fa fa-building"></i>
+                Company Master
+            </h1>
+        </div>
+
+        <div class="form-body">
+            @Html.Raw(ViewBag.msg)
+            <form action="@Url.Content("~/CompanyMaster/nsavedata")" method="post" accept-charset="utf-8" id="companymasterform" data-ng-controller="myController" name="companymasterform">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.TextBoxFor(model => Model.masterdata[0].COMPID, new { @class = "form-control COMPID", @id = "COMPID", @hidden = "true" })
+
+                <div class="section-title">
+                    <i class="fa fa-info-circle"></i> Company Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Company Name <span class="req">*</span></label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPNAME, new { @class = "form-control COMPNAME", @id = "COMPNAME", @placeholder = "Enter company name" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Display Name</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPDNAME, new { @class = "form-control COMPDNAME", @id = "COMPDNAME", @placeholder = "Enter display name" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Address</label>
+                            @Html.TextAreaFor(model => Model.masterdata[0].COMPADDR, new { @class = "form-control COMPADDR", @id = "COMPADDR", @rows = "3", @placeholder = "Enter company address" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <i class="fa fa-phone"></i> Contact Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Landline 1</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPPHN1, new { @class = "form-control COMPPHN1", @id = "COMPPHN1", @placeholder = "Enter landline number" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Landline 2</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPPHN2, new { @class = "form-control COMPPHN2", @id = "COMPPHN2", @placeholder = "Enter landline number" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Mobile 1</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPPHN3, new { @class = "form-control COMPPHN3", @id = "COMPPHN3", @placeholder = "Enter mobile number" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Mobile 2</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPPHN4, new { @class = "form-control COMPPHN4", @id = "COMPPHN4", @placeholder = "Enter mobile number" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Email</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPMAIL, new { @class = "form-control COMPMAIL", @id = "COMPMAIL", @placeholder = "Enter email address" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Contact Person</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPCPRSN, new { @class = "form-control COMPCPRSN", @id = "COMPCPRSN", @placeholder = "Enter contact person name" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <i class="fa fa-file-text"></i> Legal Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">PAN No</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPPANNO, new { @class = "form-control COMPPANNO", @id = "COMPPANNO", @placeholder = "Enter PAN number" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Registration No</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPTANNO, new { @class = "form-control COMPTANNO", @id = "COMPTANNO", @placeholder = "Enter registration number" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Company Code</label>
+                            @Html.TextBoxFor(model => Model.masterdata[0].COMPCODE, new { @class = "form-control COMPCODE", @id = "COMPCODE", @placeholder = "Enter company code" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Status</label>
+                            @Html.DropDownList("DISPSTATUS", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden Fields -->
+                @Html.TextBoxFor(model => Model.masterdata[0].CUSRID, new { @class = "form-control CUSRID", @id = "CUSRID", @hidden = "true" })
+                @Html.TextBoxFor(model => Model.masterdata[0].LMUSRID, new { @class = "form-control LMUSRID readonly", @id = "LMUSRID", @hidden = "true" })
+
+                <!-- PO Company Details Section -->
+                <div class="card mb-4" id="job_list">
+                    <div class="card-header bg-secondary text-white">
+                        <i class="fas fa-list me-2"></i> PO Company Details
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <input type="text" id="TDETAIL_IDX" value="0" name="TDETAIL_IDX[]" class="TDETAIL_IDX" style="display:none" />
+
+                            <table class="table table-striped table-bordered" id="TDETAIL">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th><i class="fas fa-building me-1"></i> PO Company Name</th>
+                                        <th><i class="fas fa-map-marker-alt me-1"></i> PO Company Address</th>
+                                        <th>
+                                            <button type="button" class="btn btn-sm btn-success" id="add_detail">
+                                                <i class="fas fa-plus me-1"></i> Add New
+                                            </button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="TDETAIL_BODY" id="TDETAIL_BODY"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Save Company
+                    </button>
+                    <a href="@Url.Action("Index", "CompanyMaster")" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            // Display Name auto-fill
+            $("#COMPNAME").blur(function () {
+                var COMPNAME = $('#COMPNAME').val();
+                $('#COMPDNAME').val(COMPNAME);
+            });
+
+            // Disable submit if TMPCOMPYID is 11
+            var ses_var = $(".TMPCOMPYID").val();
+            if (ses_var == "11") {
+                $("form input:submit").attr("disabled", true);
+            }
+
+            // Prevent Enter key from submitting form in text fields
+            function stopRKey(evt) {
+                var evt = (evt) ? evt : ((event) ? event : null);
+                var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+                if ((evt.keyCode == 13) && (node.type == "text")) { return false; }
+            }
+            document.onkeypress = stopRKey;
+
+            // Ctrl+I to add new row
+            $(document).on("keyup", function (e) {
+                if (e.ctrlKey && e.which === 73) {
+                    $("#add_detail").click();
+                }
+                e.preventDefault();
+            });
+
+            // Initialize row count
+            var rowcount = $('#TDETAIL tbody tr').length;
+            $("#TDETAIL_IDX").val(rowcount);
+
+            // Add new row functionality
+            $("#add_detail").click(function () {
+                if ($("#TDETAIL_IDX").val() != 0) {
+                    var $tableBody = $('#TDETAIL').find("tbody"),
+                        $trLast = $tableBody.find("tr:last"),
+                        $trNew = $trLast.clone();
+
+                    $trLast.after($trNew);
+                    $trNew.find('#COMPDID').val(0);
+                    $trNew.find("#COMPPONAME").val("");
+                    $trNew.find("#COMPPOADDR").val("");
+
+                    var row_idx = parseInt($("#TDETAIL_IDX").val());
+                    $("#TDETAIL_IDX").val(row_idx + 1);
+                    $("#TDETAIL_BODY").show();
+                } else {
+                    $('#TDETAIL_IDX').val("1");
+                    $("#TDETAIL_BODY").show();
+                }
+            });
+
+            // Delete row functionality
+            $(document).on("click", "#del_detail", function () {
+                var r = confirm("Are you sure to delete this record?");
+                if (r == true) {
+                    var idx = $("#TDETAIL_IDX").val();
+                    if (idx == 1) {
+                        $("#TDETAIL_BODY").hide();
+                        var $tableBody = $('#TDETAIL').find("tbody");
+                        $trCur = $tableBody.find("tr:eq(0)");
+                        $("#COMPPONAME").val("");
+                        $("#COMPPOADDR").val("");
+                        $("#TDETAIL_IDX").val(0);
+                    } else {
+                        $("#TDETAIL_BODY").show();
+                        $(this).parents('.item-row').remove();
+                        $("#TDETAIL_IDX").val($("#TDETAIL_IDX").val() - 1);
+                    }
+                }
+            });
+
+            // Form validation
+            window.validate = function () {
+                temp2 = $("#COMPNAME").val();
+                if (temp2.trim() == "") { alert("Please Enter the Company Name"); $("#COMPNAME").focus(); return false; }
+
+                temp3 = $("#COMPDNAME").val();
+                if (temp3.trim() == "") { alert("Please Enter the Company Display Name"); $("#COMPDNAME").focus(); return false; }
+
+                temp4 = $("#COMPCODE").val();
+                if (temp4.trim() == "") { alert("Please Enter the Company Code"); $("#COMPCODE").focus(); return false; }
+
+                var bad = 0;
+                $('#TDETAIL :text').each(function () {
+                    switch (this.id) {
+                        default:
+                            if ($.trim(this.value) == "" && $.trim(this.value) == 0) bad++;
+                    }
+                });
+
+                if (bad < 1) return true;
+                else {
+                    alert("Please Enter PO Company Details before save");
+                    return false;
+                }
+            }
+        });
+    </script>
+}

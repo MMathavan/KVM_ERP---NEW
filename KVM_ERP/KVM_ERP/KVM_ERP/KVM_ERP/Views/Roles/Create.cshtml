@@ -1,0 +1,283 @@
+@model KVM_ERP.Models.AccountViewModels.RoleViewModel
+@{
+    ViewBag.Title = "Create Role";
+}
+
+<div class="container">
+    <div class="card shadow" style="max-width: 800px; margin: 2rem auto;">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="h4 mb-0">
+                <i class="fas fa-user-tag me-2"></i>Create New Role
+            </h2>
+        </div>
+
+        <div class="card-body">
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger mb-4" })
+
+            @if (ViewBag.Message != null && !string.IsNullOrEmpty(ViewBag.Message.ToString()))
+            {
+                <div class="alert alert-danger mb-4">
+                    @ViewBag.Message
+                </div>
+            }
+
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <!-- Header Section -->
+                <div class="mb-4">
+                    <h3 class="h5 text-primary">Role Information</h3>
+                    <p class="text-muted">Enter details for the new role</p>
+                </div>
+
+                <!-- Basic Information Section -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Role Name</label>
+                        @Html.TextBoxFor(model => model.RoleName, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter role name",
+                            data_val = "true",
+                            data_val_required = "Role name is required"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="RoleName" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(model => model.RoleName)
+                        </span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Description</label>
+                        @Html.TextBoxFor(model => model.Description, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Enter description"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="Description" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Department Selection -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold d-block mb-2">Department</label>
+                    @Html.DropDownListFor(model => model.SDPTID, new SelectList(ViewBag.SDPTID, "value", "text"),
+                        "Select Department",
+                        new
+                             {
+                            @class = "form-select",
+                            required = "required",
+                            data_val = "true",
+                            data_val_required = "Department is required"
+                        })
+                    <span class="text-danger small field-validation-error" data-valmsg-for="SDPTID" data-valmsg-replace="true">
+                        @Html.ValidationMessageFor(model => model.SDPTID)
+                    </span>
+                </div>
+
+                <!-- Menu Configuration Section -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Menu Name</label>
+                        @Html.TextBoxFor(model => model.MenuName, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter menu name",
+                            data_val = "true",
+                            data_val_required = "Menu name is required"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="MenuName" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(model => model.MenuName)
+                        </span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Controller Name</label>
+                        @Html.TextBoxFor(model => model.ControllerName, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter controller name",
+                            data_val = "true",
+                            data_val_required = "Controller name is required"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="ControllerName" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(model => model.ControllerName)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Menu Settings Section -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Menu Index</label>
+                        @Html.TextBoxFor(model => model.MenuIndex, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter menu index",
+                            Value = "Index",
+                            data_val = "true",
+                            data_val_required = "Menu index is required"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="MenuIndex" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(model => model.MenuIndex)
+                        </span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Order</label>
+                        @Html.TextBoxFor(model => model.Order, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter order",
+                            data_val = "true",
+                            data_val_required = "Order is required"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="Order" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(model => model.Order)
+                        </span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Menu Group</label>
+                        @Html.DropDownListFor(model => model.MenuOrder, Model.MenuOrderOptions,
+                            "Select Menu Group",
+                            new { @class = "form-select" })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="MenuOrder" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(model => model.MenuOrder)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Image Selection -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold d-block mb-2">Role Image</label>
+                    @Html.DropDownListFor(model => model.RImage, Model.RImageOptions,
+                        "Select Image Class",
+                        new { @class = "form-select" })
+                    <span class="text-danger small field-validation-error" data-valmsg-for="RImage" data-valmsg-replace="true">
+                        @Html.ValidationMessageFor(model => model.RImage)
+                    </span>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-save me-2"></i>Create Role
+                    </button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary px-4">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 8px;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem 2rem;
+    }
+
+    .form-control, .form-select {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .btn {
+        min-width: 140px;
+    }
+
+    .text-danger.small {
+        font-size: 0.875rem;
+    }
+
+    .field-validation-error {
+        display: block;
+        margin-top: 0.25rem;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Enable Bootstrap 5 validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+
+
+         $(document).ready(function() {
+            // Check for success message
+            var successMessage = '@(TempData["SuccessMessage"] as string)';
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: successMessage,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+
+            // Check for error message
+            var errorMessage = '@(TempData["ErrorMessage"] as string)';
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: errorMessage
+                });
+            }
+
+            // Form submission handler
+            $('form').submit(function(e) {
+                if (!$(this).valid()) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: 'Please fill in all required fields correctly.'
+                    });
+                    return false;
+                }
+
+                 //You can add additional confirmation if needed
+                 e.preventDefault();
+                 Swal.fire({
+                     title: 'Are you sure?',
+                     text: "You are about to create a new role",
+                     icon: 'question',
+                     showCancelButton: true,
+                     confirmButtonColor: '#3085d6',
+                     cancelButtonColor: '#d33',
+                     confirmButtonText: 'Yes, create it!'
+                 }).then((result) => {
+                     if (result.isConfirmed) {
+                         $(this).unbind('submit').submit();
+                     }
+                 });
+            });
+        });
+    </script>
+}

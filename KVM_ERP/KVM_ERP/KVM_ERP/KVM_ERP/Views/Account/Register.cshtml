@@ -1,0 +1,281 @@
+@model  KVM_ERP.Models.AccountViewModels.RegisterViewModel
+@{
+    ViewBag.Title = "Register New User";
+}
+
+<div class="container">
+    <!-- Header with Logo and Company Name -->
+    <div class="text-center mb-4" style="margin-top: 2rem;">
+        <img src="~/Content/images/logo-small.png" alt="Sree Narayana Guru Samidhi Logo" style="width: 80px; height: auto; margin-bottom: 15px;">
+        <h1 class="h3 text-primary mb-0" style="font-weight: 600;">Sree Narayana Guru Samidhi</h1>
+        <p class="text-muted mt-2">User Registration</p>
+    </div>
+    
+    <div class="card shadow" style="max-width: 800px; margin: 0 auto 2rem;">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">
+                <i class="fas fa-user-plus me-2"></i>Register New User
+            </h2>
+        </div>
+
+        <div class="card-body">
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger mb-4" })
+
+            @if (ViewBag.msg != null && !string.IsNullOrEmpty(ViewBag.msg.ToString()))
+            {
+                <div class="alert alert-info alert-dismissible fade show mb-4">
+                    @Html.Raw(ViewBag.msg)
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "needs-validation", role = "form", novalidate = "novalidate", viewType = "standard" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "alert alert-danger mb-4" })
+
+                <!-- Header Section -->
+                <div class="mb-4">
+                    <h3 class="h5 text-primary">User Information</h3>
+                    <p class="text-muted">Enter details for the new user account</p>
+                </div>
+
+                <!-- User Credentials Section -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Username</label>
+                        @Html.TextBoxFor(m => m.UserName, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter username",
+                            data_val = "true",
+                            data_val_required = "The Username field is required."
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="UserName" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(m => m.UserName)
+                        </span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Email</label>
+                        @Html.TextBoxFor(m => m.Email, new
+                        {
+                            @class = "form-control",
+                            type = "email",
+                            required = "required",
+                            placeholder = "Enter email",
+                            data_val = "true",
+                            data_val_required = "The Email field is required.",
+                            data_val_email = "Please enter a valid email address."
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="Email" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(m => m.Email)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Password Section -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Password</label>
+                        @Html.PasswordFor(m => m.Password, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter password",
+                            data_val = "true",
+                            data_val_required = "The Password field is required.",
+                            data_val_length = "The Password must be at least 6 characters long.",
+                            data_val_length_min = "6"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="Password" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(m => m.Password)
+                        </span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Confirm Password</label>
+                        @Html.PasswordFor(m => m.ConfirmPassword, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Confirm password",
+                            data_val = "true",
+                            data_val_required = "The Confirm Password field is required.",
+                            data_val_equalto = "The password and confirmation password do not match.",
+                            data_val_equalto_other = "Password"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Personal Information Section -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">First Name</label>
+                        @Html.TextBoxFor(m => m.FirstName, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter first name",
+                            data_val = "true",
+                            data_val_required = "The First Name field is required."
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="FirstName" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(m => m.FirstName)
+                        </span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Last Name</label>
+                        @Html.TextBoxFor(m => m.LastName, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter last name",
+                            data_val = "true",
+                            data_val_required = "The Last Name field is required."
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="LastName" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(m => m.LastName)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- New Fields Section -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Mobile Number</label>
+                        @Html.TextBoxFor(m => m.MobileNo, new
+                        {
+                            @class = "form-control",
+                            required = "required",
+                            placeholder = "Enter mobile number",
+                            data_val = "true",
+                            data_val_required = "Mobile number is required.",
+                            data_val_length = "Mobile number must be 10 digits.",
+                            data_val_length_min = "10",
+                            data_val_length_max = "10",
+                            data_val_regex = "Please enter a valid mobile number.",
+                            data_val_regex_pattern = "^[0-9]{10}$"
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="MobileNo" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(m => m.MobileNo)
+                        </span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Date of Birth</label>
+                        @Html.TextBoxFor(m => m.DOB, "{0:yyyy-MM-dd}", new
+                        {
+                            @class = "form-control",
+                            type = "date",
+                            max = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"),
+                            required = "required",
+                            data_val = "true",
+                            data_val_required = "Date of birth is required.",
+                            data_val_date = "Please enter a valid date."
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="DOB" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(m => m.DOB)
+                        </span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold d-block mb-2">Gender</label>
+                        @Html.DropDownListFor(m => m.Gender, new SelectList(new List<string> { "Male", "Female" }), "Select Gender", new
+                        {
+                            @class = "form-select",
+                            required = "required",
+                            data_val = "true",
+                            data_val_required = "Gender is required."
+                        })
+                        <span class="text-danger small field-validation-error" data-valmsg-for="Gender" data-valmsg-replace="true">
+                            @Html.ValidationMessageFor(m => m.Gender)
+                        </span>
+                    </div>
+                </div>
+
+                <input type="hidden" name="viewType" value="standard" />
+
+                <!-- Buttons -->
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-user-plus me-2"></i>Register User
+                    </button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary px-4">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 8px;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem 2rem;
+    }
+
+    .form-control, .form-select {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .btn {
+        min-width: 140px;
+    }
+
+    .text-danger.small {
+        font-size: 0.875rem;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Immediate DOB validation: must be earlier than today
+            (function () {
+                var $dob = $('#DOB');
+                function validateDob() {
+                    var v = $dob.val();
+                    if (!v) { $dob[0].setCustomValidity(''); return; }
+                    var dob = new Date(v + 'T00:00:00');
+                    var today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    if (dob >= today) {
+                        $dob[0].setCustomValidity('Date of Birth must be earlier than today.');
+                    } else {
+                        $dob[0].setCustomValidity('');
+                    }
+                    if (typeof $dob[0].reportValidity === 'function') {
+                        $dob[0].reportValidity();
+                    }
+                }
+                $dob.on('change input blur', validateDob);
+                validateDob();
+            })();
+            // Bootstrap validation
+            (function () {
+                'use strict'
+                var forms = document.querySelectorAll('.needs-validation')
+                Array.prototype.slice.call(forms).forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })();
+        });
+    </script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

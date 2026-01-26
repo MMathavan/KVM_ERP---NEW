@@ -1,0 +1,386 @@
+@{
+    ViewBag.Title = "Category Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .modern-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+        }
+        .header-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0;
+        }
+        .header-title h3 {
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn-modern {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .btn-modern:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .filter-section {
+            background: #f8fafc;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-label {
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+        }
+        .form-control-modern {
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 8px 12px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+        .form-control-modern:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+        .status-legend {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+        .status-active {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .status-inactive {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        .table-container {
+            padding: 0;
+        }
+        .table-modern {
+            margin: 0;
+            background: white;
+        }
+        .table-modern thead th {
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            color: #374151;
+            font-weight: 700;
+            padding: 16px;
+            border-top: none;
+        }
+        .table-modern tbody td {
+            padding: 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .table-modern tbody tr {
+            transition: all 0.2s ease;
+        }
+        .table-modern tbody tr:hover {
+            background: #f8fafc;
+            transform: translateX(4px);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-action {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .btn-edit {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+        .btn-edit:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        .btn-delete {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+        .row-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .code-badge {
+            background: #f1f5f9;
+            color: #374151;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+        }
+        .muted-row {
+            opacity: 0.6;
+        }
+        .muted-row td {
+            color: #9ca3af !important;
+        }
+    </style>
+    
+    <style type="text/css">
+        @@media (max-width: 768px) {
+            .header-title {
+                flex-direction: column !important;
+                gap: 16px !important;
+                align-items: flex-start !important;
+            }
+            .filter-row {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 16px !important;
+            }
+            .action-buttons {
+                flex-direction: column !important;
+            }
+        }
+    </style>
+}
+
+<div class="container-fluid py-4">
+    <div class="modern-card">
+        <div class="header-gradient">
+            <div class="header-title">
+                <h3><i class="fas fa-tags"></i> Category Master</h3>
+                <a class="btn btn-modern" href="@Url.Action("Form", "CategoryMaster")">
+                    <i class="fas fa-plus"></i> Add New Category    
+                </a>
+            </div>
+        </div>
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label class="filter-label">Legend:</label>
+                    <div class="status-legend">
+                        <span class="status-badge status-active">Active</span>
+                        <span class="status-badge status-inactive">Inactive</span>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label" for="statusFilter">Status:</label>
+                    <select id="statusFilter" class="form-control-modern">
+                        <option value="">All Categories</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="flex: 1; max-width: 300px;">
+                    <label class="filter-label" for="globalSearch">Search:</label>
+                    <input id="globalSearch" type="text" class="form-control-modern" placeholder="Search by code, description, or status...">
+                </div>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="table-responsive">
+                <table id="example" class="table table-modern" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="width:80px;">#</th>
+                            <th style="width:140px;">Code</th>
+                            <th>Description</th>
+                            <th style="width:120px;">Status</th>
+                            <th style="width:80px; display:none;">ID</th>
+                            <th style="width:160px;">Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <script type="text/javascript" class="init">
+
+        var editor; // use a global for the submit and return data rendering in the examples
+        $(document).ready(function() {
+
+        table=$('#example').DataTable( {
+            ajax: "@Url.Action("GetAjaxData", "CategoryMaster")",
+            order: [[ 2, 'asc' ]],
+            pageLength: 10,
+            lengthMenu: [ [10, 25, 50, 100], [10, 25, 50, 100] ],
+            language: {
+                emptyTable: 'No categories found.'
+            },
+            columns: [
+                {
+                    data: null,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return '<span class="row-number">' + (meta.row + 1) + '</span>';
+                    }
+                },
+                { 
+                    data: "ACCODE",
+                    render: function (data, type, row) {
+                        return '<span class="code-badge">' + data + '</span>';
+                    }
+                },
+                { data: "ACDESC" },
+                {
+                    data: "DISPSTATUS",
+                    render: function (data, type, row) {
+                        var isActive = (data === '0' || data === 0);
+                        var text = isActive ? 'Active' : 'Inactive';
+                        var cls = isActive ? 'status-badge status-active' : 'status-badge status-inactive';
+                        return '<span class="' + cls + '">' + text + '</span>';
+                    }
+                },
+                { data: "ACID", visible: false },
+                {
+                    orderable: false,
+                    render: function (data, type, row) {
+                        if ((row["ACCODE"] || '').toString().trim() === '000') {
+                            return '';
+                        }
+                        var editUrl = '@Url.Action("Form", "CategoryMaster")/' + row["ACID"];
+                        var editBtn = '<a href="' + editUrl + '" class="btn-action btn-edit" title="Edit Category"><i class="fas fa-edit"></i> Edit</a>';
+                        var delBtn = '<a href="#" id="' + row["ACID"] + '" class="editor_remove btn-action btn-delete" title="Delete Category"><i class="fas fa-trash"></i> Delete</a>';
+                        return '<div class="action-buttons">' + editBtn + delBtn + '</div>';
+                    }
+                }
+            ],
+            rowCallback: function(row, data) {
+                if ((data["ACCODE"] || '').toString().trim() === '000') {
+                    $(row).addClass('muted-row');
+                }
+            }
+        });
+
+            // Global search input wiring
+            $('#globalSearch').on('keyup change', function() {
+                table.search(this.value).draw();
+            });
+
+            // Status filter
+            $('#statusFilter').on('change', function() {
+                var val = $(this).val();
+                table.column(3).search(val, true, false).draw();
+            });
+
+            //--------------Delete Record----------------//
+            $(document).on("click", "a.editor_remove", function () {
+                var r = confirm("Are you sure to delete this record ?");
+                if (r == true) {
+                    var idx = $(this).attr('id');
+                    base = window.location.origin;
+                    $.post(base + "/CategoryMaster/Del",
+                          {
+                              id: idx, fld: ""
+                          },
+                        function (data, status) {
+                            if (data == "Deleted Successfully ...")
+                                location.replace(base + "/CategoryMaster/Index");
+                            else if (data == "") alert("You are not authorize to Delete..!");
+                            else
+                                alert(data);
+                        });
+                }
+                return false;
+            });//end
+
+            $("#from").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat: 'dd-mm-yy',
+                onClose: function (selectedDate) {
+                    $("#to").datepicker("option", "minDate", selectedDate);
+                }
+            });
+            $("#to").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat: 'dd-mm-yy',
+                onClose: function (selectedDate) {
+                    $("#from").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+
+        } );
+
+    </script>
+
+}
+
+
+

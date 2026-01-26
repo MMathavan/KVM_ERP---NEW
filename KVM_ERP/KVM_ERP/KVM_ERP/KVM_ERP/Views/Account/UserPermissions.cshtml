@@ -1,0 +1,95 @@
+﻿@model KVM_ERP.Models.AccountViewModels.UserPermissionsViewModel
+@{
+    ViewBag.Title = "User Permissions";
+}
+
+<div class="container">
+    <div class="card shadow" style="max-width: 1000px; margin: 2rem auto;">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="h4 mb-0">
+                <i class="fas fa-user-shield me-2"></i>User Permissions
+            </h2>
+            <a href="@Url.Action("Index")" class="btn btn-sm btn-light">
+                <i class="fas fa-arrow-left me-1"></i>Back to List
+            </a>
+        </div>
+
+        <div class="card-body">
+            <!-- Header Section -->
+            <div class="mb-4">
+                <h3 class="h5 text-primary">Effective Role Permissions</h3>
+                <p class="text-muted">Permissions for user: <strong>@Html.DisplayFor(model => model.UserName)</strong></p>
+            </div>
+
+            <!-- Permissions Table -->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4" style="width: 30%;">Role Permission</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Roles)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <strong>@Html.DisplayFor(modelItem => item.RoleName)</strong>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Back Button -->
+            <div class="d-flex justify-content-end mt-4">
+                <a href="@Url.Action("Index")" class="btn btn-outline-secondary px-4">
+                    <i class="fas fa-arrow-left me-2"></i>Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 8px;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem 2rem;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+        padding: 1rem;
+        background-color: #f8f9fa;
+    }
+
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    .btn {
+        min-width: 140px;
+    }
+</style>

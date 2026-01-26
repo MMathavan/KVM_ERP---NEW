@@ -1,0 +1,700 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ClubMembershipModelStoreContainer" CdmEntityContainer="ClubMembershipEntities">
+    <EntitySetMapping Name="VW_USER_DETAILS">
+      <EntityTypeMapping TypeName="ClubMembershipModel.VW_USER_DETAILS">
+        <MappingFragment StoreEntitySet="VW_USER_DETAILS">
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="PR_ACCOUNTINGYEAR_ID_CHK" FunctionName="ClubMembershipModel.Store.PR_ACCOUNTINGYEAR_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.PR_ACCOUNTINGYEAR_ID_CHK_Result">
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+          <ScalarProperty Name="YRDESC" ColumnName="YRDESC" />
+          <ScalarProperty Name="YRID1" ColumnName="YRID1" />
+          <ScalarProperty Name="FDATE" ColumnName="FDATE" />
+          <ScalarProperty Name="TDATE" ColumnName="TDATE" />
+          <ScalarProperty Name="YRDESC1" ColumnName="YRDESC1" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+          <ScalarProperty Name="PRCSDATE" ColumnName="PRCSDATE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" FunctionName="ClubMembershipModel.Store.PR_COMPANYACCOUNTINGDETAIL_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_CompanyDetail_Flx_Assgn" FunctionName="ClubMembershipModel.Store.pr_CompanyDetail_Flx_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_CompanyDetail_Flx_Assgn_Result">
+          <ScalarProperty Name="COMPDID" ColumnName="COMPDID" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+          <ScalarProperty Name="COMPPONAME" ColumnName="COMPPONAME" />
+          <ScalarProperty Name="COMPPOADDR" ColumnName="COMPPOADDR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountGroup" FunctionName="ClubMembershipModel.Store.pr_SearchAccountGroup">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchAccountGroup_Result">
+          <ScalarProperty Name="ACHEADGCODE" ColumnName="ACHEADGCODE" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADGID" ColumnName="ACHEADGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountHeadMaster" FunctionName="ClubMembershipModel.Store.pr_SearchAccountHeadMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchAccountHeadMaster_Result">
+          <ScalarProperty Name="ACHEADCODE" ColumnName="ACHEADCODE" />
+          <ScalarProperty Name="ACHEADDESC" ColumnName="ACHEADDESC" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADID" ColumnName="ACHEADID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCompanyMaster" FunctionName="ClubMembershipModel.Store.pr_SearchCompanyMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchCompanyMaster_Result">
+          <ScalarProperty Name="COMPCODE" ColumnName="COMPCODE" />
+          <ScalarProperty Name="COMPNAME" ColumnName="COMPNAME" />
+          <ScalarProperty Name="COMPADDR" ColumnName="COMPADDR" />
+          <ScalarProperty Name="COMPPHN1" ColumnName="COMPPHN1" />
+          <ScalarProperty Name="COMPCPRSN" ColumnName="COMPCPRSN" />
+          <ScalarProperty Name="COMPMAIL" ColumnName="COMPMAIL" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDepartmentMaster" FunctionName="ClubMembershipModel.Store.pr_SearchDepartmentMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchDepartmentMaster_Result">
+          <ScalarProperty Name="DEPTCODE" ColumnName="DEPTCODE" />
+          <ScalarProperty Name="DEPTDESC" ColumnName="DEPTDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DEPTID" ColumnName="DEPTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDesignationMaster" FunctionName="ClubMembershipModel.Store.pr_SearchDesignationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchDesignationMaster_Result">
+          <ScalarProperty Name="DSGNCODE" ColumnName="DSGNCODE" />
+          <ScalarProperty Name="DSGNDESC" ColumnName="DSGNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DSGNID" ColumnName="DSGNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLocationMaster" FunctionName="ClubMembershipModel.Store.pr_SearchLocationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchLocationMaster_Result">
+          <ScalarProperty Name="LOCTCODE" ColumnName="LOCTCODE" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="REGNDESC" ColumnName="REGNDESC" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LOCTID" ColumnName="LOCTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchRegionMaster" FunctionName="ClubMembershipModel.Store.pr_SearchRegionMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchRegionMaster_Result">
+          <ScalarProperty Name="REGNCODE" ColumnName="REGNCODE" />
+          <ScalarProperty Name="REGNDESC" ColumnName="REGNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="REGNID" ColumnName="REGNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchStateMaster" FunctionName="ClubMembershipModel.Store.pr_SearchStateMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchStateMaster_Result">
+          <ScalarProperty Name="STATECODE" ColumnName="STATECODE" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="REGNDESC" ColumnName="REGNDESC" />
+          <ScalarProperty Name="STATETYPE" ColumnName="STATETYPE" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="STATEID" ColumnName="STATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Search_Roles" FunctionName="ClubMembershipModel.Store.pr_Search_Roles">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Search_Roles_Result">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Descp" ColumnName="Descp" />
+          <ScalarProperty Name="SDPTNAME" ColumnName="SDPTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="ClubMembershipModel.AspNetUser">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+          <ScalarProperty Name="DBrnchId" ColumnName="DBrnchId" />
+          <ScalarProperty Name="UBrnchName" ColumnName="UBrnchName" />
+          <ScalarProperty Name="BrnchId" ColumnName="BrnchId" />
+          <ScalarProperty Name="NPassword" ColumnName="NPassword" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCategoryMaster" FunctionName="ClubMembershipModel.Store.pr_SearchCategoryMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchCategoryMaster_Result">
+          <ScalarProperty Name="ACCODE" ColumnName="ACCODE" />
+          <ScalarProperty Name="ACDESC" ColumnName="ACDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACID" ColumnName="ACID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchEditionMaster" FunctionName="ClubMembershipModel.Store.pr_SearchEditionMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchEditionMaster_Result">
+          <ScalarProperty Name="EDTNCODE" ColumnName="EDTNCODE" />
+          <ScalarProperty Name="EDTNDESC" ColumnName="EDTNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="EDTNID" ColumnName="EDTNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLanguageMaster" FunctionName="ClubMembershipModel.Store.pr_SearchLanguageMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchLanguageMaster_Result">
+          <ScalarProperty Name="LANGCODE" ColumnName="LANGCODE" />
+          <ScalarProperty Name="LANGDESC" ColumnName="LANGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LANGID" ColumnName="LANGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchMediaUnitMaster" FunctionName="ClubMembershipModel.Store.pr_SearchMediaUnitMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchMediaUnitMaster_Result">
+          <ScalarProperty Name="MUNITCODE" ColumnName="MUNITCODE" />
+          <ScalarProperty Name="MUNITDESC" ColumnName="MUNITDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="MUNITID" ColumnName="MUNITID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchPublicationTypeMaster" FunctionName="ClubMembershipModel.Store.pr_SearchPublicationTypeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchPublicationTypeMaster_Result">
+          <ScalarProperty Name="PUBLNTCODE" ColumnName="PUBLNTCODE" />
+          <ScalarProperty Name="PUBLNTDESC" ColumnName="PUBLNTDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="PUBLNTID" ColumnName="PUBLNTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchPositionMaster" FunctionName="ClubMembershipModel.Store.pr_SearchPositionMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchPositionMaster_Result">
+          <ScalarProperty Name="POSTNCODE" ColumnName="POSTNCODE" />
+          <ScalarProperty Name="POSTNDESC" ColumnName="POSTNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="POSTNID" ColumnName="POSTNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchHSNCodeMaster" FunctionName="ClubMembershipModel.Store.pr_SearchHSNCodeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchHSNCodeMaster_Result">
+          <ScalarProperty Name="HSNCODE" ColumnName="HSNCODE" />
+          <ScalarProperty Name="HSNDESC" ColumnName="HSNDESC" />
+          <ScalarProperty Name="TAXEXPRN" ColumnName="TAXEXPRN" />
+          <ScalarProperty Name="CGSTEXPRN" ColumnName="CGSTEXPRN" />
+          <ScalarProperty Name="SGSTEXPRN" ColumnName="SGSTEXPRN" />
+          <ScalarProperty Name="IGSTEXPRN" ColumnName="IGSTEXPRN" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="HSNID" ColumnName="HSNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchReleaseOrder" FunctionName="ClubMembershipModel.Store.pr_SearchReleaseOrder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchReleaseOrder_Result">
+          <ScalarProperty Name="RODATE" ColumnName="RODATE" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="NETTAMT" ColumnName="NETTAMT" />
+          <ScalarProperty Name="RCOUNT" ColumnName="RCOUNT" />
+          <ScalarProperty Name="BCOUNT" ColumnName="BCOUNT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_RO_Publication_Edition_List" FunctionName="ClubMembershipModel.Store.pr_RO_Publication_Edition_List">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_RO_Publication_Edition_List_Result">
+          <ScalarProperty Name="EDTNID" ColumnName="EDTNID" />
+          <ScalarProperty Name="EDTNDESC" ColumnName="EDTNDESC" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchInvoice" FunctionName="ClubMembershipModel.Store.pr_SearchInvoice">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchInvoice_Result">
+          <ScalarProperty Name="BILLDATE" ColumnName="BILLDATE" />
+          <ScalarProperty Name="BILLNID" ColumnName="BILLNID" />
+          <ScalarProperty Name="BILLPRNNO" ColumnName="BILLPRNNO" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="NETTAMT" ColumnName="NETTAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="BILLMID" ColumnName="BILLMID" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillMasterAmountWiseClntSlct" FunctionName="ClubMembershipModel.Store.pr_BillMasterAmountWiseClntSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillMasterAmountWiseClntSlct_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillMasterParyWiseClntSlct" FunctionName="ClubMembershipModel.Store.pr_BillMasterParyWiseClntSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillMasterParyWiseClntSlct_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillMasterPrcntWiseClntSlct" FunctionName="ClubMembershipModel.Store.pr_BillMasterPrcntWiseClntSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillMasterPrcntWiseClntSlct_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillMasterSpaceWiseClntSlct" FunctionName="ClubMembershipModel.Store.pr_BillMasterSpaceWiseClntSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillMasterSpaceWiseClntSlct_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailPublicationAmountCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailPublicationAmountCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailPublicationAmountCbxSlct_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailPublicationPartyCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailPublicationPartyCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailPublicationPartyCbxSlct_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailPublicationPrcntCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailPublicationPrcntCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailPublicationPrcntCbxSlct_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailPublicationSpaceCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailPublicationSpaceCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailPublicationSpaceCbxSlct_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailROAmountCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailROAmountCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailROAmountCbxSlct_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailROParyCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailROParyCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailROParyCbxSlct_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailROPrcntCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailROPrcntCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailROPrcntCbxSlct_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailROSpaceCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailROSpaceCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailROSpaceCbxSlct_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_ReleaseOrderDetailCtrlAssgn" FunctionName="ClubMembershipModel.Store.pr_ReleaseOrderDetailCtrlAssgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_ReleaseOrderDetailCtrlAssgn_Result">
+          <ScalarProperty Name="MUNITCODE" ColumnName="MUNITCODE" />
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+          <ScalarProperty Name="EDTNIDS" ColumnName="EDTNIDS" />
+          <ScalarProperty Name="EDTNDESC" ColumnName="EDTNDESC" />
+          <ScalarProperty Name="DORTYPE" ColumnName="DORTYPE" />
+          <ScalarProperty Name="DORSTATUS" ColumnName="DORSTATUS" />
+          <ScalarProperty Name="CANLSTATUS" ColumnName="CANLSTATUS" />
+          <ScalarProperty Name="DORNARTN" ColumnName="DORNARTN" />
+          <ScalarProperty Name="SPACE" ColumnName="SPACE" />
+          <ScalarProperty Name="RATE" ColumnName="RATE" />
+          <ScalarProperty Name="GAMT" ColumnName="GAMT" />
+          <ScalarProperty Name="MUNITID" ColumnName="MUNITID" />
+          <ScalarProperty Name="PBILLDID" ColumnName="PBILLDID" />
+          <ScalarProperty Name="BILLDID" ColumnName="BILLDID" />
+          <ScalarProperty Name="BLDTYPE" ColumnName="BLDTYPE" />
+          <ScalarProperty Name="BLDSPACE" ColumnName="BLDSPACE" />
+          <ScalarProperty Name="BLDAMT" ColumnName="BLDAMT" />
+          <ScalarProperty Name="BLDPRCNT" ColumnName="BLDPRCNT" />
+          <ScalarProperty Name="PEDTNID" ColumnName="PEDTNID" />
+          <ScalarProperty Name="DORCAPTN" ColumnName="DORCAPTN" />
+          <ScalarProperty Name="NOP" ColumnName="NOP" />
+          <ScalarProperty Name="BAmt" ColumnName="BAmt" />
+          <ScalarProperty Name="BPrcnt" ColumnName="BPrcnt" />
+          <ScalarProperty Name="PRMTYPE" ColumnName="PRMTYPE" />
+          <ScalarProperty Name="PRMEXPRN" ColumnName="PRMEXPRN" />
+          <ScalarProperty Name="EXPNTYPE" ColumnName="EXPNTYPE" />
+          <ScalarProperty Name="CMSNMODE" ColumnName="CMSNMODE" />
+          <ScalarProperty Name="CMSNPRCNT" ColumnName="CMSNPRCNT" />
+          <ScalarProperty Name="ACDESC" ColumnName="ACDESC" />
+          <ScalarProperty Name="POSTNDESC" ColumnName="POSTNDESC" />
+          <ScalarProperty Name="SIZE" ColumnName="SIZE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Get_Client_Address_Detail" FunctionName="ClubMembershipModel.Store.pr_Get_Client_Address_Detail">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Get_Client_Address_Detail_Result">
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="CLNTADDR" ColumnName="CLNTADDR" />
+          <ScalarProperty Name="STATETYPE" ColumnName="STATETYPE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Billing_Release_Order_DOR_Ctrl_Assgn" FunctionName="ClubMembershipModel.Store.pr_Billing_Release_Order_DOR_Ctrl_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Billing_Release_Order_DOR_Ctrl_Assgn_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Billing_Release_Order_No_Ctrl_Assgn" FunctionName="ClubMembershipModel.Store.pr_Billing_Release_Order_No_Ctrl_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Billing_Release_Order_No_Ctrl_Assgn_Result">
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailRODORSpaceCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailRODORSpaceCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailRODORSpaceCbxSlct_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailRODORAmountCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailRODORAmountCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailRODORAmountCbxSlct_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailRODORPartyCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailRODORPartyCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailRODORPartyCbxSlct_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailRODORPrcntCbxSlct" FunctionName="ClubMembershipModel.Store.pr_BillDetailRODORPrcntCbxSlct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailRODORPrcntCbxSlct_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchProductionReleaseOrder" FunctionName="ClubMembershipModel.Store.pr_SearchProductionReleaseOrder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchProductionReleaseOrder_Result">
+          <ScalarProperty Name="RODATE" ColumnName="RODATE" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="RONAMT" ColumnName="RONAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ROID" ColumnName="ROID" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchEmployeeMaster" FunctionName="ClubMembershipModel.Store.pr_SearchEmployeeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchEmployeeMaster_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="DSGNDESC" ColumnName="DSGNDESC" />
+          <ScalarProperty Name="REGNDESC" ColumnName="REGNDESC" />
+          <ScalarProperty Name="CATECPNAME" ColumnName="CATECPNAME" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="CATEEMAIL" ColumnName="CATEEMAIL" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchProductionInvoice" FunctionName="ClubMembershipModel.Store.pr_SearchProductionInvoice">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchProductionInvoice_Result">
+          <ScalarProperty Name="BILLDATE" ColumnName="BILLDATE" />
+          <ScalarProperty Name="BILLNID" ColumnName="BILLNID" />
+          <ScalarProperty Name="BILLPRNNO" ColumnName="BILLPRNNO" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="NETTAMT" ColumnName="NETTAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="BILLMID" ColumnName="BILLMID" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchStudioInvoice" FunctionName="ClubMembershipModel.Store.pr_SearchStudioInvoice">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchStudioInvoice_Result">
+          <ScalarProperty Name="BILLDATE" ColumnName="BILLDATE" />
+          <ScalarProperty Name="BILLNID" ColumnName="BILLNID" />
+          <ScalarProperty Name="BILLPRNNO" ColumnName="BILLPRNNO" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="NETTAMT" ColumnName="NETTAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="BILLMID" ColumnName="BILLMID" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Production_Bill_RO_Cbx_Assgn" FunctionName="ClubMembershipModel.Store.pr_Production_Bill_RO_Cbx_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Production_Bill_RO_Cbx_Assgn_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+          <ScalarProperty Name="RODNO" ColumnName="RODNO" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Billing_Production_Release_Order_No_Ctrl_Assgn" FunctionName="ClubMembershipModel.Store.pr_Billing_Production_Release_Order_No_Ctrl_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Billing_Production_Release_Order_No_Ctrl_Assgn_Result">
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="RONID" ColumnName="RONID" />
+          <ScalarProperty Name="RODNO" ColumnName="RODNO" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchClientMaster" FunctionName="ClubMembershipModel.Store.pr_SearchClientMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchClientMaster_Result">
+          <ScalarProperty Name="CLNTCODE" ColumnName="CLNTCODE" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="CLNTPNAME" ColumnName="CLNTPNAME" />
+          <ScalarProperty Name="CLNTPHN3" ColumnName="CLNTPHN3" />
+          <ScalarProperty Name="CLNTMAIL" ColumnName="CLNTMAIL" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CLNTID" ColumnName="CLNTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchPublicationMaster" FunctionName="ClubMembershipModel.Store.pr_SearchPublicationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchPublicationMaster_Result">
+          <ScalarProperty Name="PUBLNCODE" ColumnName="PUBLNCODE" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+          <ScalarProperty Name="LANGDESC" ColumnName="LANGDESC" />
+          <ScalarProperty Name="PUBLNTDESC" ColumnName="PUBLNTDESC" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="PUBLNGSTNO" ColumnName="PUBLNGSTNO" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchPublicationBill" FunctionName="ClubMembershipModel.Store.pr_SearchPublicationBill">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchPublicationBill_Result">
+          <ScalarProperty Name="PBILLDATE" ColumnName="PBILLDATE" />
+          <ScalarProperty Name="PBILLNO" ColumnName="PBILLNO" />
+          <ScalarProperty Name="PBILLDNO" ColumnName="PBILLDNO" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+          <ScalarProperty Name="PBILLNAMT" ColumnName="PBILLNAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="PBILLID" ColumnName="PBILLID" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Publicattion_RO_Flx_Assgn" FunctionName="ClubMembershipModel.Store.pr_Publicattion_RO_Flx_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Publicattion_RO_Flx_Assgn_Result">
+          <ScalarProperty Name="PrnROId" ColumnName="PrnROId" />
+          <ScalarProperty Name="RODate" ColumnName="RODate" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="RODAmt" ColumnName="RODAmt" />
+          <ScalarProperty Name="NAmt" ColumnName="NAmt" />
+          <ScalarProperty Name="CateId" ColumnName="CateId" />
+          <ScalarProperty Name="PublnId" ColumnName="PublnId" />
+          <ScalarProperty Name="CompYId" ColumnName="CompYId" />
+          <ScalarProperty Name="TranId" ColumnName="TranId" />
+          <ScalarProperty Name="TCol" ColumnName="TCol" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+          <ScalarProperty Name="RODId" ColumnName="RODId" />
+          <ScalarProperty Name="BillId" ColumnName="BillId" />
+          <ScalarProperty Name="ClntName" ColumnName="ClntName" />
+          <ScalarProperty Name="PBillDId" ColumnName="PBillDId" />
+          <ScalarProperty Name="BillNId" ColumnName="BillNId" />
+          <ScalarProperty Name="BillDate" ColumnName="BillDate" />
+          <ScalarProperty Name="Size" ColumnName="Size" />
+          <ScalarProperty Name="EdtnDescs" ColumnName="EdtnDescs" />
+          <ScalarProperty Name="ACDesc" ColumnName="ACDesc" />
+          <ScalarProperty Name="PostnDesc" ColumnName="PostnDesc" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_BillDetailPublicationSpaceCbxSlct_Mod" FunctionName="ClubMembershipModel.Store.pr_BillDetailPublicationSpaceCbxSlct_Mod">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_BillDetailPublicationSpaceCbxSlct_Mod_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Get_Publication_Address_Detail" FunctionName="ClubMembershipModel.Store.pr_Get_Publication_Address_Detail">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Get_Publication_Address_Detail_Result">
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="PUBLNNAME" ColumnName="PUBLNNAME" />
+          <ScalarProperty Name="PUBLNADDR" ColumnName="PUBLNADDR" />
+          <ScalarProperty Name="STATETYPE" ColumnName="STATETYPE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Publicattion_RO_Flx_Assgn_Mod" FunctionName="ClubMembershipModel.Store.pr_Publicattion_RO_Flx_Assgn_Mod">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Publicattion_RO_Flx_Assgn_Mod_Result">
+          <ScalarProperty Name="PrnROId" ColumnName="PrnROId" />
+          <ScalarProperty Name="RODATE" ColumnName="RODATE" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="RODAmt" ColumnName="RODAmt" />
+          <ScalarProperty Name="NAmt" ColumnName="NAmt" />
+          <ScalarProperty Name="CateId" ColumnName="CateId" />
+          <ScalarProperty Name="PUBLNID" ColumnName="PUBLNID" />
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="TranId" ColumnName="TranId" />
+          <ScalarProperty Name="TCol" ColumnName="TCol" />
+          <ScalarProperty Name="RATE" ColumnName="RATE" />
+          <ScalarProperty Name="RODID" ColumnName="RODID" />
+          <ScalarProperty Name="BillId" ColumnName="BillId" />
+          <ScalarProperty Name="CLNTNAME" ColumnName="CLNTNAME" />
+          <ScalarProperty Name="PBILLDID" ColumnName="PBILLDID" />
+          <ScalarProperty Name="BILLNID" ColumnName="BILLNID" />
+          <ScalarProperty Name="BILLDATE" ColumnName="BILLDATE" />
+          <ScalarProperty Name="SIZE" ColumnName="SIZE" />
+          <ScalarProperty Name="EDTNDESCS" ColumnName="EDTNDESCS" />
+          <ScalarProperty Name="ACDESC" ColumnName="ACDESC" />
+          <ScalarProperty Name="POSTNDESC" ColumnName="POSTNDESC" />
+          <ScalarProperty Name="PBILLID" ColumnName="PBILLID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchEstimate" FunctionName="ClubMembershipModel.Store.pr_SearchEstimate">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_SearchEstimate_Result">
+          <ScalarProperty Name="EstiDate" ColumnName="EstiDate" />
+          <ScalarProperty Name="EstiPrnNo" ColumnName="EstiPrnNo" />
+          <ScalarProperty Name="ClntName" ColumnName="ClntName" />
+          <ScalarProperty Name="EstiNAmt" ColumnName="EstiNAmt" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="EstiId" ColumnName="EstiId" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Estimate_Detail_Flx_Assgn" FunctionName="ClubMembershipModel.Store.pr_Estimate_Detail_Flx_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipModel.pr_Estimate_Detail_Flx_Assgn_Result">
+          <ScalarProperty Name="EstiId" ColumnName="EstiId" />
+          <ScalarProperty Name="EstiDId" ColumnName="EstiDId" />
+          <ScalarProperty Name="EstiPId" ColumnName="EstiPId" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="ADOR" ColumnName="ADOR" />
+          <ScalarProperty Name="DORType" ColumnName="DORType" />
+          <ScalarProperty Name="EdtnIds" ColumnName="EdtnIds" />
+          <ScalarProperty Name="EstiDORs" ColumnName="EstiDORs" />
+          <ScalarProperty Name="EdtnDesc" ColumnName="EdtnDesc" />
+          <ScalarProperty Name="EstiSize" ColumnName="EstiSize" />
+          <ScalarProperty Name="Space" ColumnName="Space" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+          <ScalarProperty Name="MUnitId" ColumnName="MUnitId" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Nartn" ColumnName="Nartn" />
+          <ScalarProperty Name="PublnId" ColumnName="PublnId" />
+          <ScalarProperty Name="PEstiAmt" ColumnName="PEstiAmt" />
+          <ScalarProperty Name="ROStat" ColumnName="ROStat" />
+          <ScalarProperty Name="TInsrt" ColumnName="TInsrt" />
+          <ScalarProperty Name="FInsrt" ColumnName="FInsrt" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

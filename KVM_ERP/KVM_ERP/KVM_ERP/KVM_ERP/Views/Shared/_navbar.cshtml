@@ -1,0 +1,1046 @@
+@using KVM_ERP.Models
+@model IEnumerable<KVM_ERP.Models.MenuNavbar>
+@{
+    var isAdmin = Request.IsAuthenticated && (User.IsInRole("Admin") || (System.Web.HttpContext.Current.Session != null && System.Web.HttpContext.Current.Session["Group"] != null && (System.Web.HttpContext.Current.Session["Group"].ToString() == "Admin" || System.Web.HttpContext.Current.Session["Group"].ToString() == "SuperAdmin")));
+}
+
+<style>
+    /* HIGHEST PRIORITY - Force navbar background color */
+    .navbar,
+    .navbar.navbar-expand-lg,
+    .navbar-dark,
+    .navbar-light,
+    nav.navbar {
+        background-color: #f8f9fa !important;
+        background: #f8f9fa !important;
+        background-image: none !important;
+    }
+
+    /* Modernized CSS with better organization */
+    :root {
+        --navbar-bg: #f8f9fa;
+        --dropdown-bg: #ffffff;
+        --dropdown-header-bg: #6c757d;
+        --dropdown-header-color: #ffffff;
+        --dropdown-hover-bg: #f8f9fa;
+        --dropdown-divider: #dee2e6;
+        --nav-link-hover: #495057;
+    }
+
+    /* Base styles */
+    .navbar {
+        min-height: 56px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #495057 !important;
+        text-decoration: none;
+    }
+
+    .navbar-brand img {
+        height: 60px;
+        width: auto;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover img {
+        transform: scale(1.05);
+    }
+
+    .navbar-brand .company-name {
+        color: #495057;
+        font-size: 1.4rem;
+        font-weight: 600;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        white-space: nowrap;
+    }
+
+    .navbar-brand:hover .company-name {
+        color: #495057;
+    }
+
+    /* Navigation items */
+    .nav-item {
+        position: relative;
+        margin: 0 0.25rem;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        height: 100%;
+        transition: all 0.3s ease;
+        border-radius: 0.375rem;
+        color: #495057 !important;
+    }
+
+    .nav-link i {
+        margin-right: 0.5rem;
+        line-height: 1;
+    }
+
+    .nav-link:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: #495057;
+    }
+
+    /* Dropdown styles */
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border-radius: 0.5rem;
+        padding: 0.5rem 0;
+    }
+
+    .dropdown-item {
+        padding: 0.5rem 1.5rem;
+        transition: all 0.2s ease;
+        color: #495057 !important;
+    }
+
+    .dropdown-item:hover {
+        background-color: var(--dropdown-hover-bg);
+        color: #495057 !important;
+    }
+
+    .dropdown-divider {
+        background-color: var(--dropdown-divider);
+        margin: 0.5rem 0;
+    }
+
+    /* Multi-column dropdown */
+    .dropdown-menu.columns-2 {
+        min-width: 500px;
+    }
+
+    .multi-column-dropdown {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .dropdown-header {
+        background-color: var(--dropdown-header-bg);
+        color: var(--dropdown-header-color);
+        padding: 0.5rem 1.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+
+    /* Ensure all navbar text is black */
+    .navbar-nav .nav-link {
+        color: #495057 !important;
+    }
+    
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link:focus {
+        color: #495057 !important;
+    }
+    
+    .navbar-nav .dropdown-toggle::after {
+        border-top-color: #495057;
+    }
+    
+    .navbar-toggler {
+        border-color: #495057;
+    }
+    
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.25rem rgba(73, 80, 87, 0.25);
+    }
+
+    /* User dropdown specific */
+    #userDropdown {
+        padding-right: 1.5rem;
+    }
+
+    #userDropdown::after {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 991.98px) {
+        .navbar-collapse {
+            padding-top: 1rem;
+        }
+
+        .navbar-brand .company-name {
+            font-size: 1.1rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .navbar-brand .company-name {
+            font-size: 1rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .navbar-brand {
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+        }
+        
+        .navbar-brand .company-name {
+            font-size: 0.9rem;
+        }
+
+        .dropdown-menu.columns-2 {
+            min-width: 100%;
+        }
+
+        .dropdown-menu li a {
+            min-width: 100%;
+        }
+
+        .multi-column-dropdown {
+            padding-left: 0;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0;
+        }
+    }
+
+    /* Active state styling */
+    .activeli > .nav-link,
+    .activeli > .dropdown-item {
+        font-weight: 600;
+        color: #007bff;
+    }
+</style>
+
+<!-- Navigation -->
+@if ((Request.IsAuthenticated))
+{
+    var tmpcusrid = Session["CUSRID"] != null ? Session["CUSRID"].ToString() : string.Empty;
+    KVM_ERP.Models.ApplicationDbContext db = new KVM_ERP.Models.ApplicationDbContext();
+    var links = (from item in db.MenuRoleMasters.Where(x => x.Roles == tmpcusrid).OrderBy(x => x.MenuGId).OrderBy(x => x.MenuGIndex).ToList()
+                 select item).ToList();
+
+    <nav class="navbar navbar-expand-lg @(isAdmin ? "navbar-dark bg-primary" : "navbar-light bg-light")">
+        <div class="container-fluid">
+            <!-- Brand and toggle button -->
+            <a class="navbar-brand" href="#">
+                <img src="~/Content/images/logo-small.png" class="img-fluid" alt="Logo" />
+                <span class="ms-2 badge @(isAdmin ? "bg-warning text-dark" : "bg-secondary")" title="Current role">@(isAdmin ? "Admin" : "User")</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Main navigation -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <!-- Left-aligned menu items -->
+                <ul class="navbar-nav me-auto">
+                    @*@if (Model != null && (links.Any(x => x.MenuGId == 5)))
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (item.MenuGId == 5)
+                            {
+                                <li class="nav-item @item.activeli">
+                                    <a class="nav-link" href="@Url.Action(item.ActionName, item.ControllerName)">
+                                        <i class="@item.imageClass"></i> @item.LinkText
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }*@
+
+                    @* Transaction Menu - Role Based Access Control
+                       RMenuGroupId = 1 (Transaction)
+                       RMenuGroupOrder = Sequential order (1-3)
+                       
+                       Transaction Items:
+                       1. Raw Material Intake (RawMaterialIntake)
+                       2. Stock View (StockView)
+                       3. Invoice (RawMaterialInvoice)
+                    *@
+                    @if (Model != null && (isAdmin || 
+                        User.IsInRole("RawMaterialIntakeIndex") || 
+                        User.IsInRole("StockViewIndex") || 
+                        User.IsInRole("SupplierStockViewIndex") ||
+                        User.IsInRole("PurchaseInvoiceIndex") ||
+                        User.IsInRole("PurchaseInvoiceApprovalIndex")))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="transactionDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-exchange-alt"></i> Transaction
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="transactionDropdown">
+                                <!-- Raw Material Intake - Order: 1, GroupId: 1 -->
+                                @if (User.IsInRole("RawMaterialIntakeIndex"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "RawMaterialIntake")"
+                                           data-role="RawMaterialIntake" data-menugroupid="1" data-menuorder="1">
+                                            <i class="fa fa-truck-loading"></i> Raw Material Intake
+                                        </a>
+                                    </li>
+                                }
+                                @* Commented out other transaction menu items as requested
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-flask"></i> Sampling & QC
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-layer-group"></i> Slab Segregation
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-calculator"></i> Rate Calculation
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-check-circle"></i> Rate Confirmation
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-file-invoice"></i> Purchase Invoice Generation
+                                    </a>
+                                </li>
+                                *@
+                                <!-- Stock View - Order: 2, GroupId: 1 -->
+                                @if (User.IsInRole("StockViewIndex"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "StockView")"
+                                           data-role="StockView" data-menugroupid="1" data-menuorder="2">
+                                            <i class="fa fa-chart-line"></i> Item wise Stock View
+                                        </a>
+                                    </li>
+                                }
+                                <!-- Supplier wise Stock View - Order: 3, GroupId: 1 -->
+                                @if (User.IsInRole("SupplierStockViewIndex"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "SupplierStockView")"
+                                           data-role="SupplierStockView" data-menugroupid="1" data-menuorder="3">
+                                           <i class="bi bi-clipboard-data-fill"></i> Supplier wise Stock View
+                                        </a>
+                                    </li>
+                                }
+                                <!-- Invoice - Order: 4, GroupId: 1 -->
+                                @if (User.IsInRole("PurchaseInvoiceIndex"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "RawMaterialInvoice")"
+                                           data-role="RawMaterialInvoice" data-menugroupid="1" data-menuorder="4">
+                                            <i class="fa fa-file-invoice"></i> Invoice
+                                        </a>
+                                    </li>
+                                }
+                                <!-- Invoice Approval - Order: 5, GroupId: 1 -->
+                                @if (User.IsInRole("PurchaseInvoiceApprovalIndex"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "PurchaseInvoiceApproval")"
+                                           data-role="PurchaseInvoiceApproval" data-menugroupid="1" data-menuorder="5">
+                                            <i class="fa fa-check-circle"></i> Invoice Approval
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @* Reports Menu - Role Based Access Control
+                       RMenuGroupId = 5 (Reports)
+                       
+                       Report Items:
+                       1. Stock View Report (StockViewReport)
+                       2. Raw Materials Intake Report (RawMaterialIntakeReport)
+                    *@
+                    @if (Model != null && (User.IsInRole("StockViewReportIndex") || User.IsInRole("RawMaterialIntakeReportIndex")))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="reportsDropdownUser" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-file-alt"></i> Reports
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="reportsDropdownUser">
+                                <!-- Stock View Report - Order: 1, GroupId: 5 -->
+                                @if (User.IsInRole("StockViewReportIndex"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "StockViewReport")"
+                                           data-role="StockViewReport" data-menugroupid="5" data-menuorder="1">
+                                            <i class="fa fa-chart-bar"></i> Stock View Report
+                                        </a>
+                                    </li>
+                                }
+                                <!-- Raw Materials Intake Report - Order: 2, GroupId: 5 -->
+                                @if (User.IsInRole("RawMaterialIntakeReportIndex"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("RawMaterialsImport", "Reports")"
+                                           data-role="RawMaterialIntakeReport" data-menugroupid="5" data-menuorder="2">
+                                            <i class="fa fa-truck-loading"></i> Raw Materials Intake Report
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @* Tally Menu - Role Based Access Control
+                       RMenuGroupId = 3 (Tally)
+                       RMenuGroupOrder = 1
+                       
+                       Tally Items:
+                       1. Invoice Updation to Tally (TallyInvoiceUpdation)
+                    *@
+                    @if (isAdmin)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="tallyDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-calculator"></i> Tally
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="tallyDropdown">
+                                <!-- Invoice Updation to Tally - Order: 1, GroupId: 3 -->
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")"
+                                       data-role="TallyInvoiceUpdation" data-menugroupid="3" data-menuorder="1">
+                                        <i class="fa fa-sync-alt"></i> Invoice Updation to Tally
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    @* Stock Menu *@
+                    @*@if (isAdmin)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="stockDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-boxes"></i> Stock
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="stockDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-play-circle"></i> Opening Stock Entry
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-industry"></i> Production Output Entry
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-shipping-fast"></i> Container Loading Entry Against Client Order
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-stop-circle"></i> Closing Stock
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "ComingSoon")">
+                                        <i class="fa fa-check-double"></i> Stock Verification & Updation
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }*@
+
+                    @*@if (Model != null && (links.Any(x => x.MenuGId == 5)))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="publicationDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-fw fa-info-circle"></i> Publication
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="publicationDropdown">
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        if (item.MenuGId == 5)
+                                        {
+                                            <li class="@item.activeli">
+                                                <a class="dropdown-item" href="@Url.Action(item.ActionName, item.ControllerName)">
+                                                    <i class="@item.imageClass"></i> @item.LinkText
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    }*@
+
+                    @if (Model != null && (links.Any(x => x.MenuGId == 5000)))
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (item.MenuGId == 5)
+                            {
+                                <li class="nav-item @item.activeli">
+                                    <a class="nav-link" href="@Url.Action(item.ActionName, item.ControllerName)">
+                                        <i class="@item.imageClass"></i> @item.LinkText
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
+
+                    @if (Model != null && (links.Any(x => x.MenuGId == 9)))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="smsDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-life-bouy"></i> SMS
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="smsDropdown">
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        if (item.MenuGId == 6)
+                                        {
+                                            <li class="@item.activeli">
+                                                <a class="dropdown-item" href="@Url.Action(item.ActionName, item.ControllerName)">
+                                                    <i class="@item.imageClass"></i> @item.LinkText
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                }
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("ECSRemainder", "SMSTemplate")">
+                                        <i class="fa fa-fw fa-building"></i> ECS Customers
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("ECSBounce", "SMSTemplate")">
+                                        <i class="fa fa-fw fa-building"></i> ECS Bounce
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+
+                <!-- Right-aligned menu items -->
+                <ul class="navbar-nav ms-auto">
+                    @* Dashboard Link *@
+                    @if (isAdmin)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Home")">
+                                <i class="fa fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                    }
+
+                    @* REMOVED: Duplicate Admin-only Reports Menu
+                       This was consolidated into the role-based Reports menu above (RMenuGroupId = 2)
+                       Admin users should be assigned the appropriate report roles instead
+                    *@
+                    @*@if (isAdmin)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-chart-bar"></i> Reports
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reportsDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("RawMaterialsImport", "Reports")"
+                                       data-role="RawMaterialsImportReport" data-menugroupid="3" data-menuorder="1">
+                                        <i class="fa fa-file-excel"></i> Raw Materials Import
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }*@
+
+                    @* Masters Menu - Show if user has ANY master permission OR is Admin *@
+                    @{
+                        var hasSupplier = User.IsInRole("SupplierMasterIndex");
+                        var hasState = User.IsInRole("StateMasterIndex");
+                        var hasUnit = User.IsInRole("UnitMasterIndex");
+                        System.Diagnostics.Debug.WriteLine(string.Format("[Navbar] SupplierMasterIndex={0}, StateMasterIndex={1}, UnitMasterIndex={2}, isAdmin={3}", hasSupplier, hasState, hasUnit, isAdmin));
+                    }
+                    @if (Model != null && (isAdmin || 
+                        User.IsInRole("CompanyMasterIndex") || 
+                        User.IsInRole("DesginationMasterIndex") || 
+                        User.IsInRole("DepartmentMasterIndex") || 
+                        User.IsInRole("CostFactorMasterIndex") || 
+                        User.IsInRole("HSNCodeMasterIndex") || 
+                        User.IsInRole("CustomerMasterIndex") || 
+                        hasSupplier || 
+                        User.IsInRole("LocationMasterIndex") || 
+                        hasState || 
+                        hasUnit || 
+                        User.IsInRole("MaterialMasterIndex") || 
+                        User.IsInRole("MaterialTypeMasterIndex") || 
+                        User.IsInRole("MaterialGroupMasterIndex") || 
+                        User.IsInRole("PackingMasterIndex") || 
+                        User.IsInRole("PackingTypeMasterIndex") || 
+                        User.IsInRole("LaboratoryMasterIndex")))
+                    {
+                        @*
+                        Masters Menu - Role Based Access Control
+                        RMenuGroupId = 4 (Masters)
+                        RMenuGroupOrder = Sequential order (1-16)
+                        
+                        16 Masters with their Order:
+                        1. Company Master (CompanyMaster/Index)
+                        2. Designation (DesginationMaster/Index)
+                        3. Department (DepartmentMaster/Index)
+                        4. Cost Factor (CostFactorMaster/Index)
+                        5. HSN Code (HSNCodeMaster/Index)
+                        6. Customer Master (CustomerMaster/Index)
+                        7. Supplier Master (SupplierMaster/Index)
+                        8. Location Master (LocationMaster/Index)
+                        9. State Master (StateMaster/Index)
+                        10. Unit (UnitMaster/Index)
+                        11. Material (MaterialMaster/Index)
+                        12. Material Type (MaterialTypeMaster/Index)
+                        13. Material Group (MaterialGroupMaster/Index)
+                        14. Packing (PackingMaster/Index)
+                        15. Packing Type (PackingTypeMaster/Index)
+                        16. Laboratory (LaboratoryMaster/Index)
+                        *@
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="mastersDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-cogs"></i> Masters
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end multi-column columns-2">
+                                <div class="row g-0">
+                                    <!-- Left Column - General Section -->
+                                    <div class="col-sm-6">
+                                        <ul class="multi-column-dropdown">
+                                            <li class="dropdown-header">
+                                                <i class="fa fa-building-o"></i> General
+                                            </li>
+                                            <!-- Company Master - Order: 1, GroupId: 4, MenuType: Masters -->
+                                            @if (User.IsInRole("CompanyMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "CompanyMaster")" 
+                                                       data-role="CompanyMaster" data-menugroupid="4" data-menuorder="1">
+                                                        <i class="fa fa-building"></i> Company Master
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Designation - Order: 2, GroupId: 4 -->
+                                            @if (User.IsInRole("DesginationMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "DesginationMaster")"
+                                                       data-role="DesginationMaster" data-menugroupid="4" data-menuorder="2">
+                                                        <i class="fa fa-id-badge"></i> Designation
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Department - Order: 3, GroupId: 4 -->
+                                            @if (User.IsInRole("DepartmentMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "DepartmentMaster")"
+                                                       data-role="DepartmentMaster" data-menugroupid="4" data-menuorder="3">
+                                                        <i class="fa fa-sitemap"></i> Department
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Cost Factor - Order: 4, GroupId: 4 -->
+                                            @if (User.IsInRole("CostFactorMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "CostFactorMaster")"
+                                                       data-role="CostFactorMaster" data-menugroupid="4" data-menuorder="4">
+                                                        <i class="fa fa-calculator"></i> Costfactor
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- HSN Code - Order: 5, GroupId: 4 -->
+                                            @if (User.IsInRole("HSNCodeMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "HSNCodeMaster")"
+                                                       data-role="HSNCodeMaster" data-menugroupid="4" data-menuorder="5">
+                                                        <i class="fa fa-barcode"></i> HSN Code
+                                                    </a>
+                                                </li>
+                                            }
+                                            
+                                            <li class="dropdown-divider"></li>
+                                            
+                                            <!-- Customer Master - Order: 6, GroupId: 4 -->
+                                            @if (User.IsInRole("CustomerMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "CustomerMaster")"
+                                                       data-role="CustomerMaster" data-menugroupid="4" data-menuorder="6">
+                                                        <i class="fa-solid fa-person"></i> Customer Master
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Supplier Master - Order: 7, GroupId: 4 -->
+                                            @if (User.IsInRole("SupplierMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "SupplierMaster")"
+                                                       data-role="SupplierMaster" data-menugroupid="4" data-menuorder="7">
+                                                        <i class="fa fa-truck"></i> Supplier Master
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Salesman Master -->
+                                            <!-- <li>
+                                                <a class="dropdown-item" href="@Url.Action("Index", "SalesmanMaster")">
+                                                    <i class="fa fa-user-times"></i> Salesman Master
+                                                </a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+
+                                    <!-- Right Column - Others Section -->
+                                    <div class="col-sm-6">
+                                        <ul class="multi-column-dropdown">
+                                            <li class="dropdown-header">
+                                                <i class="fa fa-cog"></i> Others
+                                            </li>
+                                            <!-- Location Master - Order: 8, GroupId: 4 -->
+                                            @if (User.IsInRole("LocationMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "LocationMaster")"
+                                                       data-role="LocationMaster" data-menugroupid="4" data-menuorder="8">
+                                                        <i class="fa-solid fa-map-location-dot"></i> Location Master
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- State Master - Order: 9, GroupId: 4 -->
+                                            @if (User.IsInRole("StateMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "StateMaster")"
+                                                       data-role="StateMaster" data-menugroupid="4" data-menuorder="9">
+                                                        <i class="fa-solid fa-compass"></i> State Master
+                                                    </a>
+                                                </li>
+                                            }
+                                            
+                                            <li class="dropdown-divider"></li>
+                                            
+                                            <li class="dropdown-header">
+                                                <i class="fa fa-info-circle"></i> Item Details
+                                            </li>
+                                            <!-- Unit - Order: 10, GroupId: 4 -->
+                                            @if (User.IsInRole("UnitMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "UnitMaster")"
+                                                       data-role="UnitMaster" data-menugroupid="4" data-menuorder="10">
+                                                        <i class="fa fa-balance-scale"></i> Unit
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Material - Order: 11, GroupId: 4 -->
+                                            @if (User.IsInRole("MaterialMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "MaterialMaster")"
+                                                       data-role="MaterialMaster" data-menugroupid="4" data-menuorder="11">
+                                                        <i class="fa-solid fa-atom"></i> Material
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Material Type - Order: 12, GroupId: 4 -->
+                                            @if (User.IsInRole("MaterialTypeMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "MaterialTypeMaster")"
+                                                       data-role="MaterialTypeMaster" data-menugroupid="4" data-menuorder="12">
+                                                        <i class="fa fa-cubes"></i> Material Type
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Material Group - Order: 13, GroupId: 4 -->
+                                            @if (User.IsInRole("MaterialGroupMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "MaterialGroupMaster")"
+                                                       data-role="MaterialGroupMaster" data-menugroupid="4" data-menuorder="13">
+                                                        <i class="fa fa-layer-group"></i> Material Group
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Packing Master - Order: 14, GroupId: 4 -->
+                                            @if (User.IsInRole("PackingMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "PackingMaster")"
+                                                       data-role="PackingMaster" data-menugroupid="4" data-menuorder="14">
+                                                        <i class="fa fa-box"></i> Packing
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Packing Type Master - Order: 15, GroupId: 4 -->
+                                            @if (User.IsInRole("PackingTypeMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "PackingTypeMaster")"
+                                                       data-role="PackingTypeMaster" data-menugroupid="4" data-menuorder="15">
+                                                        <i class="fa fa-cube"></i> Packing Type
+                                                    </a>
+                                                </li>
+                                            }
+                                            <!-- Laboratory Master - Order: 16, GroupId: 4 -->
+                                            @if (User.IsInRole("LaboratoryMasterIndex"))
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Index", "LaboratoryMaster")"
+                                                       data-role="LaboratoryMaster" data-menugroupid="4" data-menuorder="16">
+                                                        <i class="fa fa-flask"></i> Laboratory
+                                                    </a>
+                                                </li>
+                                            }
+
+                                            <!-- Rate Card -->
+                                            <!-- <li>
+                                                <a class="dropdown-item" href="@Url.Action("Index", "RateCardMaster")">
+                                                    <i class="fa fa-gbp"></i> Rate Card
+                                                </a>
+                                            </li> -->
+                                            
+                                            @if (Model != null)
+                                            {
+                                                foreach (var item in Model)
+                                                {
+                                                    if (item.MenuGId == 2)
+                                                    {
+                                                        <li class="@item.activeli">
+                                                            <a class="dropdown-item" href="@Url.Action(item.ActionName, item.ControllerName)">
+                                                                <i class="@item.imageClass"></i> @item.LinkText
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                    @if (Model != null && links.Any(x => x.MenuGId == 2 || x.MenuGId == 22))
+                    {
+                        foreach (var item in Model.Where(x => x.MenuGId == 2 || x.MenuGId == 22))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action(item.ActionName, item.ControllerName)" id="@("menu-"+item.MenuGId)">
+                                    <i class="@item.imageClass"></i> @item.LinkText
+                                </a>
+                            </li>
+                        }
+                    }
+
+                    @*@if (System.Web.HttpContext.Current.Session["Group"] != null &&
+                        System.Web.HttpContext.Current.Session["Group"].ToString() == "Admin")
+                    {
+                        <!-- Content Management Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="contentDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-newspaper-o"></i> Content Management
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="contentDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "AnnouncementMaster")">
+                                        <i class="fa fa-bullhorn"></i> Announcements
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "EventMaster")">
+                                        <i class="fa fa-calendar"></i> Events
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "GalleryMaster")">
+                                        <i class="fa fa-images"></i> Gallery
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "MinutesOfMeeting")">
+                                        <i class="fa-regular fa-file-lines"></i> Minutes of Meeting
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }*@
+
+                    <!-- User dropdown -->
+                    <li class="nav-item dropdown">
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "form-css" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user"></i> @User.Identity.Name
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                @{ var group = (System.Web.HttpContext.Current.Session != null ? System.Web.HttpContext.Current.Session["Group"] as string : null) ?? string.Empty; }
+                                @{ var isPrivilegedGroup = string.Equals(group, "Manager", System.StringComparison.OrdinalIgnoreCase) || string.Equals(group, "Admin", System.StringComparison.OrdinalIgnoreCase) || string.Equals(group, "Purchaseadmin", System.StringComparison.OrdinalIgnoreCase) || string.Equals(group, "SuperAdmin", System.StringComparison.OrdinalIgnoreCase); }
+                                @if (isPrivilegedGroup)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Groups")">
+                                            <i class="fa fa-fw fa-user"></i> Groups
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Account")">
+                                            <i class="fa fa-fw fa-envelope"></i> Users
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Roles")">
+                                            <i class="fa fa-fw fa-user-shield"></i> Roles
+                                        </a>
+                                    </li>
+                                    @* Renewal Approval - Only for SuperAdmin Group *@
+                                    if (string.Equals(group, "SuperAdmin", System.StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("Index", "RenewalApproval")">
+                                                <i class="fa fa-fw fa-user-check"></i> Renewal Approval
+                                            </a>
+                                        </li>
+                                    }
+                                    @*<li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Members")">
+                                            <i class="fa-solid fa-people-group"></i> Members
+                                        </a>
+                                    </li>*@
+                                    if (string.Equals(group, "Admin", System.StringComparison.OrdinalIgnoreCase) || string.Equals(group, "SuperAdmin", System.StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        @*<li>
+                                            <a class="dropdown-item" href="@Url.Action("Index", "GovernmentProof")">
+                                                <i class="fa fa-fw fa-id-card"></i> Government Proof
+                                            </a>
+                                        </li>*@
+                                    }
+                                    if (!string.Equals(group, "Admin", System.StringComparison.OrdinalIgnoreCase) && !string.Equals(group, "SuperAdmin", System.StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("Index", "Roles")">
+                                                <i class="fa fa-fw fa-gear"></i> Roles
+                                            </a>
+                                        </li>
+                                    }
+                                    <li><hr class="dropdown-divider"></li>
+                                }
+                                else
+                                {
+                                    // For regular users, show a Dashboard quick link
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Home")">
+                                            <i class="fa fa-fw fa-dashboard"></i> Dashboard
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("ChangePassword", "Account")">
+                                            <i class="fa fa-key"></i> Change Password
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                }
+                                <li>
+                                    <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">
+                                        <i class="fa fa-fw fa-power-off"></i> Log Out
+                                    </a>
+                                </li>
+                            </ul>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+}
+else
+{
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="~/Content/images/logo-small.png" class="img-fluid" alt="Logo" />
+                <span class="company-name">Sree Narayana Guru Samidhi</span>
+            </a>
+            <div class="navbar-nav">
+                <li class="nav-item">
+                    @Html.ActionLink("Log in", "Login", "Account", routeValues: null,
+                     htmlAttributes: new { id = "loginLink", @class = "nav-link" })
+                </li>
+            </div>
+        </div>
+    </nav>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        // Initialize Bootstrap tooltips if needed
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Enable dropdowns with hover (optional)
+            const dropdownElements = document.querySelectorAll('.dropdown-toggle');
+            dropdownElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    const dropdown = bootstrap.Dropdown.getInstance(el);
+                    if (!dropdown) {
+                        new bootstrap.Dropdown(el).show();
+                    } else {
+                        dropdown.show();
+                    }
+                });
+
+                // Keep dropdown open when hovering over menu
+                const dropdownMenu = el.nextElementSibling;
+                if (dropdownMenu) {
+                    dropdownMenu.addEventListener('mouseleave', () => {
+                        const dropdown = bootstrap.Dropdown.getInstance(el);
+                        if (dropdown) {
+                            dropdown.hide();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

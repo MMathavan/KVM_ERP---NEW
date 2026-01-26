@@ -1,0 +1,428 @@
+@model KVM_ERP.Controllers.InvoicePrintViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw Material Invoice - @Model.TRANDNO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .invoice-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .invoice-header {
+            text-align: center;
+            border-bottom: 3px solid #185a9d;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .invoice-header-main {
+            display: flex;
+            align-items: flex-start; /* align logo with top of title text */
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .invoice-header-logo {
+            height: 50px;
+        }
+
+        .invoice-header h1 {
+            color: #185a9d;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .invoice-header h2 {
+            color: #666;
+            font-size: 18px;
+            font-weight: normal;
+        }
+
+        .invoice-info {
+            margin-bottom: 20px;
+            padding: 8px 0 16px 0;
+            border-bottom: 1px solid #000;
+        }
+
+        .info-section {
+            flex: 1;
+        }
+
+        .info-section h3 {
+            color: #185a9d;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #43cea2;
+            padding-bottom: 5px;
+        }
+
+        .info-row {
+            margin: 8px 0;
+            display: flex;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            min-width: 120px;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+
+        .items-table thead {
+            background: linear-gradient(135deg, #185a9d, #43cea2);
+            color: white;
+        }
+
+        .items-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .items-table th.text-right,
+        .items-table td.text-right {
+            text-align: right;
+        }
+
+        .items-table th.text-center,
+        .items-table td.text-center {
+            text-align: center;
+        }
+
+        .items-table th.small-header {
+            font-size: 11px;
+            line-height: 1.15;
+            white-space: normal;
+            word-wrap: break-word;
+            padding: 8px 4px;
+            text-align: center;
+        }
+
+        .items-table tbody tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .items-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .items-table td {
+            padding: 12px;
+            color: #333;
+        }
+
+        .tax-summary {
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-top: 20px;
+            border: 2px solid #185a9d;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tax-summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tax-summary-row:last-child {
+            border-bottom: none;
+            background: linear-gradient(135deg, #185a9d, #43cea2);
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .tax-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .tax-summary-row:last-child .tax-label {
+            color: white;
+        }
+
+        .tax-value {
+            font-weight: 600;
+            color: #185a9d;
+        }
+
+        .tax-summary-row:last-child .tax-value {
+            color: white;
+        }
+
+        .invoice-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .invoice-status-text {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        @@media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .invoice-container {
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            @@page {
+                margin: 1cm;
+            }
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #185a9d, #43cea2);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(24, 90, 157, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .print-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(24, 90, 157, 0.4);
+        }
+
+        @@media print {
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print();">
+        <i class="fa fa-print"></i> Print Invoice
+    </button>
+
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <div class="purchase-note-header">
+                <div class="info-row" style="justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+                    <span class="info-label" style="min-width:auto; font-weight:600;">GST No.: 33AADPV1948D1ZT</span>
+                    <span class="info-value" style="font-weight:600;">Phone : 28452246 / 28456020</span>
+                </div>
+                <div style="text-align: center; margin-bottom: 4px;">
+                    <img src="@Url.Content("~/Content/images/logo-small.png")" alt="Logo" style="height: 40px;" />
+                </div>
+                <h1 style="font-size: 26px; font-weight: 700; margin-bottom: 4px; color: #000;">K. V. Marine Exports</h1>
+                <div class="company-address" style="font-size: 12px; margin-bottom: 6px;">
+                    No. 61, Venkatesa Gramani Street, Chintadripet, Chennai - 600 002.
+                </div>
+                <div class="purchase-note-title" style="font-size: 16px; font-weight: 700; text-decoration: underline; margin-top: 4px;">
+                    RAW MATERIAL PURCHASE-NOTE
+                </div>
+            </div>
+        </div>
+
+        <div class="invoice-info">
+            <div class="info-row" style="justify-content: space-between;">
+                <div>
+                    <span class="info-label" style="min-width:auto;">No:</span>
+                    <span class="info-value">@Model.TRANDNO</span>
+                </div>
+                <div>
+                    <span class="info-label" style="min-width:auto;">Date:</span>
+                    <span class="info-value">@Model.TRANDATE.ToString("dd.MM.yy")</span>
+                </div>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Supplier Name:</span>
+                <span class="info-value">@Model.CATENAME</span>
+            </div>
+        </div>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">S.No</th>
+                    <th style="width: 55%;">Particulars</th>
+                    <th class="text-right small-header" style="width: 15%;">Quantity<br />(Kg)</th>
+                    <th class="text-right small-header" style="width: 10%;">Rate<br />(Rs.)</th>
+                    <th class="text-right small-header" style="width: 15%;">Amount<br />(Rs.)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int serialNo = 1;
+                    decimal subtotal = 0;
+                    decimal totalQty = 0;
+                }
+                @foreach (var item in Model.Items)
+                {
+                    subtotal += item.TRANDAMT;
+                    totalQty += item.TRANQTY;
+                    <tr>
+                        <td class="text-center">@serialNo</td>
+                        <td>
+                            @item.MTRLNAME
+                            @if (!string.IsNullOrEmpty(item.GRADEDESC) || !string.IsNullOrEmpty(item.PCLRDESC) || !string.IsNullOrEmpty(item.RCVDTDESC))
+                            {
+                                <br />
+                                <span style="font-size: 11px; color: #555;">
+                                    @(string.IsNullOrEmpty(item.GRADEDESC) ? "-" : item.GRADEDESC)
+                                    - @(string.IsNullOrEmpty(item.PCLRDESC) ? "-" : item.PCLRDESC)
+                                    - @(string.IsNullOrEmpty(item.RCVDTDESC) ? "-" : item.RCVDTDESC)
+                                </span>
+                            }
+                        </td>
+                        <td class="text-right">@item.TRANQTY.ToString("N2")</td>
+                        <td class="text-right">@item.TRANRATE.ToString("N2")</td>
+                        <td class="text-right">@item.TRANDAMT.ToString("N2")</td>
+                    </tr>
+                    serialNo++;
+                }
+                <tr>
+                    <td></td>
+                    <td style="text-align: right; font-weight: 700;">TOTAL</td>
+                    <td class="text-right" style="font-weight: 700;">@totalQty.ToString("N2")</td>
+                    <td></td>
+                    <td class="text-right" style="font-weight: 700;">@subtotal.ToString("N2")</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="tax-summary">
+            <div class="tax-summary-row">
+                <span class="tax-label">Subtotal:</span>
+                <span class="tax-value">₹ @Model.TRANGAMT.ToString("N2")</span>
+            </div>
+
+            <div class="tax-summary-row">
+                <span class="tax-label">Discount on Packing:</span>
+                <span class="tax-value">₹ @Model.TRANPACKAMT.ToString("N2")</span>
+            </div>
+
+            @* Invoice-level Incentive (TRANINCAMT) *@
+            @if (Model.TRANINCAMT != 0)
+            {
+                <div class="tax-summary-row">
+                    <span class="tax-label">Incentive:</span>
+                    <span class="tax-value">₹ @Model.TRANINCAMT.ToString("N2")</span>
+                </div>
+            }
+
+            @* Display CGST from TRANSACTIONMASTER (only if amount > 0) *@
+            @if (Model.CGSTAMT > 0)
+            {
+                <div class="tax-summary-row">
+                    <span class="tax-label">
+                        CGST: &#64; @Model.CGSTPER%
+                    </span>
+                    <span class="tax-value">₹ @Model.CGSTAMT.ToString("N2")</span>
+                </div>
+            }
+
+            @* Display SGST from TRANSACTIONMASTER (only if amount > 0) *@
+            @if (Model.SGSTAMT > 0)
+            {
+                <div class="tax-summary-row">
+                    <span class="tax-label">
+                        SGST: &#64; @Model.SGSTPER%
+                    </span>
+                    <span class="tax-value">₹ @Model.SGSTAMT.ToString("N2")</span>
+                </div>
+            }
+
+            @* Display IGST from TRANSACTIONMASTER (only if amount > 0) *@
+            @if (Model.IGSTAMT > 0)
+            {
+                <div class="tax-summary-row">
+                    <span class="tax-label">
+                        IGST: &#64; @Model.IGSTPER%
+                    </span>
+                    <span class="tax-value">₹ @Model.IGSTAMT.ToString("N2")</span>
+                </div>
+            }
+
+            @* Display other factors from TRANSACTIONMASTERFACTOR (like Discount) *@
+            @if (Model.TaxFactors != null && Model.TaxFactors.Any())
+            {
+                foreach (var tax in Model.TaxFactors)
+                {
+                    <div class="tax-summary-row">
+                        <span class="tax-label">
+                            @tax.CFDESC:
+                            @if (tax.OPTNVALUE == 1 && tax.CFRATE != 0)
+                            {
+                                <text> &#64; @Math.Abs(tax.CFRATE)%</text>
+                            }
+                        </span>
+                        <span class="tax-value">₹ @tax.CFAMT.ToString("N2")</span>
+                    </div>
+                }
+            }
+
+            <div class="tax-summary-row">
+                <span class="tax-label">Grand Total:</span>
+                <span class="tax-value">₹ @Model.TRANNAMT.ToString("N2")</span>
+            </div>
+        </div>
+
+        <div class="invoice-footer">
+            <p><strong>Thank you for your business!</strong></p>
+            <p>This is a computer-generated invoice and does not require a signature.</p>
+            <p style="margin-top: 10px; font-size: 12px;">Printed on: @DateTime.Now.ToString("dd MMM yyyy hh:mm tt")</p>
+        </div>
+    </div>
+
+    <!-- Add Font Awesome for print icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+</html>

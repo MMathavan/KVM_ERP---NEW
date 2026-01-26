@@ -1,0 +1,108 @@
+﻿@using KVM_ERP.Models;
+@model KVM_ERP.Models.RegionMaster
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .req {
+        color: red;
+        font-size: 15px;
+    }
+</style>
+<div class="col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>  Region Master  <div class="clearfix"> </div></h3>
+        </div>
+
+        @Html.Raw(ViewBag.msg)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel-body">
+                    <form action="@Url.Content("~/RegionMaster/savedata")" method="post" accept-charset="utf-8" id="accountgroupmasterform" data-ng-controller="myController" name="accountgroupmasterform" onsubmit="return validate();">
+                        @Html.ValidationSummary(true)
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-4 hidden">
+                                    <div class="form-group">
+                                        <label>Primary  </label>
+                                        @Html.TextBoxFor(model => Model.REGNID, new { @class = "form-control  REGNID", @id = "REGNID" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Code<span class="req"> *</span> </label>
+                                        @Html.TextBoxFor(model => Model.REGNCODE, new { @class = "form-control REGNCODE caps", @id = "REGNCODE", required = "required", MaxLength = "15" })
+                                        @Html.ValidationMessageFor(model => Model.REGNCODE)
+                                        <input type="text" value="@Model.REGNCODE" name="i_REGNCODE" hidden>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Description <span class="req"> *</span> </label>
+                                        @Html.TextBoxFor(model => Model.REGNDESC, new { @class = "form-control  REGNDESC", @id = "REGNDESC", required = "required" })
+                                        @Html.ValidationMessageFor(model => Model.REGNDESC)
+                                        <input type="text" value="@Model.REGNDESC" name="i_REGNDESC" hidden>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 hidden">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>CUSRID </label>
+                                        @Html.TextBoxFor(model => Model.CUSRID, new { @class = "form-control CUSRID", @id = "CUSRID" })
+                                        @Html.ValidationMessageFor(model => model.CUSRID)
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>LMUSRID </label>
+                                        @Html.TextBoxFor(model => Model.LMUSRID, new { @class = "form-control  LMUSRID", @id = "LMUSRID" })
+                                        @Html.ValidationMessageFor(model => model.LMUSRID)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Status </label>
+                                        @Html.DropDownList("DISPSTATUS", null, new { @class = "form-control DISPSTATUS", @id = "DISPSTATUS" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 box-footer">
+                                <input type="button" name="back" value="Go Back" class="btn btn-primary btn-sm  pull-left" onclick="JavaScript:history.back()" />
+                                @*<input type="submit" name="continue" value="Save & Add" class="btn btn-success btn-sm pull-right " />*@
+
+                                <input type="submit" name="save" value="Save" class="btn btn-primary btn-sm pull-right  " />
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $('.msg').delay(1200).fadeOut(1000);
+
+        $(".REGNDESC").keyup(function () {//...capitalize each
+
+            $(this).val($(this).val().toUpperCase());
+        });
+
+    </script>
+
+}

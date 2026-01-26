@@ -1,0 +1,608 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@*<input type="text" class="form-control" id="CNAME" name="CNAME" value="@ViewBag.CNAME">*@
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            @*<h1 class="page-header">
+                    Dashboard <small>Statistics Overview</small>
+                </h1>*@
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i>  Dashboard ( @Session["BRNCHNAME"] )
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- /.row -->
+    @*<div class="row">
+            <div class="col-lg-12">
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fa fa-info-circle"></i>  <strong>Like SB Admin?</strong> Try out <a href="http://startbootstrap.com/template-overviews/sb-admin-2" class="alert-link">SB Admin 2</a> for additional features!
+                </div>
+            </div>
+        </div>*@
+    <!-- /.row -->
+    @if (Request.IsAuthenticated)
+    {
+        if (System.Web.HttpContext.Current.Session["Group"].ToString() == "Manager" || System.Web.HttpContext.Current.Session["Group"].ToString() == "Admin")
+        {
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-comments fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">@ViewBag.POAMT</div>
+                                    <div>Total Purchase Order Value</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-comments fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">@ViewBag.GRNAMT</div>
+                                    <div>Total Goods Receipt Value</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-bank fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">@ViewBag.ADVAMT</div>
+                                    <div>Total HO Sales Value</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-shopping-cart fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">@ViewBag.AMRN</div>
+                                    <div>Total No. of HO Sales Invoice</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 hide">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">@ViewBag.AMIN</div>
+                                    <div>Total No. of MIN</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-shopping-cart fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">@ViewBag.POAMT</div>
+                                    <div>Total Purchase Order Value</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    <!-- /.row -->
+    @*<div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Area Chart</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="morris-area-chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <!-- /.row -->
+    @*<div class="row">
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Donut Chart</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="morris-donut-chart"></div>
+                        <div class="text-right">
+                            <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Tasks Panel</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <a href="#" class="list-group-item">
+                                <span class="badge">just now</span>
+                                <i class="fa fa-fw fa-calendar"></i> Calendar updated
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <span class="badge">4 minutes ago</span>
+                                <i class="fa fa-fw fa-comment"></i> Commented on a post
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <span class="badge">23 minutes ago</span>
+                                <i class="fa fa-fw fa-truck"></i> Order 392 shipped
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <span class="badge">46 minutes ago</span>
+                                <i class="fa fa-fw fa-money"></i> Invoice 653 has been paid
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <span class="badge">1 hour ago</span>
+                                <i class="fa fa-fw fa-user"></i> A new user has been added
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <span class="badge">2 hours ago</span>
+                                <i class="fa fa-fw fa-check"></i> Completed task: "pick up dry cleaning"
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <span class="badge">yesterday</span>
+                                <i class="fa fa-fw fa-globe"></i> Saved the world
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <span class="badge">two days ago</span>
+                                <i class="fa fa-fw fa-check"></i> Completed task: "fix error on sales page"
+                            </a>
+                        </div>
+                        <div class="text-right">
+                            <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Order Date</th>
+                                        <th>Order Time</th>
+                                        <th>Amount (USD)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>3326</td>
+                                        <td>10/21/2013</td>
+                                        <td>3:29 PM</td>
+                                        <td>$321.33</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3325</td>
+                                        <td>10/21/2013</td>
+                                        <td>3:20 PM</td>
+                                        <td>$234.34</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3324</td>
+                                        <td>10/21/2013</td>
+                                        <td>3:03 PM</td>
+                                        <td>$724.17</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3323</td>
+                                        <td>10/21/2013</td>
+                                        <td>3:00 PM</td>
+                                        <td>$23.71</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3322</td>
+                                        <td>10/21/2013</td>
+                                        <td>2:49 PM</td>
+                                        <td>$8345.23</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3321</td>
+                                        <td>10/21/2013</td>
+                                        <td>2:23 PM</td>
+                                        <td>$245.12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3320</td>
+                                        <td>10/21/2013</td>
+                                        <td>2:15 PM</td>
+                                        <td>$5663.54</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3319</td>
+                                        <td>10/21/2013</td>
+                                        <td>2:13 PM</td>
+                                        <td>$943.45</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-right">
+                            <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <!-- /.row -->
+    @if (Request.IsAuthenticated)
+    {
+        if (System.Web.HttpContext.Current.Session["Group"].ToString() == "SuperAdmin" || System.Web.HttpContext.Current.Session["Group"].ToString() == "Admin")
+        {
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="col-lg-6">
+                        <legend> Branch Sales </legend>
+
+                        <div id="chart_div" style="text-align:left; width: 100%; padding: 0; margin: 0; height: 300px;"></div>
+
+
+                    </div>
+                    @*<div class="col-lg-6 hide">
+                            <legend> Receipts & Outstanding</legend>
+                            <div id="chart_div2" style="width: 100%; height: 300px;"></div>
+
+                        </div>*@
+                    <div class="col-lg-6">
+                        <legend>Material Outward</legend>
+                        <div id="piechart_3d" style="width:100%; height:300px; padding:0;margin:0;background:none"></div>
+                    </div>
+
+                </div>
+            </div>
+        }
+        else
+        {
+
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="col-lg-6">
+                        <legend> Branch Sales </legend>
+
+                        <div id="chart_div" style="text-align:left; width: 100%; padding: 0; margin: 0; height: 300px;"></div>
+
+
+                    </div>
+                    @*<div class="col-lg-6 hide">
+                            <legend> Receipts & Outstanding</legend>
+                            <div id="chart_div2" style="width: 100%; height: 300px;"></div>
+
+                        </div>*@
+                    <div class="col-lg-6">
+                        <legend>Material Outward</legend>
+                        <div id="piechart_3d" style="width:100%; height:300px; padding:0;margin:0;background:none"></div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    }
+
+
+</div>
+<br />
+<br />
+<br />
+<!-- /.container-fluid -->
+
+
+
+
+@section Scripts
+    {
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script>
+    var chartData; // globar variable for hold chart data
+    google.load("visualization", "1", { packages: ["corechart"] });
+
+    // Here We will fill chartData
+
+    $(document).ready(function () {
+
+        @*$.ajax({
+            url: '@Url.Action("GetbBranchStockData", "Home")',
+          //  data: "",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; chartset=utf-8",
+            success: function (data) {
+                chartData = data;
+
+            },
+            error: function () {
+                alert("Error loading data! Please try again.");
+            }
+        }).done(function () {
+            // after complete loading data
+
+            google.setOnLoadCallback(drawChart);
+            drawChart();
+        });*@
+
+    });
+
+
+    function drawChart() {
+       // alert("lll" + chartData);
+        var data = google.visualization.arrayToDataTable(chartData);
+
+        var options = {
+          //  title: "Company Revenue",
+            pointSize: 5
+        };
+
+        var columnChart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        columnChart.draw(data, options);
+
+    }
+
+    //function drawChart2() {
+    //    // alert("lll" + chartData);
+    //    var data = google.visualization.arrayToDataTable(chartData);
+
+    //    var options = {
+
+    //        is3D: true,
+    //        backgroundColor: 'none',
+    //        chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
+    //        legend: { textStyle: { fontSize: 8.5, bold: false } }
+    //    };
+
+    //    //var columnChart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+    //    var columnChart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+    //    columnChart.draw(data, options);
+
+    //}
+
+    </script>
+
+    <script>
+
+        @*google.load("visualization", "1", { packages: ["corechart"] });
+
+        var x1amt = 0; var y1amt = 0; var x2amt = 0; var y2amt = 0;
+        var x3amt = 0; var y3amt = 0; var x4amt = 0; var y4amt = 0;
+        var x5amt = 0; var y5amt = 0; var x6amt = 0; var y6amt = 0;
+        var x7amt = 0; var y7amt = 0; var x8amt = 0; var y8amt = 0;
+        var x9amt = 0; var y9amt = 0; var x10amt = 0; var y10amt = 0;
+        var x11amt = 0; var y11amt = 0; var x12amt = 0; var y12amt = 0;
+        //    var x1amt = 0; var y1amt = 0; var x2amt = 0; var y2amt = 0;
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("GetSalesReceiptData", "Home")', // we are calling json method
+            datatype: 'json',
+            success: function (data) {
+                alert("lll");
+                x1amt = eval(data[0].SALEAMT).toFixed(); y1amt = eval(data[0].RCPTAMT).toFixed();
+                x2amt = eval(data[1].SALEAMT).toFixed(); y2amt = eval(data[1].RCPTAMT).toFixed();
+                x3amt = eval(data[2].SALEAMT).toFixed(); y3amt = eval(data[2].RCPTAMT).toFixed();
+                x4amt = eval(data[3].SALEAMT).toFixed(); y4amt = eval(data[3].RCPTAMT).toFixed();
+                x5amt = eval(data[4].SALEAMT).toFixed(); y5amt = eval(data[4].RCPTAMT).toFixed();
+                x6amt = eval(data[5].SALEAMT).toFixed(); y6amt = eval(data[5].RCPTAMT).toFixed();
+                x7amt = eval(data[6].SALEAMT).toFixed(); y7amt = eval(data[6].RCPTAMT).toFixed();
+                x8amt = eval(data[7].SALEAMT).toFixed(); y8amt = eval(data[7].RCPTAMT).toFixed();
+                x9amt = eval(data[8].SALEAMT).toFixed(); y9amt = eval(data[8].RCPTAMT).toFixed();
+                x10amt = eval(data[9].SALEAMT).toFixed(); y10amt = eval(data[9].RCPTAMT).toFixed();
+                x11amt = eval(data[10].SALEAMT).toFixed(); y11amt = eval(data[10].RCPTAMT).toFixed();
+                x12amt = eval(data[11].SALEAMT).toFixed(); y12amt = eval(data[11].RCPTAMT).toFixed();
+                //          data1 = google.visualization.arrayToDataTable([
+                //['Year', 'Sales', 'Receipts'],
+                // [data[0].COL1, data[0].SALEAMT, data[0].RCPTAMT],
+                //  [data[1].COL1, data[1].SALEAMT, data[1].RCPTAMT]
+
+                //          ]);
+
+
+            },
+            error: function (ex) {
+                alert('Failed to data ' + ex);
+            }
+        }).complete(function () {
+            alert("call0");
+            // after complete loading data
+            google.setOnLoadCallback(drawChart);
+           drawChart();
+        });
+
+
+        function drawChart() {
+            alert("call");
+            // var data1 = DataView();
+            var cnt = 0;
+
+
+            alert(x1amt);
+
+           var data = google.visualization.arrayToDataTable([
+            ['Year', 'Sales', 'Receipts'],
+
+             ['Jan', x1amt, y1amt],
+             ['Feb', x2amt, y2amt],
+             ['March', x3amt, y3amt],
+             ['Apr', x4amt, y4amt],
+
+             ['May', x5amt, y5amt],
+             ['Jun', x6amt, y6amt],
+             ['Jul', x7amt, y7amt],
+             ['Aug', x8amt, y8amt],
+
+             ['Sep', x9amt, y9amt],
+             ['Oct', x10amt, y10amt],
+             ['Nov', x11amt, y11amt],
+             ['Dec', x12amt, y12amt],
+           ]);
+
+           var options = {
+
+               hAxis: { title: '2016-2017', titleTextStyle: { color: 'red' } },
+
+               //   legend: { position: 'bottom' }, width: '100%',
+               backgroundColor: 'none',
+               is3D: true,
+
+           };
+
+           var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+
+           chart.draw(data, options);
+
+        }*@
+
+        //google.setOnLoadCallback(drawChart2);
+        //function drawChart2() {
+        //    var data = google.visualization.arrayToDataTable([
+        //      ['Task', 'Hours per Day'],
+        //      ['Travel Bag Small', 15],
+        //      ['Brown Netlon Bag Small', 20],
+        //      ['Ball Pen Cello', 20],
+        //      ['Brown Netlon Bag Medium', 20],
+        //      ['Brown Netlon Bags Big', 7]
+        //    ]);
+
+        //    var options = {
+
+        //        is3D: true,
+        //        backgroundColor: 'none',
+        //        chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
+        //        legend: { textStyle: { fontSize: 8.5, bold: false } }
+        //    };
+
+        //    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        //    chart.draw(data, options);
+        //}
+
+
+        //google.setOnLoadCallback(drawChart3);
+
+        //function drawChart3() {
+        //    var data = google.visualization.arrayToDataTable([
+        //      ['Month', 'Outstanding', 'Receipts'],
+        //      ['Jan', 1000, 1400],
+        //      ['Feb', 1870, 1760],
+        //      ['March', 660, 1120],
+        //      ['April', 1030, 1540]
+        //    ]);
+
+
+        //    var options = {
+        //        backgroundColor: 'none', curveType: 'function',
+        //        legend: { position: 'bottom' }, width: '100%'
+        //    };
+
+        //    var chart = new google.visualization.LineChart(document.getElementById('chart_div2'));
+
+        //    chart.draw(data, options);
+
+        //}
+
+
+
+
+
+    </script>
+}

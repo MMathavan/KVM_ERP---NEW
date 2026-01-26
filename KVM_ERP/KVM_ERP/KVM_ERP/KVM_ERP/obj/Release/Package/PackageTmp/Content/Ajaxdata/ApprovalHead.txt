@@ -1,0 +1,12 @@
+{"data":[
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1596","ANAME":"Ramesh Chandra Parek(Due)","PNAME":"Goutam Dalapati","PCS":6,"NAMT":180.00,"DISPSTATUS":null,"MID":"1"},
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1597","ANAME":"Kashinath Panja","PNAME":"Kashinath Panja","PCS":78,"NAMT":2340.00,"DISPSTATUS":null,"MID":"2"},
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1598","ANAME":"Krishnendu Roy","PNAME":"Krishnendu Roy","PCS":51,"NAMT":1530.00,"DISPSTATUS":null,"MID":"3"},
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1599","ANAME":"Mahamaya Jewellers","PNAME":"Chitra Dhar","PCS":1,"NAMT":50.00,"DISPSTATUS":null,"MID":"4"},
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1600","ANAME":"Chiranjit Da","PNAME":"B K","PCS":52,"NAMT":2147.00,"DISPSTATUS":null,"MID":"5"},
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1601","ANAME":"Shree Maa Jewellers","PNAME":"Amiya","PCS":2,"NAMT":60.00,"DISPSTATUS":null,"MID":"6"},
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1602","ANAME":"New Mira Jewellers","PNAME":"Sukanta Kandar","PCS":52,"NAMT":1300.00,"DISPSTATUS":null,"MID":"7"},
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1603","ANAME":"Sukanta Kandar","PNAME":"Chotda","PCS":2,"NAMT":70.00,"DISPSTATUS":null,"MID":"8"},
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1604","ANAME":"Chiranjit Da","PNAME":"Ajit Maityi","PCS":11,"NAMT":385.00,"DISPSTATUS":null,"MID":"9"},
+{"RDATE":"01-02-2018","DDATE":"01-02-2018","REFNO":"C1605","ANAME":"G C Paul Jewellers","PNAME":"Gunjan Bhai","PCS":65,"NAMT":2275.00,"DISPSTATUS":null,"MID":"10"}
+]}

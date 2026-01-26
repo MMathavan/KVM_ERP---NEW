@@ -1,0 +1,130 @@
+// NEW GetStockViewReportData method with dynamic columns
+private List<StockViewReportData> GetStockViewReportData(DateTime fromDate, DateTime toDate, string tab)
+{
+    try
+    {
+        System.Diagnostics.Debug.WriteLine($"GetStockViewReportData - From: {fromDate:yyyy-MM-dd}, To: {toDate:yyyy-MM-dd}, Tab: {tab}");
+
+        var stockData = new List<StockViewReportData>();
+        DateTime openingStockDate = toDate.AddDays(-1);
+
+        // Get all transaction data with packing master info
+        var allData = (from tpc in db.TransactionProductCalculations
+                       join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
+                       join m in db.MaterialMasters on td.MTRLID equals m.MTRLID
+                       join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
+                       join packing in db.PackingMasters on tpc.PACKMID equals packing.PACKMID
+                       join grade in db.GradeMasters on tpc.GRADEID equals grade.GRADEID into gradeLeft
+                       from grade in gradeLeft.DefaultIfEmpty()
+                       join color in db.ProductionColourMasters on tpc.PCLRID equals color.PCLRID into colorLeft
+                       from color in colorLeft.DefaultIfEmpty()
+                       join rcvdType in db.ReceivedTypeMasters on tpc.RCVDTID equals rcvdType.RCVDTID into rcvdLeft
+                       from rcvdType in rcvdLeft.DefaultIfEmpty()
+                       where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
+                             && (m.DISPSTATUS == 0 || m.DISPSTATUS == null)
+                             && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
+                             && tm.TRANDATE <= toDate
+                       select new {
+                           tm.TRANDATE,
+                           ProductId = m.MTRLID,
+                           ProductName = m.MTRLDESC,
+                           PackingMasterId = packing.PACKMID,
+                           PackingMasterName = packing.PACKMDESC,
+                           KGWGT = tpc.KGWGT,
+                           GradeName = grade != null ? grade.GRADEDESC : "",
+                           ColorName = color != null ? color.PCLRDESC : "",
+                           ReceivedTypeName = rcvdType != null ? rcvdType.RCVDTDESC : "",
+                           Calculation = tpc
+                       }).ToList();
+
+        // Group by packing master and product
+        var groupedByPackingAndProduct = allData
+            .GroupBy(x => new { x.PackingMasterId, x.PackingMasterName, x.ProductId, x.ProductName, x.KGWGT, x.GradeName, x.ColorName, x.ReceivedTypeName })
+            .ToList();
+
+        foreach (var productGroup in groupedByPackingAndProduct)
+        {
+            // Get column headers for this packing master from PackingTypeMaster
+            var columnHeaders = db.PackingTypeMasters
+                .Where(pt => pt.PACKMID == productGroup.Key.PackingMasterId 
+                          && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null)
+                          && !pt.PACKTMDESC.ToUpper().Contains("BKN")
+                          && !pt.PACKTMDESC.ToUpper().Contains("BROKEN"))
+                .OrderBy(pt => pt.PACKTMCODE)
+                .Select(pt => pt.PACKTMDESC)
+                .ToList();
+
+            // Split data into opening and production
+            var openingData = productGroup.Where(x => x.TRANDATE <= openingStockDate).ToList();
+            var productionData = productGroup.Where(x => x.TRANDATE == toDate).ToList();
+
+            // Build dynamic data arrays
+            var openingDataArray = new List<decimal>();
+            var productionDataArray = new List<decimal>();
+            var totalDataArray = new List<decimal>();
+
+            // Get PCK values (PCK1-PCK17)
+            var pckProperties = new[] { "PCK1", "PCK2", "PCK3", "PCK4", "PCK5", "PCK6", "PCK7", "PCK8", "PCK9", "PCK10", "PCK11", "PCK12", "PCK13", "PCK14", "PCK15", "PCK16", "PCK17" };
+            
+            for (int i = 0; i < columnHeaders.Count && i < pckProperties.Length; i++)
+            {
+                var prop = typeof(TransactionProductCalculation).GetProperty(pckProperties[i]);
+                
+                decimal openingSum = 0;
+                foreach (var item in openingData)
+                {
+                    var value = prop.GetValue(item.Calculation);
+                    openingSum += value != null ? (decimal)value : 0;
+                }
+                openingDataArray.Add(openingSum);
+
+                decimal productionSum = 0;
+                foreach (var item in productionData)
+                {
+                    var value = prop.GetValue(item.Calculation);
+                    productionSum += value != null ? (decimal)value : 0;
+                }
+                productionDataArray.Add(productionSum);
+
+                totalDataArray.Add(openingSum + productionSum);
+            }
+
+            // Calculate totals
+            decimal openingTotal = openingDataArray.Sum();
+            decimal productionTotal = productionDataArray.Sum();
+            decimal total = totalDataArray.Sum();
+
+            // Create StockViewReportData item
+            var item = new StockViewReportData
+            {
+                ProductName = $"{productGroup.Key.ProductName} 6 x {productGroup.Key.KGWGT:F1}" +
+                             (!string.IsNullOrEmpty(productGroup.Key.GradeName) ? $" - {productGroup.Key.GradeName}" : "") +
+                             (!string.IsNullOrEmpty(productGroup.Key.ColorName) ? $" - {productGroup.Key.ColorName}" : "") +
+                             (!string.IsNullOrEmpty(productGroup.Key.ReceivedTypeName) ? $" - {productGroup.Key.ReceivedTypeName}" : ""),
+                ReceivedType = string.IsNullOrWhiteSpace(productGroup.Key.PackingMasterName) ? "Unknown" : productGroup.Key.PackingMasterName,
+                PackingMasterId = productGroup.Key.PackingMasterId,
+                
+                // Dynamic columns
+                ColumnHeaders = columnHeaders,
+                OpeningData = openingDataArray,
+                OpeningTotalSlabs = openingTotal,
+                ProductionData = productionDataArray,
+                ProductionTotalSlabs = productionTotal,
+                TotalData = totalDataArray,
+                TotalSlabs = total
+            };
+
+            stockData.Add(item);
+        }
+
+        System.Diagnostics.Debug.WriteLine($"Combined into {stockData.Count} products");
+        stockData = stockData.OrderBy(x => x.ReceivedType).ThenBy(x => x.ProductName).ToList();
+        
+        return stockData;
+    }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"Error in GetStockViewReportData: {ex.Message}");
+        return new List<StockViewReportData>();
+    }
+}

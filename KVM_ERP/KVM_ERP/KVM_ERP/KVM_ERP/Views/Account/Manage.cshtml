@@ -1,0 +1,129 @@
+﻿@using KVM_ERP.Models
+@using Microsoft.AspNet.Identity;
+@model KVM_ERP.Models.AccountViewModels.ManageUserViewModel
+@{
+    ViewBag.Title = "Manage Account";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+            <div class="card shadow-sm">
+                <!-- Header -->
+                <div class="card-header bg-primary text-white py-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h2 class="h5 mb-0">
+                            <i class="bi bi-person-gear me-2"></i>@ViewBag.Title
+                        </h2>
+                        @if (Request.IsAuthenticated)
+                        {
+                            var backLink = (System.Web.HttpContext.Current.Session["Group"].ToString() == "Manager" ||
+                                             System.Web.HttpContext.Current.Session["Group"].ToString() == "Admin" ||
+                                             System.Web.HttpContext.Current.Session["Group"].ToString() == "Purchaseadmin")
+                                            ? "Index" : "CIndex";
+
+                            <a href="@Url.Action(backLink)" class="btn btn-outline-light btn-sm">
+                                <i class="bi bi-arrow-left me-1"></i>Back
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="card-body p-4">
+                    <!-- User Info -->
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-person-circle fs-3 text-muted"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-0">You're logged in as <strong>@User.Identity.GetUserName()</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Alerts -->
+                    @if (ViewBag.msg != null && !string.IsNullOrEmpty(ViewBag.msg.ToString()))
+                    {
+                        <div class="alert alert-info alert-dismissible fade show mb-4">
+                            @Html.Raw(ViewBag.msg)
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (ViewBag.StatusMessage != null && !string.IsNullOrEmpty(ViewBag.StatusMessage.ToString()))
+                    {
+                        <div class="alert alert-success alert-dismissible fade show mb-4">
+                            @ViewBag.StatusMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <!-- Password Card (single form) -->
+                    <div class="card border-0 shadow-none">
+                        <div class="card-header bg-transparent border-bottom px-0 pt-0 pb-3">
+                            <h3 class="h6 mb-0">
+                                <i class="bi bi-key-fill text-primary me-2"></i>Password Management
+                            </h3>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                            @if (System.Web.HttpContext.Current.Session["Group"] != null && System.Web.HttpContext.Current.Session["Group"].ToString() == "Admin")
+                            {
+                                using (Html.BeginForm("Manage","Account", new { id = ViewBag.TargetUser }, FormMethod.Post, new { @class = "row g-3" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(m => m.OldPassword, new { @Value = "AdminOverride" })
+
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(m => m.NewPassword)
+                                        @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.NewPassword, null, new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(m => m.ConfirmPassword)
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ConfirmPassword, null, new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <a href="@Url.Action("Index","Account")" class="btn btn-secondary">Cancel</a>
+                                        <button type="submit" class="btn btn-primary">Update Password</button>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                var hasLocalPassword = (ViewBag.HasLocalPassword as bool?) ?? true;
+                                if (hasLocalPassword)
+                                {
+                                    Html.RenderPartial("_ChangePasswordPartial");
+                                }
+                                else
+                                {
+                                    Html.RenderPartial("_SetPasswordPartial");
+                                }
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function NPass() {
+            document.getElementById("NPassword").value = document.getElementById("ConfirmPassword").value;
+        };
+
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

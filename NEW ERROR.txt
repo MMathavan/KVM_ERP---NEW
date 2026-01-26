@@ -1,0 +1,82 @@
+Server Error in '/' Application.
+A transport-level error has occurred when receiving results from the server. (provider: Session Provider, error: 19 - Physical connection is not usable)
+Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
+
+Exception Details: System.Data.SqlClient.SqlException: A transport-level error has occurred when receiving results from the server. (provider: Session Provider, error: 19 - Physical connection is not usable)
+
+Source Error:
+
+
+Line 274:
+Line 275:            @Html.ValidationMessageFor(m => m.COMPID)
+Line 276:            @Html.DropDownList("COMPID", null, new { @class = "hide" })
+Line 277:
+Line 278:            <div class="form-group static">
+Source File: d:\FUSIONTEC CLIENT COMPLETEDPROJECTS\KVM_ERP\KVM_ERP\KVM_ERP\KVM_ERP\KVM_ERP\Views\Account\Login.cshtml    Line: 276
+
+Stack Trace:
+
+
+[SqlException (0x80131904): A transport-level error has occurred when receiving results from the server. (provider: Session Provider, error: 19 - Physical connection is not usable)]
+   System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action1 wrapCloseInAction) +3357572
+   System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose) +334
+   System.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error) +857
+   System.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync() +299
+   System.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket() +126
+   System.Data.SqlClient.TdsParserStateObject.TryPrepareBuffer() +97
+   System.Data.SqlClient.TdsParserStateObject.TryReadByte(Byte& value) +47
+   System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady) +704
+   System.Data.SqlClient.SqlDataReader.TryConsumeMetaData() +89
+   System.Data.SqlClient.SqlDataReader.get_MetaData() +101
+   System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted) +624
+   System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest) +3355
+   System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry) +725
+   System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method) +84
+   System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method) +312
+   System.Data.Entity.Infrastructure.Interception.InternalDispatcher1.Dispatch(TTarget target, Func3 operation, TInterceptionContext interceptionContext, Action3 executing, Action3 executed) +98
+   System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.Reader(DbCommand command, DbCommandInterceptionContext interceptionContext) +449
+   System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior) +38
+
+[EntityCommandExecutionException: An error occurred while executing the command definition. See the inner exception for details.]
+   System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior) +128
+   System.Data.Entity.Core.Objects.Internal.ObjectQueryExecutionPlan.Execute(ObjectContext context, ObjectParameterCollection parameterValues) +1041
+   System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction(Func1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess) +458
+   System.Data.Entity.Core.Objects.<>c__DisplayClass41_0.<GetResults>b__0() +222
+   System.Data.Entity.SqlServer.DefaultSqlExecutionStrategy.Execute(Func1 operation) +224
+   System.Data.Entity.Core.Objects.ObjectQuery1.GetResults(Nullable1 forMergeOption) +354
+   System.Data.Entity.Core.Objects.ObjectQuery1.<System.Collections.Generic.IEnumerable<T>.GetEnumerator>b__31_0() +32
+   System.Data.Entity.Internal.LazyEnumerator1.MoveNext() +39
+   System.Linq.WhereSelectEnumerableIterator`2.MoveNext() +123
+   System.Collections.Generic.List1..ctor(IEnumerable1 collection) +453
+   System.Linq.Enumerable.ToList(IEnumerable`1 source) +73
+   System.Web.Mvc.MultiSelectList.GetEnumerator() +9
+   System.Linq.Lookup2.Create(IEnumerable1 source, Func2 keySelector, Func2 elementSelector, IEqualityComparer1 comparer) +166
+   System.Linq.GroupedEnumerable3.GetEnumerator() +89
+   System.Web.Mvc.Html.SelectExtensions.BuildItems(String optionLabel, IEnumerable`1 selectList) +391
+   System.Web.Mvc.Html.SelectExtensions.SelectInternal(HtmlHelper htmlHelper, ModelMetadata metadata, String optionLabel, String name, IEnumerable1 selectList, Boolean allowMultiple, IDictionary2 htmlAttributes) +343
+   System.Web.Mvc.Html.SelectExtensions.DropDownList(HtmlHelper htmlHelper, String name, IEnumerable1 selectList, Object htmlAttributes) +56
+   ASP._Page_Views_Account_Login_cshtml.Execute() in d:\FUSIONTEC CLIENT COMPLETEDPROJECTS\KVM_ERP\KVM_ERP\KVM_ERP\KVM_ERP\KVM_ERP\Views\Account\Login.cshtml:276
+   System.Web.WebPages.WebPageBase.ExecutePageHierarchy() +252
+   System.Web.Mvc.WebViewPage.ExecutePageHierarchy() +148
+   System.Web.WebPages.StartPage.ExecutePageHierarchy() +86
+   System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage) +107
+   System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context) +384
+   System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult) +97
+   System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult) +843
+   System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult) +843
+   System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList1 filters, ActionResult actionResult) +81
+   System.Web.Mvc.Async.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult) +188
+   System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult) +38
+   System.Web.Mvc.Controller.<BeginExecuteCore>b__1d(IAsyncResult asyncResult, ExecuteCoreState innerState) +38
+   System.Web.Mvc.Async.WrappedAsyncVoid1.CallEndDelegate(IAsyncResult asyncResult) +73
+   System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult) +52
+   System.Web.Mvc.Async.WrappedAsyncVoid1.CallEndDelegate(IAsyncResult asyncResult) +39
+   System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult) +38
+   System.Web.Mvc.MvcHandler.<BeginProcessRequest>b__5(IAsyncResult asyncResult, ProcessRequestState innerState) +52
+   System.Web.Mvc.Async.WrappedAsyncVoid1.CallEndDelegate(IAsyncResult asyncResult) +73
+   System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult) +38
+   System.Web.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute() +426
+   System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step) +172
+   System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously) +158
+
+Version Information: Microsoft .NET Framework Version:4.0.30319; ASP.NET Version:4.8.9319.0

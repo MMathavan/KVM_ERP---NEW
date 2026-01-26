@@ -1,0 +1,847 @@
+@{
+    ViewBag.Title = "Supplier wise Stock View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: white;
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    .content-wrapper {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+        border: 1px solid #e9ecef;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .header-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .table-container {
+        padding: 30px;
+        background: white;
+    }
+
+    #stockTable {
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+    }
+
+    #stockTable thead th {
+        background: #7f88e9;
+        color: white;
+        font-weight: 600;
+        padding: 15px 12px;
+        text-align: center;
+        border: none;
+        font-size: 14px;
+        border-right: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    #stockTable thead th:last-child {
+        border-right: none;
+    }
+
+    #stockTable tbody td {
+        padding: 12px;
+        border-bottom: 1px solid #f0f0f0;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    #stockTable tbody tr:hover {
+        background-color: #f8f9ff;
+        transition: all 0.2s ease;
+    }
+
+    .form-label {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 10px 12px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+    }
+
+    #filterBtn {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    #filterBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+
+    .item-name {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .total-weight {
+        font-weight: 700;
+        color: #28a745;
+        font-size: 18px;
+        text-align: right;
+    }
+
+    .expand-btn {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .expand-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+    }
+
+    .expand-btn.expanded {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        transform: rotate(45deg);
+    }
+
+    .print-btn {
+        background: #ffffff;
+        color: #4facfe;
+        border: 1px solid #4facfe;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-left: 8px;
+        font-size: 14px;
+    }
+
+    .print-btn:hover {
+        background: #4facfe;
+        color: #ffffff;
+        box-shadow: 0 4px 8px rgba(79, 172, 254, 0.3);
+    }
+
+    .details-row {
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        border-left: 4px solid #4facfe;
+    }
+
+    .details-content {
+        padding: 20px 30px;
+        border-radius: 8px;
+        margin: 10px;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .intake-header-card {
+        background: linear-gradient(135deg, #3498db 0%, #2ecc71 100%);
+        color: #fff;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin-bottom: 15px;
+    }
+
+    .intake-header-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+
+    .intake-header-subtitle {
+        font-size: 13px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .intake-info-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 13px;
+        justify-content: space-between;
+    }
+
+    .intake-info-item {
+        flex: 1 1 45%;
+    }
+
+    .intake-info-label {
+        font-weight: 600;
+    }
+
+    .intake-info-value {
+        margin-left: 4px;
+    }
+
+    .intake-products-table th {
+        background-color: #007bff;
+        color: #fff;
+        font-size: 13px;
+        text-align: center;
+    }
+
+    .intake-products-table td {
+        font-size: 13px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .production-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #34495e;
+    }
+
+    .production-table th {
+        background-color: #6c5ce7;
+        color: #fff;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .production-table td {
+        font-size: 13px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .balance-positive {
+        color: #28a745;
+        font-weight: 600;
+    }
+
+    .balance-zero {
+        color: #17a2b8;
+        font-weight: 600;
+    }
+
+    .balance-negative {
+        color: #dc3545;
+        font-weight: 700;
+    }
+
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #4facfe;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @@media (max-width: 768px) {
+        .header-title {
+            font-size: 24px;
+        }
+
+        .table-container {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="main-container">
+    <div class="content-wrapper">
+        <div class="header-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="header-title">
+                    <i class="fa fa-chart-line"></i>
+                    Supplier wise Stock View
+                </h1>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="row align-items-end">
+                                <div class="col-md-3">
+                                    <label for="fromDate" class="form-label fw-bold text-primary">
+                                        <i class="fa fa-calendar-alt"></i> From Date
+                                    </label>
+                                    <input type="date" id="fromDate" class="form-control border-2" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="toDate" class="form-label fw-bold text-primary">
+                                        <i class="fa fa-calendar-alt"></i> To Date
+                                    </label>
+                                    <input type="date" id="toDate" class="form-control border-2" />
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="filterBtn" class="btn btn-primary px-4" onclick="refreshTable()">
+                                        <i class="fa fa-filter"></i> Filter
+                                    </button>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <div id="filterStatus" class="mb-2">
+                                        <small class="text-success fw-bold" style="display: none;">
+                                            <i class="fa fa-check-circle"></i>
+                                            <span id="filterText"></span>
+                                        </small>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="fa fa-info-circle"></i>
+                                        View Raw Material Intakes between selected dates
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p>Loading stock data...</p>
+            </div>
+
+            <table id="stockTable" class="display table table-striped" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="6%" style="text-align: center;">S.No</th>
+                        <th width="16%" style="text-align: left;">Date</th>
+                        <th width="32%" style="text-align: left;">Supplier</th>
+                        <th width="18%" style="text-align: left;">Vehicle No</th>
+                        <th width="18%" style="text-align: left;">Client Weight (KG)</th>
+                        <th width="10%" style="text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th style="text-align: center;">S.No</th>
+                        <th style="text-align: left;">Date</th>
+                        <th style="text-align: left;">Supplier</th>
+                        <th style="text-align: left;">Vehicle No</th>
+                        <th style="text-align: left;">Client Weight (KG)</th>
+                        <th style="text-align: center;">Action</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script type="text/javascript">
+        var stockTable;
+
+        $(document).ready(function () {
+            var today = new Date();
+            var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            $('#fromDate').val(firstDay.toISOString().split('T')[0]);
+            $('#toDate').val(today.toISOString().split('T')[0]);
+
+            initializeStockTable();
+        });
+
+        function initializeStockTable() {
+            $.ajax({
+                url: '@Url.Action("GetIntakeList", "SupplierStockView")',
+                type: 'GET',
+                data: {
+                    fromDate: $('#fromDate').val(),
+                    toDate: $('#toDate').val()
+                },
+                timeout: 10000,
+                beforeSend: function () {
+                    showLoading();
+                },
+                success: function (response) {
+                    hideLoading();
+
+                    if (response && response.success && response.data && response.data.length > 0) {
+                        initializeTableWithData(response.data);
+                        $('#filterStatus small').show();
+                        var fromText = $('#fromDate').val();
+                        var toText = $('#toDate').val();
+                        $('#filterText').text('From ' + fromText + ' To ' + toText);
+                    } else {
+                        initializeTableWithData([]);
+                        $('#filterStatus small').hide();
+                        alert('No data available for selected date range');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    hideLoading();
+                    $('#filterStatus small').hide();
+                    alert('Error loading data: ' + error);
+                }
+            });
+        }
+
+        function initializeTableWithData(data) {
+            if ($.fn.DataTable.isDataTable('#stockTable')) {
+                $('#stockTable').DataTable().destroy();
+                $('#stockTable tbody').empty();
+            }
+
+            stockTable = $('#stockTable').DataTable({
+                data: data,
+                destroy: true,
+                columns: [
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        width: "6%",
+                        className: "text-center",
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
+                        data: 1,
+                        width: "16%",
+                        render: function (data) {
+                            return '<span>' + data + '</span>';
+                        }
+                    },
+                    {
+                        data: null,
+                        width: "32%",
+                        render: function (data, type, row) {
+                            var name = row[2] || '';
+                            var code = row[3] || '';
+                            return '<div class="item-name">' +
+                                   '<span>' + name + ' (' + code + ')</span>' +
+                                   '</div>';
+                        }
+                    },
+                    {
+                        data: 4,
+                        width: "18%",
+                        render: function (data) {
+                            return '<span>' + (data || '') + '</span>';
+                        }
+                    },
+                    {
+                        data: 5,
+                        width: "18%",
+                        render: function (data) {
+                            return '<div class="total-weight" style="text-align: left;">' + data + ' KG</div>';
+                        }
+                    },
+                    {
+                        data: 0,
+                        width: "10%",
+                        className: "text-center",
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<div class="d-inline-flex align-items-center justify-content-center">' +
+                                   '<button class="expand-btn" onclick="toggleDetails(this, ' + data + ')">' +
+                                   '<i class="fa fa-plus"></i>' +
+                                   '</button>' +
+                                   '<button class="print-btn" onclick="printIntake(' + data + ')">' +
+                                   '<i class="fa fa-print"></i>' +
+                                   '</button>' +
+                                   '</div>';
+                        }
+                    }
+                ],
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50], [10, 25, 50]],
+                language: {
+                    search: "Search Transactions:",
+                    lengthMenu: "Show _MENU_ rows per page",
+                    info: "Showing _START_ to _END_ of _TOTAL_ transactions",
+                    emptyTable: "No data available"
+                },
+                responsive: true,
+                autoWidth: false
+            });
+        }
+
+        function refreshTable() {
+            if (stockTable) {
+                stockTable.destroy();
+                stockTable = null;
+            }
+            $('#stockTable tbody').empty();
+            initializeStockTable();
+        }
+
+        function showLoading() {
+            $('#loadingSpinner').show();
+            $('#stockTable').hide();
+        }
+
+        function hideLoading() {
+            $('#loadingSpinner').hide();
+            $('#stockTable').show();
+        }
+
+        function toggleDetails(button, tranmid) {
+            var $button = $(button);
+            var $row = $button.closest('tr');
+            var $icon = $button.find('i');
+
+            if ($button.hasClass('expanded')) {
+                $row.next('.details-row').remove();
+                $button.removeClass('expanded');
+                $icon.removeClass('fa-minus').addClass('fa-plus');
+            } else {
+                $button.addClass('expanded');
+                $icon.removeClass('fa-plus').addClass('fa-minus');
+
+                getIntakeOverview(tranmid, function (details) {
+                    var detailsHtml = '<tr class="details-row">' +
+                                     '<td colspan="6">' +
+                                     '<div class="details-content">' +
+                                     details +
+                                     '</div>' +
+                                     '</td>' +
+                                     '</tr>';
+                    $row.after(detailsHtml);
+                });
+            }
+        }
+
+        function getIntakeOverview(tranmid, callback) {
+            $.ajax({
+                url: '@Url.Action("GetIntakeOverview", "SupplierStockView")',
+                type: 'GET',
+                data: {
+                    tranmid: tranmid
+                },
+                success: function (response) {
+                    if (response && response.success) {
+                        var h = response.header;
+                        var products = response.products || [];
+                        var rows = response.productionRows || [];
+
+                        var html = '';
+                        html += '<div class="row">';
+
+                        // Left side - Intake details
+                        html += '<div class="col-md-6">';
+                        html += '<div class="intake-header-card">';
+
+                        // Centered lines one by one for clean alignment
+                        html += '<div class="intake-info-row" style="justify-content:center;">';
+                        html += '<div class="intake-info-item" style="flex:0 0 auto; text-align:center;">';
+                        html += '<span class="intake-info-label">Date:</span><span class="intake-info-value"> ' + h.TransactionDate + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+
+                        html += '<div class="intake-info-row" style="justify-content:center;">';
+                        html += '<div class="intake-info-item" style="flex:0 0 auto; text-align:center;">';
+                        html += '<span class="intake-info-label">Supplier Name:</span><span class="intake-info-value"> ' + (h.SupplierName || '') + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+
+                        html += '<div class="intake-info-row" style="justify-content:center;">';
+                        html += '<div class="intake-info-item" style="flex:0 0 auto; text-align:center;">';
+                        html += '<span class="intake-info-label">Supplier Code:</span><span class="intake-info-value"> ' + (h.SupplierCode || '') + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+
+                        html += '<div class="intake-info-row" style="justify-content:center;">';
+                        html += '<div class="intake-info-item" style="flex:0 0 auto; text-align:center;">';
+                        html += '<span class="intake-info-label">Vehicle No:</span><span class="intake-info-value"> ' + (h.VehicleNo || '') + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+
+                        html += '<div class="intake-info-row" style="justify-content:center;">';
+                        html += '<div class="intake-info-item" style="flex:0 0 auto; text-align:center;">';
+                        html += '<span class="intake-info-label">Client Weight (KG):</span><span class="intake-info-value"> ' + h.ClientWeight + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+
+                        html += '</div>'; // intake-header-card
+
+                        html += '<div class="card shadow-sm">';
+                        html += '<div class="card-header bg-white"><strong>Product Details</strong></div>';
+                        html += '<div class="card-body p-2">';
+                        html += '<div class="table-responsive">';
+                        html += '<table class="table table-bordered table-sm intake-products-table">';
+                        html += '<thead><tr>';
+                        html += '<th style="width:8%;">S.No</th>';
+                        html += '<th style="width:24%;">Product Type</th>';
+                        html += '<th style="width:28%;">Product Name</th>';
+                        html += '<th style="width:20%;">No of Boxes</th>';
+                        html += '<th style="width:20%;">Counts per KG</th>';
+                        html += '</tr></thead><tbody>';
+
+                        if (products.length > 0) {
+                            for (var i = 0; i < products.length; i++) {
+                                var p = products[i];
+                                html += '<tr>';
+                                html += '<td>' + (i + 1) + '</td>';
+                                html += '<td>' + (p.ProductType || '') + '</td>';
+                                html += '<td>' + (p.ProductName || '') + '</td>';
+                                html += '<td>' + p.NoOfBoxes + '</td>';
+                                html += '<td>' + p.CountsPerKg + '</td>';
+                                html += '</tr>';
+                            }
+                        } else {
+                            html += '<tr><td colspan="5">No products found.</td></tr>';
+                        }
+
+                        html += '</tbody></table>';
+                        html += '</div>'; // table-responsive
+                        html += '</div>'; // card-body
+                        html += '</div>'; // card
+                        html += '</div>'; // col-md-6
+
+                        // Right side - Production summary
+                        html += '<div class="col-md-6">';
+                        html += '<div class="card shadow-sm">';
+                        html += '<div class="card-header bg-white"><span class="production-title">Production Summary</span></div>';
+                        html += '<div class="card-body p-2">';
+                        html += '<div class="table-responsive">';
+                        html += '<table class="table table-bordered table-sm production-table">';
+                        html += '<thead><tr>';
+                        html += '<th style="width:25%;">Production Date</th>';
+                        html += '<th style="width:25%;">Total Counts</th>';
+                        html += '<th style="width:25%;">Our Kgs</th>';
+                        html += '<th style="width:25%;">Balance stock in production</th>';
+                        html += '</tr></thead><tbody>';
+
+                        if (rows.length > 0) {
+                            rows.forEach(function (r) {
+                                var bal = parseFloat(r.BalanceStock || '0');
+                                var balClass = 'balance-zero';
+                                if (bal > 0) balClass = 'balance-positive';
+                                if (bal < 0) balClass = 'balance-negative';
+
+                                html += '<tr>';
+                                html += '<td>' + r.ProductionDate + '</td>';
+                                html += '<td>' + r.TotalCounts + '</td>';
+                                html += '<td>' + r.OurKgs + '</td>';
+                                html += '<td class="' + balClass + '">' + r.BalanceStock + '</td>';
+                                html += '</tr>';
+                            });
+                        } else {
+                            html += '<tr><td colspan="4">No production data available.</td></tr>';
+                        }
+
+                        html += '</tbody></table>';
+                        html += '</div>'; // table-responsive
+                        html += '</div>'; // card-body
+                        html += '</div>'; // card
+                        html += '</div>'; // col-md-6
+
+                        html += '</div>'; // row
+
+                        callback(html);
+                    } else {
+                        var msg = (response && response.message) ? response.message : 'No data available';
+                        callback('<div>No details available: ' + msg + '</div>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    callback('<div>Error loading details: ' + error + '</div>');
+                }
+            });
+        }
+
+        function printIntake(tranmid) {
+            $.ajax({
+                url: '@Url.Action("GetIntakeOverview", "SupplierStockView")',
+                type: 'GET',
+                data: { tranmid: tranmid },
+                success: function (response) {
+                    if (!response || !response.success) {
+                        alert('Unable to load data for printing');
+                        return;
+                    }
+
+                    var h = response.header || {};
+                    var products = response.products || [];
+                    var rows = response.productionRows || [];
+
+                    var html = '';
+                    html += "<!DOCTYPE html><html><head><meta charset='utf-8'><title>Supplier wise Stock view Report</title>";
+                    html += "<style>" +
+                        "body{font-family:Arial,sans-serif;margin:20px;background:#f8f9fa;}" +
+                        ".container{max-width:900px;margin:0 auto;background:#ffffff;padding:30px;border-radius:10px;box-shadow:0 4px 6px rgba(0,0,0,0.1);}" +
+                        ".header{text-align:center;margin-bottom:30px;padding-bottom:15px;border-bottom:3px solid #007bff;}" +
+                        ".company-name{font-size:28px;font-weight:bold;color:#007bff;margin-bottom:5px;}" +
+                        ".document-title{font-size:20px;color:#444;margin-bottom:5px;}" +
+                        ".transaction-id{color:#6c757d;font-size:14px;}" +
+                        ".transaction-info{margin:25px 0;font-size:14px;}" +
+                        ".info-row{display:flex;justify-content:space-between;margin-bottom:4px;}" +
+                        ".info-label{font-weight:600;color:#007bff;}" +
+                        ".info-value{font-weight:600;color:#000;}" +
+                        ".section-title{font-size:16px;font-weight:600;color:#007bff;margin:20px 0 8px 0;}" +
+                        ".table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px;}" +
+                        ".table th,.table td{border:1px solid #dee2e6;padding:8px 10px;text-align:left;}" +
+                        ".table thead th{background-color:#f1f5ff;color:#007bff;font-weight:600;}" +
+                        ".table td.value{text-align:right;}" +
+                        ".total-row td{background-color:#f8f9fa;font-weight:600;}" +
+                        ".no-data{text-align:center;color:#6c757d;font-style:italic;padding:20px;}" +
+                        ".footer-note{text-align:center;color:#6c757d;font-size:12px;margin-top:40px;}" +
+                        "@@media print{body{background:#ffffff;margin:0;} .container{box-shadow:none;border-radius:0;} @@page{margin:1in;}}" +
+                        "</style>";
+                    html += "</head><body><div class='container'>";
+
+                    // Header
+                    html += "<div class='header'>" +
+                            "<div class='company-name'>MARINEX</div>" +
+                            "<div class='document-title'>Supplier wise Stock view Report</div>" +
+                            "</div>";
+
+                    // Transaction info
+                    html += "<div class='transaction-info'>" +
+                            "<div class='info-row'><span class='info-label'>Date:</span><span class='info-value'>" + (h.TransactionDate || '') + "</span></div>" +
+                            "<div class='info-row'><span class='info-label'>Supplier Name:</span><span class='info-value'>" + (h.SupplierName || '') + "</span></div>" +
+                            "<div class='info-row'><span class='info-label'>Supplier Code:</span><span class='info-value'>" + (h.SupplierCode || '') + "</span></div>" +
+                            "<div class='info-row'><span class='info-label'>Vehicle No:</span><span class='info-value'>" + (h.VehicleNo || '') + "</span></div>" +
+                            "<div class='info-row'><span class='info-label'>Client Weight (KG):</span><span class='info-value'>" + (h.ClientWeight || '') + "</span></div>" +
+                            "</div>";
+
+                    // Product details
+                    html += "<div class='section-title'>Product Details</div>";
+                    if (products.length > 0) {
+                        html += "<table class='table'><thead><tr>" +
+                                "<th>S.No</th>" +
+                                "<th>Product Type</th>" +
+                                "<th>Product Name</th>" +
+                                "<th>No of Boxes</th>" +
+                                "<th>Counts per KG</th>" +
+                                "</tr></thead><tbody>";
+
+                        var totalBoxes = 0;
+                        for (var i = 0; i < products.length; i++) {
+                            var p = products[i];
+                            totalBoxes += (p.NoOfBoxes || 0);
+                            html += "<tr>" +
+                                    "<td>" + (i + 1) + "</td>" +
+                                    "<td>" + (p.ProductType || '') + "</td>" +
+                                    "<td>" + (p.ProductName || '') + "</td>" +
+                                    "<td class='value'>" + (p.NoOfBoxes || 0) + "</td>" +
+                                    "<td class='value'>" + (p.CountsPerKg || 0) + "</td>" +
+                                    "</tr>";
+                        }
+
+                        html += "<tr class='total-row'><td colspan='3'><strong>Total No.of Boxes</strong></td>" +
+                                "<td colspan='2' class='value'><strong>" + totalBoxes + "</strong></td></tr>" +
+                                "</tbody></table>";
+                    } else {
+                        html += "<div class='no-data'>No product details available for this transaction.</div>";
+                    }
+
+                    // Production summary
+                    html += "<div class='section-title'>Production Summary</div>";
+                    if (rows.length > 0) {
+                        html += "<table class='table'><thead><tr>" +
+                                "<th>Production Date</th>" +
+                                "<th>Total Counts</th>" +
+                                "<th>Our Kgs</th>" +
+                                "<th>Balance stock in production</th>" +
+                                "</tr></thead><tbody>";
+
+                        rows.forEach(function (r) {
+                            html += "<tr>" +
+                                    "<td>" + (r.ProductionDate || '') + "</td>" +
+                                    "<td class='value'>" + (r.TotalCounts || '0.000') + "</td>" +
+                                    "<td class='value'>" + (r.OurKgs || '0.000') + "</td>" +
+                                    "<td class='value'>" + (r.BalanceStock || '0.000') + "</td>" +
+                                    "</tr>";
+                        });
+
+                        html += "</tbody></table>";
+                    } else {
+                        html += "<div class='no-data'>No production details available for this transaction.</div>";
+                    }
+
+                    // Footer note with current date/time
+                    var now = new Date();
+                    var pad = function (n) { return n < 10 ? '0' + n : n; };
+                    var generated = pad(now.getDate()) + '/' + pad(now.getMonth() + 1) + '/' + now.getFullYear() +
+                        ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+
+                    html += "<div class='footer-note'>Generated on " + generated + " | MARINEX ERP System</div>";
+                    html += "</div></body></html>";
+
+                    var printWindow = window.open('', '_blank');
+                    if (!printWindow || printWindow.closed || typeof printWindow.closed === 'undefined') {
+                        alert('Please allow popups in your browser to print.');
+                        return;
+                    }
+
+                    printWindow.document.open();
+                    printWindow.document.write(html);
+                    printWindow.document.close();
+                    printWindow.focus();
+                    printWindow.print();
+                },
+                error: function () {
+                    alert('Error loading data for printing');
+                }
+            });
+        }
+    </script>
+}

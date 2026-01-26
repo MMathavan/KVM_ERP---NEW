@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ClubMembershipDBModelStoreContainer" CdmEntityContainer="ClubMembershipDBEntities">
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="ClubMembershipDBModel.AspNetUser">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="NPassword" ColumnName="NPassword" />
+          <ScalarProperty Name="BrnchId" ColumnName="BrnchId" />
+          <ScalarProperty Name="UBrnchName" ColumnName="UBrnchName" />
+          <ScalarProperty Name="DBrnchId" ColumnName="DBrnchId" />
+          <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VW_USER_DETAILS">
+      <EntityTypeMapping TypeName="ClubMembershipDBModel.VW_USER_DETAILS">
+        <MappingFragment StoreEntitySet="VW_USER_DETAILS">
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="PR_ACCOUNTINGYEAR_ID_CHK" FunctionName="ClubMembershipDBModel.Store.PR_ACCOUNTINGYEAR_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipDBModel.PR_ACCOUNTINGYEAR_ID_CHK_Result">
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+          <ScalarProperty Name="YRDESC" ColumnName="YRDESC" />
+          <ScalarProperty Name="YRID1" ColumnName="YRID1" />
+          <ScalarProperty Name="FDATE" ColumnName="FDATE" />
+          <ScalarProperty Name="TDATE" ColumnName="TDATE" />
+          <ScalarProperty Name="YRDESC1" ColumnName="YRDESC1" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+          <ScalarProperty Name="PRCSDATE" ColumnName="PRCSDATE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" FunctionName="ClubMembershipDBModel.Store.PR_COMPANYACCOUNTINGDETAIL_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipDBModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountGroup" FunctionName="ClubMembershipDBModel.Store.pr_SearchAccountGroup">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchAccountGroup_Result">
+          <ScalarProperty Name="ACHEADGCODE" ColumnName="ACHEADGCODE" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADGID" ColumnName="ACHEADGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountHeadMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchAccountHeadMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchAccountHeadMaster_Result">
+          <ScalarProperty Name="ACHEADCODE" ColumnName="ACHEADCODE" />
+          <ScalarProperty Name="ACHEADDESC" ColumnName="ACHEADDESC" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADID" ColumnName="ACHEADID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCompanyMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchCompanyMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchCompanyMaster_Result">
+          <ScalarProperty Name="COMPCODE" ColumnName="COMPCODE" />
+          <ScalarProperty Name="COMPNAME" ColumnName="COMPNAME" />
+          <ScalarProperty Name="COMPADDR" ColumnName="COMPADDR" />
+          <ScalarProperty Name="COMPPHN1" ColumnName="COMPPHN1" />
+          <ScalarProperty Name="COMPCPRSN" ColumnName="COMPCPRSN" />
+          <ScalarProperty Name="COMPMAIL" ColumnName="COMPMAIL" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchEmployeeMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchEmployeeMaster" />
+    <FunctionImportMapping FunctionImportName="pr_USER_MENU_DETAIL_ASSGN" FunctionName="ClubMembershipDBModel.Store.pr_USER_MENU_DETAIL_ASSGN">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_USER_MENU_DETAIL_ASSGN_Result">
+          <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+          <ScalarProperty Name="LinkText" ColumnName="LinkText" />
+          <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+          <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+          <ScalarProperty Name="Roles" ColumnName="Roles" />
+          <ScalarProperty Name="MenuGId" ColumnName="MenuGId" />
+          <ScalarProperty Name="MenuGIndex" ColumnName="MenuGIndex" />
+          <ScalarProperty Name="ImageClassName" ColumnName="ImageClassName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Search_Roles" FunctionName="ClubMembershipDBModel.Store.pr_Search_Roles">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_Search_Roles_Result">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Descp" ColumnName="Descp" />
+          <ScalarProperty Name="SDPTNAME" ColumnName="SDPTNAME" />
+          <ScalarProperty Name="RMenuType" ColumnName="RMenuType" />
+          <ScalarProperty Name="RControllerName" ColumnName="RControllerName" />
+          <ScalarProperty Name="MENUDESC" ColumnName="MENUDESC" />
+          <ScalarProperty Name="RMenuGroupOrder" ColumnName="RMenuGroupOrder" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchStateMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchStateMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchStateMaster_Result">
+          <ScalarProperty Name="STATEID" ColumnName="STATEID" />
+          <ScalarProperty Name="STATECODE" ColumnName="STATECODE" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="STATETYPE" ColumnName="STATETYPE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchBloodGroupMaster" FunctionName="ClubMembershipDBModel.Store.pr_SearchBloodGroupMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ClubMembershipDBModel.pr_SearchBloodGroupMaster_Result">
+          <ScalarProperty Name="BLDGID" ColumnName="BLDGID" />
+          <ScalarProperty Name="BLDGCODE" ColumnName="BLDGCODE" />
+          <ScalarProperty Name="BLDGDESC" ColumnName="BLDGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

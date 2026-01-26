@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "TabExample";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>TabExample</h2>
+
+<div class="col-sm-12">
+    <h3>Details of sales</h3>
+    <hr />
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- required for floating -->
+            <!-- Nav tabs -->
+            <ul class="nav nav-pills nav-justified">
+                <li class="active"><a href="#Reg-v" data-toggle="tab">Region Wise details</a></li>
+                <li><a href="#State-v" data-toggle="tab">State Wise details</a></li>
+                <li><a href="#Excu-v" data-toggle="tab">Excutive Wise details</a></li>
+                <li><a href="#Excusc-v" data-toggle="tab">Excutive Sales & Colections</a></li>
+                <li class="hide"><a href="#Invoice-v" data-toggle="tab">Invoice Wise details</a></li>
+            </ul>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="Reg-v">
+                    <table class="table table-bordered text-center" cellspacing="0" width="100%" id="excu_sales">
+                        <thead class="text-center">
+                            <tr>
+                                <th class="text-center">Process</th>
+                                <th class="text-center">State</th>
+
+                                <th class="text-center">Generated</th>
+                                <th class="text-center">Approved</th>
+                                <th class="text-center">Rejected</th>
+                                <th class="text-center">Pending/Hold</th>
+                            </tr>
+                        </thead>
+                        @if (Model.region_sales_dashboard_detaildata != null)
+                        {
+                            if (Model.region_sales_dashboard_detaildata.Count != 0)
+                            {
+
+                                @*foreach (z_pr_Region_Sales_Dashboard_Assgn_Result details in Model.region_sales_dashboard_detaildata)
+                                {
+                                    <tr>
+                                        <td class="col1">@details.TDESC</td>
+                                        <td class="col1">@details.REGNDESC</td>
+
+                                        <td>@details.SRFCOUNT</td>
+                                        <td>@details.ASRFCOUNT</td>
+                                        <td>@details.RSRFCOUNT</td>
+                                        <td>@details.PSRFCOUNT</td>
+
+                                    </tr>
+                                }*@
+                            }
+                        }
+
+                    </table>
+                </div>
+                <div class="tab-pane" id="State-v">
+                    <table class="table table-bordered text-center" cellspacing="0" width="100%" id="myTable">
+                        <tbody>
+                            <tr>
+                                <th class="text-center">Process</th>
+                                <th class="text-center">State</th>
+
+                                <th class="text-center">Generated</th>
+                                <th class="text-center">Approved</th>
+                                <th class="text-center">Rejected</th>
+                                <th class="text-center">Hold</th>
+                            </tr>
+                            @if (Model.sales_dashboard_detaildata != null)
+                            {
+                                if (Model.sales_dashboard_detaildata.Count != 0)
+                                {
+                                    @*foreach (z_pr_Sales_Dashboard_Assgn_Result details in Model.sales_dashboard_detaildata)
+                                    {
+                                        <tr>
+                                            <td class="col1">@details.TDESC</td>
+                                            <td class="col1">@details.STATEDESC</td>
+
+                                            <td>@details.SRFCOUNT</td>
+                                            <td>@details.ASRFCOUNT</td>
+                                            <td>@details.RSRFCOUNT</td>
+                                            <td>@details.PSRFCOUNT</td>
+                                        </tr>
+                                    }*@
+                                }
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane" id="Excu-v">
+                    <table class="table table-bordered text-center" cellspacing="0" width="100%" id="excu">
+                        <thead class="text-center">
+                            <tr>
+                                <th class="text-center">Process</th>
+                                <th class="text-center">Excutive</th>
+                                @*<th class="text-center">State</th>*@
+                                <th class="text-center">Generated</th>
+                                <th class="text-center">Approved</th>
+                                <th class="text-center">Rejected</th>
+                                <th class="text-center">Hold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.sales_dashboard_detaildata_exce != null)
+                            {
+                                if (Model.sales_dashboard_detaildata_exce.Count != 0)
+                                {
+
+                                    @*foreach (z_pr_Sales_Executive_Sales_Dashboard_Assgn_Result details in Model.sales_dashboard_detaildata_exce)
+                                    {
+                                        <tr>
+                                            <td class="col1">@details.TDESC</td>
+                                            <td class="col1">@details.EXECNAME</td>
+
+                                            <td>@details.SRFCOUNT</td>
+                                            <td>@details.ASRFCOUNT</td>
+                                            <td>@details.RSRFCOUNT</td>
+                                            <td>@details.PSRFCOUNT</td>
+                                        </tr>
+                                    }*@
+                                }
+                            }
+
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="tab-pane" id="Excusc-v">
+                    <table class="table table-bordered text-center" cellspacing="0" width="100%" id="excu_sales">
+                        <thead class="text-center">
+                            <tr>
+                                <th class="text-center">State</th>
+                                <th class="text-center">Excutive</th>
+                                <th class="text-center">Sales</th>
+                                <th class="text-center">Collections</th>
+                                <th class="text-center">Balance</th>
+                                @*<th class="text-center">Yet to approve</th>*@
+                            </tr>
+                        </thead>
+                        @if (Model.sales_dashboard_detaildata_exce_sales != null)
+                        {
+                            if (Model.sales_dashboard_detaildata_exce_sales.Count != 0)
+                            {
+
+                                @*foreach (z_pr_Sales_Executive_Sales_Collection_Dashboard_Assgn_Result details in Model.sales_dashboard_detaildata_exce_sales)
+                                {
+                                    <tr>
+
+                                        <td class="col1">@details.EXECNAME</td>
+                                        <td class="col1">@details.STATEDESC</td>
+
+                                        <td>@details.SAMT</td>
+                                        <td>@details.RAMT</td>
+                                        <td>@details.BAMT</td>
+
+                                    </tr>
+                                }*@
+                            }
+                        }
+
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+</div> 

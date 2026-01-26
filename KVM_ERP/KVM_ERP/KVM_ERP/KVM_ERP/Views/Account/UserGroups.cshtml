@@ -1,0 +1,96 @@
+﻿@model KVM_ERP.Models.AccountViewModels.SelectUserGroupsViewModel
+@{
+    ViewBag.Title = "User Group Assignments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var allGroups = (IEnumerable<Group>)ViewBag.AllGroups ?? Enumerable.Empty<Group>();
+    var selected = (System.Collections.Generic.HashSet<int>)ViewBag.Selected ?? new System.Collections.Generic.HashSet<int>();
+    var userName = ViewBag.UserName as string ?? "";
+}
+
+<div class="container py-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="fa fa-user-group me-2"></i> User Group Assignments</h3>
+        </div>
+        <div class="card-body">
+            <h5 class="text-primary">Group Assignments</h5>
+            <p class="text-muted">Manage group memberships for user: <strong>@Html.DisplayFor(model => model.UserName)</strong></p>
+            @using (Html.BeginForm("UserGroups", "Account", new { id = userName }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:100px;">Select</th>
+                                <th>Group Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var g in allGroups)
+                        {
+                            var isChecked = selected.Contains(g.Id);
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="groupIds" value="@g.Id" @(isChecked ? "checked=\"checked\"" : "") />
+                                </td>
+                                <td>@g.Name</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save Changes</button>
+                    <a href="@Url.Action("Index","Account")" class="btn btn-secondary"><i class="fa fa-times me-1"></i> Cancel</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 8px;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem 2rem;
+    }
+
+    .table th {
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn {
+        min-width: 160px;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Enable Bootstrap 5 validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}

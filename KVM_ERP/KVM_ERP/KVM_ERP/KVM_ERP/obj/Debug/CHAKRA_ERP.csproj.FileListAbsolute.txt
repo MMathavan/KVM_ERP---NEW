@@ -1,0 +1,539 @@
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll.config
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.pdb
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.CrystalReports.Engine.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.ReportSource.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.Shared.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Web.Infrastructure.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Owin.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\WebGrease.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\stdole.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.pdb
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.pdb
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CoreCompileInputs.cache
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CopyComplete
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.pdb
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll.config
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.pdb
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.CrystalReports.Engine.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.ReportSource.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.Shared.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Web.Infrastructure.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Owin.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\WebGrease.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\stdole.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.pdb
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.pdb
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.xml
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CoreCompileInputs.cache
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CopyComplete
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.dll
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.pdb
+E:\wetransfer_chakra_erp-rar_2023-09-15_1912\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.AssemblyReference.cache
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll.config
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.pdb
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.CrystalReports.Engine.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.ReportSource.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.Shared.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Owin.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\WebGrease.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\stdole.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.pdb
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.pdb
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.xml
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.AssemblyReference.cache
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CoreCompileInputs.cache
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CopyComplete
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.dll
+C:\Users\admin\Desktop\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.pdb
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll.config
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.pdb
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.CrystalReports.Engine.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.ReportSource.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.Shared.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Web.Infrastructure.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Owin.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\WebGrease.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\stdole.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.pdb
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.pdb
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.xml
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.AssemblyReference.cache
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CoreCompileInputs.cache
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CopyComplete
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.dll
+\\server\Filesharing new\saranya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.pdb
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll.config
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.pdb
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.CrystalReports.Engine.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.ReportSource.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.Shared.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Web.Infrastructure.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Owin.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\WebGrease.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\stdole.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.pdb
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.pdb
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.xml
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CoreCompileInputs.cache
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CopyComplete
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.dll
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.pdb
+E:\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.AssemblyReference.cache
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll.config
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.pdb
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.CrystalReports.Engine.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.ReportSource.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.Shared.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Web.Infrastructure.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Owin.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\WebGrease.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\stdole.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.pdb
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.pdb
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.xml
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.AssemblyReference.cache
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CoreCompileInputs.cache
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CopyComplete
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.dll
+D:\Ilaya\CHAKRA_ERP\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.pdb
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll.config
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.pdb
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.CrystalReports.Engine.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.ReportSource.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.Shared.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Web.Infrastructure.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Owin.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\WebGrease.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\stdole.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.pdb
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.pdb
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.xml
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CoreCompileInputs.cache
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CopyComplete
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.dll
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.pdb
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll.config
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.pdb
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.CrystalReports.Engine.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.ReportSource.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.Shared.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Web.Infrastructure.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Owin.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\WebGrease.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\stdole.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.pdb
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.pdb
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.xml
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.AssemblyReference.cache
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CoreCompileInputs.cache
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.Up2Date
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.dll
+D:\_ILAYA\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.pdb
+D:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.AssemblyReference.cache
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll.config
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CHAKRA_ERP.pdb
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.CrystalReports.Engine.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.ReportSource.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\CrystalDecisions.Shared.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Web.Infrastructure.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Owin.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\WebGrease.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\stdole.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.pdb
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ClosedXML.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\DocumentFormat.OpenXml.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\EntityFramework.SqlServer.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\ExcelNumberFormat.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\log4net.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Core.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.AspNet.Identity.Owin.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Host.SystemWeb.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.Cookies.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Microsoft.Owin.Security.OAuth.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Helpers.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Mvc.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Optimization.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.Razor.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Deployment.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\System.Web.WebPages.Razor.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Antlr3.Runtime.pdb
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\bin\Newtonsoft.Json.xml
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.AssemblyReference.cache
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.CoreCompileInputs.cache
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.csproj.Up2Date
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.dll
+E:\WEB_APP_SRC\CHAKRA_ERP\CHAKRA_ERP\obj\Debug\CHAKRA_ERP.pdb

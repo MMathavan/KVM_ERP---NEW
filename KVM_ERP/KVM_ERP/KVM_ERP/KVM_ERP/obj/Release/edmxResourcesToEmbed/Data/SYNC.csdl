@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SYNCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="NSYNC_ERPEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="SP_UNITMASTER_INSRT">
+      <Parameter Name="PID" Mode="In" Type="Int32" />
+      <Parameter Name="PDESC" Mode="In" Type="String" />
+      <Parameter Name="PCODE" Mode="In" Type="String" />
+      <Parameter Name="PCUSRID" Mode="In" Type="Int32" />
+      <Parameter Name="PLMUSRID" Mode="In" Type="Int32" />
+      <Parameter Name="PDISPSTATUS" Mode="In" Type="Int16" />
+      <Parameter Name="PPRCSDATE" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Search_Roles" ReturnType="Collection(SYNCModel.pr_Search_Roles_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchAccountGroup" ReturnType="Collection(SYNCModel.pr_SearchAccountGroup_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchAccountHeadMaster" ReturnType="Collection(SYNCModel.pr_SearchAccountHeadMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchCompanyMaster" ReturnType="Collection(SYNCModel.pr_SearchCompanyMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchCostFactorMaster" ReturnType="Collection(SYNCModel.pr_SearchCostFactorMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchCustomerMaster" ReturnType="Collection(SYNCModel.pr_SearchCustomerMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchDepartmentMaster" ReturnType="Collection(SYNCModel.pr_SearchDepartmentMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchDesignationMaster" ReturnType="Collection(SYNCModel.pr_SearchDesignationMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchEmployeeMaster" ReturnType="Collection(SYNCModel.pr_SearchEmployeeMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchHSNCodeMaster" ReturnType="Collection(SYNCModel.pr_SearchHSNCodeMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchLocationMaster">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchMaterialGroupMaster" ReturnType="Collection(SYNCModel.pr_SearchMaterialGroupMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchMaterialMaster" ReturnType="Collection(SYNCModel.pr_SearchMaterialMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="AspNetUsers" EntityType="SYNCModel.AspNetUser" />
+    <FunctionImport Name="PR_ACCOUNTINGYEAR_ID_CHK" ReturnType="Collection(SYNCModel.PR_ACCOUNTINGYEAR_ID_CHK_Result)">
+      <Parameter Name="PFYear" Mode="In" Type="Int32" />
+      <Parameter Name="PTYear" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" ReturnType="Collection(SYNCModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result)">
+      <Parameter Name="PCompId" Mode="In" Type="Int32" />
+      <Parameter Name="PYrId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="VW_USER_DETAILS" EntityType="SYNCModel.VW_USER_DETAILS" />
+    <FunctionImport Name="pr_SearchSalesEInvoice" ReturnType="Collection(SYNCModel.pr_SearchSalesEInvoice_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="PSDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PEDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PCompyid" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="pr_Search_Roles_Result">
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Descp" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="SDPTNAME" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchAccountGroup_Result">
+    <Property Type="String" Name="ACHEADGCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ACHEADGID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchAccountHeadMaster_Result">
+    <Property Type="String" Name="ACHEADCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ACHEADID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchCompanyMaster_Result">
+    <Property Type="String" Name="COMPCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="COMPPHN1" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPCPRSN" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPMAIL" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="COMPID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchCostFactorMaster_Result">
+    <Property Type="String" Name="CFMODE" Nullable="true" MaxLength="6" />
+    <Property Type="String" Name="CFDESC" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="CFEXPR" Nullable="true" Precision="18" Scale="3" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="CFID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchCustomerMaster_Result">
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATETDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEPNAME" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="CATEPHN3" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATEMAIL" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="CATEID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchDepartmentMaster_Result">
+    <Property Type="String" Name="DEPTCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DEPTDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="DEPTID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchDesignationMaster_Result">
+    <Property Type="String" Name="DSGNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DSGNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="DSGNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchEmployeeMaster_Result">
+    <Property Type="String" Name="CATECODE" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATENAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="CATEPNAME" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="CATEPHN3" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CATEMAIL" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="CATEID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchHSNCodeMaster_Result">
+    <Property Type="String" Name="HSNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="HSNDESC" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="TAXEXPRN" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="CGSTEXPRN" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="SGSTEXPRN" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="IGSTEXPRN" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="HSNID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchMaterialGroupMaster_Result">
+    <Property Type="String" Name="MTRLGCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="MTRLGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="MTRLGID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchMaterialMaster_Result">
+    <Property Type="String" Name="MTRLCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="MTRLGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="MTRLDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PACKMDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="UNITCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="HSNCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="MTRLID" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Discriminator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="NPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BrnchId" Type="Int32" Nullable="false" />
+    <Property Name="UBrnchName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DBrnchId" Type="Int32" Nullable="false" />
+    <Property Name="DeptName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="PR_ACCOUNTINGYEAR_ID_CHK_Result">
+    <Property Type="Int32" Name="YRID" Nullable="false" />
+    <Property Type="String" Name="YRDESC" Nullable="false" MaxLength="15" />
+    <Property Type="Int32" Name="YRID1" Nullable="false" />
+    <Property Type="DateTime" Name="FDATE" Nullable="false" Precision="16" />
+    <Property Type="DateTime" Name="TDATE" Nullable="false" Precision="16" />
+    <Property Type="String" Name="YRDESC1" Nullable="false" MaxLength="15" />
+    <Property Type="Int32" Name="CUSRID" Nullable="false" />
+    <Property Type="DateTime" Name="PRCSDATE" Nullable="false" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+    <Property Type="Int32" Name="COMPYID" Nullable="false" />
+    <Property Type="Int32" Name="COMPID" Nullable="false" />
+    <Property Type="Int32" Name="YRID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="VW_USER_DETAILS">
+    <Key>
+      <PropertyRef Name="GroupId" />
+      <PropertyRef Name="GroupName" />
+    </Key>
+    <Property Name="GroupId" Type="Int32" Nullable="false" />
+    <Property Name="GroupName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="pr_SearchSalesEInvoice_Result">
+    <Property Type="DateTime" Name="TRANDATE" Nullable="true" Precision="16" />
+    <Property Type="String" Name="TRANDNO" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TRANREFNO" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="TRANREFNAME" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="TRANNAMT" Nullable="true" Precision="18" Scale="3" />
+    <Property Type="String" Name="ACKNO" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="9" />
+    <Property Type="Int32" Name="TRANMID" Nullable="true" />
+  </ComplexType>
+</Schema>

@@ -1,0 +1,147 @@
+﻿@model IEnumerable<KVM_ERP.Models.Group>
+@{
+    ViewBag.Title = "Groups Management";
+}
+
+<div class="container-fluid px-4 py-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">
+                <i class="bi bi-people-fill me-2"></i> Groups
+            </h3>
+            <a href="@Url.Action("Create", "Groups")" class="btn btn-light btn-sm">
+                <i class="bi bi-plus-circle me-1"></i> Create New Group
+            </a>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Group Name</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-circle bg-primary text-white me-3">
+                                            <i class="bi bi-people-fill"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">@Html.DisplayFor(modelItem => item.Name)</h6>
+                                            <small class="text-muted">ID: @item.Id</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group" role="group">
+                                        <a href="@Url.Action("Edit", "Groups", new { id = item.Id })"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil-square me-1"></i> Edit
+                                        </a>
+                                        <a href="@Url.Action("GroupRoles", "Groups", new { id = item.Id })"
+                                           class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-key-fill me-1"></i> Permissions
+                                        </a>
+                                        <a href="javascript:void(0);"
+                                           class="btn btn-sm btn-outline-danger delete-group"
+                                           data-url="@Url.Action("Delete", "Groups", new { id = item.Id })">
+                                            <i class="bi bi-trash-fill me-1"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted small">
+                    Showing <strong>@Model.Count()</strong> groups
+                </div>
+                @*<div>
+                        <a href="@Url.Action("Create", "Groups")" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-circle me-1"></i> Add New Group
+                        </a>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deleteButtons = document.querySelectorAll('.delete-group');
+            deleteButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const deleteUrl = this.getAttribute('data-url');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "This will permanently delete the group!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirect to Delete action
+                            window.location.href = deleteUrl;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}
+
+
+<style>
+    .icon-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+    }
+
+    .btn-group .btn {
+        border-radius: 4px;
+        margin-left: 5px;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .card-footer {
+        padding: 1rem 1.5rem;
+    }
+</style>

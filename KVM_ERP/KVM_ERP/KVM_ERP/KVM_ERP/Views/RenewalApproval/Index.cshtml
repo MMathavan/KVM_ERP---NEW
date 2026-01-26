@@ -1,0 +1,541 @@
+@model List<KVM_ERP.Controllers.RenewalRequestViewModel>
+@{
+    ViewBag.Title = "Renewal Approval";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 40px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="90" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        pointer-events: none;
+    }
+
+    .page-header h1 {
+        margin: 0;
+        font-size: 3rem;
+        font-weight: 800;
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-header .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.95;
+        margin-top: 15px;
+        font-weight: 400;
+        position: relative;
+        z-index: 1;
+    }
+
+
+    .renewal-cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .renewal-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        position: relative;
+    }
+
+    .renewal-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+        transition: all 0.3s ease;
+    }
+
+    .renewal-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .renewal-card:hover::before {
+        background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        text-align: center;
+        position: relative;
+    }
+
+    .card-header::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 10px solid #764ba2;
+    }
+
+    .card-header h4 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header .user-email {
+        font-size: 0.95rem;
+        opacity: 0.9;
+        margin-top: 8px;
+        font-weight: 400;
+    }
+
+    .card-body {
+        padding: 30px 25px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+    }
+
+    .info-row:hover {
+        background: rgba(102, 126, 234, 0.02);
+        margin: 0 -15px;
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #495057;
+        display: flex;
+        align-items: center;
+        font-size: 0.95rem;
+    }
+
+    .info-label i {
+        margin-right: 12px;
+        width: 20px;
+        color: #667eea;
+        font-size: 1.1rem;
+    }
+
+    .info-value {
+        color: #212529;
+        font-weight: 600;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 0.95rem;
+    }
+
+    .card-actions {
+        padding: 25px;
+        background: #f8f9fa;
+        text-align: center;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .btn-approve, .btn-reject {
+        border: none;
+        padding: 14px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+        min-width: 120px;
+    }
+
+    .btn-approve {
+        background: linear-gradient(135deg, #10ac84, #00d2d3);
+        color: white;
+        box-shadow: 0 8px 20px rgba(16, 172, 132, 0.3);
+    }
+
+    .btn-approve:hover {
+        background: linear-gradient(135deg, #00d2d3, #10ac84);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(16, 172, 132, 0.4);
+    }
+
+    .btn-reject {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        color: white;
+        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn-reject:hover {
+        background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+    }
+
+    .no-requests {
+        text-align: center;
+        padding: 80px 40px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .no-requests::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 25px 25px 0 0;
+    }
+
+    .no-requests i {
+        font-size: 5rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 25px;
+        opacity: 0.8;
+    }
+
+    .no-requests h3 {
+        color: #495057;
+        margin-bottom: 15px;
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .no-requests p {
+        color: #6c757d;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .loading {
+        opacity: 0.6;
+        pointer-events: none;
+        position: relative;
+    }
+
+    .loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(102, 126, 234, 0.3);
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        z-index: 10;
+    }
+
+    @@keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .alert {
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border: none;
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        color: #155724;
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+        color: #721c24;
+    }
+
+    .container-fluid {
+        padding: 30px;
+    }
+
+    @@media (max-width: 768px) {
+        .renewal-cards-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .page-header h1 {
+            font-size: 2.2rem;
+        }
+
+        .card-actions {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-approve, .btn-reject {
+            width: 100%;
+        }
+
+        .container-fluid {
+            padding: 15px;
+        }
+    }
+
+    /* Add smooth entrance animations */
+    .renewal-card {
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    @@keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+</style>
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h1><i class="fas fa-user-check"></i> Renewal Approval</h1>
+        <div class="subtitle">Manage subscription renewal requests</div>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div id="messageContainer"></div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="renewal-cards-container" id="renewalCardsContainer">
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var request in Model)
+                    {
+                        <div class="renewal-card" id="card-@request.SubscriptionId">
+                            <div class="card-header">
+                                <h4>@request.UserName</h4>
+                                <div class="user-email">@request.Email</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-row">
+                                    <div class="info-label">
+                                        <i class="fas fa-crown"></i> Plan
+                                    </div>
+                                    <div class="info-value">@request.PlanName</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">
+                                        <i class="fas fa-calendar-plus"></i> Request Date
+                                    </div>
+                                    <div class="info-value">@request.RequestDate.ToString("dd MMM yyyy, hh:mm tt")</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">
+                                        <i class="fas fa-play"></i> Start Date
+                                    </div>
+                                    <div class="info-value">@request.StartDate.ToString("dd MMM yyyy")</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">
+                                        <i class="fas fa-calendar-times"></i> Expiry Date
+                                    </div>
+                                    <div class="info-value">@request.ExpiryDate.ToString("dd MMM yyyy")</div>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-approve" onclick="approveRenewal(@request.SubscriptionId)">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="btn-reject" onclick="rejectRenewal(@request.SubscriptionId)">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12">
+                        <div class="no-requests">
+                            <i class="fas fa-inbox"></i>
+                            <h3>No Pending Requests</h3>
+                            <p>There are currently no subscription renewal requests waiting for approval.</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    function showMessage(message, type) {
+        var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        var icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
+        
+        var messageHtml = '<div class="alert ' + alertClass + '">' +
+                         '<i class="fas ' + icon + '"></i> ' + message +
+                         '</div>';
+        
+        $('#messageContainer').html(messageHtml);
+        
+        // Auto-hide after 5 seconds
+        setTimeout(function() {
+            $('#messageContainer').fadeOut();
+        }, 5000);
+    }
+
+    function approveRenewal(subscriptionId) {
+        if (!confirm('Are you sure you want to approve this renewal request?')) {
+            return;
+        }
+
+        var card = $('#card-' + subscriptionId);
+        card.addClass('loading');
+
+        $.ajax({
+            url: '@Url.Action("ApproveRenewal", "RenewalApproval")',
+            type: 'POST',
+            data: { subscriptionId: subscriptionId },
+            success: function(response) {
+                if (response.success) {
+                    showMessage(response.message, 'success');
+                    // Remove the card with animation
+                    card.fadeOut(500, function() {
+                        $(this).remove();
+                        updatePendingCount();
+                    });
+                } else {
+                    showMessage(response.message, 'error');
+                    card.removeClass('loading');
+                }
+            },
+            error: function() {
+                showMessage('An error occurred while processing the request.', 'error');
+                card.removeClass('loading');
+            }
+        });
+    }
+
+    function rejectRenewal(subscriptionId) {
+        if (!confirm('Are you sure you want to reject this renewal request? This action cannot be undone.')) {
+            return;
+        }
+
+        var card = $('#card-' + subscriptionId);
+        card.addClass('loading');
+
+        $.ajax({
+            url: '@Url.Action("RejectRenewal", "RenewalApproval")',
+            type: 'POST',
+            data: { subscriptionId: subscriptionId },
+            success: function(response) {
+                if (response.success) {
+                    showMessage(response.message, 'success');
+                    // Remove the card with animation
+                    card.fadeOut(500, function() {
+                        $(this).remove();
+                        updatePendingCount();
+                    });
+                } else {
+                    showMessage(response.message, 'error');
+                    card.removeClass('loading');
+                }
+            },
+            error: function() {
+                showMessage('An error occurred while processing the request.', 'error');
+                card.removeClass('loading');
+            }
+        });
+    }
+
+    function updatePendingCount() {
+        var remainingCards = $('.renewal-card').length;
+        
+        if (remainingCards === 0) {
+            $('#renewalCardsContainer').html(
+                '<div class="col-12">' +
+                '<div class="no-requests">' +
+                '<i class="fas fa-inbox"></i>' +
+                '<h3>No Pending Requests</h3>' +
+                '<p>There are currently no subscription renewal requests waiting for approval.</p>' +
+                '</div>' +
+                '</div>'
+            );
+        }
+    }
+</script>

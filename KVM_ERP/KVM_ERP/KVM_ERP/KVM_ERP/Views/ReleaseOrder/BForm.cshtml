@@ -1,0 +1,893 @@
+﻿@using ClubMembership.Models;
+@model ClubMembership.Models.ReleaseOrderDetail
+
+
+@{
+    Layout = "~/Views/Shared/_PopupLayout.cshtml";
+}
+
+@*<link rel="stylesheet" type="text/css" href="~/crmassets/select2/css/select2.min.css" />*@
+
+<style>
+    .small {
+        border: 0;
+        width: 30px;
+        max-width: 25%;
+        background: none;
+    }
+
+    .stk {
+        background: #808080;
+        color: #fff;
+    }
+
+    .sm {
+        width: 50px;
+        max-width: 35%;
+    }
+
+    #TRANCBX:hover {
+        cursor: pointer;
+    }
+</style>
+
+<div class="modal-header">
+    <button type="button" class="close hide" data-dismiss="modal" aria-hidden="true" id="btnClosePopup">&times;</button>
+    <h4 class="modal-title"> Release Order Details for</h4>
+
+</div>
+<br />
+<form method="post" action="@Url.Action("B_Savedata","NewReceipt")" id="batchfrm">
+
+
+    <div class="clearfix"> </div>
+
+    <div class="msg" hidden style="margin-left:0;margin-right:0"> </div>
+    <div class="msg_error" hidden style="margin-left:0;margin-right:0"> </div>
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-lg-2 hide">
+                    <div class="form-group ">
+                        @Html.TextBoxFor(model => Model.RODID, new { @class = "form-control RODID", @id = "RODID" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group ">
+                        <label>DOR</label>
+                        @Html.TextBoxFor(model => Model.DOR, "{0:dd/MM/yyyy}", new { @class = "form-control DOR datepicker", @id = "DOR", @data_val = "false", @tabindex = "-1" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group ">
+                        <label>ADOR</label>
+                        @Html.TextBoxFor(model => Model.ADOR, "{0:dd/MM/yyyy}", new { @class = "form-control ADOR datepicker", @id = "ADOR", @data_val = "false", @tabindex = "-1" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group ">
+                        <label>Insertion Type</label>
+                        @Html.DropDownList("DORTYPE", null, "Select", new { @class = "form-control DORTYPE", @id = "DORTYPE", tabindex = "-1" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group ">
+                        <label>Status</label>
+                        @Html.DropDownList("DORSTATUS", null, "Select", new { @class = "form-control DORSTATUS", @id = "DORSTATUS", tabindex = "-1" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Edition<span class="req" id="lid18"> *</span></label>
+                        @Html.DropDownList("EDTNIDS", null, "Select", new { @class = "form-control custom-select  select2 EDTNIDS", @id = "EDTNIDS", tabindex = "-1" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group ">
+                        <label>Caption</label>
+                        @Html.TextBoxFor(model => Model.DORCAPTN, new { @class = "form-control DORCAPTN", @id = "DORCAPTN", @maxlength = "100", tabindex = "4" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group ">
+                        <label>Narration</label>
+                        @Html.TextBoxFor(model => Model.DORNARTN, new { @class = "form-control DORNARTN", @id = "DORNARTN", @maxlength = "100", tabindex = "4" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Parties<span class="req" id="lid18"> *</span></label>
+                        @Html.TextBoxFor(model => Model.NOP, new { @class = "form-control NOP", @id = "NOP", @maxlength = "3", tabindex = "4" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group ">
+                        <label>Space</label>
+                        @Html.TextBoxFor(model => Model.SPACE, new { @class = "form-control SPACE", @id = "SPACE", @onchange = "total()", @maxlength = "4", tabindex = "4" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group ">
+                        <label>Rate</label>
+                        @Html.TextBoxFor(model => Model.RATE, new { @class = "form-control RATE", @id = "RATE", @onchange = "total()", @maxlength = "4", tabindex = "4" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Bill Type<span class="req" id="lid18"> *</span></label>
+                        @Html.DropDownList("MUNITID", null, "Select", new { @class = "form-control custom-select  select2 MUNITID", @id = "MUNITID", tabindex = "-1" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group ">
+                        <label>Amount</label>
+                        @Html.TextBoxFor(model => Model.GAMT, new { @class = "form-control GAMT", @id = "GAMT", @maxlength = "10", tabindex = "4" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <div class="clearfix"> </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="btm_btnClosePopup">Close</button>
+        <button type="button" class="btn btn-success" id="SaveClick">Save</button>
+    </div>
+
+
+</form>
+
+
+
+
+<div class="modal-body"><div class="te"></div></div>
+
+@*<script src="~/crmassets/select2/js/select2.full.min.js"></script>
+<script src="~/crmassets/select2/js/select2.min.js"></script>
+<script src="~/crmassets/forms/select2/select2.init.js"></script>*@
+<script>
+
+        $(function () {
+            //-----date controls-------------
+            $(".datepicker").datepicker({ dateFormat: 'dd/mm/yy', maxDate: 0, });
+            var rodid = $(".RODID").val();
+            if (rodid == 0 || rodid == "") {
+                //alert("");
+                var dt = new Date();
+                var month = dt.getMonth() + 1;
+                //var date = dt.getDate() + "/" + month + "/" + dt.getFullYear();
+                //var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+
+                var pad = n => n < 10 ? "0" + n : n;
+                var date = pad(dt.getDate()) + "/" + pad(month) + "/" + dt.getFullYear();
+
+                //var datetme = time;
+                $(".DOR").val(date);
+                $(".ADOR").val(date);
+            }
+        });
+
+    function total() {
+
+        TRANNAMT = 0;
+        TRANGAMT = 0;
+
+        i = 0;
+
+        DSPACE = 0;
+        DRATE = 0;
+        TRANDGAMT = 0;
+        TRANDNAMT = 0;
+        TRANGAMT = 0;
+
+        DSPACE = $(".SPACE").val();
+        if (isNaN(DSPACE) || DSPACE == "") { DSPACE = 0; }
+        else
+            DSPACE = eval(DSPACE).toFixed(2);
+
+        $(".SPACE").val(DSPACE);
+
+        DRATE = $(".RATE").val();;
+        if (isNaN(DRATE) || DRATE == "") { DRATE = 0; }
+        else
+            DRATE = eval(DRATE).toFixed(2);
+
+        $(".RATE").val(DRATE);
+
+        TRANDGAMT = eval(DRATE * DSPACE).toFixed(2);
+        $(".GAMT").val(TRANDGAMT);//eval(TRANDRATE * TRANDQTY).toFixed(2);
+
+    }
+
+        function GetBilllNoDetail (obj) {
+            //MACHINE NAME START
+            var ldgrid = $(".V_TRANDREFID").val();
+
+            //alert(tranno);
+            //alert(tranmid);
+
+            var row = $(obj).closest('tr'); // get the row
+            //alert(ldgrid);
+
+            var rtid = row.find('.RTID');
+            var artid = rtid.val();
+
+            var artypedesc = "";;
+            //var itemid = $trCur.find("#QDREFID option:selected").val();
+            //alert(artypedesc);
+
+            var zrtid = row.find('.ARTID');
+            var rtranmid = row.find('.RTRANMID');
+            var refno = row.find('.TRANRREFNO');
+            var refdate = row.find('.TRANRREFDATE');
+            var rbalamt = row.find('.TRANBALAMT');
+            var ramt = row.find('.TRANRAMT');
+
+            var diffamt = 0;
+            diffamt = CheckAmount();
+            if (diffamt < 0) { diffamt = 0; }
+
+            var mcSelect = row.find('.TRANMID'); // get the other select in the same row
+            mcSelect.empty();
+            //alert(artid);
+
+            zrtid.val(artid);
+            rtranmid.val(0);
+            refno.val("");
+            refdate.val("");
+            rbalamt.val("0.00");
+            ramt.val("0.00");
+
+            if (artid == 1) {
+                artypedesc = "Advance";
+            }
+            else if (artid == 2)
+            {
+                artypedesc = "Agst Ref";
+            }
+            else if (artid == 3) {
+                artypedesc = "New Ref";
+            }
+            else if (artid == 4) {
+                artypedesc = "On Account";
+            }
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            today = dd + '/' + mm + '/' + yyyy;
+
+            //Hiding Invoice No Dropdown list
+            if (artid == 1 || artid == 2)
+            {
+                mcSelect.show();
+                rtranmid.show();
+                refno.hide();
+                refdate.show();
+            }
+            else
+            {
+                mcSelect.hide();
+                rtranmid.show();
+                refno.show();
+                refdate.show();
+
+                refno.val(artypedesc);
+                refdate.val(today);
+
+            }
+
+            //Load Invoice if Type is Agst Ref.
+            if (artid == 1 || artid == 2) {
+                url = "/NewReceipt/GetInvoiceNoDetail?ids=" + ldgrid + ";" + artid;// alert(url);
+                $.ajax({
+                    type: 'post',
+                    url: url, // we are calling json method
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data != "") {
+                            var count = data.length;
+                            if (count >= 1) {
+                                mcSelect.append('<option value="0" selected>Select Ref No.</option>');
+                            }
+                            $.each(data, function (i, dataval) {
+                                //if (count > 1) {
+                                mcSelect.append('<option value="' + dataval.TRANMID + '">' + dataval.BTRANDNO + '</option>');
+                                //}
+                                //else {
+                                //    mcSelect.append('<option value="' + dataval.TRANMID + '" selected>' + dataval.BTRANDNO + '</option>');
+                                //}
+                            });
+                        }
+                        else {
+                            mcSelect.append('<option value="0">' + "Select Ref No." + '</option>');
+                        }
+
+                        //GetHSNDetails(obj)
+                    },
+                    complete: function () {
+                        GetBilllDetail(obj);
+                    },
+                    error: function (ex) {
+                        alert('Failed to data ' + ex);
+                    }
+
+
+                });
+            }
+            else
+            {
+                ramt.val(diffamt.toFixed(2));
+                rbalamt.val(diffamt.toFixed(2));
+                receipttotal();
+            }
+
+
+            //MACHINE NAME END
+        }
+
+        function GetBilllDetail(obj) {
+
+            var ldgrid = $(".V_TRANDREFID").val();
+
+            var row = $(obj).closest('tr'); // get the row
+
+            var mcSelect = row.find('.TRANMID'); // get the other select in the same row
+            var tranmid = mcSelect.val();
+
+            //alert($("option:selected", mcSelect).text());
+
+            var rtranmid = row.find('.RTRANMID');
+            var refno = row.find('.TRANRREFNO');
+            var refdate = row.find('.TRANRREFDATE');
+            var ramt = row.find('.TRANRAMT');
+            var balamt = row.find('.TRANBALAMT');
+
+            var rtid = row.find('.RTID');
+            var artid = rtid.val();
+
+            //var atranmid = rtranmid.val();
+            var atranno = $("option:selected", mcSelect).text()
+            atranno = atranno.replace('/', '~');
+
+            rtranmid.val(0);
+            refno.val("");
+            refdate.val("");
+            ramt.val("0.00");
+            balamt.val("0.00");
+
+            var diffamt = 0;
+            diffamt = CheckAmount();
+            if (diffamt < 0) { diffamt = 0;}
+
+            url = "/NewReceipt/GetInvoiceDetail?ids=" + ldgrid + ";" + artid + ";" + tranmid + ";" + atranno; //alert(url);
+            $.ajax({
+                type: 'post',
+                url: url, // we are calling json method
+                dataType: 'json',
+                success: function (data) {
+                    if (data != "") {
+                        $.each(data, function (i, dataval)
+                        {
+                            rtranmid.val(dataval.TRANMID);
+                            refno.val(dataval.TRANDNO);
+                            //ramt.val(dataval.TRANBAMT.toFixed(2));
+                            //balamt.val(dataval.TRANBAMT.toFixed(2));
+                            if (diffamt >= eval(dataval.TRANBAMT).toFixed(2)) {
+                                ramt.val(dataval.TRANBAMT.toFixed(2));
+                                balamt.val(dataval.TRANBAMT.toFixed(2));
+                            }
+                            else
+                            {
+                            ramt.val(diffamt.toFixed(2));
+                            balamt.val(diffamt.toFixed(2));
+
+                            }
+
+                            refdate.val(dataval.TRANDATE);//.dateFormat("dd/MM/yyyy");
+
+
+                        });
+                    }
+                },
+                complete: function () {
+                    receipttotal();
+                    //GetMachineSerialDetails(obj);
+                },
+                error: function (ex) {
+                    alert('Failed to data ' + ex);
+                }
+            });
+        }
+
+        function PopulateDropdown() {
+            i = 0;
+            $('.TRANRID').each(function () {
+
+                ldgrid = $(".V_TRANDREFID").val();
+                mcateaid = $(".MCATEAID option:selected").val();
+
+                var artid = $(".ARTID")[i].value.trim();
+                qd_tranmid = $(".RTRANMID")[i].value.trim();
+
+                //alert(artid);
+                var $tableBody = $('#SUB_TDETAIL').find("tbody")
+                $trCur = $tableBody.find("tr:eq(" + i + ")");
+
+                var rtranmid = $trCur.find('.RTRANMID');
+                var refno = $trCur.find('.TRANRREFNO');
+                var refdate = $trCur.find('.TRANRREFDATE');
+
+                var mcSelect = $trCur.find('.TRANMID');
+                mcSelect.empty();
+
+                if (artid == 1 || artid == 2) {
+                    mcSelect.show();
+                    rtranmid.show();
+                    refno.show();
+                    refdate.show();
+                }
+                else {
+                    mcSelect.hide();
+                    rtranmid.show();
+                    refno.show();
+                    refdate.show();
+
+                }
+                if (eval(artid) == 1 || eval(artid) == 2)
+                {
+                    mcSelect.append('<option value="0">Select Ref No.</option>');
+                    mcSelect.append('<option value="' + rtranmid.val() + '" selected>' + refno.val() + '</option>');
+                }
+                else {
+                    mcSelect.append('<option value="0" selected>Select Ref No.</option>');
+                }
+
+                //if (eval(artid) == 111 || eval(artid) == 211) {
+                //    url = "/NewReceipt/GetInvoiceNoCtrlDetail?id=" + qd_tranmid;// + "~" + mcateaid + "~" + stypeid;// alert(url);
+                //    $.ajax({
+                //        type: 'post',
+                //        url: url, // we are calling json method
+                //        dataType: 'json',
+                //        success: function (data) {
+                //            if (data != "") {
+                //                var count = data.length;
+                //                if (count > 0) {
+                //                    mcSelect.append('<option value="0" selected>Select Ref No.</option>');
+                //                }
+                //                $.each(data, function (i, dataval) {
+                //                    //if (count > 1) {
+                //                    //    mcSelect.append('<option value="' + dataval.TRANMID + '">' + dataval.TRANDNO + '</option>');
+                //                   // }
+                //                   // else {
+                //                        mcSelect.append('<option value="' + dataval.TRANMID + '" selected>' + dataval.TRANDNO + '</option>');
+                //                   // }
+                //                });
+                //            }
+                //            else {
+                //                mcSelect.append('<option value="0">' + "Select Ref No." + '</option>');
+                //            }
+
+                //            //GetHSNDetails(obj)
+                //        },
+                //        complete: function () {
+                //            //GetMachineSerialDetails(obj);
+                //        },
+                //        error: function (ex) {
+                //            alert('Failed to data ' + ex);
+                //        }
+
+
+                //    });
+                //}
+                //else {
+                //    mcSelect.append('<option value="0" selected>Select Ref No.</option>');
+                //}
+
+
+                i++;
+            });
+
+        }
+
+        function QRefNoHide() {
+            var fstatus = 0;
+            //alert("a");
+            $('#SUB_TDETAIL :text,#SUB_TDETAIL select').each(function () {
+                //
+                //alert(this.id + " : " + this.value);
+                switch (this.id) {
+                    case "RTID":
+                        fstatus = 0;
+                        if ($.trim(this.value) == "1" || $.trim(this.value) == "2") {
+                            //alert(this.value);
+                            fstatus = 1;
+                        }
+                        break;
+                    case "TRANMID":
+                        if (fstatus == 1) {
+                            $(this).show();
+                        }
+                        else {
+                            $(this).hide();
+                        }
+                        break;
+                    case "TRANRREFNO":
+                        if (fstatus == 0) {
+                            $(this).show();
+                        }
+                        else {
+                            $(this).hide();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+
+        function ExecTMP() {
+            url = "/NewReceipt/TMP_INSERT_DEL";
+            $.ajax({
+                url: url,
+                async: false,
+                success: function (data) {
+                    //alert();
+                }
+            });
+            var k = 0;
+            $(".TRANRID").each(function () {
+                if ($(".TRANRID")[k].value == 0) {
+                    var rtid = $(".RTID")[k].value;
+                    var tranno = $(".TRANRREFNO")[k].value;
+                    var tranmid = $(".RTRANMID")[k].value;
+                    var ramt = $(".TRANRAMT")[k].value;
+                    var zramt = 0;
+                    //alert(tranno);
+                    //alert(tranmid);
+                    if (ramt == "" || ramt == 0) { ramt = 0; } else { zramt = ramt.replace('.', '~'); }
+                    tranno = tranno.replace('/', '~');
+                    //if ($(".TRANDAID")[k].value != 0) {
+                    url = "/NewReceipt/TMP_INSERT?ids=" + rtid + ";" + tranmid + ";" + tranno + ";" + zramt;
+                    //alert(url);
+
+                    $.ajax({
+                        url: url,
+                        async: false,
+                        success: function (data) {
+                            //alert(data);
+
+                        }
+                    });
+                    // }
+                }
+                k++;
+            })
+
+        }
+
+        function pad2(n) {
+            return (n < 10 ? '0' : '') + n;
+        }
+
+        //
+        $("#SaveClick").click(function () {
+            var formdata = ($("#batchfrm").serialize());
+
+            var savename = "";
+            var vtrandid = $(".V_TRANDID").val();
+            var tamt = $(".ZTRANRAMT").val();
+            if (vtrandid > 0) { savename = "B_Org_Savedata"; } else { savename = "B_Tmp_Savedata" };
+            var y = 0; var boolcount = 0;
+            //alert("a");
+            //
+            //$('#TDETAIL :text, #TDETAIL select').each(function () {
+            //});
+            //
+            var billbad = 0;
+            var bstatus = 0;
+            var rtid = 0;
+            $('#batchfrm #SUB_TDETAIL input, #SUB_TDETAIL select').each(function () {
+                //alert(this.id + "--" + $.trim(this.value));
+                switch (this.id) {
+                    case "RTID":
+                        //alert($.trim(this.value));
+                        if ($.trim(this.value) == "" || $.trim(this.value) == "Select Type") {
+                            alert("Please Select the Type Properly !!");
+                            billbad++;
+                            this.focus();
+                        }
+                        else
+                        {
+                            rtid = $.trim(this.value);
+                        }
+                        if (billbad >= 1) { return false; } else { bstatus = 1; }
+                        break;
+                    case "TRANMID":
+                        //alert(rtid);
+                        if (rtid == 1 || rtid == 2)
+                        {
+                            if ($.trim(this.value) == "" || $.trim(this.value) == 0) {
+                                alert("Please Select the Bill Ref No.Properly !!");
+                                billbad++;
+                                this.focus();
+                            }
+                            if (billbad >= 1) { return false; } else { bstatus = 1; }
+                        }
+                        break;
+                    case "TRANRREFNO":
+                        //alert($.trim(this.value));
+                        if (rtid > 2)// if (rtid != 2)
+                        {
+                            if ($.trim(this.value) == "") {
+                                alert("Please Select Or Enter the Bill Ref No.Properly !!");
+                                billbad++;
+                                this.focus();
+                            }
+                            if (billbad >= 1) { return false; } else { bstatus = 1; }
+                        }
+                        break;
+                    case "TRANRAMT":
+                        //alert($.trim(this.value));
+                        if ($.trim(this.value) == "" || $.trim(this.value) == 0) {
+                            alert("Please Enter the Amount Properly !!");
+                            billbad++;
+                            this.focus();
+                        }
+                        if (billbad >= 1) { return false; } else { bstatus = 1; }
+                        break;
+                    default:
+                        if (bstatus == 1) {
+                            if ($.trim(this.value) == "") billbad++;
+                        }
+
+
+                }
+
+                //switch (this.id) {
+                //    case "booltype":
+                //          if ($.trim(this.value) == "true") { boolcount++;}
+
+                //}
+            });
+            //alert(billbad);
+            if (billbad < 1) {
+
+                //return true;
+
+            }
+            else {
+                //alert("Please Check the Ink Detail before save");
+                //$(".M_ITEMID").focus();
+                return false;
+            }
+            if (CheckAmount() != 0) {
+                //alert("a");
+                //alert(CheckAmount());
+                alert("Please Check the Adjusted Amount !!");
+                return false;
+
+            }
+
+            var zurl = "/NewReceipt/" + savename;
+
+            //alert(zurl);
+            $.ajax({
+                type: 'post',
+                url: zurl,//'@Url.Action("B_Tmp_Savedata","NewReceipt")', // we are calling json method
+                data: formdata,
+                success: function (data) {
+                    if (data == "saved") {
+                        //alert(eval(tamt));
+                        $("#materialrequestform .valStore").val(eval(tamt));
+                        //alert(eval(tamt));
+                        parent_value_assign(tamt)
+                        //alert(eval(tamt));
+                        //SetNumber();
+                        //$('.msg').html("Saved Successfully");
+                        //$('.msg').show();
+                        //$('.msg').delay(1200).fadeOut(1000);
+                        $('#myModal').modal('hide');
+                        ////location.reload();
+                        ////location.reload();
+                    }
+                },
+                complete: function (data) {
+                    //alert("ok");
+                    //SetNumber();
+                },
+                error: function (ex) {
+                    alert('Failed to save data ' + ex);
+                }
+            });
+        });
+
+    //
+    function receipttotal() {
+
+        TRANGAMT = 0;
+        TRANRAMT = 0;
+        i = 0;
+
+        $('.TRANRID').each(function () {
+            var ckb = true;//$(this).is(':checked');
+            //alert(ckb);
+            if (ckb == true) {
+
+                TRANRAMT = $(".TRANRAMT")[i].value.trim();
+                if (isNaN(TRANRAMT) || TRANRAMT == "") { TRANRAMT = 0; $(".TRANRAMT")[i].value = 0; }
+                else
+                    TRANRAMT = eval(TRANRAMT).toFixed(2);
+
+                $(".TRANRAMT")[i].value = TRANRAMT;
+                //alert(TRANRAMT);
+                TRANGAMT += eval($(".TRANRAMT")[i].value);
+
+            }
+
+            i++;
+
+        });
+        $(".ZTRANRAMT").val(TRANGAMT.toFixed(2));
+    }
+
+    function parent_value_assign(ramt)
+    {
+        var pstatus = 0;
+        var gamt = 0;
+        var zramt = eval(ramt);
+        var zrowid = $(".V_ROWID").val();
+        i = 0;
+        //alert("a");
+        //alert(zramt);
+        $('#materialrequestform #TDETAIL .TRANDID').each(function () {
+            var ckb = true;//$(this).is(':checked');
+            //alert(ckb);
+            if (ckb == true) {
+
+                pstatus = $(".TCOUNT")[i].value.trim();
+                itemqid = $(".ITEMQID")[i].value;
+                //alert(itemqid);
+                //alert(pstatus);
+                //alert(zrowid);
+                if (eval(pstatus) == eval(zrowid))
+                {
+                    $(".TRANDGAMT")[i].value = parseFloat(zramt).toFixed(2);
+                    $(".TRAND_TOT_COST")[i].value = parseFloat(zramt).toFixed(2);
+                }
+                //alert(eval($(".TRANDGAMT")[i].value));
+                if (itemqid == 2) {
+                    gamt += eval($(".TRANDGAMT")[i].value);
+                }
+            }
+
+            i++;
+
+        });
+        gamt = eval(gamt).toFixed(2);
+        //alert(gamt);
+        $('#materialrequestform .TRANNAMT').val(gamt);
+    }
+
+    function IsAmount(event) {
+        //alert(event);
+        var $this = event;
+        if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
+            ((event.which < 48 || event.which > 57) &&
+                (event.which != 0 && event.which != 8))) {
+            event.preventDefault();
+        }
+
+        var text = event;
+        if ((event.which == 46) && (text.indexOf('.') == -1)) {
+            setTimeout(function () {
+                if ($this.val().substring($this.val().indexOf('.')).length > 3) {
+                    $this.val($this.val().substring(0, $this.val().indexOf('.') + 3));
+                }
+            }, 1);
+        }
+    }
+
+    function OnReceiptAmountBlur(obj) {
+        var idx = obj.parentNode.parentNode.rowIndex;
+        idx = idx - 1;
+
+        var zrtid = eval($(".ARTID")[idx].value);
+
+        temp_x = parseInt($(".TRANBALAMT")[idx].value);
+        temp_y = parseInt($(".TRANRAMT")[idx].value);
+
+        if (zrtid == 1 || zrtid == 2)
+        {
+            if (temp_y > temp_x) {
+                alert("Please Check the Entered Amount....");
+                $(".TRANRAMT")[idx].value = "";
+                $(".TRANRAMT")[idx].focus();
+                receipttotal();
+            }
+        }
+    }
+
+    //
+
+    $("#batchfrm").on("click", "#sub_del_detail", function () {
+            var r = confirm("Are you sure to delete this record ?");
+            if (r == true) {
+                idx = $("#SUB_TDETAIL_IDX").val();
+                if (idx == 1) {
+
+                    var $tableBody = $('#SUB_TDETAIL').find("tbody")
+                    $trCur = $tableBody.find("tr:eq(0)");
+                    $trCur.find(".TRANPDESC").val("");
+                    $trCur.find(".TRANPQTY").val("");
+                    $trCur.find(".TRANDPID").val("-1");
+                }
+                else {
+                    $("#SUB_TDETAIL_BODY").show();
+                    var row = this.parentNode.parentNode;
+                    $(this).parents('.item-row').remove();
+                    $("#SUB_TDETAIL_IDX").val($("#SUB_TDETAIL_IDX").val() - 1);
+
+                }
+
+        }
+            ExecTMP();
+            receipttotal();
+    });
+
+
+
+    $("#btm_btnClosePopup").click(function () {
+        //alert("a");
+        $("#batchfrm").modal("hide");
+        //location.reload();
+    });
+
+
+    //$("#batchfrm").click(function () {
+    //    $("#serialfrm").modal("hide");
+    //    //location.reload();
+    //    //alert("a");
+    //});
+
+    function CheckAmount() {
+
+        var result = 0; var x = 0;
+        var ldgramt = $(".LDGRAMT").val();
+        var ramt = 0;
+        var diffamt = 0;
+        $(".TRANRAMT").each(function () {
+
+            //if ($(".booltype")[x].value == "true") {
+                if (this.value != "" || this.value > 0)
+                {
+                    //alert(this.value);
+                    ramt = ramt + eval(this.value);
+                    //result++;
+                }
+           // }
+            x++;
+        });
+        //alert(ramt);
+        diffamt = eval(ldgramt) - eval(ramt);
+        //diffamt = eval(ramt);
+        //alert(eval(diffamt));
+        return diffamt;//result;
+    }
+
+
+</script>
+

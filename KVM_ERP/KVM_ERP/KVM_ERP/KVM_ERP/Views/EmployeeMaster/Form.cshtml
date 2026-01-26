@@ -1,0 +1,796 @@
+@using KVM_ERP.Models
+@model KVM_ERP.Models.EmployeeMaster
+@{
+    ViewBag.Title = "Employee Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .form-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .form-body {
+        padding: 30px;
+        background: white;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .control-label {
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .req {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+    
+    .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+        background-color: white;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3436;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .status-wrapper {
+        position: relative;
+    }
+    
+    .status-badge {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #28a745;
+    }
+    
+    .text-danger {
+        color: #e74c3c !important;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+    
+    .msg {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    @@media (max-width: 768px) {
+        .form-container {
+            padding: 20px;
+            margin: 10px 0;
+        }
+        
+        .form-header {
+            padding: 20px;
+        }
+        
+        .form-title {
+            font-size: 24px;
+        }
+        
+        .form-body {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">
+                <i class="fa fa-user-plus"></i>
+                @(Model.CATEID == 0 ? "Add New Employee" : "Edit Employee")
+            </h1>
+        </div>
+
+        <div class="form-body">
+            @Html.Raw(ViewBag.msg)
+            <form action="@Url.Content("~/EmployeeMaster/savedata")" method="post" accept-charset="utf-8" id="employeeMasterForm" name="employeeMasterForm" enctype="multipart/form-data">
+                @Html.ValidationSummary(true)
+                
+                @Html.HiddenFor(model => model.CATEID)
+                
+                <div class="section-title">
+                    <i class="fa fa-user"></i> Basic Information
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Employee Code <span class="req">*</span>
+                            </label>
+                            @Html.TextBoxFor(model => model.CATECODE, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter employee code", 
+                                @id = "i_CATECODE",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATECODE, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Employee Name <span class="req">*</span>
+                            </label>
+                            @Html.TextBoxFor(model => model.CATENAME, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter employee name", 
+                                @id = "i_CATENAME",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATENAME, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Department <span class="req">*</span>
+                            </label>
+                            @Html.DropDownListFor(model => model.DEPTID, ViewBag.DEPTID as List<SelectListItem>, new { 
+                                @class = "form-control",
+                                @id = "departmentDropdown"
+                            })
+                            @Html.ValidationMessageFor(model => model.DEPTID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Designation <span class="req">*</span>
+                            </label>
+                            @Html.DropDownListFor(model => model.DSGNID, ViewBag.DSGNID as List<SelectListItem>, new { 
+                                @class = "form-control",
+                                @id = "designationDropdown"
+                            })
+                            @Html.ValidationMessageFor(model => model.DSGNID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Location
+                            </label>
+                            @Html.DropDownListFor(model => model.LOCTID, ViewBag.LOCTID as List<SelectListItem>, new { 
+                                @class = "form-control",
+                                @id = "locationDropdown"
+                            })
+                            @Html.ValidationMessageFor(model => model.LOCTID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                    <i class="fa fa-envelope"></i> Contact Information
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Email</label>
+                            @Html.TextBoxFor(model => model.CATEEMAIL, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter email address", 
+                                @type = "email",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEEMAIL, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Contact Person</label>
+                            @Html.TextBoxFor(model => model.CATECPNAME, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter contact person name",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATECPNAME, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Phone 1</label>
+                            @Html.TextBoxFor(model => model.CATEPHN1, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter phone number",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEPHN1, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Phone 2</label>
+                            @Html.TextBoxFor(model => model.CATEPHN2, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter phone number",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEPHN2, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Phone 3</label>
+                            @Html.TextBoxFor(model => model.CATEPHN3, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter phone number",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEPHN3, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Phone 4</label>
+                            @Html.TextBoxFor(model => model.CATEPHN4, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter phone number",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEPHN4, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                    <i class="fa fa-home"></i> Address Information
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Address Line 1</label>
+                            @Html.TextBoxFor(model => model.CATEADDR1, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter address line 1",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEADDR1, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Address Line 2</label>
+                            @Html.TextBoxFor(model => model.CATEADDR2, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter address line 2",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEADDR2, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Address Line 3</label>
+                            @Html.TextBoxFor(model => model.CATEADDR3, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter address line 3",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEADDR3, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Address Line 4</label>
+                            @Html.TextBoxFor(model => model.CATEADDR4, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter address line 4",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEADDR4, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                    <i class="fa fa-calendar"></i> Date Information
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Date of Birth</label>
+                            @Html.TextBoxFor(model => model.CATEDOB, "{0:yyyy-MM-dd}", new { 
+                                @class = "form-control", 
+                                @type = "date"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEDOB, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Date of Joining</label>
+                            @Html.TextBoxFor(model => model.CATEDOJ, "{0:yyyy-MM-dd}", new { 
+                                @class = "form-control", 
+                                @type = "date"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEDOJ, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Date of Confirmation</label>
+                            @Html.TextBoxFor(model => model.CATEDOC, "{0:yyyy-MM-dd}", new { 
+                                @class = "form-control", 
+                                @type = "date"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEDOC, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Date of Retirement</label>
+                            @Html.TextBoxFor(model => model.CATEDOR, "{0:yyyy-MM-dd}", new { 
+                                @class = "form-control", 
+                                @type = "date"
+                            })
+                            @Html.ValidationMessageFor(model => model.CATEDOR, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                    <i class="fa fa-cog"></i> Status & Additional Information
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Employee Status</label>
+                            <div class="status-wrapper">
+                                @Html.DropDownListFor(model => model.CATESTATUS, ViewBag.CATESTATUS as List<SelectListItem>, new { 
+                                    @class = "form-control",
+                                    @id = "empStatusDropdown"
+                                })
+                                <span id="empStatusIndicator" class="status-badge"></span>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.CATESTATUS, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Status</label>
+                            <div class="status-wrapper">
+                                @Html.DropDownListFor(model => model.DISPSTATUS, ViewBag.DISPSTATUS as List<SelectListItem>, new { 
+                                    @class = "form-control",
+                                    @id = "statusDropdown"
+                                })
+                                <span id="statusIndicator" class="status-badge"></span>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.DISPSTATUS, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Employee Grade</label>
+                            @Html.TextBoxFor(model => model.EMPGRD, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter employee grade",
+                                @type = "number",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.EMPGRD, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Annual Incentive CTC</label>
+                            @Html.TextBoxFor(model => model.ANNUAL_INCENTIVE_CTC, new { 
+                                @class = "form-control", 
+                                @placeholder = "Enter annual incentive CTC",
+                                @type = "number",
+                                @step = "0.01",
+                                @autocomplete = "off"
+                            })
+                            @Html.ValidationMessageFor(model => model.ANNUAL_INCENTIVE_CTC, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Employee Photo</label>
+                            @Html.HiddenFor(model => model.EMPLOYEE_PHOTO)
+                            
+                            <!-- Photo Upload Area -->
+                            <div class="photo-upload-container">
+                                <input type="file" name="EMPLOYEE_PHOTO_FILE" id="EMPLOYEE_PHOTO_FILE" class="form-control" accept=".jpg,.jpeg,.png,.pdf" style="display: none;" />
+                                
+                                <!-- Upload Button -->
+                                <div id="upload-area" class="upload-area" onclick="document.getElementById('EMPLOYEE_PHOTO_FILE').click();">
+                                    <i class="fa fa-cloud-upload" style="font-size: 24px; color: #007bff;"></i>
+                                    <p style="margin: 10px 0 5px 0; font-weight: 600;">Click to Upload Photo</p>
+                                    <p style="margin: 0; font-size: 12px; color: #666;">JPG, JPEG, PNG, PDF (Max 5MB)</p>
+                                </div>
+                                
+                                <!-- Photo Preview Area -->
+                                <div id="photo-preview" class="photo-preview" style="display: none;">
+                                    <div class="preview-container">
+                                        <img id="preview-image" src="" alt="Employee Photo" class="preview-img" />
+                                        <div class="preview-overlay">
+                                            <button type="button" class="btn-close-preview" onclick="removePhoto()" title="Remove Photo">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                            <button type="button" class="btn-change-preview" onclick="document.getElementById('EMPLOYEE_PHOTO_FILE').click();" title="Change Photo">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p id="file-name" class="file-name"></p>
+                                </div>
+                                
+                                <!-- Current Photo (for edit mode) -->
+                                @if (!string.IsNullOrEmpty(Model.EMPLOYEE_PHOTO))
+                                {
+                                    <div id="current-photo" class="photo-preview">
+                                        <div class="preview-container">
+                                            @if (Model.EMPLOYEE_PHOTO.ToLower().EndsWith(".pdf"))
+                                            {
+                                                <div class="pdf-preview">
+                                                    <i class="fa fa-file-pdf-o" style="font-size: 48px; color: #dc3545;"></i>
+                                                    <p>PDF Document</p>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <img src="@Url.Content(Model.EMPLOYEE_PHOTO)" alt="Current Employee Photo" class="preview-img" />
+                                            }
+                                            <div class="preview-overlay">
+                                                <button type="button" class="btn-close-preview" onclick="removeCurrentPhoto()" title="Remove Photo">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                                <button type="button" class="btn-change-preview" onclick="document.getElementById('EMPLOYEE_PHOTO_FILE').click();" title="Change Photo">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                                <a href="@Url.Content(Model.EMPLOYEE_PHOTO)" target="_blank" class="btn-view-preview" title="View Full Size">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <p class="file-name">@System.IO.Path.GetFileName(Model.EMPLOYEE_PHOTO)</p>
+                                    </div>
+                                }
+                            </div>
+                            
+                            @Html.ValidationMessageFor(model => model.EMPLOYEE_PHOTO, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" style="margin-top: 30px;">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Save Employee
+                        </button>
+                        <a href="@Url.Action("Index", "EmployeeMaster")" class="btn btn-secondary">
+                            <i class="fa fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        // Debug: Let's see what model values we have
+        console.log('Model CATEID:', '@Model.CATEID');
+        console.log('Model DISPSTATUS:', '@Model.DISPSTATUS');
+        console.log('Model CATESTATUS:', '@Model.CATESTATUS');
+        
+        // Focus on first input
+        $('#i_CATECODE').focus();
+        
+        // Auto-format employee code to uppercase
+        $('#i_CATECODE').on('input', function() {
+            this.value = this.value.toUpperCase();
+        });
+        
+        // Auto-format employee name to title case
+        $('#i_CATENAME').on('blur', function() {
+            var words = this.value.toLowerCase().split(' ');
+            for (var i = 0; i < words.length; i++) {
+                if (words[i].length > 0) {
+                    words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+                }
+            }
+            this.value = words.join(' ');
+        });
+        
+        // Update status indicator based on dropdown selection
+        function updateStatusIndicator() {
+            var statusValue = $('#statusDropdown').val();
+            var indicator = $('#statusIndicator');
+            
+            if (statusValue == '0') {
+                indicator.css('background-color', '#28a745'); // Green for Enabled
+            } else {
+                indicator.css('background-color', '#dc3545'); // Red for Disabled
+            }
+        }
+        
+        function updateEmpStatusIndicator() {
+            var empStatusValue = $('#empStatusDropdown').val();
+            var indicator = $('#empStatusIndicator');
+            
+            if (empStatusValue == '0') {
+                indicator.css('background-color', '#28a745'); // Green for On Roll
+            } else if (empStatusValue == '1') {
+                indicator.css('background-color', '#ffc107'); // Yellow for Expired
+            } else {
+                indicator.css('background-color', '#17a2b8'); // Blue for Retired
+            }
+        }
+        
+        // Initialize status indicators
+        updateStatusIndicator();
+        updateEmpStatusIndicator();
+        
+        // Update indicators when dropdowns change
+        $('#statusDropdown').change(updateStatusIndicator);
+        $('#empStatusDropdown').change(updateEmpStatusIndicator);
+        
+        // Form validation
+        $('#employeeMasterForm').on('submit', function(e) {
+            var isValid = true;
+            var errorMessage = '';
+            
+            // Check required fields
+            if (!$('#i_CATECODE').val().trim()) {
+                errorMessage += '• Employee Code is required\n';
+                isValid = false;
+            }
+            
+            if (!$('#i_CATENAME').val().trim()) {
+                errorMessage += '• Employee Name is required\n';
+                isValid = false;
+            }
+            
+            if (!$('#departmentDropdown').val()) {
+                errorMessage += '• Department is required\n';
+                isValid = false;
+            }
+            
+            if (!$('#designationDropdown').val()) {
+                errorMessage += '• Designation is required\n';
+                isValid = false;
+            }
+            
+            // Email validation if provided
+            var email = $('#CATEEMAIL').val();
+            if (email && !isValidEmail(email)) {
+                errorMessage += '• Please enter a valid email address\n';
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                alert('Please fix the following errors:\n\n' + errorMessage);
+                e.preventDefault();
+                return false;
+            }
+            
+            // Show loading state
+            $('button[type="submit"]').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
+            
+            return true;
+        });
+        
+        function isValidEmail(email) {
+            var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // Photo Upload Functionality
+        $('#EMPLOYEE_PHOTO_FILE').on('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    this.value = '';
+                    return;
+                }
+                
+                // Validate file type
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Please select a valid file type (JPG, JPEG, PNG, PDF)');
+                    this.value = '';
+                    return;
+                }
+                
+                // Hide upload area and current photo
+                $('#upload-area').hide();
+                $('#current-photo').hide();
+                
+                // Show preview
+                if (file.type === 'application/pdf') {
+                    // For PDF files, show PDF icon
+                    $('#preview-image').hide();
+                    $('#photo-preview .preview-container').html(`
+                        <div class="pdf-preview">
+                            <i class="fa fa-file-pdf-o" style="font-size: 48px; color: #dc3545;"></i>
+                            <p>PDF Document</p>
+                        </div>
+                        <div class="preview-overlay">
+                            <button type="button" class="btn-close-preview" onclick="removePhoto()" title="Remove Photo">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <button type="button" class="btn-change-preview" onclick="document.getElementById('EMPLOYEE_PHOTO_FILE').click();" title="Change Photo">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                    `);
+                } else {
+                    // For image files, show preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#preview-image').attr('src', e.target.result).show();
+                        $('#photo-preview .preview-container').html(`
+                            <img id="preview-image" src="${e.target.result}" alt="Employee Photo" class="preview-img" />
+                            <div class="preview-overlay">
+                                <button type="button" class="btn-close-preview" onclick="removePhoto()" title="Remove Photo">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button type="button" class="btn-change-preview" onclick="document.getElementById('EMPLOYEE_PHOTO_FILE').click();" title="Change Photo">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </div>
+                        `);
+                    };
+                    reader.readAsDataURL(file);
+                }
+                
+                $('#file-name').text(file.name);
+                $('#photo-preview').show();
+            }
+        });
+        
+        // Add loading states to buttons
+        $('.btn').on('click', function() {
+            if ($(this).attr('type') !== 'submit') {
+                $(this).prop('disabled', true);
+                setTimeout(() => {
+                    $(this).prop('disabled', false);
+                }, 2000);
+            }
+        });
+    });
+    
+    // Global functions for photo management
+    function removePhoto() {
+        // Clear the file input
+        document.getElementById('EMPLOYEE_PHOTO_FILE').value = '';
+        
+        // Hide preview and show upload area
+        $('#photo-preview').hide();
+        $('#upload-area').show();
+        
+        // Show current photo if it exists
+        if ($('#current-photo').length > 0) {
+            $('#current-photo').show();
+        }
+    }
+    
+    function removeCurrentPhoto() {
+        // Clear the hidden field to indicate photo should be removed
+        $('#EMPLOYEE_PHOTO').val('');
+        
+        // Hide current photo and show upload area
+        $('#current-photo').hide();
+        $('#upload-area').show();
+        
+        // Add a hidden input to indicate photo removal
+        if (!$('input[name="REMOVE_PHOTO"]').length) {
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'REMOVE_PHOTO',
+                value: 'true'
+            }).appendTo('form');
+        }
+    }
+</script>
+}

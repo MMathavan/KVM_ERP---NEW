@@ -1,0 +1,3079 @@
+@{
+    ViewBag.Title = "Raw Material Invoice Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    .main-container {
+        background: white;
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    .content-wrapper {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+        border: 1px solid #e9ecef;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .header-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .back-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+        background: white;
+        color: #4facfe;
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+
+    .form-container {
+        padding: 30px;
+    }
+
+    .form-section {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 25px;
+        border: 1px solid #e9ecef;
+    }
+
+    .form-section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #4facfe;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+
+    .form-control:disabled, .form-control[readonly] {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    .items-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .items-table thead th {
+        background: #7f88e9;
+        color: white;
+        font-weight: 600;
+        padding: 12px;
+        text-align: center;
+        font-size: 14px;
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .items-table thead th:last-child {
+        border-right: none;
+    }
+
+    .items-table tbody td {
+        padding: 10px;
+        border-bottom: 1px solid #e9ecef;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .items-table tbody td:nth-child(4) input[readonly] {
+        font-weight: 700;
+    }
+
+    .items-table tbody tr:hover {
+        background-color: #f8f9ff;
+    }
+
+    .items-table input[type="text"], .items-table input[type="number"] {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .items-table input[readonly] {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+        border-color: #ced4da;
+    }
+    
+    /* Readonly fields styling - match supplier code */
+    input[readonly].form-control {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    .save-btn {
+        background: linear-gradient(135deg, #00bcd4, #00acc1) !important;
+        border: none !important;
+        padding: 12px 35px !important;
+        border-radius: 30px !important;
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 15px !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .save-btn:hover {
+        background: linear-gradient(135deg, #00acc1, #0097a7) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4) !important;
+    }
+
+    .save-btn:active {
+        transform: translateY(0) !important;
+        box-shadow: 0 2px 4px rgba(0, 188, 212, 0.3) !important;
+    }
+
+    .save-btn i {
+        font-size: 14px;
+    }
+
+    .btn-actions {
+        text-align: center;
+        padding: 20px;
+        border-top: 2px solid #e9ecef;
+        margin-top: 20px;
+    }
+
+    /* Back to List Button Styling - Light Design with Border */
+    .btn-secondary {
+        background: white !important;
+        border: 2px solid #d1d5db !important;
+        padding: 12px 30px !important;
+        border-radius: 30px !important;
+        color: #6b7280 !important;
+        font-weight: 600 !important;
+        font-size: 15px !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .btn-secondary:hover {
+        background: #f9fafb !important;
+        border-color: #9ca3af !important;
+        color: #4b5563 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+        text-decoration: none !important;
+    }
+
+    .btn-secondary:active {
+        transform: translateY(0) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+        background: #f3f4f6 !important;
+    }
+
+    .btn-secondary i {
+        font-size: 14px;
+    }
+
+    /* Select2 Custom Styling - Increased height and width */
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: 50px;
+        border: 2px solid #ced4da;
+        border-radius: 6px;
+        padding: 0 15px;
+        background: white;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .select2-container--default .select2-selection--single:hover {
+        border-color: #4facfe;
+    }
+
+    .select2-container--default.select2-container--focus .select2-selection--single,
+    .select2-container--default.select2-container--open .select2-selection--single {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #495057;
+        font-size: 16px;
+        padding-left: 0;
+        padding-right: 40px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+        color: #6c757d;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 48px;
+        right: 15px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+        border-color: #495057 transparent transparent transparent;
+        border-width: 6px 5px 0 5px;
+    }
+
+    .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+        border-color: transparent transparent #495057 transparent;
+        border-width: 0 5px 6px 5px;
+    }
+
+    /* Dropdown Styling */
+    .select2-dropdown {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        margin-top: 2px;
+        background: white;
+    }
+
+    .select2-container--default .select2-search--dropdown {
+        padding: 8px;
+        background: white;
+    }
+
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 6px 12px;
+        font-size: 1rem;
+    }
+
+    .select2-container--default .select2-search--dropdown .select2-search__field:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    /* Results Styling */
+    .select2-container--default .select2-results__option {
+        padding: 8px 12px;
+        font-size: 1rem;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+    }
+
+    .select2-container--default .select2-results__option[aria-selected=true] {
+        background-color: #e7f3ff;
+        color: #495057;
+    }
+
+    /* Clear Button Styling */
+    .select2-container--default .select2-selection--single .select2-selection__clear {
+        color: #6c757d;
+        font-size: 20px;
+        margin-right: 5px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__clear:hover {
+        color: #dc3545;
+    }
+
+    /* Modal Close Button Styling */
+    .modal-header .close {
+        padding: 0.5rem 0.75rem;
+        margin: -0.5rem -0.75rem -0.5rem auto;
+        opacity: 1 !important;
+        font-size: 1.8rem;
+        font-weight: 300;
+        line-height: 1;
+        color: #fff;
+        text-shadow: none;
+        transition: all 0.3s ease;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-header .close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        transform: rotate(90deg);
+        opacity: 1 !important;
+    }
+
+    .modal-header .close:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    }
+
+    .modal-header.bg-success .close {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Modal Footer Button Styling */
+    .modal-footer .btn {
+        border-radius: 30px;
+        padding: 10px 25px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .modal-footer .btn-secondary {
+        background: white;
+        border: 2px solid #d1d5db;
+        color: #6b7280;
+    }
+
+    .modal-footer .btn-secondary:hover {
+        background: #f9fafb;
+        border-color: #9ca3af;
+        color: #4b5563;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-footer .btn-success {
+        background: linear-gradient(135deg, #00bcd4, #00acc1);
+        color: white;
+        border: none;
+    }
+
+    .modal-footer .btn-success:hover {
+        background: linear-gradient(135deg, #00acc1, #0097a7);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 188, 212, 0.4);
+    }
+
+    .modal-footer .btn i {
+        font-size: 14px;
+    }
+</style>
+
+<div class="main-container">
+    <div class="content-wrapper">
+        <div class="header-section">
+            <h1 class="header-title">
+                <i class="fa fa-file-invoice"></i>
+                Raw Material Invoice
+            </h1>
+        </div>
+
+        <div class="form-container">
+            <!-- Basic Information Section -->
+            <div class="form-section">
+                <h3 class="form-section-title">
+                    <i class="fa fa-info-circle"></i> Basic Information
+                </h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Date <span class="text-danger">*</span></label>
+                            <input type="date" id="invoiceDate" class="form-control" value="@ViewBag.InvoiceDate" required />
+                        </div>
+                    </div>
+                    <!-- Hidden No field - kept for backend processing -->
+                    <div class="col-md-3" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">No</label>
+                            <input type="text" id="invoiceNo" class="form-control" readonly value="@ViewBag.InvoiceNo" placeholder="Auto Generated" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Ref No <span class="text-danger">*</span></label>
+                            <input type="text" id="refNo" class="form-control" value="@ViewBag.RefNo" placeholder="Enter Reference Number" required />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Invoice Status <span class="text-danger">*</span></label>
+                            <select id="status" class="form-control" required>
+                                <option value="">-- Select Status --</option>
+                                @foreach (var status in (List<SelectListItem>)ViewBag.InvoiceStatuses)
+                                {
+                                    <option value="@status.Value" @(ViewBag.Status != null && ViewBag.Status.ToString() == status.Value ? "selected" : "")>@status.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Supplier Details Section -->
+            <div class="form-section">
+                <h3 class="form-section-title">
+                    <i class="fa fa-truck"></i> Supplier Details
+                </h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Supplier Name <span class="text-danger">*</span></label>
+                            <select id="supplierName" class="form-control">
+                                <option value="">-- Select Supplier --</option>
+                                @foreach (var supplier in (List<SelectListItem>)ViewBag.Suppliers)
+                                {
+                                    <option value="@supplier.Value" @(ViewBag.SupplierId != null && ViewBag.SupplierId.ToString() == supplier.Value ? "selected" : "")>@supplier.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">Supplier Code</label>
+                            <input type="text" id="supplierCode" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">State</label>
+                            <input type="text" id="state" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" id="location" class="form-control" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items Section -->
+            <div class="form-section">
+                <h3 class="form-section-title">
+                    <i class="fa fa-boxes"></i> Items
+                </h3>
+                <div class="table-responsive">
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" title="Select All" /></th>
+                                <th>S.No</th>
+                                <th>Item</th>
+                                <th>Grade</th>
+                                <th>Production Colour</th>
+                                <th>Received Type</th>
+                                <th>Actual Weight (KG)</th>
+                                <th>Net Weight (KG)</th>
+                                <th id="rateColumn" style="display: none;">Rate (₹/KG)</th>
+                                <th id="amountColumn" style="display: none;">Amount (₹)</th>
+                                <th id="packingKgColumn" style="display: none;">Packing/Kg (₹)</th>
+                                <th id="packingAmountColumn" style="display: none;">Packing Amount (₹)</th>
+                                <th id="incentiveColumn" style="display: none;">Incentive (₹)</th>
+                                <th id="netAmountColumn" style="display: none;">Net Amount (₹)</th>
+                                <th id="actionColumn" style="display: none;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody">
+                            <tr>
+                                <td colspan="15" class="text-center text-muted">
+                                    Please select a supplier to load items
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Total Amount Section -->
+            <div class="form-section">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-success" id="taxBtn" onclick="openTaxModal()">
+                            <i class="fa fa-calculator"></i> TAX
+                        </button>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <h4 class="mb-3">
+                            <strong>Subtotal: </strong>
+                            <span id="grossAmount" class="text-success" style="font-size: 20px; font-weight: bold;">₹ 0.00</span>
+                        </h4>
+                        
+                        <h4 class="mb-3">
+                            <strong>Expenses (Discount): </strong>
+                            <span id="packingDiscountAmount" class="text-warning" style="font-size: 20px; font-weight: bold;">₹ 0.00</span>
+                        </h4>
+
+                        <h4 class="mb-3">
+                            <strong>On Incentive value: </strong>
+                            <span id="incentiveSummaryAmount" class="text-info" style="font-size: 20px; font-weight: bold;">₹ @(((decimal?)ViewBag.InvoiceIncentiveAmount ?? 0M).ToString("0.00"))</span>
+                        </h4>
+                        
+                        <!-- HSN-Based GST Breakdown -->
+                        <div id="gstBreakdown" style="margin-bottom: 1rem;">
+                            <div id="cgstRow" style="display: none; margin-bottom: 8px;">
+                                <strong>CGST: </strong>
+                                <span id="cgstRateDisplay" class="text-muted" style="font-size: 14px;"></span>
+                                <span id="cgstAmountDisplay" class="text-info" style="font-size: 18px; font-weight: bold; margin-left: 10px;">₹ 0.00</span>
+                            </div>
+                            <div id="sgstRow" style="display: none; margin-bottom: 8px;">
+                                <strong>SGST: </strong>
+                                <span id="sgstRateDisplay" class="text-muted" style="font-size: 14px;"></span>
+                                <span id="sgstAmountDisplay" class="text-info" style="font-size: 18px; font-weight: bold; margin-left: 10px;">₹ 0.00</span>
+                            </div>
+                            <div id="igstRow" style="display: none; margin-bottom: 8px;">
+                                <strong>IGST: </strong>
+                                <span id="igstRateDisplay" class="text-muted" style="font-size: 14px;"></span>
+                                <span id="igstAmountDisplay" class="text-info" style="font-size: 18px; font-weight: bold; margin-left: 10px;">₹ 0.00</span>
+                            </div>
+                            <div id="noTaxRow" style="display: block; margin-bottom: 8px;">
+                                <strong>Tax: </strong>
+                                <span class="text-muted" style="font-size: 18px;">₹ 0.00</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Manual Tax Factors from Tax Button -->
+                        <div id="manualTaxBreakdown" style="margin-bottom: 1rem;">
+                            <!-- Manual taxes will be dynamically added here -->
+                        </div>
+                        
+                        <h4 class="mb-3" style="border-top: 2px solid #ddd; padding-top: 10px;">
+                            <strong>Grand Total: </strong>
+                            <span id="grandTotalDisplay" class="text-success" style="font-size: 24px; font-weight: bold;">
+                                @if (ViewBag.IsEdit != null && ViewBag.IsEdit == true && ViewBag.InvoiceGrandTotal != null)
+                                {
+                                    @:₹ @(((decimal)ViewBag.InvoiceGrandTotal).ToString("0.00"))
+                                }
+                                else
+                                {
+                                    @:₹ 0.00
+                                }
+                            </span>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="btn-actions">
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("Index", "RawMaterialInvoice")" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to List
+                    </a>
+                    <button type="button" class="btn save-btn" onclick="saveInvoice()">
+                        <i class="fa fa-save"></i> Save Invoice
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tax Modal -->
+<div class="modal fade" id="taxModal" tabindex="-1" role="dialog" aria-labelledby="taxModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="taxModalLabel">
+                    <i class="fa fa-calculator"></i> Tax Calculation
+                </h5>
+                <button type="button" class="close" onclick="$('#taxModal').modal('hide');" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="addTaxRow()">
+                            <i class="fa fa-plus"></i> Add Row
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="taxTable">
+                        <thead class="bg-light">
+                            <tr>
+                                <th width="5%">
+                                    <button type="button" class="btn btn-danger btn-sm" title="Delete">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </th>
+                                <th width="30%">Cost Factor</th>
+                                <th width="20%">Expression</th>
+                                <th width="15%">Mode</th>
+                                <th width="15%">Value</th>
+                                <th width="15%">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taxTableBody">
+                            <!-- Tax rows will be added here -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-light">
+                                <td colspan="5" class="text-end"><strong>Total Tax Amount:</strong></td>
+                                <td><strong id="totalTaxAmount">₹ 0.00</strong></td>
+                            </tr>
+                            <tr class="bg-success text-white">
+                                <td colspan="5" class="text-end"><strong>Grand Total (Gross + Tax):</strong></td>
+                                <td><strong id="grandTotal">₹ 0.00</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="$('#taxModal').modal('hide');">
+                    <i class="fa fa-times"></i> Close
+                </button>
+                <button type="button" class="btn btn-success" onclick="applyTaxCalculation()">
+                    <i class="fa fa-check"></i> Apply
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rate Calculation Modal -->
+<div class="modal fade" id="rateModal" tabindex="-1" role="dialog" aria-labelledby="rateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <h5 class="modal-title" id="rateModalLabel">
+                    <i class="fa fa-calculator"></i> Rate Calculation
+                </h5>
+                <button type="button" class="close text-white" onclick="$('#rateModal').modal('hide');" aria-label="Close" style="opacity: 0.8; font-size: 1.5rem; font-weight: bold; text-shadow: 0 1px 0 rgba(255,255,255,0.1); transition: all 0.2s ease;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Item Details Section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0"><i class="fa fa-info-circle"></i> Item Details</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <strong>Item:</strong>
+                                        <div id="modalItemName" class="text-muted">-</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>Grade:</strong>
+                                        <div id="modalGrade" class="text-muted">-</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>Production Colour:</strong>
+                                        <div id="modalProductionColour" class="text-muted">-</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>Received Type:</strong>
+                                        <div id="modalReceivedType" class="text-muted">-</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>Actual Weight (KG):</strong>
+                                        <div id="modalActualWeight" class="text-muted">-</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>Net Weight (KG):</strong>
+                                        <div id="modalNetWeight" class="text-muted">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Packing Type Section -->
+                <div id="packingTypeSection">
+                    <div class="card">
+                        <div class="card-header text-white" id="packingTypeHeader">
+                            <h6 class="mb-0"><i class="fa fa-fish"></i> <span id="packingTypeName">Packing Type</span></h6>
+                        </div>
+                        <div class="card-body" id="packingTypeContent">
+                            <h6>Slab Distribution</h6>
+                            <div id="packingTypeSlabs">
+                                <!-- Dynamic slab inputs will be populated here -->
+                            </div>
+                            
+                            <hr>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Total (In Dollar)</label>
+                                    <input type="number" class="form-control" id="packingTypeTotal" step="0.001" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Packing Weight</label>
+                                    <input type="number" class="form-control" id="packingTypePackingWeight" step="0.01" oninput="calculateTotalWeight('packingType')">
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Total (Total (In Dollar) x Packing Weight)</label>
+                                    <input type="number" class="form-control" id="packingTypeTotalWeight" step="0.01" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Rate Per USD</label>
+                                    <input type="number" class="form-control" id="packingTypeOneDollarRate" step="0.01" oninput="calculateDollarValue('packingType')">
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Total Value (In INR)</label>
+                                    <input type="number" class="form-control" id="packingTypeTotalValueForDollar" step="0.01" readonly>
+                                </div>
+                            </div>
+                            <hr />
+                            <h6>Packing Expenses</h6>
+                            <div class="row mt-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Packing/Kg (₹)</label>
+                                    <input type="number" class="form-control" id="packingTypePackingPerKg" step="0.01" oninput="calculatePackingDiscount('packingType')">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Peeled + Weight</label>
+                                    <input type="number" class="form-control" id="packingTypeWastePWeight" step="0.01" readonly>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Packing Amount (₹)</label>
+                                    <input type="number" class="form-control" id="packingTypePackingAmount" step="0.01" readonly>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Total Value - Packing Amount (Packing Expense)</label>
+                                    <input type="number" class="form-control" id="packingTypePackingExpense" step="0.01" readonly>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Incentive (In %)</label>
+                                    <input type="number" class="form-control" id="packingTypeIncentivePercent" step="0.001" oninput="calculatePerKgRate('packingType')">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Incentive Value</label>
+                                    <input type="number" class="form-control" id="packingTypeIncentiveValue" step="0.01" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">On Account</label>
+                                    <input type="number" class="form-control" id="packingTypeIncentiveTotal" step="0.01" readonly>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Net Weight</label>
+                                    <input type="number" class="form-control" id="packingTypeNetWeight" step="0.01" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Per Kg Rate</label>
+                                    <input type="number" class="form-control" id="packingTypePerKgRate" step="0.01" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="$('#rateModal').modal('hide');">Close</button>
+                <button type="button" class="btn btn-primary" onclick="applyRateCalculation()">Apply Rate</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Select2 JS from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <script type="text/javascript">
+        var itemsData = [];
+
+        $(document).ready(function () {
+            // Set default date to today if not set
+            if (!$('#invoiceDate').val()) {
+                const today = new Date().toISOString().split('T')[0];
+                $('#invoiceDate').val(today);
+            }
+
+            // Initialize column visibility based on mode
+            var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
+            toggleColumnsForMode(isEditMode === "true");
+
+            // Initialize Select2 on Supplier dropdown with search functionality
+            $('#supplierName').select2({
+                placeholder: '-- Select Supplier --',
+                allowClear: true,
+                width: '100%'
+            });
+            
+            console.log('Select2 initialized on supplier dropdown');
+
+            // Supplier dropdown change event
+            $('#supplierName').on('change', function () {
+                const supplierId = $(this).val();
+
+                if (!supplierId) {
+                    // Clear fields if no supplier selected
+                    clearSupplierDetails();
+                    clearItemsTable();
+                    return;
+                }
+
+                // Load supplier details
+                loadSupplierDetails(supplierId);
+
+                // Load items for the supplier
+                loadSupplierItems(supplierId);
+            });
+
+            // Initialize status dropdown
+            @if (ViewBag.Status != null)
+            {
+                <text>
+                // Edit mode - set saved status
+                $('#status').val('@ViewBag.Status');
+                </text>
+            }
+            else if (ViewBag.DefaultStatus != null)
+            {
+                <text>
+                // New invoice - set default status based on mode
+                $('#status').val('@ViewBag.DefaultStatus');
+                </text>
+            }
+
+            // Load supplier details and items if editing
+            @if (ViewBag.SupplierId != null)
+            {
+                <text>
+                var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
+                var editId = @(ViewBag.EditId ?? 0);
+                
+                // Trigger change event to load supplier details
+                setTimeout(function() {
+                    var supplierId = $('#supplierName').val();
+                    if (supplierId) {
+                        // Load supplier details first
+                        loadSupplierDetails(supplierId);
+                    }
+                    
+                    if (isEditMode && editId > 0) {
+                        // Disable supplier dropdown in edit mode
+                        $('#supplierName').prop('disabled', true);
+                        
+                        // Load ONLY saved items for editing
+                        loadInvoiceItems(editId);
+                        // Load saved tax factors for editing
+                        loadInvoiceTaxFactors(editId);
+                    } else {
+                        // Load supplier items from Raw Material Intake
+                        if (supplierId) {
+                            loadSupplierItems(supplierId);
+                        }
+                    }
+                }, 100);
+                </text>
+            }
+
+            // Select All checkbox functionality
+            $(document).on('change', '#selectAll', function() {
+                var isChecked = $(this).prop('checked');
+                $('.row-checkbox').prop('checked', isChecked);
+                calculateGrossAmount();
+                
+                // Recalculate all tax rows if tax exists
+                if ($('#taxTableBody tr').length > 0) {
+                    $('#taxTableBody tr').each(function() {
+                        var rowId = $(this).data('row-id');
+                        calculateTaxRow(rowId);
+                    });
+                }
+            });
+
+            // Add event listener for waste-row checkbox
+            $('.waste-row-checkbox').on('change', function () {
+                calculateGrossAmount();
+
+                // Recalculate all tax rows if tax modal is open or if tax data exists
+                if ($('#taxTableBody tr').length > 0) {
+                    $('#taxTableBody tr').each(function() {
+                        var rowId = $(this).data('row-id');
+                        calculateTaxRow(rowId);
+                    });
+                }
+            });
+
+            // Update Select All checkbox state when individual checkboxes change
+            $(document).on('change', '.row-checkbox', function() {
+                var totalCheckboxes = $('.row-checkbox').length;
+                var checkedCheckboxes = $('.row-checkbox:checked').length;
+                $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
+            });
+        });
+
+        function loadSupplierDetails(supplierId) {
+            $.ajax({
+                url: '@Url.Action("GetSupplierDetails", "RawMaterialInvoice")',
+                type: 'POST',
+                data: { supplierId: supplierId },
+                success: function (response) {
+                    if (response.success) {
+                        $('#supplierCode').val(response.data.Code);
+                        $('#state').val(response.data.State);
+                        $('#location').val(response.data.Location);
+                    } else {
+                        alert('Error loading supplier details: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading supplier details:', error);
+                    alert('Failed to load supplier details');
+                }
+            });
+        }
+
+        function loadSupplierItems(supplierId) {
+            $.ajax({
+                url: '@Url.Action("GetSupplierItems", "RawMaterialInvoice")',
+                type: 'POST',
+                data: { supplierId: supplierId },
+                beforeSend: function () {
+                    $('#itemsTableBody').html('<tr><td colspan="15" class="text-center"><i class="fa fa-spinner fa-spin"></i> Loading items...</td></tr>');
+                },
+                success: function (response) {
+                    if (response.success && response.data && response.data.length > 0) {
+                        itemsData = response.data;
+                        renderItemsTable();
+                    } else {
+                        $('#itemsTableBody').html('<tr><td colspan="15" class="text-center text-muted">No items found for this supplier</td></tr>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading items:', error);
+                    $('#itemsTableBody').html('<tr><td colspan="15" class="text-center text-danger">Failed to load items</td></tr>');
+                }
+            });
+        }
+
+        function loadInvoiceItems(invoiceId) {
+            var isApprovalMode = @(ViewBag.IsApprovalMode != null && ViewBag.IsApprovalMode == true ? "true" : "false");
+            $.ajax({
+                url: '@Url.Action("GetInvoiceItems", "RawMaterialInvoice")',
+                type: 'POST',
+                data: { 
+                    invoiceId: invoiceId,
+                    isApprovalMode: isApprovalMode
+                },
+                beforeSend: function () {
+                    $('#itemsTableBody').html('<tr><td colspan="15" class="text-center"><i class="fa fa-spinner fa-spin"></i> Loading saved items...</td></tr>');
+                },
+                success: function (response) {
+                    if (response.success && response.data && response.data.length > 0) {
+                        // Merge main and waste TRANSACTIONDETAIL rows per TRANPID so UI shows one logical item
+                        var rawItems = response.data;
+                        var grouped = {};
+
+                        rawItems.forEach(function (item) {
+                            var key = item.TRANPID || 0;
+                            if (!grouped[key]) {
+                                grouped[key] = { main: null, waste: null };
+                            }
+
+                            var isWaste = item.IsWasteRow === true || item.IsWasteRow === 1;
+                            if (isWaste) {
+                                grouped[key].waste = item;
+                            } else {
+                                grouped[key].main = item;
+                            }
+                        });
+
+                        var mergedItems = [];
+                        Object.keys(grouped).forEach(function (key) {
+                            var group = grouped[key];
+                            var mainItem = group.main || group.waste; // Fallback: invoices before waste saving
+                            var wasteItem = group.waste;
+
+                            // Clone main item so we don't accidentally mutate original
+                            var merged = $.extend(true, {}, mainItem);
+
+                            if (wasteItem) {
+                                merged.SavedWasteNetWeight = wasteItem.NetWeight || 0;
+                                merged.SavedWasteRate = wasteItem.Rate || 0;
+                                merged.SavedWasteAmount = wasteItem.Amount || 0;
+                                merged.SavedWastePackingKg = wasteItem.PackingKg || 0;
+                                merged.SavedWastePackingAmount = wasteItem.PackingAmount || 0;
+                                merged.SavedWasteNetAmount = wasteItem.NetAmount || 0;
+                                merged.SavedWasteIncentiveAmount = wasteItem.IncentiveAmount || 0;
+                                merged.HasSavedWasteRow = true;
+                            } else {
+                                merged.SavedWasteNetWeight = 0;
+                                merged.SavedWasteRate = 0;
+                                merged.SavedWasteAmount = 0;
+                                merged.SavedWastePackingKg = 0;
+                                merged.SavedWastePackingAmount = 0;
+                                merged.SavedWasteNetAmount = 0;
+                                merged.SavedWasteIncentiveAmount = 0;
+                                merged.HasSavedWasteRow = false;
+                            }
+
+                            mergedItems.push(merged);
+                        });
+
+                        // Use merged items as the single source of truth for rendering & saving
+                        itemsData = mergedItems;
+                        renderItemsTable();
+
+                        // Populate main-row values and checkboxes
+                        itemsData.forEach(function(item, index) {
+                            console.log('Merged Item ' + index + ': TRANPID=' + item.TRANPID + ', HasSavedWasteRow=' + item.HasSavedWasteRow + ', ItemName=' + item.ItemName);
+
+                            if (item.TRANPID > 0) {
+                                $('.row-checkbox[data-index="' + index + '"]').prop('checked', true);
+                            }
+
+                            $('.net-weight[data-index="' + index + '"]').val((item.NetWeight || 0).toFixed(2));
+                            $('.rate[data-index="' + index + '"]').val((item.Rate || 0).toFixed(2));
+                            $('.amount[data-index="' + index + '"]').val((item.Amount || 0).toFixed(2));
+                            $('.packing-kg[data-index="' + index + '"]').val((item.PackingKg || 0).toFixed(2));
+                            $('.packing-amount[data-index="' + index + '"]').val((item.PackingAmount || 0).toFixed(2));
+                            $('.net-amount[data-index="' + index + '"]').val((item.NetAmount || 0).toFixed(2));
+
+                            // Populate waste-row values and checkbox if a saved waste line exists
+                            if (item.HasSavedWasteRow && item.WasteWeight && item.WasteWeight > 0) {
+                                $('.waste-row-checkbox[data-index="' + index + '"]').prop('checked', true);
+                                $('.waste-net-weight[data-index="' + index + '"]').val((item.SavedWasteNetWeight || 0).toFixed(2));
+                                $('.waste-rate[data-index="' + index + '"]').val((item.SavedWasteRate || 0).toFixed(2));
+                                $('.waste-amount[data-index="' + index + '"]').val((item.SavedWasteAmount || 0).toFixed(2));
+                                $('.waste-packing-kg[data-index="' + index + '"]').val((item.SavedWastePackingKg || 0).toFixed(2));
+                                $('.waste-packing-amount[data-index="' + index + '"]').val((item.SavedWastePackingAmount || 0).toFixed(2));
+                                $('.waste-net-amount[data-index="' + index + '"]').val((item.SavedWasteNetAmount || 0).toFixed(2));
+                                $('.waste-incentive-amount[data-index="' + index + '"]').val((item.SavedWasteIncentiveAmount || 0).toFixed(2));
+                            }
+                        });
+
+                        // Recalculate packing / net amounts after loading
+                        itemsData.forEach(function(item, index) {
+                            if (item.PackingKg > 0) {
+                                calculatePackingAmount(index);
+                                calculateNetAmount(index);
+                            }
+
+                            if (item.HasSavedWasteRow && item.WasteWeight && item.WasteWeight > 0 && item.SavedWasteRate > 0) {
+                                calculateWasteAmount(index);
+                                calculateWastePackingAmount(index);
+                            }
+                        });
+
+                        // Refresh incentive summary for this invoice
+                        refreshInvoiceIncentiveSummary();
+                        
+                        // In edit mode, disable all checkboxes to prevent unchecking saved items
+                        var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
+                        if (isEditMode === "true") {
+                            $('.row-checkbox').prop('disabled', true);
+                            $('#selectAll').prop('disabled', true);
+                            console.log('Edit mode: All checkboxes disabled');
+                        }
+                        
+                        // Update Select All checkbox state
+                        var totalCheckboxes = $('.row-checkbox').length;
+                        var checkedCheckboxes = $('.row-checkbox:checked').length;
+                        $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
+                        
+                        calculateGrossAmount();
+                    } else {
+                        $('#itemsTableBody').html('<tr><td colspan="15" class="text-center text-muted">No items found for this invoice</td></tr>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading invoice items:', error);
+                    $('#itemsTableBody').html('<tr><td colspan="15" class="text-center text-danger">Failed to load invoice items</td></tr>');
+                }
+            });
+        }
+
+        // Load ALL items for EDIT mode: saved items (checked) + available items (unchecked)
+        function loadInvoiceItemsForEdit(invoiceId) {
+            var isApprovalMode = @(ViewBag.IsApprovalMode != null && ViewBag.IsApprovalMode == true ? "true" : "false");
+            $.ajax({
+                url: '@Url.Action("GetInvoiceItemsForEdit", "RawMaterialInvoice")',
+                type: 'POST',
+                data: { 
+                    invoiceId: invoiceId,
+                    isApprovalMode: isApprovalMode
+                },
+                beforeSend: function () {
+                    $('#itemsTableBody').html('<tr><td colspan="14" class="text-center"><i class="fa fa-spinner fa-spin"></i> Loading items...</td></tr>');
+                },
+                success: function (response) {
+                    if (response.success && response.data && response.data.length > 0) {
+                        itemsData = response.data;
+                        renderItemsTable();
+                        
+                        // Populate values and checkbox state from merged data
+                        response.data.forEach(function(item, index) {
+                            console.log('Item ' + index + ': ' + item.ItemName + ', IsSelected=' + item.IsSelected + ', NetWeight=' + item.NetWeight + ', Rate=' + item.Rate);
+                            
+                            // Set checkbox based on IsSelected (true if item was in invoice)
+                            $('.row-checkbox[data-index="' + index + '"]').prop('checked', item.IsSelected);
+                            
+                            // Populate values (saved values if selected, defaults if not)
+                            $('.net-weight[data-index="' + index + '"]').val(item.NetWeight.toFixed(2));
+                            $('.rate[data-index="' + index + '"]').val(item.Rate.toFixed(2));
+                            $('.amount[data-index="' + index + '"]').val(item.Amount.toFixed(2));
+                            $('.packing-kg[data-index="' + index + '"]').val((item.PackingKg || 0).toFixed(2));
+                            $('.packing-amount[data-index="' + index + '"]').val((item.PackingAmount || 0).toFixed(2));
+                            $('.net-amount[data-index="' + index + '"]').val((item.NetAmount || 0).toFixed(2));
+                        });
+                        
+                        // Recalculate packing amounts for all items after loading
+                        response.data.forEach(function(item, index) {
+                            if (item.IsSelected && item.PackingKg > 0) {
+                                calculatePackingAmount(index);
+                                calculateNetAmount(index);
+                            }
+                        });
+
+                        // Refresh incentive summary for this invoice
+                        refreshInvoiceIncentiveSummary();
+                        
+                        // Update Select All checkbox state
+                        var totalCheckboxes = $('.row-checkbox').length;
+                        var checkedCheckboxes = $('.row-checkbox:checked').length;
+                        $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
+                        
+                        calculateGrossAmount();
+                        
+                        console.log('Loaded ' + response.data.length + ' total items, ' + response.data.filter(i => i.IsSelected).length + ' selected');
+                    } else {
+                        $('#itemsTableBody').html('<tr><td colspan="15" class="text-center text-muted">No items found</td></tr>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading items for edit:', error);
+                    $('#itemsTableBody').html('<tr><td colspan="15" class="text-center text-danger">Failed to load items</td></tr>');
+                }
+            });
+        }
+
+        function loadInvoiceTaxFactors(invoiceId) {
+            console.log('loadInvoiceTaxFactors called for invoiceId:', invoiceId);
+            
+            // IMPORTANT: Load cost factors FIRST, then load tax data
+            $.ajax({
+                url: '@Url.Action("GetCostFactors", "RawMaterialInvoice")',
+                type: 'POST',
+                success: function(costFactorsResponse) {
+                    if (costFactorsResponse.success) {
+                        costFactorsData = costFactorsResponse.data;
+                        console.log('Cost factors loaded:', costFactorsData.length);
+                        
+                        // NOW load the saved tax factors
+                        $.ajax({
+                            url: '@Url.Action("GetInvoiceTaxFactors", "RawMaterialInvoice")',
+                            type: 'POST',
+                            data: { invoiceId: invoiceId },
+                            success: function (response) {
+                                console.log('Tax factors response:', response);
+                                console.log('Tax factors data:', JSON.stringify(response.data, null, 2));
+                                if (response.success && response.data && response.data.length > 0) {
+                                    console.log('Loading ' + response.data.length + ' tax factors');
+                                    
+                                    // Clear existing tax rows
+                                    $('#taxTableBody').empty();
+                                    taxData = response.data; // Store tax data
+                                    
+                                    // Calculate and display tax totals on main form
+                                    var totalTax = 0;
+                                    response.data.forEach(function(tax) {
+                                        totalTax += parseFloat(tax.DEDVALUE) || 0;
+                                    });
+                                    
+                                    // Update main form display
+                                    $('#taxAmountDisplay').text('₹ ' + totalTax.toFixed(2));
+                                    console.log('Tax amount: ₹' + totalTax.toFixed(2));
+
+                                    // Recalculate full totals (Net + Incentive + HSN GST + manual taxes)
+                                    // This uses taxData + item incentives inside calculateGrossAmount()
+                                    calculateGrossAmount();
+                                    
+                                    // Add each saved tax factor as a row
+                                    response.data.forEach(function(tax, index) {
+                                        addTaxRow();
+                                        
+                                        // Wait a bit for the row to be added, then populate it
+                                        setTimeout(function() {
+                                            var allRows = $('#taxTableBody tr');
+                                            var currentRow = $(allRows[index]); // Get the specific row by index
+                                            var actualRowId = currentRow.data('row-id');
+                                            
+                                            console.log('Row ' + index + ' has rowId: ' + actualRowId);
+                                            console.log('Populating row ' + index + ': CFID=' + tax.CFID + ', CFDESC=' + tax.CFDESC + ', CFTYPE=' + tax.CFTYPE + ', CFMODE=' + tax.CFMODE + ', CFEXPR=' + tax.CFEXPR + ', DEDVALUE=' + tax.DEDVALUE);
+                                            
+                                            // Set cost factor dropdown
+                                            var costFactorSelect = currentRow.find('.cost-factor');
+                                            console.log('Dropdown found:', costFactorSelect.length > 0);
+                                            console.log('Dropdown options count:', costFactorSelect.find('option').length);
+                                            console.log('Setting dropdown to CFID:', tax.CFID);
+                                            
+                                            costFactorSelect.val(tax.CFID);
+                                            
+                                            // Verify dropdown was set
+                                            var selectedValue = costFactorSelect.val();
+                                            var selectedText = costFactorSelect.find('option:selected').text();
+                                            console.log('Dropdown after setting - Value:', selectedValue, 'Text:', selectedText);
+                                            
+                                            if (!selectedValue || selectedValue === '') {
+                                                console.error('FAILED to set dropdown for row ' + index + '! CFID ' + tax.CFID + ' not found in options');
+                                                // Try to find the option by text if CFID doesn't work
+                                                costFactorSelect.find('option').each(function() {
+                                                    if ($(this).text().toUpperCase().includes(tax.CFDESC.toUpperCase())) {
+                                                        console.log('Found option by text matching:', $(this).val(), $(this).text());
+                                                        costFactorSelect.val($(this).val());
+                                                        return false; // break
+                                                    }
+                                                });
+                                            }
+                                            
+                                            // Set expression
+                                            var expression = tax.CFTYPE === 0 ? 'Percentage' : 'Value';
+                                            currentRow.find('.expression').val(expression);
+                                            
+                                            // Set mode
+                                            var mode = tax.CFMODE === 0 ? '+' : '-';
+                                            currentRow.find('.mode').val(mode);
+                                            
+                                            // Set value and make readonly
+                                            var valueInput = currentRow.find('.value-input');
+                                            valueInput.val(tax.CFEXPR.toFixed(2));
+                                            valueInput.prop('readonly', true);
+                                            valueInput.css('background-color', '#e9ecef');
+                                            
+                                            // Set amount
+                                            currentRow.find('.amount-output').val(tax.DEDVALUE.toFixed(2));
+                                            
+                                            console.log('Tax row ' + index + ' populated: ' + tax.CFDESC + ' = ₹' + tax.DEDVALUE.toFixed(2));
+                                        }, 100 * (index + 1)); // Increased timeout for better stability
+                                    });
+                                    
+                                    // Update totals after all rows are added
+                                    setTimeout(function() {
+                                        console.log('Updating tax totals after row population...');
+                                        updateTaxTotals();
+                                        updateManualTaxDisplay(); // Display manual taxes on main form
+                                    }, 100 * response.data.length + 300);
+                                } else {
+                                    console.log('No tax factors found or empty response');
+                                    taxData = [];
+                                    // Reset tax display to 0
+                                    $('#taxAmountDisplay').text('₹ 0.00');
+                                    $('#manualTaxBreakdown').empty(); // Clear manual tax display
+
+                                    // Recalculate totals without manual cost factors
+                                    calculateGrossAmount();
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error loading tax factors:', error);
+                                console.error('Response:', xhr.responseText);
+                            }
+                        });
+                    } else {
+                        console.error('Error loading cost factors');
+                    }
+                },
+                error: function() {
+                    console.error('Failed to load cost factors');
+                }
+            });
+        }
+
+        function renderItemsTable() {
+            var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
+            var editId = @(ViewBag.EditId ?? 0);
+            console.log('renderItemsTable called - isEditMode:', isEditMode, 'editId:', editId, 'itemsData.length:', itemsData.length);
+            var html = '';
+            itemsData.forEach(function (item, index) {
+                var actualWeight = (item.ActualWeight || 0).toFixed(2);
+                var incentiveAmount = (item.IncentiveAmount || 0).toFixed(2);
+                var wasteWeight = (item.WasteWeight || 0);
+
+                var isBknOrOthers = item.HasBknOrOthers === true || item.HasBknOrOthers === 1 || item.HasBknOrOthers === "1";
+
+                // Main invoice row (with checkbox and editable fields)
+                html += '<tr data-item-id="' + (item.ItemId || 0) + '" data-index="' + index + '">';
+                html += '<td><input type="checkbox" class="row-checkbox" data-index="' + index + '" /></td>';
+                html += '<td>' + (index + 1) + '</td>';
+                html += '<td><input type="text" readonly value="' + (item.ItemName || '') + '" /></td>';
+                html += '<td><input type="text" readonly value="' + (item.Grade || '') + '" /></td>';
+                html += '<td><input type="text" readonly value="' + (item.ProductionColour || '') + '" /></td>';
+                html += '<td><input type="text" readonly value="' + (item.ReceivedType || '') + '" /></td>';
+                html += '<td><input type="text" readonly value="' + actualWeight + '" /></td>';
+                html += '<td><input type="number" step="0.01" class="net-weight' + (isBknOrOthers ? ' bkn-others-cell' : '') + '" data-index="' + index + '" data-bkn-others="' + (isBknOrOthers ? '1' : '0') + '" value="' + actualWeight + '" /></td>';
+                
+                // Conditionally render Rate, Amount, and new Packing columns based on edit mode
+                var shouldShowEditColumns = (isEditMode === "true") || (editId > 0);
+                if (shouldShowEditColumns) {
+                    var rateReadonly = isBknOrOthers ? '' : ' readonly';
+                    var packingReadonly = isBknOrOthers ? '' : ' readonly';
+
+                    html += '<td class="rate-cell"><input type="number" step="0.01" class="rate' + (isBknOrOthers ? ' bkn-others-cell' : '') + '" data-index="' + index + '" placeholder="0.00" data-bkn-others="' + (isBknOrOthers ? '1' : '0') + '"' + rateReadonly + ' /></td>';
+                    html += '<td class="amount-cell"><input type="text" readonly class="amount" data-index="' + index + '" value="0.00" /></td>';
+                    html += '<td class="packing-kg-cell"><input type="number" step="0.01" class="packing-kg' + (isBknOrOthers ? ' bkn-others-cell' : '') + '" data-index="' + index + '" placeholder="0.00" data-bkn-others="' + (isBknOrOthers ? '1' : '0') + '"' + packingReadonly + ' /></td>';
+                    html += '<td class="packing-amount-cell"><input type="text" readonly class="packing-amount" data-index="' + index + '" value="0.00" /></td>';
+                    html += '<td class="incentive-cell"><input type="text" readonly class="incentive-amount" data-index="' + index + '" value="' + incentiveAmount + '" /></td>';
+                    html += '<td class="net-amount-cell"><input type="text" readonly class="net-amount" data-index="' + index + '" value="0.00" /></td>';
+                    html += '<td class="action-cell"><button type="button" class="btn btn-sm btn-info" onclick="openRateModal(' + index + ')" title="Rate Calculation"><i class="fa fa-calculator"></i> R</button></td>';
+                }
+                
+                html += '</tr>';
+
+                // Optional waste-weight row when WASTEWGT has a value
+                if (wasteWeight && parseFloat(wasteWeight) > 0) {
+                    var wasteDisplay = parseFloat(wasteWeight).toFixed(2);
+                    html += '<tr class="waste-row" data-item-id="' + (item.ItemId || 0) + '" data-index="' + index + '">';
+                    // Separate checkbox to control whether this waste row should be invoiced/saved
+                    html += '<td><input type="checkbox" class="waste-row-checkbox" data-index="' + index + '" /></td>';
+                    html += '<td>' + (index + 1) + '</td>';
+                    html += '<td><input type="text" readonly value="' + (item.ItemName || '') + '" /></td>';
+                    html += '<td><input type="text" readonly value="' + (item.Grade || '') + '" /></td>';
+                    html += '<td><input type="text" readonly value="' + (item.ProductionColour || '') + '" /></td>';
+                    html += '<td><input type="text" readonly value="' + (item.ReceivedType || '') + '" /></td>';
+                    html += '<td><input type="text" readonly value="' + wasteDisplay + '" /></td>'; // Actual Weight (WASTEWGT)
+                    html += '<td><input type="number" step="0.01" class="waste-net-weight" data-index="' + index + '" value="' + wasteDisplay + '" /></td>'; // Net Weight (editable)
+
+                    if (shouldShowEditColumns) {
+                        html += '<td class="rate-cell"><input type="number" step="0.01" class="waste-rate" data-index="' + index + '" placeholder="0.00" /></td>';
+                        html += '<td class="amount-cell"><input type="text" readonly class="waste-amount" data-index="' + index + '" value="0.00" /></td>';
+                        html += '<td class="packing-kg-cell"><input type="number" step="0.01" class="waste-packing-kg" data-index="' + index + '" placeholder="0.00" /></td>';
+                        html += '<td class="packing-amount-cell"><input type="text" readonly class="waste-packing-amount" data-index="' + index + '" value="0.00" /></td>';
+                        html += '<td class="incentive-cell"><input type="text" readonly class="waste-incentive-amount" data-index="' + index + '" value="0.00" /></td>';
+                        html += '<td class="net-amount-cell"><input type="text" readonly class="waste-net-amount" data-index="' + index + '" value="0.00" /></td>';
+                        html += '<td class="action-cell"></td>';
+                    }
+
+                    html += '</tr>';
+                }
+            });
+            $('#itemsTableBody').html(html);
+            
+            // Show/hide columns based on edit mode
+            var actuallyInEditMode = (isEditMode === "true") || (editId > 0);
+            toggleColumnsForMode(actuallyInEditMode);
+
+            // For main rows, calculations are normally driven by the R-button modal.
+            // Exception: rows with HasBknOrOthers=1 allow manual editing of Rate and Packing/Kg.
+
+            $('.net-weight[data-bkn-others="1"], .rate[data-bkn-others="1"]').on('input', function () {
+                var index = $(this).data('index');
+                calculateAmount(index);
+            });
+
+            $('.packing-kg[data-bkn-others="1"]').on('input', function () {
+                var index = $(this).data('index');
+                calculatePackingAmount(index);
+            });
+
+            // Add event listeners for waste-row calculations (unchanged)
+            $('.waste-net-weight, .waste-rate').on('input', function () {
+                var index = $(this).data('index');
+                calculateWasteAmount(index);
+            });
+
+            $('.waste-packing-kg').on('input', function () {
+                var index = $(this).data('index');
+                calculateWastePackingAmount(index);
+            });
+
+            // Add event listener for row checkbox
+            $('.row-checkbox').on('change', function () {
+                calculateGrossAmount();
+                
+                // Recalculate all tax rows if tax modal is open or if tax data exists
+                if ($('#taxTableBody tr').length > 0) {
+                    $('#taxTableBody tr').each(function() {
+                        var rowId = $(this).data('row-id');
+                        calculateTaxRow(rowId);
+                    });
+                }
+            });
+        }
+
+        // Toggle column visibility based on mode
+        function toggleColumnsForMode(isEditMode) {
+            if (isEditMode) {
+                $('#rateColumn').css('display', 'table-cell');
+                $('#amountColumn').css('display', 'table-cell');
+                $('#packingKgColumn').css('display', 'table-cell');
+                $('#packingAmountColumn').css('display', 'table-cell');
+                $('#incentiveColumn').css('display', 'table-cell');
+                $('#netAmountColumn').css('display', 'table-cell');
+                $('#actionColumn').css('display', 'table-cell');
+                $('.rate-cell').css('display', 'table-cell');
+                $('.amount-cell').css('display', 'table-cell');
+                $('.packing-kg-cell').css('display', 'table-cell');
+                $('.packing-amount-cell').css('display', 'table-cell');
+                $('.incentive-cell').css('display', 'table-cell');
+                $('.net-amount-cell').css('display', 'table-cell');
+                $('.action-cell').css('display', 'table-cell');
+            } else {
+                $('#rateColumn, #amountColumn, #packingKgColumn, #packingAmountColumn, #incentiveColumn, #netAmountColumn, #actionColumn').css('display', 'none');
+                $('.rate-cell, .amount-cell, .packing-kg-cell, .packing-amount-cell, .incentive-cell, .net-amount-cell, .action-cell').css('display', 'none');
+            }
+        }
+
+        // Reset all fields in the Rate Calculation modal so values from one row
+        // do not leak into another row when opening the modal
+        function resetRateModalFields() {
+            // Clear summary / calculation fields
+            $('#packingTypeTotal').val('0.000');
+            $('#packingTypePackingWeight').val('');
+            $('#packingTypeTotalWeight').val('0.00');
+            $('#packingTypeOneDollarRate').val('');
+            $('#packingTypeTotalValueForDollar').val('0.00');
+            $('#packingTypeNetWeight').val('0.00');
+            $('#packingTypePerKgRate').val('0.00');
+
+            // Packing / discount and incentive related fields
+            $('#packingTypePackingPerKg').val('');
+            $('#packingTypeWastePWeight').val('0.00');
+            $('#packingTypePackingAmount').val('0.00');
+            $('#packingTypePackingExpense').val('0.00');
+            $('#packingTypeIncentivePercent').val('');
+            $('#packingTypeIncentiveValue').val('0.00');
+            $('#packingTypeIncentiveTotal').val('0.00');
+
+            // Clear dynamic slab inputs container (will be repopulated by loadSlabData)
+            $('#packingTypeSlabs').empty();
+        }
+
+        // Open Rate Calculation Modal
+        function openRateModal(itemIndex) {
+            // Always reset modal fields first so previous row's values are cleared
+            resetRateModalFields();
+
+            if (!itemsData[itemIndex]) {
+                alert('Item data not found');
+                return;
+            }
+            
+            var item = itemsData[itemIndex];
+            
+            // Store current item index and TRANDID for later use
+            window.currentRateItemIndex = itemIndex;
+            window.currentTRANDID = item.TRANDID || 0;
+            
+            console.log('🔵 openRateModal called for itemIndex:', itemIndex);
+            console.log('🔵 Item TRANDID:', window.currentTRANDID);
+            console.log('🔵 Item TRANPID:', item.TRANPID);
+            console.log('🔵 Full item data:', item);
+            
+            if (window.currentTRANDID <= 0) {
+                console.warn('⚠️ WARNING: TRANDID is 0 or invalid. This might cause issues loading/saving data.');
+            }
+            
+            // Populate item details
+            $('#modalItemName').text(item.ItemName || '-');
+            $('#modalGrade').text(item.Grade || '-');
+            $('#modalProductionColour').text(item.ProductionColour || '-');
+            $('#modalReceivedType').text(item.ReceivedType || '-');
+            $('#modalActualWeight').text((item.ActualWeight || 0).toFixed(2) + ' KG');
+            
+            // Get current net weight from the input field
+            var currentNetWeight = $('.net-weight[data-index="' + itemIndex + '"]').val() || item.ActualWeight || 0;
+            $('#modalNetWeight').text(parseFloat(currentNetWeight).toFixed(2) + ' KG');
+
+            // Populate Peeled + Weight (WASTEPWGT from TRANSACTION_PRODUCT_CALCULATION)
+            var peeledPlusWeight = 0;
+            if (typeof item.WastePWeight !== 'undefined' && item.WastePWeight !== null) {
+                peeledPlusWeight = parseFloat(item.WastePWeight) || 0;
+            }
+            $('#packingTypeWastePWeight').val(peeledPlusWeight.toFixed(2));
+            
+            // Load slab data for this item
+            loadSlabData(item.TRANPID);
+            
+            // Show modal
+            $('#rateModal').modal('show');
+        }
+
+        // Load slab data from Raw Material Intake
+        function loadSlabData(tranpId) {
+            if (!tranpId || tranpId <= 0) {
+                console.log('No TRANPID available for slab data');
+                $('#packingTypeName').text('No TRANPID');
+                $('#packingTypeHeader').removeClass().addClass('card-header text-white bg-secondary');
+                populateSlabInputs('packingType', []);
+                return;
+            }
+            
+            console.log('Loading slab data for TRANPID:', tranpId);
+            
+            // AJAX call to get actual slab data from Raw Material Intake
+            $.ajax({
+                url: '@Url.Action("GetSlabData", "RawMaterialInvoice")',
+                type: 'POST',
+                data: { tranpId: tranpId },
+                success: function(response) {
+                    console.log('Slab data response:', response);
+                    if (response.success && response.data && response.data.length > 0) {
+                        console.log('Found slab data:', response.data);
+                        console.log('Packing master:', response.packingMaster);
+                        
+                        // Store packing master ID for saving weight details
+                        window.currentPackingMasterId = response.packingMaster.id;
+                        window.currentPackingMasterName = response.packingMaster.name;
+                        console.log('🔍 Set currentPackingMasterId =', window.currentPackingMasterId);
+                        console.log('🔍 Set currentPackingMasterName =', window.currentPackingMasterName);
+                        
+                        // Set packing type name and header color
+                        $('#packingTypeName').text(response.packingMaster.name);
+                        
+                        // Set header color based on packing type
+                        var headerColor = getPackingTypeColor(response.packingMaster.name);
+                        $('#packingTypeHeader').removeClass().addClass('card-header text-white').css('background-color', headerColor);
+                        
+                        // Populate slab data
+                        populateSlabInputs('packingType', response.data);
+                        
+                        // Set Net Weight from current item
+                        if (typeof window.currentRateItemIndex !== 'undefined') {
+                            var currentItem = itemsData[window.currentRateItemIndex];
+                            if (currentItem) {
+                                var currentNetWeight = $('.net-weight[data-index="' + window.currentRateItemIndex + '"]').val() || currentItem.ActualWeight || 0;
+                                $('#packingTypeNetWeight').val(parseFloat(currentNetWeight).toFixed(2));
+                            }
+                        }
+                        
+                        // Load existing weight details in edit mode (use setTimeout to ensure inputs are rendered)
+                        var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
+                        var invoiceId = @(ViewBag.EditId ?? 0);
+                        
+                        console.log('🔍 Checking if should load existing data...');
+                        console.log('  isEditMode:', isEditMode, 'type:', typeof isEditMode);
+                        console.log('  invoiceId:', invoiceId, 'type:', typeof invoiceId);
+                        console.log('  currentPackingMasterId:', window.currentPackingMasterId);
+                        console.log('  Condition check: isEditMode === "true":', (isEditMode === "true"));
+                        console.log('  Condition check: invoiceId > 0:', (invoiceId > 0));
+                        console.log('  Condition check: currentPackingMasterId exists:', !!window.currentPackingMasterId);
+                        
+                        if ((isEditMode === true || isEditMode === "true") && invoiceId > 0 && window.currentPackingMasterId && window.currentTRANDID > 0) {
+                            console.log('✅ ALL CONDITIONS MET - Loading existing weight details for TRANDID:', window.currentTRANDID);
+                            setTimeout(function() {
+                                loadExistingWeightDetails(window.currentTRANDID);
+                            }, 100); // Small delay to ensure DOM is ready
+                        } else {
+                            console.warn('❌ CONDITIONS NOT MET - Will not load existing data');
+                            console.warn('  isEditMode:', isEditMode, 'type:', typeof isEditMode);
+                            console.warn('  invoiceId:', invoiceId);
+                            console.warn('  currentPackingMasterId:', window.currentPackingMasterId);
+                            console.warn('  currentTRANDID:', window.currentTRANDID);
+                            if (!(isEditMode === true || isEditMode === "true")) console.warn('  ❌ Not in edit mode');
+                            if (invoiceId <= 0) console.warn('  ❌ Invalid invoice ID');
+                            if (!window.currentPackingMasterId) console.warn('  ❌ No packing master ID');
+                            if (!window.currentTRANDID || window.currentTRANDID <= 0) console.warn('  ❌ No TRANDID or TRANDID is invalid');
+                        }
+                    } else {
+                        console.log('No slab data found for TRANPID:', tranpId);
+                        console.log('Response details:', response);
+                        
+                        // Set default packing master ID if no data found
+                        window.currentPackingMasterId = 1; // Default to first packing master
+                        console.log('🔍 Set default currentPackingMasterId =', window.currentPackingMasterId);
+                        
+                        // Show empty section
+                        $('#packingTypeName').text('No Packing Data');
+                        $('#packingTypeHeader').removeClass().addClass('card-header text-white bg-secondary');
+                        populateSlabInputs('packingType', []);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading slab data:', error);
+                    console.error('XHR response:', xhr.responseText);
+                    
+                    // Set default packing master ID on error
+                    window.currentPackingMasterId = 1; // Default to first packing master
+                    console.log('🔍 Set default currentPackingMasterId on error =', window.currentPackingMasterId);
+                    
+                    // Show empty section due to error
+                    $('#packingTypeName').text('Error Loading Data');
+                    $('#packingTypeHeader').removeClass().addClass('card-header text-white bg-danger');
+                    populateSlabInputs('packingType', []);
+                }
+            });
+        }
+
+        // Get packing type color based on name
+        function getPackingTypeColor(packingTypeName) {
+            var name = packingTypeName.toLowerCase();
+            if (name.includes('head on')) {
+                return '#007bff'; // Blue
+            } else if (name.includes('head less')) {
+                return '#28a745'; // Green
+            } else if (name.includes('easy peel')) {
+                return '#ffc107'; // Yellow
+            } else if (name.includes('peeled')) {
+                return '#17a2b8'; // Teal
+            } else if (name.includes('tail off')) {
+                return '#6f42c1'; // Purple
+            } else if (name.includes('tail on')) {
+                return '#fd7e14'; // Orange
+            } else {
+                return '#6c757d'; // Gray (default)
+            }
+        }
+
+
+        // Populate slab inputs for dynamic packing type
+        function populateSlabInputs(type, slabData) {
+            var containerId = type + 'Slabs';
+            var container = $('#' + containerId);
+            container.empty();
+            
+            if (slabData && slabData.length > 0) {
+                // Create table structure
+                var tableHtml = '<div class="table-responsive">' +
+                    '<table class="table table-bordered table-sm">' +
+                        '<thead class="bg-light">' +
+                            '<tr>' +
+                                '<th width="25%">Size Range</th>' +
+                                '<th width="20%">Intake Value</th>' +
+                                '<th width="55%">Calculation Value (Dollar)</th>' +
+                            '</tr>' +
+                        '</thead>' +
+                        '<tbody>';
+                
+                slabData.forEach(function(slab, index) {
+                    tableHtml += '<tr>' +
+                        '<td><strong>' + slab.range + '</strong></td>' +
+                        '<td class="text-center">' +
+                            '<span class="badge bg-info text-white fs-6">' + (slab.value || 0) + '</span>' +
+                        '</td>' +
+                        '<td>' +
+                            '<input type="number" class="form-control slab-input" ' +
+                                'id="' + type + 'Slab' + index + '" ' +
+                                'data-range="' + slab.range + '" ' +
+                                'data-type="' + type + '" ' +
+                                'data-intake-value="' + (slab.value || 0) + '" ' +
+                                'data-pck-column="' + (slab.pckColumn || '') + '" ' +
+                                'placeholder="Enter calculation value" ' +
+                                'step="0.001" oninput="calculateSlabTotal(\'' + type + '\')">' +
+                        '</td>' +
+                    '</tr>';
+                });
+                
+                tableHtml += '</tbody></table></div>';
+                container.html(tableHtml);
+            } else {
+                container.html('<div class="text-muted text-center p-3">No slab data available</div>');
+            }
+            
+            // Calculate initial total
+            calculateSlabTotal(type);
+        }
+
+        // Calculate slab total for dynamic packing type
+        function calculateSlabTotal(type) {
+            var total = 0;
+            $('#' + type + 'Slabs .slab-input').each(function() {
+                var calculationValue = parseFloat($(this).val()) || 0;
+                var intakeValue = parseFloat($(this).data('intake-value')) || 0;
+                // Multiply intake value × calculation value
+                total += intakeValue * calculationValue;
+            });
+            
+            $('#' + type + 'Total').val(total.toFixed(3));
+            calculateTotalWeight(type);
+        }
+
+        // Calculate total weight (Total × Packing Weight)
+        function calculateTotalWeight(type) {
+            var total = parseFloat($('#' + type + 'Total').val()) || 0;
+            var packingWeight = parseFloat($('#' + type + 'PackingWeight').val()) || 0;
+            
+            var totalWeight = total * packingWeight;
+            $('#' + type + 'TotalWeight').val(totalWeight.toFixed(2));
+            
+            // Set Net Weight from current item
+            if (typeof window.currentRateItemIndex !== 'undefined') {
+                var currentItem = itemsData[window.currentRateItemIndex];
+                if (currentItem) {
+                    var currentNetWeight = $('.net-weight[data-index="' + window.currentRateItemIndex + '"]').val();
+                    if (!currentNetWeight || isNaN(parseFloat(currentNetWeight))) {
+                        currentNetWeight = currentItem.NetWeight || currentItem.ActualWeight || 0;
+                    }
+                    $('#' + type + 'NetWeight').val(parseFloat(currentNetWeight).toFixed(2));
+                }
+            }
+            
+            calculateDollarValue(type);
+        }
+
+        // Calculate dollar value
+        // Total Value (In INR) = Total Weight (In KGS) * Rate Per USD
+        // Per Kg Rate = Total Value (In INR) / Net Weight
+        function calculateDollarValue(type) {
+            var totalWeight = parseFloat($('#' + type + 'TotalWeight').val()) || 0;
+            var netWeight = parseFloat($('#' + type + 'NetWeight').val()) || 0;
+            var oneDollarRate = parseFloat($('#' + type + 'OneDollarRate').val()) || 0;
+
+            // Step 1: Total Value in INR from Total Weight
+            var totalValueForDollar = totalWeight * oneDollarRate;
+            $('#' + type + 'TotalValueForDollar').val(totalValueForDollar.toFixed(2));
+
+            // Step 2: Per Kg Rate from Total Value / Net Weight
+            var perKgRate = (netWeight > 0) ? (totalValueForDollar / netWeight) : 0;
+            $('#' + type + 'PerKgRate').val(perKgRate.toFixed(2));
+
+            // When the base value changes, also refresh packing discount and incentive
+            // so Packing Amount, Packing Expense, Incentive Value and On Account
+            // stay in sync without retyping other fields
+            if (type === 'packingType') {
+                // Recalculate packing discount if a Packing/Kg value exists
+                var packingPerKgVal = $('#'+ type + 'PackingPerKg').val();
+                if (packingPerKgVal !== undefined && packingPerKgVal !== null && packingPerKgVal !== '') {
+                    calculatePackingDiscount(type);
+                }
+
+                // Recalculate incentive / On Account if an incentive percent exists
+                var incentivePercentVal = $('#'+ type + 'IncentivePercent').val();
+                if (incentivePercentVal !== undefined && incentivePercentVal !== null && incentivePercentVal !== '') {
+                    calculatePerKgRate(type);
+                } else {
+                    // Even when no incentive % is entered, keep On Account synced
+                    calculatePerKgRate(type);
+                }
+            }
+        }
+
+        // Incentive calculation ONLY on Packing Expense (does NOT change Per Kg Rate or Total Value)
+        function calculatePerKgRate(type) {
+            var packingExpense = parseFloat($('#' + type + 'PackingExpense').val()) || 0;
+            var incentivePercent = parseFloat($('#' + type + 'IncentivePercent').val()) || 0;
+            var incentiveValue = 0;
+            var incentiveTotal = 0;
+
+            if (incentivePercent > 0 && packingExpense > 0) {
+                incentiveValue = packingExpense * incentivePercent / 100.0;
+                incentiveTotal = packingExpense + incentiveValue;
+
+                $('#' + type + 'IncentiveValue').val(incentiveValue.toFixed(2));
+                $('#' + type + 'IncentiveTotal').val(incentiveTotal.toFixed(2));
+
+                // Also update the invoice-level "On Incentive value" summary
+                if (type === 'packingType') {
+                    $('#incentiveSummaryAmount').text('₹ ' + incentiveValue.toFixed(2));
+                }
+            } else {
+                // No incentive: reset values and set On Account equal to Packing Expense
+                $('#' + type + 'IncentiveValue').val('0.00');
+                incentiveTotal = packingExpense;
+                $('#' + type + 'IncentiveTotal').val(packingExpense.toFixed(2));
+
+                // Reset the invoice-level summary when there is no incentive
+                if (type === 'packingType') {
+                    $('#incentiveSummaryAmount').text('₹ 0.00');
+                }
+            }
+
+            // After On Account is set, recalculate Per Kg Rate based on On Account / Net Weight
+            var netWeight = parseFloat($('#' + type + 'NetWeight').val()) || 0;
+            var onAccount = parseFloat($('#' + type + 'IncentiveTotal').val()) || 0;
+
+            if (netWeight > 0 && onAccount > 0) {
+                var perKgFromOnAccount = onAccount / netWeight;
+                $('#' + type + 'PerKgRate').val(perKgFromOnAccount.toFixed(2));
+            } else {
+                $('#' + type + 'PerKgRate').val('0.00');
+            }
+        }
+
+        // Calculate packing discount values based on Packing/Kg and Peeled + Weight (WASTEPWGT)
+        // If Peeled + Weight is 0, fall back to Net Weight for the calculation
+        function calculatePackingDiscount(type) {
+            var packingPerKg = parseFloat($('#' + type + 'PackingPerKg').val()) || 0;
+            var wastePWeight = parseFloat($('#' + type + 'WastePWeight').val()) || 0;
+            var baseTotalValue = parseFloat($('#' + type + 'TotalValueForDollar').val()) || 0;
+            var netWeightForModal = parseFloat($('#' + type + 'NetWeight').val()) || 0;
+
+            // Use Peeled + Weight when available; otherwise use Net Weight
+            var basisWeight = wastePWeight > 0 ? wastePWeight : netWeightForModal;
+
+            // TRANIDISCAMT = basisWeight * TRANIDISCEXPRN
+            var packingAmount = (basisWeight * packingPerKg) || 0;
+            $('#' + type + 'PackingAmount').val(packingAmount.toFixed(2));
+            
+            // TOTALDOLDISCAMT = TOTALDOLVAL - TRANIDISCAMT
+            var discountedTotal = baseTotalValue - packingAmount;
+            if (discountedTotal < 0) discountedTotal = 0;
+            $('#' + type + 'PackingExpense').val(discountedTotal.toFixed(2));
+            
+            // When packing changes, refresh incentive / On Account as well
+            calculatePerKgRate(type);
+        }
+
+        // Load existing weight details for edit mode
+        function loadExistingWeightDetails(trandId) {
+            console.log('===========================================');
+            console.log('📥 LOAD EXISTING WEIGHT DETAILS CALLED');
+            console.log('📥 TRANDID:', trandId);
+            console.log('📥 TRANDID type:', typeof trandId);
+            
+            if (!trandId || trandId <= 0) {
+                console.error('❌ ERROR: Invalid TRANDID provided to loadExistingWeightDetails:', trandId);
+                return;
+            }
+            
+            $.ajax({
+                url: '@Url.Action("GetWeightDetails", "RawMaterialInvoice")',
+                type: 'POST',
+                data: { 
+                    trandId: trandId
+                },
+                success: function(response) {
+                    console.log('📥 GetWeightDetails Response:', response);
+                    if (response.success && response.data) {
+                        console.log('✅ Found existing weight details:', response.data);
+                        
+                        // Populate the summary fields
+                        $('#packingTypeTotal').val(response.data.TOTALPNDS.toFixed(3));
+                        $('#packingTypePackingWeight').val(response.data.PACKWGT.toFixed(2));
+                        $('#packingTypeTotalWeight').val(response.data.TOTALWGHT.toFixed(2));
+                        $('#packingTypeOneDollarRate').val(response.data.ONEDOLLAR.toFixed(2));
+                        $('#packingTypeTotalValueForDollar').val(response.data.TOTALDOLVAL.toFixed(2));
+                        $('#packingTypeNetWeight').val(response.data.WEIGHTINKGS.toFixed(2));
+                        $('#packingTypePerKgRate').val(response.data.PERKGRATE.toFixed(2));
+                        // Populate packing discount fields
+                        var existingWastePWeight = parseFloat($('#packingTypeWastePWeight').val()) || 0;
+                        var dbWastePWeight = parseFloat(response.data.WASTEPWGT || 0);
+                        var finalWastePWeight = dbWastePWeight > 0 ? dbWastePWeight : existingWastePWeight;
+                        $('#packingTypeWastePWeight').val(finalWastePWeight.toFixed(2));
+
+                        var totalDolVal = parseFloat(response.data.TOTALDOLVAL || 0);
+                        var totalDolDiscAmt = parseFloat(response.data.TOTALDOLDISCAMT || totalDolVal);
+                        var dbPackingAmount = parseFloat(response.data.TRANIDISCAMT || 0);
+                        var packingAmount = dbPackingAmount;
+
+                        if (packingAmount <= 0 && totalDolVal > 0 && totalDolDiscAmt >= 0 && totalDolDiscAmt <= totalDolVal) {
+                            packingAmount = totalDolVal - totalDolDiscAmt;
+                        }
+                        if (packingAmount < 0) packingAmount = 0;
+
+                        var dbPackingPerKg = parseFloat(response.data.TRANIDISCEXPRN || 0);
+                        var packingPerKg = dbPackingPerKg;
+                        if (packingPerKg <= 0 && finalWastePWeight > 0 && packingAmount > 0) {
+                            packingPerKg = packingAmount / finalWastePWeight;
+                        }
+
+                        $('#packingTypePackingPerKg').val(packingPerKg.toFixed(2));
+                        $('#packingTypePackingAmount').val(packingAmount.toFixed(2));
+                        $('#packingTypePackingExpense').val(totalDolDiscAmt.toFixed(2));
+                        
+                        // Populate incentive fields (optional)
+                        if (typeof response.data.INCENTIVEPERCENT !== 'undefined' && response.data.INCENTIVEPERCENT !== null) {
+                            $('#packingTypeIncentivePercent').val(parseFloat(response.data.INCENTIVEPERCENT).toFixed(3));
+                        } else {
+                            $('#packingTypeIncentivePercent').val('0.000');
+                        }
+                        $('#packingTypeIncentiveValue').val(((response.data.INCENTIVEVALUE !== null && typeof response.data.INCENTIVEVALUE !== 'undefined') ? response.data.INCENTIVEVALUE : 0).toFixed(2));
+                        $('#packingTypeIncentiveTotal').val(((response.data.INCENTIVETOTALVALUE !== null && typeof response.data.INCENTIVETOTALVALUE !== 'undefined') ? response.data.INCENTIVETOTALVALUE : response.data.TOTALDOLVAL).toFixed(2));
+                        
+                        // Populate the calculation values for each slab
+                        if (response.data.Details && response.data.Details.length > 0) {
+                            console.log('📝 Populating', response.data.Details.length, 'calculation values');
+                            
+                            // First, log all available slab inputs
+                            var availableSlabs = [];
+                            $('#packingTypeSlabs .slab-input').each(function() {
+                                var inputRange = $(this).data('range');
+                                availableSlabs.push(inputRange);
+                            });
+                            console.log('📋 Available slab inputs:', availableSlabs);
+                            console.log('📋 Details to populate:', response.data.Details.map(d => d.PACKTMDESC));
+                            
+                            response.data.Details.forEach(function(detail) {
+                                console.log('🔍 Looking for range:', detail.PACKTMDESC);
+                                var matched = false;
+                                
+                                // Find the matching slab input by range name
+                                $('#packingTypeSlabs .slab-input').each(function() {
+                                    var inputRange = $(this).data('range');
+                                    console.log('  Comparing "' + inputRange + '" with "' + detail.PACKTMDESC + '"');
+                                    
+                                    if (inputRange && inputRange.trim().toUpperCase() === detail.PACKTMDESC.trim().toUpperCase()) {
+                                        $(this).val(detail.PNDSVALUE.toFixed(3));
+                                        console.log('  ✅ Set', detail.PACKTMDESC, '=', detail.PNDSVALUE);
+                                        matched = true;
+                                    }
+                                });
+                                
+                                if (!matched) {
+                                    console.warn('  ⚠️ No matching input found for:', detail.PACKTMDESC);
+                                }
+                            });
+                            
+                            // Recalculate totals after populating
+                            calculateSlabTotal('packingType');
+                        }
+                        
+                        console.log('✅ Populated existing weight details in modal');
+                    } else {
+                        console.log('ℹ️ No existing weight details found for TRANDID:', trandId);
+                        if (response.message) {
+                            console.log('ℹ️ Server message:', response.message);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('❌ Error loading existing weight details');
+                    console.error('❌ Status:', status);
+                    console.error('❌ Error:', error);
+                    console.error('❌ Response Text:', xhr.responseText);
+                    console.error('❌ TRANDID used:', trandId);
+                }
+            });
+        }
+
+        // Apply rate calculation and save weight details
+        function applyRateCalculation() {
+            console.log('🔥 applyRateCalculation called - STARTING');
+            console.log('🔍 window.currentRateItemIndex:', window.currentRateItemIndex);
+            
+            if (typeof window.currentRateItemIndex === 'undefined') {
+                console.error('❌ No currentRateItemIndex defined');
+                alert('No item selected for rate calculation');
+                return;
+            }
+            
+            var itemIndex = window.currentRateItemIndex;
+            var currentItem = itemsData[itemIndex];
+            console.log('🔍 Current item:', currentItem);
+            
+            // Get calculated rate from the packing type section
+            var finalRate = parseFloat($('#packingTypePerKgRate').val()) || 0;
+            console.log('🔍 Final rate:', finalRate);
+            
+            if (finalRate > 0) {
+                // Also copy packing values from modal to the main grid row
+                var modalPackingPerKg = parseFloat($('#packingTypePackingPerKg').val()) || 0;
+                var modalPackingAmount = parseFloat($('#packingTypePackingAmount').val()) || 0;
+
+                $('.packing-kg[data-index="' + itemIndex + '"]').val(modalPackingPerKg.toFixed(2));
+                $('.packing-amount[data-index="' + itemIndex + '"]').val(modalPackingAmount.toFixed(2));
+
+                // Get invoice ID (only save if we're in edit mode with a valid invoice ID)
+                var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
+                var invoiceId = @(ViewBag.EditId ?? 0);
+                
+                console.log('🔍 isEditMode:', isEditMode, 'type:', typeof isEditMode);
+                console.log('🔍 invoiceId:', invoiceId, 'type:', typeof invoiceId);
+                
+                // Fix the condition to handle both boolean and string values
+                var isEdit = (isEditMode === true || isEditMode === "true");
+                console.log('🔍 isEdit (converted):', isEdit);
+                
+                if (isEdit && invoiceId > 0) {
+                    // Ensure we have a valid packing master ID
+                    var packingMasterId = window.currentPackingMasterId || 1; // Default to 1 if not set
+                    
+                    // Validate required data
+                    if (!invoiceId || invoiceId <= 0) {
+                        alert('❌ Error: Invalid invoice ID');
+                        return;
+                    }
+                    if (!packingMasterId || packingMasterId <= 0) {
+                        alert('❌ Error: Invalid packing master ID');
+                        return;
+                    }
+
+                    console.log('🔍 Debug: invoiceId =', invoiceId, 'PACKMID =', packingMasterId);
+                    
+                    // Collect all slab data with their packing type information
+                    var slabDetails = [];
+                    var totalSlabValue = 0;
+                    var totalPndsValue = 0;
+                    
+                    $('#packingTypeSlabs .slab-input').each(function() {
+                        var intakeValue = parseFloat($(this).data('intake-value')) || 0;
+                        var calculationValue = parseFloat($(this).val()) || 0;
+                        var slabRange = $(this).data('range') || 'Unknown';
+                        var pckColumn = $(this).data('pck-column') || '';
+                        
+                        if (calculationValue > 0) {
+                            slabDetails.push({
+                                range: slabRange,
+                                intakeValue: intakeValue,
+                                calculationValue: calculationValue,
+                                pckColumn: pckColumn
+                            });
+                        }
+                        
+                        totalSlabValue += intakeValue;
+                        totalPndsValue += calculationValue;
+                    });
+                    
+                    // Get TRANDID from the item data
+                    var trandId = window.currentTRANDID || 0;
+                    console.log('🔵 applyRateCalculation - TRANDID:', trandId);
+                    console.log('🔵 applyRateCalculation - window.currentTRANDID:', window.currentTRANDID);
+                    
+                    if (trandId <= 0) {
+                        console.error('❌ ERROR: TRANDID is invalid:', trandId);
+                        console.error('❌ Current item index:', itemIndex);
+                        console.error('❌ Current item data:', currentItem);
+                        alert('❌ Error: Invalid TRANDID (' + trandId + '). Please ensure the row is saved first and has a valid TRANDID.');
+                        return;
+                    }
+
+                    // Prepare comprehensive weight details data
+                    var weightDetailsData = {
+                        TRANDID: trandId,
+                        PACKMID: packingMasterId,
+                        PACKTMID: 0, // Will be determined by server based on packing types
+                        SLABVALUE: totalSlabValue,
+                        PNDSVALUE: totalPndsValue,
+                        TOTALPNDS: parseFloat($('#packingTypeTotal').val()) || 0,
+                        PACKWGT: parseFloat($('#packingTypePackingWeight').val()) || 0,
+                        TOTALWGHT: parseFloat($('#packingTypeTotalWeight').val()) || 0,
+                        ONEDOLLAR: parseFloat($('#packingTypeOneDollarRate').val()) || 0,
+                        TOTALDOLVAL: parseFloat($('#packingTypeTotalValueForDollar').val()) || 0,
+                        TRANIDISCEXPRN: parseFloat($('#packingTypePackingPerKg').val()) || 0,
+                        WASTEPWGT: parseFloat($('#packingTypeWastePWeight').val()) || 0,
+                        TRANIDISCAMT: parseFloat($('#packingTypePackingAmount').val()) || 0,
+                        TOTALDOLDISCAMT: parseFloat($('#packingTypePackingExpense').val()) || (parseFloat($('#packingTypeTotalValueForDollar').val()) || 0),
+                        WEIGHTINKGS: parseFloat($('#packingTypeNetWeight').val()) || 0,
+                        PERKGRATE: finalRate,
+                        INCENTIVEPERCENT: parseFloat($('#packingTypeIncentivePercent').val()) || 0,
+                        INCENTIVEVALUE: parseFloat($('#packingTypeIncentiveValue').val()) || 0,
+                        INCENTIVETOTALVALUE: parseFloat($('#packingTypeIncentiveTotal').val()) || (parseFloat($('#packingTypePackingExpense').val()) || parseFloat($('#packingTypeTotalValueForDollar').val()) || 0),
+                        SlabDetails: slabDetails // Send detailed slab information
+                    };
+
+                    console.log('🔥 ABOUT TO SAVE WEIGHT DETAILS');
+                    console.log('Saving weight details:', weightDetailsData);
+                    console.log('AJAX URL:', '@Url.Action("SaveWeightDetails", "RawMaterialInvoice")');
+                    console.log('SlabDetails count:', slabDetails.length);
+
+                    // Save weight details to database
+                    $.ajax({
+                        url: '@Url.Action("SaveWeightDetails", "RawMaterialInvoice")',
+                        type: 'POST',
+                        data: weightDetailsData,
+                        beforeSend: function() {
+                            console.log('🚀 AJAX REQUEST STARTING...');
+                        },
+                        success: function(response) {
+                            console.log('✅ AJAX Success Response:', response);
+                            if (response.success) {
+                                console.log('✅ Weight details saved successfully to database!');
+                                console.log('✅ Server message:', response.message);
+                                
+                                // Update the rate in the main form
+                                $('.rate[data-index="' + itemIndex + '"]').val(finalRate.toFixed(2));
+                                
+                                // Update line incentive from modal and recalculate amounts
+                                var lineIncentive = parseFloat($('#packingTypeIncentiveValue').val()) || 0;
+                                $('.incentive-amount[data-index="' + itemIndex + '"]').val(lineIncentive.toFixed(2));
+                                
+                                // Trigger calculation (amount, net, totals including incentive)
+                                calculateAmount(itemIndex);
+                                
+                                alert('✅ SUCCESS: Rate applied and weight details saved!\n' + response.message + '\n₹' + finalRate.toFixed(2) + ' per KG');
+                                
+                                // Refresh incentive summary on the invoice
+                                refreshInvoiceIncentiveSummary();
+
+                                // Close modal
+                                $('#rateModal').modal('hide');
+                            } else {
+                                console.error('❌ Server returned error:', response.message);
+                                console.error('❌ AJAX Error:', response);
+                                console.error('❌ Status:', 'Server Error');
+                                console.error('❌ Response Text:', response.message);
+                                console.error('❌ XHR Object:', response);
+                                alert('❌ ERROR: Server returned error: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('❌ AJAX REQUEST FAILED!');
+                            console.error('❌ AJAX Error:', error);
+                            console.error('❌ Status:', status);
+                            console.error('❌ Response Text:', xhr.responseText);
+                            console.error('❌ XHR Object:', xhr);
+                            alert('❌ Error saving weight details: ' + error + '\nStatus: ' + status + '\nResponse: ' + xhr.responseText);
+                        }
+                    });
+                } else {
+                    // Add mode - just apply the rate without saving weight details
+                    console.log('Add mode - applying rate without saving weight details');
+                    
+                    // Update the rate in the main form
+                    $('.rate[data-index="' + itemIndex + '"]').val(finalRate.toFixed(2));
+                    
+                    // Trigger calculation
+                    calculateAmount(itemIndex);
+                    
+                    alert('Rate applied successfully: ₹' + finalRate.toFixed(2) + ' per KG');
+                    
+                    // Close modal
+                    $('#rateModal').modal('hide');
+                }
+            } else {
+                alert('Please calculate rate in the packing type section');
+                return;
+            }
+        }
+
+        function calculateAmount(index) {
+            var netWeightInput = $('.net-weight[data-index="' + index + '"]');
+            var netWeight = parseFloat(netWeightInput.val()) || 0;
+            var rate = parseFloat($('.rate[data-index="' + index + '"]').val()) || 0;
+            var amount = (netWeight * rate).toFixed(2);
+            $('.amount[data-index="' + index + '"]').val(amount);
+            
+            // Validate Net Weight against Actual Weight (real-time visual feedback)
+            // Use rounding to 2 decimal places to avoid floating point precision issues
+            var actualWeight = parseFloat(itemsData[index].ActualWeight) || 0;
+            var netWeightRounded = Math.round(netWeight * 100) / 100;
+            var actualWeightRounded = Math.round(actualWeight * 100) / 100;
+            if (netWeightRounded > actualWeightRounded) {
+                // Add red border and show warning
+                netWeightInput.css({
+                    'border': '2px solid #dc3545',
+                    'background-color': '#fff5f5'
+                });
+                netWeightInput.attr('title', 'Net Weight (' + netWeight.toFixed(2) + ' kg) cannot exceed Actual Weight (' + actualWeight.toFixed(2) + ' kg)');
+            } else {
+                // Remove red border if valid
+                netWeightInput.css({
+                    'border': '1px solid #ced4da',
+                    'background-color': 'white'
+                });
+                netWeightInput.removeAttr('title');
+            }
+            
+            // Update PERKGRATE in weight details if rate changed and we're in edit mode with a valid TRANDID
+            if (rate > 0) {
+                var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
+                var invoiceId = @(ViewBag.EditId ?? 0);
+                var isEdit = (isEditMode === true || isEditMode === "true");
+                
+                if (isEdit && invoiceId > 0) {
+                    // Get TRANDID from the item data
+                    var item = itemsData[index];
+                    if (item && item.TRANDID && item.TRANDID > 0) {
+                        // Update PERKGRATE in weight details asynchronously
+                        $.ajax({
+                            url: '@Url.Action("UpdateRateInWeightDetails", "RawMaterialInvoice")',
+                            type: 'POST',
+                            data: JSON.stringify({ trandId: item.TRANDID, newRate: rate }),
+                            contentType: 'application/json',
+                            success: function(response) {
+                                if (response.success) {
+                                    console.log('Rate updated in weight details for TRANDID: ' + item.TRANDID);
+                                } else {
+                                    console.log('No weight details to update or error: ' + response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.log('Error updating rate in weight details: ' + error);
+                            }
+                        });
+                    }
+                }
+            }
+            
+            // Recalculate gross amount after amount changes
+            calculateGrossAmount();
+            
+            // Recalculate all tax rows if tax exists
+            if ($('#taxTableBody tr').length > 0) {
+                $('#taxTableBody tr').each(function() {
+                    var rowId = $(this).data('row-id');
+                    calculateTaxRow(rowId);
+                });
+            }
+            
+            // Also recalculate packing amounts when amount changes
+            calculatePackingAmount(index);
+        }
+
+        // Calculate Packing Amount
+        // For normal R-button rows (non BKN/OTHERS), the business rule is:
+        //   Packing Amount = Packing/Kg × (Peeled + Weight)
+        // where "Peeled + Weight" comes from product calculation (WastePWeight).
+        // If Peeled + Weight is not available, fall back to Net Weight.
+        // This matches the logic used in the Rate popup so the main grid
+        // shows the same packing amount as the popup.
+        //
+        // For editable BKN/OTHERS/manual rows (data-bkn-others="1"), we keep the
+        // previous behavior and derive Packing Amount directly on the row using
+        // Net Weight × Packing/Kg so manual edits behave as before.
+        function calculatePackingAmount(index) {
+            var netWeightInput = $('.net-weight[data-index="' + index + '"]');
+            var isBknOrOthers = false;
+
+            if (netWeightInput.length) {
+                var flag = netWeightInput.data('bkn-others');
+                isBknOrOthers = (flag === 1 || flag === "1" || flag === true);
+            }
+
+            var packingKg = parseFloat($('.packing-kg[data-index="' + index + '"]').val()) || 0;
+
+            if (!isBknOrOthers) {
+                // Normal rows: use Peeled + Weight (WastePWeight) when available,
+                // otherwise fall back to current Net Weight on the row.
+                var basisWeight = 0;
+
+                if (Array.isArray(itemsData) && itemsData[index]) {
+                    var wastePWeight = parseFloat(itemsData[index].WastePWeight) || 0;
+                    var netWeightForRow = parseFloat(netWeightInput.val()) || 0;
+                    basisWeight = wastePWeight > 0 ? wastePWeight : netWeightForRow;
+                } else {
+                    basisWeight = parseFloat(netWeightInput.val()) || 0;
+                }
+
+                var packingAmountNormal = (basisWeight * packingKg).toFixed(2);
+                $('.packing-amount[data-index="' + index + '"]').val(packingAmountNormal);
+
+                // Recalculate Net Amount using this packing value so totals stay in sync
+                calculateNetAmount(index);
+                return;
+            }
+
+            // BKN/OTHERS/manual rows: keep existing Net Weight × Packing/Kg behavior
+            var netWeight = parseFloat(netWeightInput.val()) || 0;
+            var packingAmount = (netWeight * packingKg).toFixed(2);
+            $('.packing-amount[data-index="' + index + '"]').val(packingAmount);
+            
+            // Calculate Net Amount (Amount - Packing Amount) for these rows
+            calculateNetAmount(index);
+        }
+
+        // Calculate Net Amount = Amount - Packing Amount
+        function calculateNetAmount(index) {
+            var amount = parseFloat($('.amount[data-index="' + index + '"]').val()) || 0;
+            var packingAmount = parseFloat($('.packing-amount[data-index="' + index + '"]').val()) || 0;
+
+            // Detect BKN / OTHERS / manual rows by data-bkn-others flag on net-weight
+            var isBknOrOthers = false;
+            var netWeightInput = $('.net-weight[data-index="' + index + '"]');
+            if (netWeightInput.length) {
+                var flag = netWeightInput.data('bkn-others');
+                isBknOrOthers = (flag === 1 || flag === "1" || flag === true);
+            }
+
+            // Default: Net Amount mirrors Amount for normal R-button rows
+            var netAmount = amount;
+
+            // For BKN / Others / manual rows only, subtract Packing Amount on the row
+            if (isBknOrOthers) {
+                netAmount = amount - packingAmount;
+            }
+
+            $('.net-amount[data-index="' + index + '"]').val(netAmount.toFixed(2));
+            
+            // Recalculate totals
+            calculateGrossAmount();
+        }
+
+        // Calculate Amount for waste-weight row (Rate × Waste Net Weight)
+        function calculateWasteAmount(index) {
+            var netWeightInput = $('.waste-net-weight[data-index="' + index + '"]');
+            var netWeight = parseFloat(netWeightInput.val()) || 0;
+            var rate = parseFloat($('.waste-rate[data-index="' + index + '"]').val()) || 0;
+            var amount = (netWeight * rate).toFixed(2);
+            $('.waste-amount[data-index="' + index + '"]').val(amount);
+
+            // Validate Net Weight against Waste Weight (visual feedback only)
+            var wasteActual = 0;
+            if (itemsData && itemsData[index] && typeof itemsData[index].WasteWeight !== 'undefined') {
+                wasteActual = parseFloat(itemsData[index].WasteWeight) || 0;
+            }
+
+            var netWeightRounded = Math.round(netWeight * 100) / 100;
+            var wasteActualRounded = Math.round(wasteActual * 100) / 100;
+            if (wasteActual > 0 && netWeightRounded > wasteActualRounded) {
+                netWeightInput.css({
+                    'border': '2px solid #dc3545',
+                    'background-color': '#fff5f5'
+                });
+                netWeightInput.attr('title', 'Net Waste Weight (' + netWeight.toFixed(2) + ' kg) cannot exceed Waste Weight (' + wasteActual.toFixed(2) + ' kg)');
+            } else {
+                netWeightInput.css({
+                    'border': '1px solid #ced4da',
+                    'background-color': 'white'
+                });
+                netWeightInput.removeAttr('title');
+            }
+
+            // Also update packing and net for waste row
+            calculateWastePackingAmount(index);
+        }
+
+        // Calculate Packing Amount for waste-weight row based on Waste Net Weight * Packing/Kg
+        function calculateWastePackingAmount(index) {
+            var netWeight = parseFloat($('.waste-net-weight[data-index="' + index + '"]').val()) || 0;
+            var packingKg = parseFloat($('.waste-packing-kg[data-index="' + index + '"]').val()) || 0;
+
+            // Use Waste Net Weight directly for packing calculation in the form
+            var packingAmount = (netWeight * packingKg).toFixed(2);
+            $('.waste-packing-amount[data-index="' + index + '"]').val(packingAmount);
+
+            calculateWasteNetAmount(index);
+        }
+
+        // Calculate Net Amount for waste-weight row = Amount - Packing Amount
+        function calculateWasteNetAmount(index) {
+            var amount = parseFloat($('.waste-amount[data-index="' + index + '"]').val()) || 0;
+            var packingAmount = parseFloat($('.waste-packing-amount[data-index="' + index + '"]').val()) || 0;
+            var netAmount = (amount - packingAmount).toFixed(2);
+            $('.waste-net-amount[data-index="' + index + '"]').val(netAmount);
+            
+            // Recalculate totals after waste-row net changes
+            calculateGrossAmount();
+            
+            // Recalculate all tax rows if tax exists
+            if ($('#taxTableBody tr').length > 0) {
+                $('#taxTableBody tr').each(function() {
+                    var rowId = $(this).data('row-id');
+                    calculateTaxRow(rowId);
+                });
+            }
+        }
+
+        // Calculate Total Amount from CHECKED rows only + HSN-based GST + Incentive
+        function calculateGrossAmount() {
+            var grossAmount = 0;
+            var totalPackingAmount = 0;
+            var totalNetAmount = 0;
+            var totalIncentiveAmount = 0;
+            var supplierState = $('#state').val() || '';
+            var isTamilNadu = supplierState.toUpperCase().includes('TAMIL');
+            
+            var totalCGST = 0;
+            var totalSGST = 0;
+            var totalIGST = 0;
+            var hasGST = false;
+            
+            // Collect all checked items
+            var checkedItems = [];
+            $('#itemsTableBody tr').each(function() {
+                var checkbox = $(this).find('.row-checkbox');
+                if (checkbox.is(':checked')) {
+                    var amount = parseFloat($(this).find('.amount').val()) || 0;
+                    var packingAmount = parseFloat($(this).find('.packing-amount').val()) || 0;
+                    var netAmount = parseFloat($(this).find('.net-amount').val()) || 0;
+                    var incentiveAmount = parseFloat($(this).find('.incentive-amount').val()) || 0;
+                    var itemId = parseInt($(this).data('item-id')) || 0;
+                    var index = parseInt(checkbox.data('index')) || 0;
+
+                    // Include waste-row values ONLY if its checkbox is checked
+                    var wasteCheckbox = $('.waste-row-checkbox[data-index="' + index + '"]');
+                    var isWasteSelected = wasteCheckbox.length > 0 && wasteCheckbox.is(':checked');
+                    if (isWasteSelected) {
+                        var wasteAmount = parseFloat($('.waste-amount[data-index="' + index + '"]').val()) || 0;
+                        var wastePackingAmount = parseFloat($('.waste-packing-amount[data-index="' + index + '"]').val()) || 0;
+                        var wasteNetAmount = parseFloat($('.waste-net-amount[data-index="' + index + '"]').val()) || 0;
+                        var wasteIncentiveAmount = parseFloat($('.waste-incentive-amount[data-index="' + index + '"]').val()) || 0;
+
+                        amount += wasteAmount;
+                        packingAmount += wastePackingAmount;
+                        netAmount += wasteNetAmount;
+                        incentiveAmount += wasteIncentiveAmount;
+                    }
+                    
+                    console.log('Checked item:', itemId, 'Amount:', amount, 'PackingAmount:', packingAmount, 'NetAmount:', netAmount);
+                    
+                    grossAmount += amount;
+                    totalPackingAmount += packingAmount;
+                    totalNetAmount += netAmount;
+                    totalIncentiveAmount += incentiveAmount;
+                    checkedItems.push({ itemId: itemId, amount: amount });
+                }
+            });
+            
+            console.log('Totals calculated - Gross:', grossAmount, 'Packing:', totalPackingAmount, 'Net:', totalNetAmount);
+            
+            // Update the display values
+            $('#grossAmount').text('₹ ' + grossAmount.toFixed(2));
+            $('#packingDiscountAmount').text('₹ ' + totalPackingAmount.toFixed(2));
+            $('#incentiveSummaryAmount').text('₹ ' + totalIncentiveAmount.toFixed(2));
+            
+            // Calculate GST for each checked item
+            if (checkedItems.length > 0 && grossAmount > 0) {
+                console.log('Calculating HSN GST for ' + checkedItems.length + ' items:', checkedItems);
+                console.log('Supplier state:', supplierState, 'Is Tamil Nadu:', isTamilNadu);
+                
+                // Make AJAX call to get HSN-based GST rates for all items
+                $.ajax({
+                    url: '@Url.Action("GetMaterialHSNGST", "RawMaterialInvoice")',
+                    type: 'POST',
+                    data: JSON.stringify({ items: checkedItems, isTamilNadu: isTamilNadu }),
+                    contentType: 'application/json',
+                    async: false, // Synchronous to update display immediately
+                    success: function(response) {
+                        console.log('HSN GST API Response:', response);
+                        if (response.success && response.gstData) {
+                            totalCGST = response.gstData.totalCGST || 0;
+                            totalSGST = response.gstData.totalSGST || 0;
+                            totalIGST = response.gstData.totalIGST || 0;
+                            hasGST = response.gstData.hasGST || false;
+                            
+                            console.log('HSN GST Calculated - CGST: ₹' + totalCGST.toFixed(2) + ', SGST: ₹' + totalSGST.toFixed(2) + ', IGST: ₹' + totalIGST.toFixed(2));
+                            
+                            // Update GST display - ALWAYS show based on supplier state (even if 0)
+                            $('#noTaxRow').hide();
+                            
+                            if (isTamilNadu) {
+                                // Tamil Nadu: Show CGST + SGST (always, even if 0)
+                                $('#cgstRateDisplay').text('@@ ' + response.gstData.cgstRate + '%');
+                                $('#cgstAmountDisplay').text('₹ ' + totalCGST.toFixed(2));
+                                $('#cgstRow').show();
+                                
+                                $('#sgstRateDisplay').text('@@ ' + response.gstData.sgstRate + '%');
+                                $('#sgstAmountDisplay').text('₹ ' + totalSGST.toFixed(2));
+                                $('#sgstRow').show();
+                                
+                                $('#igstRow').hide();
+                            } else {
+                                // Other States: Show IGST only (always, even if 0)
+                                $('#igstRateDisplay').text('@@ ' + response.gstData.igstRate + '%');
+                                $('#igstAmountDisplay').text('₹ ' + totalIGST.toFixed(2));
+                                $('#igstRow').show();
+                                
+                                $('#cgstRow').hide();
+                                $('#sgstRow').hide();
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching GST data:', error);
+                        console.error('Status:', status);
+                        console.error('Response:', xhr.responseText);
+                        $('#noTaxRow').show();
+                        $('#cgstRow, #sgstRow, #igstRow').hide();
+                    }
+                });
+            } else {
+                // No items selected - show default
+                $('#noTaxRow').show();
+                $('#cgstRow, #sgstRow, #igstRow').hide();
+            }
+            
+            // Update display
+            $('#grossAmount').text('₹ ' + grossAmount.toFixed(2));
+            
+            // Calculate total tax = HSN GST + Manual Cost Factors from popup
+            var hsnGSTTotal = totalCGST + totalSGST + totalIGST;
+            var manualCostFactorTotal = 0;
+            
+            // Add manual cost factors from Tax popup (if any)
+            if (taxData && taxData.length > 0) {
+                taxData.forEach(function(tax) {
+                    manualCostFactorTotal += tax.DEDVALUE || 0;
+                });
+            }
+            
+            var totalTax = hsnGSTTotal + manualCostFactorTotal;
+
+            // Business rule: Grand Total is the total of the Net Amount column only
+            var grandTotal = totalNetAmount;
+
+            // Update Grand Total display
+            $('#grandTotalDisplay').text('₹ ' + grandTotal.toFixed(2));
+            
+            // Remove existing otherChargesRow first to prevent duplicates
+            $('#otherChargesRow').remove();
+            
+            // Show manual cost factors as separate line if present
+            if (manualCostFactorTotal > 0) {
+                // Show additional cost factors below GST
+                var costFactorHtml = '<div style="margin-bottom: 8px;"><strong>Other Charges: </strong><span class="text-info" style="font-size: 18px; font-weight: bold; margin-left: 10px;">₹ ' + manualCostFactorTotal.toFixed(2) + '</span></div>';
+                $('#gstBreakdown').append('<div id="otherChargesRow">' + costFactorHtml + '</div>');
+            }
+            
+            console.log('Gross: ₹' + grossAmount.toFixed(2) + ', Packing: ₹' + totalPackingAmount.toFixed(2) + ', Incentive: ₹' + totalIncentiveAmount.toFixed(2) + ', HSN GST: ₹' + hsnGSTTotal.toFixed(2) + ', Manual Cost: ₹' + manualCostFactorTotal.toFixed(2) + ', Total Tax: ₹' + totalTax.toFixed(2) + ', Grand: ₹' + grandTotal.toFixed(2));
+        }
+
+        // Helper to refresh incentive summary (used after loading items and saving rate)
+        function refreshInvoiceIncentiveSummary() {
+            calculateGrossAmount();
+        }
+
+        function clearSupplierDetails() {
+            $('#supplierCode').val('');
+            $('#state').val('');
+            $('#location').val('');
+        }
+
+        function clearItemsTable() {
+            itemsData = [];
+            $('#itemsTableBody').html('<tr><td colspan="15" class="text-center text-muted">Please select a supplier to load items</td></tr>');
+            $('#selectAll').prop('checked', false);
+            $('#grossAmount').text('₹ 0.00');
+            $('#packingDiscountAmount').text('₹ 0.00');
+            $('#incentiveSummaryAmount').text('₹ 0.00');
+            $('#grandTotalDisplay').text('₹ 0.00');
+            // Reset GST display
+            $('#noTaxRow').show();
+            $('#cgstRow, #sgstRow, #igstRow, #otherChargesRow').hide();
+        }
+
+        // Tax Modal Functions
+        var costFactorsData = [];
+        var taxRowIndex = 0;
+        var taxRows = [];
+        var taxData = []; // Store tax calculation data
+
+        function openTaxModal() {
+            // Load cost factors
+            $.ajax({
+                url: '@Url.Action("GetCostFactors", "RawMaterialInvoice")',
+                type: 'POST',
+                success: function(response) {
+                    if (response.success) {
+                        costFactorsData = response.data;
+                        $('#taxModal').modal('show');
+                        updateTaxTotals();
+                    } else {
+                        alert('Error loading cost factors: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Failed to load cost factors');
+                }
+            });
+        }
+
+        function addTaxRow() {
+            var rowId = taxRowIndex++;
+            var html = '<tr data-row-id="' + rowId + '">';
+            html += '<td><button type="button" class="btn btn-danger btn-sm" onclick="deleteTaxRow(' + rowId + ')"><i class="fa fa-trash"></i></button></td>';
+            
+            // Cost Factor dropdown
+            html += '<td><select class="form-control form-control-sm cost-factor" data-row-id="' + rowId + '">';
+            html += '<option value="">-- Select Cost Factor --</option>';
+            costFactorsData.forEach(function(cf) {
+                html += '<option value="' + cf.CFID + '" data-mode="' + cf.CFMODE + '" data-expr="' + cf.CFEXPR + '">' + cf.CFDESC + '</option>';
+            });
+            html += '</select></td>';
+            
+            // Expression dropdown
+            html += '<td><select class="form-control form-control-sm expression" data-row-id="' + rowId + '">';
+            html += '<option value="Value">Value</option>';
+            html += '<option value="Percentage">Percentage</option>';
+            html += '</select></td>';
+            
+            // Mode dropdown
+            html += '<td><select class="form-control form-control-sm mode" data-row-id="' + rowId + '">';
+            html += '<option value="+">+</option>';
+            html += '<option value="-">-</option>';
+            html += '</select></td>';
+            
+            // Value input
+            html += '<td><input type="number" step="0.01" class="form-control form-control-sm value-input" data-row-id="' + rowId + '" value="0.00" /></td>';
+            
+            // Amount (readonly)
+            html += '<td><input type="text" readonly class="form-control form-control-sm amount-output" data-row-id="' + rowId + '" value="0.00" /></td>';
+            
+            html += '</tr>';
+            
+            $('#taxTableBody').append(html);
+            
+            // Add event listener for cost factor selection
+            $('.cost-factor[data-row-id="' + rowId + '"]').on('change', function() {
+                onCostFactorChange(rowId);
+            });
+            
+            // Add event listeners for calculation
+            $('.expression[data-row-id="' + rowId + '"], .mode[data-row-id="' + rowId + '"], .value-input[data-row-id="' + rowId + '"]').on('change input', function() {
+                calculateTaxRow(rowId);
+            });
+        }
+
+        function onCostFactorChange(rowId) {
+            var cfId = $('.cost-factor[data-row-id="' + rowId + '"]').val();
+            
+            if (cfId) {
+                var costFactor = costFactorsData.find(cf => cf.CFID == cfId);
+                
+                if (costFactor) {
+                    // Set expression type based on CFTYPE (0=%, 1=Value)
+                    var expressionType = costFactor.CFTYPE == 0 ? 'Percentage' : 'Value';
+                    $('.expression[data-row-id="' + rowId + '"]').val(expressionType);
+                    
+                    // Set mode based on CFMODE (0=ADD(+), 1=DEDUCT(-))
+                    var mode = costFactor.CFMODE == 0 ? '+' : '-';
+                    $('.mode[data-row-id="' + rowId + '"]').val(mode);
+                    
+                    // Set value from CFEXPR and make it readonly
+                    var valueInput = $('.value-input[data-row-id="' + rowId + '"]');
+                    valueInput.val(costFactor.CFEXPR.toFixed(2));
+                    valueInput.prop('readonly', true);
+                    valueInput.css('background-color', '#e9ecef');
+                    
+                    // Calculate the row
+                    calculateTaxRow(rowId);
+                }
+            } else {
+                // If no cost factor selected, make value editable again
+                var valueInput = $('.value-input[data-row-id="' + rowId + '"]');
+                valueInput.prop('readonly', false);
+                valueInput.css('background-color', '');
+                valueInput.val('0.00');
+            }
+        }
+
+        function deleteTaxRow(rowId) {
+            $('tr[data-row-id="' + rowId + '"]').remove();
+            updateTaxTotals();
+        }
+
+        // Get total of selected items only
+        function getSelectedItemsTotal() {
+            var selectedTotal = 0;
+            $('#itemsTableBody tr').each(function() {
+                var checkbox = $(this).find('.row-checkbox');
+                if (checkbox.is(':checked')) {
+                    var amount = parseFloat($(this).find('.amount').val()) || 0;
+                    var index = parseInt(checkbox.data('index')) || 0;
+
+                    // Include waste-row amount ONLY if its checkbox is checked
+                    var wasteCheckbox = $('.waste-row-checkbox[data-index="' + index + '"]');
+                    var isWasteSelected = wasteCheckbox.length > 0 && wasteCheckbox.is(':checked');
+                    if (isWasteSelected) {
+                        var wasteAmount = parseFloat($('.waste-amount[data-index="' + index + '"]').val()) || 0;
+                        amount += wasteAmount;
+                    }
+
+                    selectedTotal += amount;
+                }
+            });
+            return selectedTotal;
+        }
+
+        function calculateTaxRow(rowId) {
+            // Use selected items total instead of gross amount
+            var selectedTotal = getSelectedItemsTotal();
+            var expression = $('.expression[data-row-id="' + rowId + '"]').val();
+            var mode = $('.mode[data-row-id="' + rowId + '"]').val();
+            var value = parseFloat($('.value-input[data-row-id="' + rowId + '"]').val()) || 0;
+            
+            var amount = 0;
+            if (expression === 'Value') {
+                amount = value;
+            } else if (expression === 'Percentage') {
+                amount = (selectedTotal * value) / 100;
+            }
+            
+            // Apply mode (+ or -)
+            if (mode === '-') {
+                amount = -amount;
+            }
+            
+            $('.amount-output[data-row-id="' + rowId + '"]').val(amount.toFixed(2));
+            updateTaxTotals();
+        }
+
+        function updateTaxTotals() {
+            var totalTax = 0;
+            $('.amount-output').each(function() {
+                totalTax += parseFloat($(this).val()) || 0;
+            });
+            
+            // Use selected items total for calculation
+            var selectedTotal = getSelectedItemsTotal();
+            var grandTotal = selectedTotal + totalTax;
+            
+            // Update modal footer totals
+            $('#totalTaxAmount').text('₹ ' + totalTax.toFixed(2));
+            $('#grandTotal').text('₹ ' + grandTotal.toFixed(2));
+            
+            console.log('Tax Totals Updated - Selected Total: ₹' + selectedTotal.toFixed(2) + ', Tax: ₹' + totalTax.toFixed(2) + ', Grand Total: ₹' + grandTotal.toFixed(2));
+        }
+
+        function applyTaxCalculation() {
+            // Collect tax data from table
+            taxData = [];
+            $('#taxTableBody tr').each(function() {
+                var rowId = $(this).data('row-id');
+                var cfSelect = $('.cost-factor[data-row-id="' + rowId + '"]');
+                var cfId = cfSelect.val();
+                
+                if (cfId) {
+                    var selectedOption = cfSelect.find('option:selected');
+                    var costFactor = costFactorsData.find(cf => cf.CFID == cfId);
+                    var cfDesc = cfSelect.find('option:selected').text().toUpperCase();
+                    var cfExpr = parseFloat($('.value-input[data-row-id="' + rowId + '"]').val()) || 0;
+                    var dedValue = parseFloat($('.amount-output[data-row-id="' + rowId + '"]').val()) || 0;
+                    
+                    // Determine GST type based on cost factor description
+                    var cgstExprn = 0, sgstExprn = 0, igstExprn = 0;
+                    
+                    if (cfDesc.includes('CGST')) {
+                        cgstExprn = cfExpr;  // Save CGST percentage (e.g., 9)
+                    } else if (cfDesc.includes('SGST')) {
+                        sgstExprn = cfExpr;  // Save SGST percentage (e.g., 9)
+                    } else if (cfDesc.includes('IGST')) {
+                        igstExprn = cfExpr;  // Save IGST percentage (e.g., 18)
+                    }
+                    
+                    taxData.push({
+                        CFID: parseInt(cfId),
+                        CFDESC: cfSelect.find('option:selected').text(),
+                        CFEXPR: cfExpr,
+                        CFMODE: $('.mode[data-row-id="' + rowId + '"]').val() === '+' ? 0 : 1,
+                        CFTYPE: $('.expression[data-row-id="' + rowId + '"]').val() === 'Percentage' ? 0 : 1,
+                        DEDVALUE: dedValue,
+                        CFOPTN: costFactor ? costFactor.CFOPTN : 0,
+                        DORDRID: costFactor ? costFactor.DORDRID : 0,
+                        CGSTEXPRN: cgstExprn,  // CGST percentage from CFEXPR if CGST
+                        SGSTEXPRN: sgstExprn,  // SGST percentage from CFEXPR if SGST
+                        IGSTEXPRN: igstExprn   // IGST percentage from CFEXPR if IGST
+                    });
+                }
+            });
+            
+            // Update manual tax display
+            updateManualTaxDisplay();
+            
+            // Update display with both HSN GST and manual cost factors
+            calculateGrossAmount(); // This will update the full breakdown
+            
+            // Close modal
+            $('#taxModal').modal('hide');
+            console.log('Tax data collected:', taxData);
+        }
+        
+        function updateManualTaxDisplay() {
+            var manualTaxContainer = $('#manualTaxBreakdown');
+            manualTaxContainer.empty(); // Clear previous display
+            
+            if (taxData && taxData.length > 0) {
+                taxData.forEach(function(tax) {
+                    var taxRow = $('<div style="margin-bottom: 8px;">' +
+                        '<strong>' + tax.CFDESC + ': </strong>' +
+                        '<span class="text-muted" style="font-size: 14px;">@@ ' + tax.CFEXPR.toFixed(2) + (tax.CFTYPE === 0 ? '%' : '') + '</span>' +
+                        '<span class="text-warning" style="font-size: 18px; font-weight: bold; margin-left: 10px;">₹ ' + tax.DEDVALUE.toFixed(2) + '</span>' +
+                    '</div>');
+                    manualTaxContainer.append(taxRow);
+                });
+            }
+        }
+
+        function saveInvoice() {
+            var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
+            
+            // Validation
+            if (!$('#invoiceDate').val()) {
+                alert('Please select a date');
+                return;
+            }
+
+            if (!$('#refNo').val()) {
+                alert('Please enter Reference Number');
+                return;
+            }
+
+            if (!$('#supplierName').val()) {
+                alert('Please select a supplier');
+                return;
+            }
+
+            if (itemsData.length === 0) {
+                alert('No items to save');
+                return;
+            }
+
+            // Collect invoice data
+            var invoiceData = {
+                InvoiceId: @(ViewBag.EditId ?? 0),  // Pass EditId for UPDATE, 0 for INSERT
+                InvoiceDate: $('#invoiceDate').val(),
+                RefNo: $('#refNo').val(),
+                Status: $('#status').val(),
+                SupplierId: $('#supplierName').val(),
+                Items: [],
+                TaxFactors: taxData,  // Include tax calculation data
+                IsApprovalMode: @(ViewBag.IsApprovalMode != null && ViewBag.IsApprovalMode ? "true" : "false")  // Flag for approval mode
+            };
+
+            // Collect items data - ONLY CHECKED items with values
+            itemsData.forEach(function (item, index) {
+                var checkbox = $('.row-checkbox[data-index="' + index + '"]');
+                var isSelected = checkbox.is(':checked');
+                var netWeight = parseFloat($('.net-weight[data-index="' + index + '"]').val()) || 0;
+                var rate = parseFloat($('.rate[data-index="' + index + '"]').val()) || 0;
+                var amount = parseFloat($('.amount[data-index="' + index + '"]').val()) || 0;
+                var packingKg = parseFloat($('.packing-kg[data-index="' + index + '"]').val()) || 0;
+                var packingAmount = parseFloat($('.packing-amount[data-index="' + index + '"]').val()) || 0;
+                var netAmount = parseFloat($('.net-amount[data-index="' + index + '"]').val()) || 0;
+                var incentiveAmount = parseFloat($('.incentive-amount[data-index="' + index + '"]').val()) || 0;
+
+                // ONLY include items that are CHECKED (isSelected = true)
+                if (isSelected) {
+                    // Validate that checked items have required values
+                    if (netWeight <= 0) {
+                        alert('Item "' + item.ItemName + '" is selected but has no Net Weight. Please enter a value or uncheck it.');
+                        invoiceData.Items = []; // Clear items to stop save
+                        return false; // Stop forEach
+                    }
+                    
+                    // Rate validation only in EDIT mode
+                    if (isEditMode === "true" && rate <= 0) {
+                        alert('Item "' + item.ItemName + '" is selected but has no Rate. Please enter a value or uncheck it.');
+                        invoiceData.Items = []; // Clear items to stop save
+                        return false; // Stop forEach
+                    }
+                    
+                    // In ADD mode, set default rate and amount to 0
+                    if (isEditMode === "false") {
+                        rate = 0;
+                        amount = 0;
+                    }
+                    
+                    // Validate Net Weight cannot be greater than Actual Weight
+                    // Use rounding to 2 decimal places to avoid floating point precision issues
+                    var actualWeight = parseFloat(item.ActualWeight) || 0;
+                    var netWeightRounded = Math.round(netWeight * 100) / 100;
+                    var actualWeightRounded = Math.round(actualWeight * 100) / 100;
+                    if (netWeightRounded > actualWeightRounded) {
+                        alert('Item "' + item.ItemName + '": Net Weight (' + netWeight.toFixed(2) + ' kg) cannot be greater than Actual Weight (' + actualWeight.toFixed(2) + ' kg). Please enter a valid Net Weight.');
+                        invoiceData.Items = []; // Clear items to stop save
+                        return false; // Stop forEach
+                    }
+
+                    console.log('Adding CHECKED item: ' + item.ItemName + ', ActualWeight=' + actualWeight + ', NetWeight=' + netWeight + ', Rate=' + rate);
+                    
+                    // Main (non-waste) row item
+                    invoiceData.Items.push({
+                        ItemId: item.ItemId,
+                        MaterialGroupId: item.MaterialGroupId || 0,
+                        GradeId: item.GradeId || 0,
+                        ProductionColourId: item.ProductionColourId || 0,
+                        ReceivedTypeId: item.ReceivedTypeId || 0,
+                        ActualWeight: item.ActualWeight || 0,
+                        NetWeight: netWeight,
+                        Rate: rate,
+                        Amount: amount,
+                        PackingKg: packingKg,           // TRANDDISCEXPRN
+                        PackingAmount: packingAmount,   // TRANDDISCAMT  
+                        NetAmount: netAmount,           // TRANDNAMT
+                        IncentiveAmount: incentiveAmount, // TRANDINCAMT
+                        TRANPID: item.TRANPID || 0,  // Transaction Product Calculation ID
+                        IsSelected: true,
+                        IsWasteRow: false   // Main row
+                    });
+
+                    // If waste row checkbox is checked, add a second item for waste
+                    var wasteCheckbox = $('.waste-row-checkbox[data-index="' + index + '"]');
+                    var isWasteSelected = wasteCheckbox.length > 0 && wasteCheckbox.is(':checked');
+                    if (isWasteSelected) {
+                        var wasteNetWeight = parseFloat($('.waste-net-weight[data-index="' + index + '"]').val()) || 0;
+                        var wasteRate = parseFloat($('.waste-rate[data-index="' + index + '"]').val()) || 0;
+                        var wasteAmount = parseFloat($('.waste-amount[data-index="' + index + '"]').val()) || 0;
+                        var wastePackingKg = parseFloat($('.waste-packing-kg[data-index="' + index + '"]').val()) || 0;
+                        var wastePackingAmount = parseFloat($('.waste-packing-amount[data-index="' + index + '"]').val()) || 0;
+                        var wasteNetAmount = parseFloat($('.waste-net-amount[data-index="' + index + '"]').val()) || 0;
+                        var wasteIncentiveAmount = parseFloat($('.waste-incentive-amount[data-index="' + index + '"]').val()) || 0;
+
+                        // Basic validation for waste row: allow zero rate in add mode, same as main row
+                        if (wasteNetWeight <= 0) {
+                            alert('Waste row for item "' + item.ItemName + '" is selected but has no Net Waste Weight. Please enter a value or uncheck the waste row.');
+                            invoiceData.Items = [];
+                            return false;
+                        }
+
+                        if (isEditMode === "true" && wasteRate <= 0) {
+                            alert('Waste row for item "' + item.ItemName + '" is selected but has no Rate. Please enter a value or uncheck the waste row.');
+                            invoiceData.Items = [];
+                            return false;
+                        }
+
+                        if (isEditMode === "false") {
+                            wasteRate = 0;
+                            wasteAmount = 0;
+                        }
+
+                        var wasteActualWeight = parseFloat(item.WasteWeight || 0) || 0;
+                        var wasteNetWeightRounded = Math.round(wasteNetWeight * 100) / 100;
+                        var wasteActualWeightRounded = Math.round(wasteActualWeight * 100) / 100;
+                        if (wasteActualWeight > 0 && wasteNetWeightRounded > wasteActualWeightRounded) {
+                            alert('Waste row for item "' + item.ItemName + '": Net Waste Weight (' + wasteNetWeight.toFixed(2) + ' kg) cannot be greater than Waste Weight (' + wasteActualWeight.toFixed(2) + ' kg). Please enter a valid Net Weight.');
+                            invoiceData.Items = [];
+                            return false;
+                        }
+
+                        invoiceData.Items.push({
+                            ItemId: item.ItemId,
+                            MaterialGroupId: item.MaterialGroupId || 0,
+                            GradeId: item.GradeId || 0,
+                            ProductionColourId: item.ProductionColourId || 0,
+                            ReceivedTypeId: item.ReceivedTypeId || 0,
+                            ActualWeight: wasteActualWeight,
+                            NetWeight: wasteNetWeight,
+                            Rate: wasteRate,
+                            Amount: wasteAmount,
+                            PackingKg: wastePackingKg,
+                            PackingAmount: wastePackingAmount,
+                            NetAmount: wasteNetAmount,
+                            IncentiveAmount: wasteIncentiveAmount,
+                            TRANPID: item.TRANPID || 0,
+                            IsSelected: true,
+                            IsWasteRow: true
+                        });
+                    }
+                } else {
+                    console.log('Skipping UNCHECKED item: ' + item.ItemName);
+                }
+            });
+
+            // Check if validation errors occurred
+            if (invoiceData.Items.length === 0) {
+                // Check if there are ANY checked items at all
+                var checkedCount = $('.row-checkbox:checked').length;
+                if (checkedCount === 0) {
+                    alert('Please select at least one item to save');
+                } else {
+                    // Mode-specific validation message
+                    if (isEditMode === "true") {
+                        alert('Please enter net weight and rate for all selected items');
+                    } else {
+                        alert('Please enter net weight for all selected items');
+                    }
+                }
+                return;
+            }
+
+            // Add totals to invoice data
+            var grossAmount = parseFloat($('#grossAmount').text().replace('₹ ', '').replace(',', '')) || 0;
+            var packingAmount = parseFloat($('#packingDiscountAmount').text().replace('₹ ', '').replace(',', '')) || 0;
+            var grandTotal = parseFloat($('#grandTotalDisplay').text().replace('₹ ', '').replace(',', '')) || 0;
+            var incentiveAmount = parseFloat($('#incentiveSummaryAmount').text().replace('₹ ', '').replace(',', '')) || 0;
+            
+            invoiceData.GrossAmount = grossAmount;      // TRANGAMT (Subtotal)
+            invoiceData.PackingAmount = packingAmount;  // TRANPACKAMT (Discount on Packing)
+            invoiceData.GrandTotal = grandTotal;       // TRANNAMT (Grand Total)
+            invoiceData.IncentiveAmount = incentiveAmount;
+
+            console.log('========== INVOICE DATA TO SEND ==========');
+            console.log('Total Items:', invoiceData.Items.length);
+            console.log('Totals: Gross=₹' + grossAmount + ', Packing=₹' + packingAmount + ', Grand=₹' + grandTotal);
+            console.log('Items Detail:', invoiceData.Items);
+            invoiceData.Items.forEach(function(item, index) {
+                console.log('  Item ' + index + ': ItemId=' + item.ItemId + ', IsSelected=' + item.IsSelected + ', NetWeight=' + item.NetWeight + ', Rate=' + item.Rate);
+            });
+            console.log('Full Invoice Data:', JSON.stringify(invoiceData, null, 2));
+
+            // Save invoice via AJAX
+            $.ajax({
+                url: '@Url.Action("SaveInvoice", "RawMaterialInvoice")',
+                type: 'POST',
+                data: JSON.stringify(invoiceData),
+                contentType: 'application/json',
+                beforeSend: function() {
+                    $('.save-btn').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update the invoice number field with generated TRANNO
+                        $('#invoiceNo').val(response.tranNo);
+                        
+                        alert('Invoice saved successfully!\n\nInvoice No: ' + response.tranNo + '\nDocument No: ' + response.tranDNo);
+                        
+                        // Redirect based on mode
+                        @if (ViewBag.IsApprovalMode != null && ViewBag.IsApprovalMode) {
+                            @:window.location.href = '@Url.Action("Index", "PurchaseInvoiceApproval")';
+                        } else {
+                            @:window.location.href = '@Url.Action("Index", "RawMaterialInvoice")';
+                        }
+                    } else {
+                        alert('Error: ' + response.message);
+                        $('.save-btn').prop('disabled', false).html('<i class="fa fa-save"></i> Save Invoice');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error saving invoice:', error);
+                    alert('Failed to save invoice. Please try again.');
+                    $('.save-btn').prop('disabled', false).html('<i class="fa fa-save"></i> Save Invoice');
+                }
+            });
+        }
+    </script>
+    
+    <style>
+        /* Enhanced close button styling */
+        .modal-header .close:hover {
+            opacity: 1 !important;
+            transform: scale(1.1);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header .close:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+            border-radius: 50%;
+        }
+        
+        .modal-header .close:active {
+            transform: scale(0.95);
+        }
+    </style>
+}

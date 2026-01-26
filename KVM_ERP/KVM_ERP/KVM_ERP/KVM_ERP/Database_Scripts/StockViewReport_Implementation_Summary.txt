@@ -1,0 +1,99 @@
+===============================================
+STOCK VIEW REPORT - STORED PROCEDURE IMPLEMENTATION
+===============================================
+
+**REQUIREMENT:**
+- Opening Stock: Data BEFORE From Date
+- Production: Data FROM From Date TO To Date
+
+===============================================
+IMPLEMENTATION DETAILS:
+===============================================
+
+**1. STORED PROCEDURE CREATED:**
+   File: pr_GetStockViewReportData.sql
+   
+   Parameters:
+   - @FromDate: Start date of production period
+   - @ToDate: End date of production period
+   
+   Date Logic:
+   - DateCategory = 0: OPENING STOCK (tm.TRANDATE < @FromDate)
+   - DateCategory = 1: PRODUCTION (tm.TRANDATE >= @FromDate AND tm.TRANDATE <= @ToDate)
+   
+   Returns:
+   - All transaction data with PCK1-PCK17 columns
+   - ProductId, ProductName, PackingMasterId, etc.
+   - DateCategory flag for filtering
+
+**2. CONTROLLER UPDATED:**
+   File: StockViewReportController.cs
+   
+   Changes:
+   - Replaced LINQ query with stored procedure call
+   - Added StockDataDTO class for SP results
+   - Updated date filtering logic:
+     * openingData = productGroup.Where(x => x.DateCategory == 0)
+     * productionData = productGroup.Where(x => x.DateCategory == 1)
+   - Updated comments throughout to reflect correct date ranges
+   
+**3. VIEW UPDATED:**
+   File: Index.cshtml
+   
+   Changes:
+   - Updated JavaScript comments for opening/production rows
+   - Comments now reflect: "data before fromDate" and "data from fromDate to toDate"
+
+**4. EXCEL EXPORT UPDATED:**
+   Both CreateExcelSheet and CreateExcelSheetGrouped methods updated:
+   - Comments updated for OPENING STOCK: "data before fromDate"
+   - Comments updated for PRODUCTION: "data from fromDate to toDate"
+
+===============================================
+USER EXPERIENCE:
+===============================================
+
+**Example Usage:**
+From Date: 2025-01-15
+To Date: 2025-01-31
+
+Result:
+- OPENING STOCK: Sum of all data from beginning until 2025-01-14 (before fromDate)
+- PRODUCTION: Sum of all data from 2025-01-15 to 2025-01-31 (date range)
+- TOTAL: Opening Stock + Production
+
+**Benefits:**
+✅ Opening Stock shows cumulative data before the selected period
+✅ Production shows only the data within the selected date range
+✅ Proper stock tracking with correct opening balances
+✅ Uses optimized stored procedure for better performance
+✅ All existing functionality preserved
+✅ Excel export follows same logic
+
+===============================================
+DATABASE SETUP:
+===============================================
+
+1. Run the stored procedure script:
+   Execute: pr_GetStockViewReportData.sql
+
+2. Verify SP creation:
+   SELECT * FROM sys.procedures WHERE name = 'pr_GetStockViewReportData'
+
+3. Test SP manually:
+   EXEC pr_GetStockViewReportData '2025-01-15', '2025-01-31'
+
+===============================================
+TESTING CHECKLIST:
+===============================================
+
+☐ Test with various date ranges
+☐ Verify Opening Stock shows data before fromDate
+☐ Verify Production shows data within date range
+☐ Verify TOTAL = Opening + Production
+☐ Test Excel export with same date ranges
+☐ Verify all packing types (Head On, Head Less, etc.) display correctly
+☐ Test with empty date ranges
+☐ Test with date ranges having no data
+
+===============================================

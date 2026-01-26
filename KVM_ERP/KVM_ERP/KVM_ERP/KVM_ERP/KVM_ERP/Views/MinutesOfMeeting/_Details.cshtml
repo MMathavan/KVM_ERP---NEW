@@ -1,0 +1,38 @@
+@model ClubMembership.Models.MinutesOfMeeting
+
+<div class="container-fluid p-0">
+    <div class="mb-2">
+        <h5 class="mb-0">@Model.Heading</h5>
+        <div class="text-muted small">@Model.Caption</div>
+    </div>
+
+    <dl class="row mb-0">
+        <dt class="col-sm-4">Meeting Date & Time</dt>
+        <dd class="col-sm-8">@(Model.MeetingDateAndTime.HasValue ? Model.MeetingDateAndTime.Value.ToString("dd/MM/yyyy HH:mm") : "-")</dd>
+
+        <dt class="col-sm-4">Place</dt>
+        <dd class="col-sm-8">@Model.MeetingPlace</dd>
+
+        <dt class="col-sm-4">Conducted By</dt>
+        <dd class="col-sm-8">@Model.ConductedBy</dd>
+
+        <dt class="col-sm-4">Organized By</dt>
+        <dd class="col-sm-8">@Model.OrganizedBy</dd>
+
+        <dt class="col-sm-4">Members Invited</dt>
+        <dd class="col-sm-8">@Model.MembersInvited</dd>
+
+        <dt class="col-sm-4">Members Attended</dt>
+        <dd class="col-sm-8">@Model.MembersAttended</dd>
+
+        <dt class="col-sm-4">Description</dt>
+        <dd class="col-sm-8 white-space-prewrap">@Model.Description</dd>
+    </dl>
+</div>
+
+<style>
+    .white-space-prewrap { white-space: pre-wrap; }
+    .modal-body { max-height: 70vh; overflow-y: auto; }
+</style>
+
+

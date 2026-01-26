@@ -1,0 +1,289 @@
+@model KVM_ERP.Models.PackingTypeMaster
+@{
+    ViewBag.Title = "Packing Type Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .form-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .form-body {
+        padding: 30px;
+        background: white;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .control-label {
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .req {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+    
+    .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+        background-color: white;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3436;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .msg {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    .form-control.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.15);
+    }
+    
+    .text-danger {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 5px;
+        display: block;
+        font-weight: 500;
+    }
+</style>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">
+                <i class="fa fa-cube"></i>
+                Packing Type Master
+            </h1>
+        </div>
+
+        <div class="form-body">
+            @Html.Raw(ViewBag.msg)
+
+            @using (Html.BeginForm("savedata", "PackingTypeMaster", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "packingTypeForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.PACKTMID)
+
+                <div class="section-title">
+                    <i class="fa fa-info-circle"></i> Packing Type Information
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Code <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.PACKTMCODE, new { @class = "form-control", @placeholder = "Enter packing type code", @id = "i_PACKTMCODE", @maxlength = "15", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.PACKTMCODE, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Packing Description <span class="req">*</span></label>
+                            @Html.TextBoxFor(m => m.PACKTMDESC, new { @class = "form-control", @placeholder = "Enter packing description", @id = "i_PACKTMDESC", @maxlength = "100", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.PACKTMDESC, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Packing Master <span class="req">*</span></label>
+                            @Html.DropDownListFor(model => model.PACKMID, ViewBag.PACKMID as List<SelectListItem>, new { @class = "form-control", @id = "packingMasterDropdown" })
+                            @Html.ValidationMessageFor(m => m.PACKMID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Status</label>
+                            @Html.DropDownListFor(model => model.DISPSTATUS, ViewBag.DISPSTATUS as List<SelectListItem>, new { @class = "form-control", @id = "statusDropdown" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary" id="saveBtn">
+                        <i class="fa fa-save"></i> Save Packing Type
+                    </button>
+                    <a href="@Url.Action("Index", "PackingTypeMaster")" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            // Debug: Let's see what model values we have
+            console.log('Model PACKTMID:', '@Model.PACKTMID');
+            console.log('Model DISPSTATUS:', '@Model.DISPSTATUS');
+            console.log('Initial dropdown value:', $('#statusDropdown').val());
+            
+            // Focus on first input
+            $('#i_PACKTMCODE').focus();
+            
+            // Enhanced form validation
+            $('#packingTypeForm').on('submit', function(e) {
+                var isValid = true;
+                var code = $('#i_PACKTMCODE').val().trim();
+                var desc = $('#i_PACKTMDESC').val().trim();
+                var packingMaster = $('#packingMasterDropdown').val();
+                
+                // Reset previous validation states
+                $('.form-control').removeClass('is-invalid');
+                
+                if (!code) {
+                    $('#i_PACKTMCODE').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!desc) {
+                    $('#i_PACKTMDESC').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!packingMaster || packingMaster === '') {
+                    $('#packingMasterDropdown').addClass('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    // Scroll to first invalid field
+                    $('.is-invalid').first().focus();
+                    return false;
+                }
+                
+                // Show loading state
+                var clickedBtn = $(document.activeElement);
+                if (clickedBtn.is('button[type="submit"]')) {
+                    clickedBtn.prop('disabled', true);
+                    var originalText = clickedBtn.html();
+                    clickedBtn.html('<i class="fa fa-spinner fa-spin"></i> Saving...');
+                    
+                    // Re-enable after 3 seconds (fallback)
+                    setTimeout(function() {
+                        clickedBtn.prop('disabled', false);
+                        clickedBtn.html(originalText);
+                    }, 3000);
+                }
+            });
+            
+            // Real-time validation feedback
+            $('#i_PACKTMCODE, #i_PACKTMDESC, #packingMasterDropdown').on('input blur change', function() {
+                var $this = $(this);
+                if ($this.val().trim()) {
+                    $this.removeClass('is-invalid');
+                }
+            });
+            
+            // Auto-format code to uppercase and trigger validation
+            $('#i_PACKTMCODE').on('input', function() {
+                this.value = this.value.toUpperCase();
+                // Trigger remote validation
+                $(this).valid();
+            });
+            
+            // Auto-format description to title case
+            $('#i_PACKTMDESC').on('blur', function() {
+                var value = this.value.trim();
+                if (value) {
+                    this.value = value.toLowerCase().replace(/\b\w/g, function(l) {
+                        return l.toUpperCase();
+                    });
+                }
+            });
+        });
+    </script>
+}

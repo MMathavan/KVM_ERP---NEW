@@ -1,0 +1,1143 @@
+@model IEnumerable<ClubMembership.Models.EventMaster>
+@{
+    ViewBag.Title = "Events";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* Debug section removed *@
+
+@section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #06b6d4;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --border-radius: 16px;
+            --box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-image: linear-gradient(135deg, rgba(102,126,234,.9) 0%, rgba(118,75,162,.9) 100%), url('@Url.Content("~/Content/images/bg.jpg")');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 2.5rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 1rem 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* Search and Filter Section */
+        .search-section {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .search-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            padding: 1.25rem 1.5rem;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            background: #f8fafc;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: white;
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .filter-tag {
+            background: #f1f5f9;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--secondary-color);
+        }
+
+        .filter-tag:hover,
+        .filter-tag.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Event Cards */
+        .event-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            height: 100%;
+            position: relative;
+            border: 1px solid #e2e8f0;
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .event-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            background: linear-gradient(45deg, #f1f5f9, #e2e8f0);
+        }
+
+        .event-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .event-card:hover .event-image img {
+            transform: scale(1.1);
+        }
+
+        /* Past events visuals */
+        .event-card.past-card {
+            border-color: #e5e7eb;
+            opacity: .9;
+        }
+        .event-card.past-card .event-image img { filter: grayscale(20%); }
+        .event-card.past-card .event-badge { background: rgba(0,0,0,0.75); }
+
+        .event-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .event-date {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            text-align: center;
+            min-width: 70px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .event-date .day {
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .event-date .month {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .event-content {
+            padding: 2rem;
+        }
+
+        .event-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            line-height: 1.3;
+        }
+
+        .event-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: var(--secondary-color);
+        }
+
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .event-meta i {
+            width: 20px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .event-description {
+            color: var(--secondary-color);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-size: 0.95rem;
+        }
+
+        .event-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .interest-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-interest {
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        .interest-count {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .btn-interest.interested {
+            background: var(--success-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-interest.not-interested {
+            background: var(--danger-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-interest:not(.interested):not(.not-interested) {
+            background: #f1f5f9;
+            color: var(--secondary-color);
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-interest:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .event-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .view-details-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .view-details-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-view {
+            border: 2px solid transparent;
+            background: transparent;
+            color: var(--secondary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            transition: var(--transition);
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-view.active,
+        .btn-view:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .search-section {
+                padding: 1.5rem;
+            }
+
+            .event-actions {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .interest-buttons {
+                justify-content: center;
+            }
+
+            .view-toggle {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .event-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .event-card:nth-child(1) { animation-delay: 0.1s; }
+        .event-card:nth-child(2) { animation-delay: 0.2s; }
+        .event-card:nth-child(3) { animation-delay: 0.3s; }
+        .event-card:nth-child(4) { animation-delay: 0.4s; }
+        .event-card:nth-child(5) { animation-delay: 0.5s; }
+        .event-card:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid var(--primary-color);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            border: 1px solid #e2e8f0;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .empty-state-text {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        /* Compact page title */
+        .page-title h2 { font-weight: 800; color: #0f172a; }
+
+        /* No Image Fallback Styling */
+        .no-image-fallback {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #dee2e6;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .no-image-fallback:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            border-color: var(--secondary-color);
+        }
+
+        .no-image-fallback i {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .no-image-fallback div {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+    </style>
+}
+
+@Html.AntiForgeryToken()
+
+<!-- Hero section removed as requested -->
+
+<div class="container page-title mb-3">
+    <h2 class="mb-1"><i class="fas fa-calendar-alt me-2 text-primary"></i>Events</h2>
+    <p class="text-muted mb-0">Browse upcoming and past events. Use search and filters to quickly find what you need.</p>
+    <hr class="mt-3 mb-0" />
+</div>
+
+<div class="container">
+    <!-- Search and Filter Section -->
+    <div class="search-section">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Search Events</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" id="searchInput" class="form-control search-input border-start-0" 
+                           placeholder="Search by title, location, or description...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Filter</label>
+                <select id="dateFilter" class="form-select">
+                    <option value="">All Events</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="past">Past Events</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Sort By</label>
+                <select id="sortFilter" class="form-select">
+                    <option value="date">Date (Newest)</option>
+                    <option value="date-asc">Date (Oldest)</option>
+                    <option value="title">Title (A-Z)</option>
+                    <option value="popularity">Popularity</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="filter-tags">
+            <span class="filter-tag active" data-filter="all">All Events</span>
+            <span class="filter-tag" data-filter="upcoming">Upcoming</span>
+            <span class="filter-tag" data-filter="past">Past Events</span>
+        </div>
+    </div>
+
+    <!-- Events Grid -->
+    <div class="row g-4" id="eventsGrid">
+        @{
+            bool hasModelItems = false;
+            if (Model != null)
+            {
+                foreach (var item in Model) { hasModelItems = true; break; }
+            }
+        }
+        @if (hasModelItems)
+        {
+            // Manual sorting instead of LINQ OrderByDescending
+            var sortedEvents = new List<ClubMembership.Models.EventMaster>();
+            if (Model != null)
+            {
+                foreach (var e in Model)
+                {
+                    sortedEvents.Add(e);
+                }
+                // Simple bubble sort for descending order by EventTime
+                for (int i = 0; i < sortedEvents.Count - 1; i++)
+                {
+                    for (int j = 0; j < sortedEvents.Count - 1 - i; j++)
+                    {
+                        if (sortedEvents[j].EventTime < sortedEvents[j + 1].EventTime)
+                        {
+                            var temp = sortedEvents[j];
+                            sortedEvents[j] = sortedEvents[j + 1];
+                            sortedEvents[j + 1] = temp;
+                        }
+                    }
+                }
+            }
+            
+            foreach (var e in sortedEvents)
+            {
+                var imgPath = "";
+                if (!string.IsNullOrWhiteSpace(e.MainImage))
+                {
+                    // If the image path starts with /Uploads/, convert it to ~/Uploads/
+                    if (e.MainImage.StartsWith("/Uploads/"))
+                    {
+                        imgPath = "~" + e.MainImage;
+                    }
+                    // If it already starts with ~, use as is
+                    else if (e.MainImage.StartsWith("~"))
+                    {
+                        imgPath = e.MainImage;
+                    }
+                    // If it's a full URL, use as is
+                    else if (e.MainImage.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    {
+                        imgPath = e.MainImage;
+                    }
+                    // Otherwise, assume it's a relative path and add ~/
+                    else
+                    {
+                        imgPath = "~/" + e.MainImage.TrimStart('/');
+                    }
+                }
+                // No default image - each event will show "No Image" if they don't have one
+                
+                var isUpcoming = e.EventTime > DateTime.Now;
+                var timeUntil = e.EventTime - DateTime.Now;
+                var daysUntil = (int)timeUntil.TotalDays;
+                
+                <div class="col-12 col-md-6 col-lg-4 event-item" 
+                     data-event-id="@e.EventId"
+                     data-title="@e.Heading.ToLower()"
+                     data-location="@(string.IsNullOrEmpty(e.EventLocation) ? "" : e.EventLocation.ToLower())"
+                     data-date="@e.EventTime.ToString("yyyy-MM-dd")"
+                     data-upcoming="@isUpcoming.ToString().ToLower()">
+                    
+                    <div class="event-card @(isUpcoming ? "" : "past-card")">
+                        <div class="event-image">
+                            <span class="event-badge">@(isUpcoming ? "Upcoming" : "Past")</span>
+                            @if (!string.IsNullOrWhiteSpace(imgPath))
+                            {
+                                <img src="@Url.Content(imgPath)" alt="@e.Heading" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" 
+                                     class="event-image-clickable"
+                                     data-event-title="@e.Heading"
+                                     data-event-date="@e.EventTime.ToString("MMM dd, yyyy")"
+                                     data-event-location="@(string.IsNullOrWhiteSpace(e.EventLocation) ? "Location TBA" : e.EventLocation)"
+                                     data-full-image="@Url.Content(imgPath)">
+                                
+                                <!-- Fallback "No Image" div that shows when image fails to load -->
+                                <div class="no-image-fallback" style="display: none; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; color: #6c757d;">
+                                    <div class="text-center">
+                                        <i class="fas fa-image fa-2x mb-2"></i>
+                                        <div>No Image</div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <!-- Show "No Image" for events without images -->
+                                <div class="no-image-fallback" style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; color: #6c757d;">
+                                    <div class="text-center">
+                                        <i class="fas fa-image fa-2x mb-2"></i>
+                                        <div>No Image</div>
+                                    </div>
+                                </div>
+                            }
+                            
+                            @if (isUpcoming && daysUntil <= 7)
+                            {
+                                <div class="event-badge">
+                                    <i class="fas fa-clock me-1"></i>
+                                    @if (daysUntil == 0)
+                                    {
+                                        <span>Today!</span>
+                                    }
+                                    else if (daysUntil == 1)
+                                    {
+                                        <span>Tomorrow!</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@daysUntil days</span>
+                                    }
+                                </div>
+                            }
+                            
+                            <div class="event-date">
+                                <div class="day">@e.EventTime.Day</div>
+                                <div class="month">@e.EventTime.ToString("MMM")</div>
+                            </div>
+                        </div>
+                        
+                        <div class="event-content d-flex flex-column">
+                            <h5 class="event-title">@e.Heading</h5>
+                            
+                            <div class="event-meta">
+                                <div class="event-meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>@e.EventTime.ToString("MMM dd, yyyy | hh:mm tt")</span>
+                                </div>
+                                <div class="event-meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>@(string.IsNullOrWhiteSpace(e.EventLocation) ? "Location TBA" : e.EventLocation)</span>
+                                </div>
+                            </div>
+                            
+                            @if (!string.IsNullOrWhiteSpace(e.Caption))
+                            {
+                                <p class="event-description">@e.Caption</p>
+                            }
+                            
+                            <div class="event-actions">
+                                <div class="interest-buttons">
+                                    <button class="btn-interest" data-state="interested">
+                                        <i class="fas fa-thumbs-up"></i>
+                                        <span class="interest-count">0</span>
+                                    </button>
+                                    <button class="btn-interest" data-state="not_interested">
+                                        <i class="fas fa-thumbs-down"></i>
+                                        <span class="interest-count">0</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <button class="view-details-btn" data-bs-toggle="modal" data-bs-target="#eventModal_@e.EventId">
+                                <i class="fas fa-eye"></i>View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Modal -->
+                <div class="modal fade" id="eventModal_@e.EventId" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-calendar-alt me-2"></i>@e.Heading
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                @if (!string.IsNullOrWhiteSpace(imgPath))
+                                {
+                                    <div class="mb-3">
+                                        <img src="@Url.Content(imgPath)" alt="@e.Heading" class="img-fluid rounded shadow-sm w-100" style="max-height: 380px; object-fit: cover;" />
+                                    </div>
+                                }
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="d-flex flex-wrap gap-2 mb-3">
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-calendar me-1"></i> 
+                                                @e.EventTime.ToString("dddd, dd MMM yyyy | hh:mm tt")
+                                            </span>
+                                            <span class="badge bg-info text-dark">
+                                                <i class="fas fa-map-marker-alt me-1"></i> 
+                                                @(string.IsNullOrWhiteSpace(e.EventLocation) ? "Location TBA" : e.EventLocation)
+                                            </span>
+                                        </div>
+
+                                        @if (!string.IsNullOrWhiteSpace(e.Caption))
+                                        {
+                                            <div class="alert alert-info">
+                                                <i class="fas fa-info-circle me-2"></i>@e.Caption
+                                            </div>
+                                        }
+                                        
+                                        @if (!string.IsNullOrWhiteSpace(e.Description))
+                                        {
+                                            <h6 class="fw-bold mb-2">Event Description</h6>
+                                            <div class="mb-3">@Html.Raw(Html.Encode(e.Description).Replace("\n", "<br/>"))</div>
+                                        }
+                                        
+                                        @if (!string.IsNullOrWhiteSpace(e.EventPlan))
+                                        {
+                                            <h6 class="fw-bold mb-2">Event Plan</h6>
+                                            <div class="mb-3">@Html.Raw(Html.Encode(e.EventPlan).Replace("\n", "<br/>"))</div>
+                                        }
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Event Details</h6>
+                                                <ul class="list-unstyled">
+                                                    <li class="mb-2">
+                                                        <i class="fas fa-calendar text-primary me-2"></i>
+                                                        <strong>Date:</strong><br>
+                                                        @e.EventTime.ToString("dddd, dd MMM yyyy")
+                                                    </li>
+                                                    <li class="mb-2">
+                                                        <i class="fas fa-clock text-primary me-2"></i>
+                                                        <strong>Time:</strong><br>
+                                                        @e.EventTime.ToString("hh:mm tt")
+                                                    </li>
+                                                    <li class="mb-2">
+                                                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                                        <strong>Location:</strong><br>
+                                                        @(string.IsNullOrWhiteSpace(e.EventLocation) ? "To be announced" : e.EventLocation)
+                                                    </li>
+                                                    <li class="mb-2">
+                                                        <i class="fas fa-users text-primary me-2"></i>
+                                                        <strong>Status:</strong><br>
+                                                        <span class="badge @(e.Status == 0 ? "bg-success" : "bg-secondary")">
+                                                            @(e.Status == 0 ? "Active" : "Inactive")
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @{
+                                    bool hasImageList = false;
+                                    if (e.ImageList != null)
+                                    {
+                                        foreach (var img in e.ImageList) { hasImageList = true; break; }
+                                    }
+                                }
+                                @if (hasImageList)
+                                {
+                                    <div class="mt-4">
+                                        <h6 class="fw-bold mb-3">Event Gallery</h6>
+                                        <div class="row g-3">
+                                            @foreach (var img in e.ImageList)
+                                            {
+                                                var gimg = (img.StartsWith("~") || img.StartsWith("/")) ? img : ("~/" + img.TrimStart('/'));
+                                                <div class="col-6 col-md-4">
+                                                    <img src="@Url.Content(gimg)" class="img-fluid rounded shadow-sm" 
+                                                         alt="@e.Heading image" 
+                                                         onerror="this.src='@Url.Content("~/Content/images/bg.jpg")'" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-2"></i>Close
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="shareEvent(@e.EventId)">
+                                    <i class="fas fa-share me-2"></i>Share Event
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-calendar-times"></i>
+                    </div>
+                    <h4 class="empty-state-title">No events available</h4>
+                    <p class="empty-state-text">Check back later for upcoming events.</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- No Events Message -->
+    <div id="noEvents" class="text-center py-5 d-none">
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h4 class="empty-state-title">No events found</h4>
+            <p class="empty-state-text">Try adjusting your search criteria or check back later for new events.</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            function getToken() {
+                var tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
+                return tokenInput ? tokenInput.value : '';
+            }
+
+            function setButtonsState(container, code, counts) {
+                var btnInterested = container.querySelector('button[data-state="interested"]');
+                var btnNot = container.querySelector('button[data-state="not_interested"]');
+                var countInt = btnInterested ? btnInterested.querySelector('.interest-count') : null;
+                var countNot = btnNot ? btnNot.querySelector('.interest-count') : null;
+
+                // Reset all buttons
+                [btnInterested, btnNot].forEach(function (b) {
+                    if (!b) return;
+                    b.classList.remove('btn-success', 'btn-danger', 'interested', 'not-interested');
+                    b.classList.add(b.dataset.state === 'interested' ? 'btn-outline-success' : 'btn-outline-danger');
+                });
+
+                // Set active state
+                if (code === 1 && btnInterested) {
+                    btnInterested.classList.remove('btn-outline-success');
+                    btnInterested.classList.add('btn-success', 'interested');
+                } else if (code === -1 && btnNot) {
+                    btnNot.classList.remove('btn-outline-danger');
+                    btnNot.classList.add('btn-danger', 'not-interested');
+                }
+
+                // Update counts
+                if (counts) {
+                    if (typeof counts.interestedCount === 'number' && countInt) countInt.textContent = counts.interestedCount;
+                    if (typeof counts.notInterestedCount === 'number' && countNot) countNot.textContent = counts.notInterestedCount;
+                }
+            }
+
+            function initItem(container) {
+                var eventId = parseInt(container.getAttribute('data-event-id'));
+                if (!eventId) return;
+
+                // Get initial interest state
+                fetch('@Url.Action("GetEventInterest", "Content")?eventId=' + eventId, {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                }).then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data && data.success) {
+                            setButtonsState(container, data.state, { 
+                                interestedCount: data.interestedCount, 
+                                notInterestedCount: data.notInterestedCount 
+                            });
+                        }
+                    })
+                    .catch(function () { });
+
+                // Add click handlers for interest buttons
+                container.querySelectorAll('button[data-state]').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        var state = btn.getAttribute('data-state');
+                        var formData = new URLSearchParams();
+                        formData.append('eventId', eventId);
+                        formData.append('state', state);
+                        formData.append('__RequestVerificationToken', getToken());
+
+                        // Add loading state
+                        btn.classList.add('loading');
+                        btn.disabled = true;
+
+                        fetch('@Url.Action("SetEventInterest", "Content")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                            },
+                            body: formData.toString(),
+                            credentials: 'same-origin'
+                        }).then(function (r) { return r.json(); })
+                            .then(function (data) {
+                                if (data && data.success) {
+                                    setButtonsState(container, data.state, { 
+                                        interestedCount: data.interestedCount, 
+                                        notInterestedCount: data.notInterestedCount 
+                                    });
+                                }
+                            })
+                            .catch(function () { })
+                            .finally(function () {
+                                btn.classList.remove('loading');
+                                btn.disabled = false;
+                            });
+                    });
+                });
+            }
+
+            // Search and filter functionality
+            function applyFilters() {
+                var searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                var dateFilter = document.getElementById('dateFilter').value;
+                var sortFilter = document.getElementById('sortFilter').value;
+                var activeFilter = document.querySelector('.filter-tag.active').dataset.filter;
+                
+                var visibleCount = 0;
+                
+                document.querySelectorAll('.event-item').forEach(function(item) {
+                    var title = item.dataset.title || '';
+                    var location = item.dataset.location || '';
+                    var eventDate = new Date(item.dataset.date);
+                    var isUpcoming = item.dataset.upcoming === 'true';
+                    
+                    var show = true;
+                    
+                    // Search filter
+                    if (searchTerm && title.indexOf(searchTerm) === -1 && location.indexOf(searchTerm) === -1) {
+                        show = false;
+                    }
+                    
+                    // Date filter (simplified: upcoming/past only)
+                    if (dateFilter) {
+                        if (dateFilter === 'upcoming') show = isUpcoming;
+                        else if (dateFilter === 'past') show = !isUpcoming;
+                    }
+                    
+                    // Active filter (simplified)
+                    if (activeFilter && activeFilter !== 'all') {
+                        if (activeFilter === 'upcoming') show = isUpcoming;
+                        else if (activeFilter === 'past') show = !isUpcoming;
+                    }
+                    
+                    if (show) {
+                        item.style.display = '';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                // Show/hide no events message
+                var noEvents = document.getElementById('noEvents');
+                if (visibleCount === 0) {
+                    noEvents.classList.remove('d-none');
+                } else {
+                    noEvents.classList.add('d-none');
+                }
+                
+                // Apply sorting
+                applySorting(sortFilter);
+            }
+
+            function applySorting(sortType) {
+                var container = document.getElementById('eventsGrid');
+                var items = Array.prototype.slice.call(container.children);
+                
+                items.sort(function(a, b) {
+                    var aTitle = a.dataset.title || '';
+                    var bTitle = b.dataset.title || '';
+                    var aDate = new Date(a.dataset.date);
+                    var bDate = new Date(b.dataset.date);
+                    
+                    switch (sortType) {
+                        case 'date-asc':
+                            return aDate - bDate;
+                        case 'title':
+                            return aTitle.localeCompare(bTitle);
+                        case 'popularity':
+                            // Sort by interest count (placeholder)
+                            return 0;
+                        default: // date
+                            return bDate - aDate;
+                    }
+                });
+                
+                items.forEach(function(item) {
+                    container.appendChild(item);
+                });
+            }
+
+            // Share functionality
+            window.shareEvent = function(eventId) {
+                var event = document.querySelector('[data-event-id="' + eventId + '"]');
+                if (!event) return;
+                
+                var title = event.querySelector('.event-title').textContent;
+                var url = window.location.href;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: title,
+                        url: url
+                    });
+                } else {
+                    // Fallback: copy to clipboard
+                    var text = title + '\n' + url;
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(function() {
+                            alert('Event link copied to clipboard!');
+                        });
+                    } else {
+                        // Fallback for older browsers
+                        var textArea = document.createElement('textarea');
+                        textArea.value = text;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        try {
+                            document.execCommand('copy');
+                            alert('Event link copied to clipboard!');
+                        } catch (err) {
+                            console.error('Failed to copy: ', err);
+                        }
+                        document.body.removeChild(textArea);
+                    }
+                }
+            };
+
+            // Event listeners
+            document.addEventListener('DOMContentLoaded', function () {
+                // Initialize all event items
+                document.querySelectorAll('.event-item').forEach(function (el) { 
+                    initItem(el); 
+                });
+
+                // Search and filter
+                document.getElementById('searchInput').addEventListener('input', applyFilters);
+                document.getElementById('dateFilter').addEventListener('change', applyFilters);
+                document.getElementById('sortFilter').addEventListener('change', applyFilters);
+
+                // Filter tags
+                document.querySelectorAll('.filter-tag').forEach(function(tag) {
+                    tag.addEventListener('click', function() {
+                        document.querySelectorAll('.filter-tag').forEach(function(t) {
+                            t.classList.remove('active');
+                        });
+                        tag.classList.add('active');
+                        applyFilters();
+                    });
+                });
+            });
+        })();
+    </script>
+}

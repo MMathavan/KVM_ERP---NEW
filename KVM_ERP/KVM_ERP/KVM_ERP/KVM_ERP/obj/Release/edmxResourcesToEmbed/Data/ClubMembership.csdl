@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ClubMembershipDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="NPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BrnchId" Type="Int32" Nullable="false" />
+    <Property Name="UBrnchName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DBrnchId" Type="Int32" Nullable="false" />
+    <Property Name="DeptName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="MobileNo" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="DOB" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="VW_USER_DETAILS">
+    <Key>
+      <PropertyRef Name="GroupId" />
+      <PropertyRef Name="GroupName" />
+    </Key>
+    <Property Name="GroupId" Type="Int32" Nullable="false" />
+    <Property Name="GroupName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityContainer Name="ClubMembershipDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+    <EntitySet Name="VW_USER_DETAILS" EntityType="Self.VW_USER_DETAILS" />
+    <FunctionImport Name="PR_ACCOUNTINGYEAR_ID_CHK" ReturnType="Collection(ClubMembershipDBModel.PR_ACCOUNTINGYEAR_ID_CHK_Result)">
+      <Parameter Name="PFYear" Mode="In" Type="Int32" />
+      <Parameter Name="PTYear" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" ReturnType="Collection(ClubMembershipDBModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result)">
+      <Parameter Name="PCompId" Mode="In" Type="Int32" />
+      <Parameter Name="PYrId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchAccountGroup" ReturnType="Collection(ClubMembershipDBModel.pr_SearchAccountGroup_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchAccountHeadMaster" ReturnType="Collection(ClubMembershipDBModel.pr_SearchAccountHeadMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchCompanyMaster" ReturnType="Collection(ClubMembershipDBModel.pr_SearchCompanyMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchEmployeeMaster">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_USER_MENU_DETAIL_ASSGN" ReturnType="Collection(ClubMembershipDBModel.pr_USER_MENU_DETAIL_ASSGN_Result)">
+      <Parameter Name="PKUSRID" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="pr_Search_Roles" ReturnType="Collection(ClubMembershipDBModel.pr_Search_Roles_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchStateMaster" ReturnType="Collection(ClubMembershipDBModel.pr_SearchStateMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_SearchBloodGroupMaster" ReturnType="Collection(ClubMembershipDBModel.pr_SearchBloodGroupMaster_Result)">
+      <Parameter Name="FilterTerm" Mode="In" Type="String" />
+      <Parameter Name="SortIndex" Mode="In" Type="Int32" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="StartRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="EndRowNum" Mode="In" Type="Int32" />
+      <Parameter Name="TotalRowsCount" Mode="InOut" Type="Int32" />
+      <Parameter Name="FilteredRowsCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="PR_ACCOUNTINGYEAR_ID_CHK_Result">
+    <Property Type="Int32" Name="YRID" Nullable="false" />
+    <Property Type="String" Name="YRDESC" Nullable="false" MaxLength="15" />
+    <Property Type="Int32" Name="YRID1" Nullable="false" />
+    <Property Type="DateTime" Name="FDATE" Nullable="false" Precision="16" />
+    <Property Type="DateTime" Name="TDATE" Nullable="false" Precision="16" />
+    <Property Type="String" Name="YRDESC1" Nullable="false" MaxLength="15" />
+    <Property Type="String" Name="CUSRID" Nullable="false" MaxLength="100" />
+    <Property Type="DateTime" Name="PRCSDATE" Nullable="false" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+    <Property Type="Int32" Name="COMPYID" Nullable="false" />
+    <Property Type="Int32" Name="COMPID" Nullable="false" />
+    <Property Type="Int32" Name="YRID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchAccountGroup_Result">
+    <Property Type="String" Name="ACHEADGCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ACHEADGID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchAccountHeadMaster_Result">
+    <Property Type="String" Name="ACHEADCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ACHEADGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ACHEADID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchCompanyMaster_Result">
+    <Property Type="String" Name="COMPCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPADDR" Nullable="true" MaxLength="250" />
+    <Property Type="String" Name="COMPPHN1" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPCPRSN" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="COMPMAIL" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="COMPID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_USER_MENU_DETAIL_ASSGN_Result">
+    <Property Type="Int32" Name="MenuId" Nullable="false" />
+    <Property Type="String" Name="LinkText" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="ActionName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="ControllerName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Roles" Nullable="false" MaxLength="250" />
+    <Property Type="Int16" Name="MenuGId" Nullable="true" />
+    <Property Type="Int16" Name="MenuGIndex" Nullable="true" />
+    <Property Type="String" Name="ImageClassName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_Search_Roles_Result">
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Descp" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="SDPTNAME" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="RMenuType" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="RControllerName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="MENUDESC" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="RMenuGroupOrder" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchStateMaster_Result">
+    <Property Type="Int32" Name="STATEID" Nullable="true" />
+    <Property Type="String" Name="STATECODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="STATEDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="STATETYPE" Nullable="true" MaxLength="11" />
+  </ComplexType>
+  <ComplexType Name="pr_SearchBloodGroupMaster_Result">
+    <Property Type="Int32" Name="BLDGID" Nullable="true" />
+    <Property Type="String" Name="BLDGCODE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="BLDGDESC" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DISPSTATUS" Nullable="true" MaxLength="8" />
+  </ComplexType>
+</Schema>

@@ -1,0 +1,998 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CHAKRA_ERPModelStoreContainer" CdmEntityContainer="CHAKRA_ERPEntities">
+    <FunctionImportMapping FunctionImportName="PR_ACCOUNTINGYEAR_ID_CHK" FunctionName="CHAKRA_ERPModel.Store.PR_ACCOUNTINGYEAR_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_ACCOUNTINGYEAR_ID_CHK_Result">
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+          <ScalarProperty Name="FDATE" ColumnName="FDATE" />
+          <ScalarProperty Name="TDATE" ColumnName="TDATE" />
+          <ScalarProperty Name="YRDESC" ColumnName="YRDESC" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+          <ScalarProperty Name="PRCSDATE" ColumnName="PRCSDATE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" FunctionName="CHAKRA_ERPModel.Store.PR_COMPANYACCOUNTINGDETAIL_ID_CHK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result">
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+          <ScalarProperty Name="YRID" ColumnName="YRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="AspNetRoles">
+      <EntityTypeMapping TypeName="CHAKRA_ERPModel.AspNetRole">
+        <MappingFragment StoreEntitySet="AspNetRoles">
+          <ScalarProperty Name="RImageClassName" ColumnName="RImageClassName" />
+          <ScalarProperty Name="SDPTID" ColumnName="SDPTID" />
+          <ScalarProperty Name="RMenuIndex" ColumnName="RMenuIndex" />
+          <ScalarProperty Name="RMenuGroupOrder" ColumnName="RMenuGroupOrder" />
+          <ScalarProperty Name="RMenuGroupId" ColumnName="RMenuGroupId" />
+          <ScalarProperty Name="RControllerName" ColumnName="RControllerName" />
+          <ScalarProperty Name="RMenuType" ColumnName="RMenuType" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="CHAKRA_ERPModel.AspNetUser">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+          <ScalarProperty Name="DBrnchId" ColumnName="DBrnchId" />
+          <ScalarProperty Name="UBrnchName" ColumnName="UBrnchName" />
+          <ScalarProperty Name="BrnchId" ColumnName="BrnchId" />
+          <ScalarProperty Name="NPassword" ColumnName="NPassword" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VW_USER_DETAILS">
+      <EntityTypeMapping TypeName="CHAKRA_ERPModel.VW_USER_DETAILS">
+        <MappingFragment StoreEntitySet="VW_USER_DETAILS">
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountGroup" FunctionName="CHAKRA_ERPModel.Store.pr_SearchAccountGroup">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchAccountGroup_Result">
+          <ScalarProperty Name="ACHEADGCODE" ColumnName="ACHEADGCODE" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADGID" ColumnName="ACHEADGID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchAccountHeadMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchAccountHeadMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchAccountHeadMaster_Result">
+          <ScalarProperty Name="ACHEADCODE" ColumnName="ACHEADCODE" />
+          <ScalarProperty Name="ACHEADDESC" ColumnName="ACHEADDESC" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="ACHEADID" ColumnName="ACHEADID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCompanyMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchCompanyMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchCompanyMaster_Result">
+          <ScalarProperty Name="COMPCODE" ColumnName="COMPCODE" />
+          <ScalarProperty Name="COMPNAME" ColumnName="COMPNAME" />
+          <ScalarProperty Name="COMPADDR" ColumnName="COMPADDR" />
+          <ScalarProperty Name="COMPPHN1" ColumnName="COMPPHN1" />
+          <ScalarProperty Name="COMPCPRSN" ColumnName="COMPCPRSN" />
+          <ScalarProperty Name="COMPMAIL" ColumnName="COMPMAIL" />
+          <ScalarProperty Name="COMPID" ColumnName="COMPID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDepartmentMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchDepartmentMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchDepartmentMaster_Result">
+          <ScalarProperty Name="DEPTCODE" ColumnName="DEPTCODE" />
+          <ScalarProperty Name="DEPTDESC" ColumnName="DEPTDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DEPTID" ColumnName="DEPTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDesignationMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchDesignationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchDesignationMaster_Result">
+          <ScalarProperty Name="DSGNCODE" ColumnName="DSGNCODE" />
+          <ScalarProperty Name="DSGNDESC" ColumnName="DSGNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="DSGNID" ColumnName="DSGNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Search_Roles" FunctionName="CHAKRA_ERPModel.Store.pr_Search_Roles">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Search_Roles_Result">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Descp" ColumnName="Descp" />
+          <ScalarProperty Name="SDPTNAME" ColumnName="SDPTNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchRegionMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchRegionMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchRegionMaster_Result">
+          <ScalarProperty Name="REGNCODE" ColumnName="REGNCODE" />
+          <ScalarProperty Name="REGNDESC" ColumnName="REGNDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="REGNID" ColumnName="REGNID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchStateMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchStateMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchStateMaster_Result">
+          <ScalarProperty Name="STATECODE" ColumnName="STATECODE" />
+          <ScalarProperty Name="STATEGSTCODE" ColumnName="STATEGSTCODE" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="STATETYPE" ColumnName="STATETYPE" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="STATEID" ColumnName="STATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_USER_MENU_DETAIL_ASSGN" FunctionName="CHAKRA_ERPModel.Store.pr_USER_MENU_DETAIL_ASSGN" />
+    <FunctionImportMapping FunctionImportName="pr_SearchBrandMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchBrandMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchBrandMaster_Result">
+          <ScalarProperty Name="BRNDCODE" ColumnName="BRNDCODE" />
+          <ScalarProperty Name="BRNDDESC" ColumnName="BRNDDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="BRNDID" ColumnName="BRNDID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchModelMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchModelMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchModelMaster_Result">
+          <ScalarProperty Name="MDLCODE" ColumnName="MDLCODE" />
+          <ScalarProperty Name="MDLDESC" ColumnName="MDLDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="MDLID" ColumnName="MDLID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchColourMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchColourMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchColourMaster_Result">
+          <ScalarProperty Name="CLRCODE" ColumnName="CLRCODE" />
+          <ScalarProperty Name="CLRDESC" ColumnName="CLRDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CLRID" ColumnName="CLRID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCategoryTypeMaster01" FunctionName="CHAKRA_ERPModel.Store.pr_SearchCategoryTypeMaster01">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchCategoryTypeMaster01_Result">
+          <ScalarProperty Name="CATETCODE" ColumnName="CATETCODE" />
+          <ScalarProperty Name="CATETDESC" ColumnName="CATETDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CATETID" ColumnName="CATETID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchSchemeMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchSchemeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchSchemeMaster_Result">
+          <ScalarProperty Name="SCHMCODE" ColumnName="SCHMCODE" />
+          <ScalarProperty Name="SCHMDN" ColumnName="SCHMDN" />
+          <ScalarProperty Name="SCHMRATE" ColumnName="SCHMRATE" />
+          <ScalarProperty Name="SCHMDCHRG" ColumnName="SCHMDCHRG" />
+          <ScalarProperty Name="SCHMMONTH" ColumnName="SCHMMONTH" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="SCHMID" ColumnName="SCHMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLoanTypeMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchLoanTypeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchLoanTypeMaster_Result">
+          <ScalarProperty Name="LOANTCODE" ColumnName="LOANTCODE" />
+          <ScalarProperty Name="LOANTDESC" ColumnName="LOANTDESC" />
+          <ScalarProperty Name="ACHEADGDESC" ColumnName="ACHEADGDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LOANTID" ColumnName="LOANTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchTestMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchTestMaster" />
+    <FunctionImportMapping FunctionImportName="pr_Employoee_Master_Link_Ctrl_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Employoee_Master_Link_Ctrl_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Employoee_Master_Link_Ctrl_Assgn_Result">
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="DSGNDESC" ColumnName="DSGNDESC" />
+          <ScalarProperty Name="BRNCHID" ColumnName="BRNCHID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchEmployeeMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchEmployeeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchEmployeeMaster_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEPNAME" ColumnName="CATEPNAME" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="CATEMAIL" ColumnName="CATEMAIL" />
+          <ScalarProperty Name="CATEAUTRNO" ColumnName="CATEAUTRNO" />
+          <ScalarProperty Name="CATEDRVLSNO" ColumnName="CATEDRVLSNO" />
+          <ScalarProperty Name="DSGNDESC" ColumnName="DSGNDESC" />
+          <ScalarProperty Name="DEPTDESC" ColumnName="DEPTDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCategory_Master" FunctionName="CHAKRA_ERPModel.Store.pr_SearchCategory_Master">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchCategory_Master_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEADDR" ColumnName="CATEADDR" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchDealerMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchDealerMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchDealerMaster_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEADDR" ColumnName="CATEADDR" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLocationMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchLocationMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchLocationMaster_Result">
+          <ScalarProperty Name="LOCTCODE" ColumnName="LOCTCODE" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LOCTID" ColumnName="LOCTID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchBankMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchBankMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchBankMaster_Result">
+          <ScalarProperty Name="BANKCODE" ColumnName="BANKCODE" />
+          <ScalarProperty Name="BANKDESC" ColumnName="BANKDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="BANKID" ColumnName="BANKID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Pr_Loan_Status_Pending_Amount_Assgn" FunctionName="CHAKRA_ERPModel.Store.Pr_Loan_Status_Pending_Amount_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.Pr_Loan_Status_Pending_Amount_Assgn_Result">
+          <ScalarProperty Name="PAMT" ColumnName="PAMT" />
+          <ScalarProperty Name="IAMT" ColumnName="IAMT" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Customer_Code_Search_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Customer_Code_Search_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Customer_Code_Search_Assgn_Result">
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEADDR" ColumnName="CATEADDR" />
+          <ScalarProperty Name="CATEPHN1" ColumnName="CATEPHN1" />
+          <ScalarProperty Name="BRNCHID" ColumnName="BRNCHID" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Receipt_Customer_Code_Search_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Receipt_Customer_Code_Search_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Receipt_Customer_Code_Search_Assgn_Result">
+          <ScalarProperty Name="LOAN_CATE_CODE" ColumnName="LOAN_CATE_CODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+          <ScalarProperty Name="BRNCHID" ColumnName="BRNCHID" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Receipt_Detail_Ctrl_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Receipt_Detail_Ctrl_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Receipt_Detail_Ctrl_Assgn_Result">
+          <ScalarProperty Name="RCPTDID" ColumnName="RCPTDID" />
+          <ScalarProperty Name="RCPTMID" ColumnName="RCPTMID" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="RCPTNOI" ColumnName="RCPTNOI" />
+          <ScalarProperty Name="RCPTPAMT" ColumnName="RCPTPAMT" />
+          <ScalarProperty Name="RCPTIAMT" ColumnName="RCPTIAMT" />
+          <ScalarProperty Name="RCPTLFEE" ColumnName="RCPTLFEE" />
+          <ScalarProperty Name="RCPTDDATE" ColumnName="RCPTDDATE" />
+          <ScalarProperty Name="RCPTFDATE" ColumnName="RCPTFDATE" />
+          <ScalarProperty Name="RCPTIWAMT" ColumnName="RCPTIWAMT" />
+          <ScalarProperty Name="RCPTLOPAMT" ColumnName="RCPTLOPAMT" />
+          <ScalarProperty Name="RCPTDCAMT" ColumnName="RCPTDCAMT" />
+          <ScalarProperty Name="RCPTADVAMT" ColumnName="RCPTADVAMT" />
+          <ScalarProperty Name="RCPTSTAMT" ColumnName="RCPTSTAMT" />
+          <ScalarProperty Name="RCPTFIAMT" ColumnName="RCPTFIAMT" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLoanNocStatusMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchLoanNocStatusMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchLoanNocStatusMaster_Result">
+          <ScalarProperty Name="LNMDATE" ColumnName="LNMDATE" />
+          <ScalarProperty Name="LNMNO" ColumnName="LNMNO" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="VHLAMT" ColumnName="VHLAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LNMID" ColumnName="LNMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Loan_Status_Detail_Ctrl_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Loan_Status_Detail_Ctrl_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Loan_Status_Detail_Ctrl_Assgn_Result">
+          <ScalarProperty Name="BRNDDESC" ColumnName="BRNDDESC" />
+          <ScalarProperty Name="CLRDESC" ColumnName="CLRDESC" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="MDLDESC" ColumnName="MDLDESC" />
+          <ScalarProperty Name="RCPTPAMT" ColumnName="RCPTPAMT" />
+          <ScalarProperty Name="RCPTIAMT" ColumnName="RCPTIAMT" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="LOANDATE" ColumnName="LOANDATE" />
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="BRNCHID" ColumnName="BRNCHID" />
+          <ScalarProperty Name="LOANNO" ColumnName="LOANNO" />
+          <ScalarProperty Name="DLOANNO" ColumnName="DLOANNO" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEADDR" ColumnName="CATEADDR" />
+          <ScalarProperty Name="CATEPHN1" ColumnName="CATEPHN1" />
+          <ScalarProperty Name="CATEPHN2" ColumnName="CATEPHN2" />
+          <ScalarProperty Name="LOANGNAME" ColumnName="LOANGNAME" />
+          <ScalarProperty Name="LOANGADDR" ColumnName="LOANGADDR" />
+          <ScalarProperty Name="LOANGPHN1" ColumnName="LOANGPHN1" />
+          <ScalarProperty Name="LOANGPHN2" ColumnName="LOANGPHN2" />
+          <ScalarProperty Name="BRNDID" ColumnName="BRNDID" />
+          <ScalarProperty Name="MDLID" ColumnName="MDLID" />
+          <ScalarProperty Name="CLRID" ColumnName="CLRID" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="ENGNO" ColumnName="ENGNO" />
+          <ScalarProperty Name="KEYNO" ColumnName="KEYNO" />
+          <ScalarProperty Name="CHANO" ColumnName="CHANO" />
+          <ScalarProperty Name="VHLAMT" ColumnName="VHLAMT" />
+          <ScalarProperty Name="ITLAMT" ColumnName="ITLAMT" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="SCHMID" ColumnName="SCHMID" />
+          <ScalarProperty Name="LOANRATE" ColumnName="LOANRATE" />
+          <ScalarProperty Name="LOANDCHRG" ColumnName="LOANDCHRG" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="LOANEDATE" ColumnName="LOANEDATE" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="INSID" ColumnName="INSID" />
+          <ScalarProperty Name="INSPLYNO" ColumnName="INSPLYNO" />
+          <ScalarProperty Name="INSDATE" ColumnName="INSDATE" />
+          <ScalarProperty Name="INSAMT" ColumnName="INSAMT" />
+          <ScalarProperty Name="RNWDATE" ColumnName="RNWDATE" />
+          <ScalarProperty Name="RNWAMT" ColumnName="RNWAMT" />
+          <ScalarProperty Name="DLRID" ColumnName="DLRID" />
+          <ScalarProperty Name="SDLRID" ColumnName="SDLRID" />
+          <ScalarProperty Name="SDLRNAME" ColumnName="SDLRNAME" />
+          <ScalarProperty Name="INVNO" ColumnName="INVNO" />
+          <ScalarProperty Name="INVDATE" ColumnName="INVDATE" />
+          <ScalarProperty Name="INVAMT" ColumnName="INVAMT" />
+          <ScalarProperty Name="LOANPDTYPE" ColumnName="LOANPDTYPE" />
+          <ScalarProperty Name="LOANTID" ColumnName="LOANTID" />
+          <ScalarProperty Name="CONSMNO" ColumnName="CONSMNO" />
+          <ScalarProperty Name="CUSRID" ColumnName="CUSRID" />
+          <ScalarProperty Name="LMUSRID" ColumnName="LMUSRID" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LOAN_CATE_CODE" ColumnName="LOAN_CATE_CODE" />
+          <ScalarProperty Name="PRCSDATE" ColumnName="PRCSDATE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLoanLateeFee" FunctionName="CHAKRA_ERPModel.Store.pr_SearchLoanLateeFee">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchLoanLateeFee_Result">
+          <ScalarProperty Name="LFMDATE" ColumnName="LFMDATE" />
+          <ScalarProperty Name="LFMNO" ColumnName="LFMNO" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LFMID" ColumnName="LFMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchBranchMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchBranchMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchBranchMaster_Result">
+          <ScalarProperty Name="BRNCHPCODE" ColumnName="BRNCHPCODE" />
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="BRNCHADDR" ColumnName="BRNCHADDR" />
+          <ScalarProperty Name="BRNCHPHN1" ColumnName="BRNCHPHN1" />
+          <ScalarProperty Name="STATEDESC" ColumnName="STATEDESC" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="BRNCHID" ColumnName="BRNCHID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchCustomerMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchCustomerMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchCustomerMaster_Result">
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEPROOFNAME" ColumnName="CATEPROOFNAME" />
+          <ScalarProperty Name="CATEPHN1" ColumnName="CATEPHN1" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchExpenseDetail" FunctionName="CHAKRA_ERPModel.Store.pr_SearchExpenseDetail">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchExpenseDetail_Result">
+          <ScalarProperty Name="RCPTDATE" ColumnName="RCPTDATE" />
+          <ScalarProperty Name="RCPTNO" ColumnName="RCPTNO" />
+          <ScalarProperty Name="DRCPTNO" ColumnName="DRCPTNO" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="RCPTDESC" ColumnName="RCPTDESC" />
+          <ScalarProperty Name="RCPTGAMT" ColumnName="RCPTGAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="RCPTMID" ColumnName="RCPTMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Account_Head_Search_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Account_Head_Search_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Account_Head_Search_Assgn_Result">
+          <ScalarProperty Name="ACHEADDESC" ColumnName="ACHEADDESC" />
+          <ScalarProperty Name="ACHEADID" ColumnName="ACHEADID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Search_LOC_Status_Grid_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Search_LOC_Status_Grid_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Search_LOC_Status_Grid_Assgn_Result">
+          <ScalarProperty Name="LOANDATE" ColumnName="LOANDATE" />
+          <ScalarProperty Name="LOANNO" ColumnName="LOANNO" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="RAMT" ColumnName="RAMT" />
+          <ScalarProperty Name="LATEAMT" ColumnName="LATEAMT" />
+          <ScalarProperty Name="BAMT" ColumnName="BAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Receipt_Amount_Received_SMS_Detail_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Receipt_Amount_Received_SMS_Detail_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Receipt_Amount_Received_SMS_Detail_Assgn_Result">
+          <ScalarProperty Name="RCPTMID" ColumnName="RCPTMID" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="DRCPTNO" ColumnName="DRCPTNO" />
+          <ScalarProperty Name="RCPTDATE" ColumnName="RCPTDATE" />
+          <ScalarProperty Name="RCPTNAMT" ColumnName="RCPTNAMT" />
+          <ScalarProperty Name="CATEPHN1" ColumnName="CATEPHN1" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Loan_Sanctioned_SMS_Detail_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Loan_Sanctioned_SMS_Detail_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Loan_Sanctioned_SMS_Detail_Assgn_Result">
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="LOANDATE" ColumnName="LOANDATE" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="LOANNO" ColumnName="LOANNO" />
+          <ScalarProperty Name="DLOANNO" ColumnName="DLOANNO" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="LOANTDESC" ColumnName="LOANTDESC" />
+          <ScalarProperty Name="CATEPHN1" ColumnName="CATEPHN1" />
+          <ScalarProperty Name="CATEPHN2" ColumnName="CATEPHN2" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="VHLAMT" ColumnName="VHLAMT" />
+          <ScalarProperty Name="ITLAMT" ColumnName="ITLAMT" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="LOANRATE" ColumnName="LOANRATE" />
+          <ScalarProperty Name="SCHMMONTH" ColumnName="SCHMMONTH" />
+          <ScalarProperty Name="SCHMDN" ColumnName="SCHMDN" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="LOANEDATE" ColumnName="LOANEDATE" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Search_CollectionReceipt" FunctionName="CHAKRA_ERPModel.Store.pr_Search_CollectionReceipt">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Search_CollectionReceipt_Result">
+          <ScalarProperty Name="RCPTDATE" ColumnName="RCPTDATE" />
+          <ScalarProperty Name="RCPTNO" ColumnName="RCPTNO" />
+          <ScalarProperty Name="DRCPTNO" ColumnName="DRCPTNO" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="MODEDESC" ColumnName="MODEDESC" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="RCPTGAMT" ColumnName="RCPTGAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="RCPTMID" ColumnName="RCPTMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_GET_USERNAME" FunctionName="CHAKRA_ERPModel.Store.PR_GET_USERNAME">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_GET_USERNAME_Result">
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="BRNCHID" ColumnName="BRNCHID" />
+          <ScalarProperty Name="LBRNCHNAME" ColumnName="LBRNCHNAME" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLoanMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchLoanMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchLoanMaster_Result">
+          <ScalarProperty Name="LOANDATE" ColumnName="LOANDATE" />
+          <ScalarProperty Name="LOANNO" ColumnName="LOANNO" />
+          <ScalarProperty Name="LOAN_CATE_CODE" ColumnName="LOAN_CATE_CODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="VHLAMT" ColumnName="VHLAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="SMSSTATUS" ColumnName="SMSSTATUS" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchReceiptMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchReceiptMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchReceiptMaster_Result">
+          <ScalarProperty Name="RCPTDATE" ColumnName="RCPTDATE" />
+          <ScalarProperty Name="RCPTNO" ColumnName="RCPTNO" />
+          <ScalarProperty Name="DRCPTNO" ColumnName="DRCPTNO" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="MODEDESC" ColumnName="MODEDESC" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="RCPTGAMT" ColumnName="RCPTGAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="SMSSTATUS" ColumnName="SMSSTATUS" />
+          <ScalarProperty Name="RCPTMID" ColumnName="RCPTMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_CUSTOMER_PENDING_LOAN_LIST_INSRT_001" FunctionName="CHAKRA_ERPModel.Store.pr_CUSTOMER_PENDING_LOAN_LIST_INSRT_001">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_CUSTOMER_PENDING_LOAN_LIST_INSRT_001_Result">
+          <ScalarProperty Name="KUSRID" ColumnName="KUSRID" />
+          <ScalarProperty Name="COMPNAME" ColumnName="COMPNAME" />
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="BRNCHID" ColumnName="BRNCHID" />
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="LOANEDATE" ColumnName="LOANEDATE" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="RAMT" ColumnName="RAMT" />
+          <ScalarProperty Name="IAMT" ColumnName="IAMT" />
+          <ScalarProperty Name="CMAT" ColumnName="CMAT" />
+          <ScalarProperty Name="BAMT" ColumnName="BAMT" />
+          <ScalarProperty Name="TNOI" ColumnName="TNOI" />
+          <ScalarProperty Name="PTNOI" ColumnName="PTNOI" />
+          <ScalarProperty Name="PNOI" ColumnName="PNOI" />
+          <ScalarProperty Name="PAMT" ColumnName="PAMT" />
+          <ScalarProperty Name="LOCTID" ColumnName="LOCTID" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="CNOI" ColumnName="CNOI" />
+          <ScalarProperty Name="LOCTCODE" ColumnName="LOCTCODE" />
+          <ScalarProperty Name="MDLDESC" ColumnName="MDLDESC" />
+          <ScalarProperty Name="MDLCODE" ColumnName="MDLCODE" />
+          <ScalarProperty Name="DLRID" ColumnName="DLRID" />
+          <ScalarProperty Name="SDLRID" ColumnName="SDLRID" />
+          <ScalarProperty Name="SDLRNAME" ColumnName="SDLRNAME" />
+          <ScalarProperty Name="DEALERNAME" ColumnName="DEALERNAME" />
+          <ScalarProperty Name="CATEPHN1" ColumnName="CATEPHN1" />
+          <ScalarProperty Name="CATEPHN2" ColumnName="CATEPHN2" />
+          <ScalarProperty Name="CATEPHN3" ColumnName="CATEPHN3" />
+          <ScalarProperty Name="CATEPHN4" ColumnName="CATEPHN4" />
+          <ScalarProperty Name="CATETYPE" ColumnName="CATETYPE" />
+          <ScalarProperty Name="CATEADDR" ColumnName="CATEADDR" />
+          <ScalarProperty Name="CATEOADDR" ColumnName="CATEOADDR" />
+          <ScalarProperty Name="ANOI" ColumnName="ANOI" />
+          <ScalarProperty Name="LRCPTDATE" ColumnName="LRCPTDATE" />
+          <ScalarProperty Name="ZNOI" ColumnName="ZNOI" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_BRANCH_DETAILS_DASHBOARD_CHART" FunctionName="CHAKRA_ERPModel.Store.PR_BRANCH_DETAILS_DASHBOARD_CHART">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_BRANCH_DETAILS_DASHBOARD_CHART_Result">
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="RCPTGAMT" ColumnName="RCPTGAMT" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_AREA_WISE_DETAILS_DASHBOARD_CHART" FunctionName="CHAKRA_ERPModel.Store.PR_AREA_WISE_DETAILS_DASHBOARD_CHART">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_AREA_WISE_DETAILS_DASHBOARD_CHART_Result">
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="RCPTGAMT" ColumnName="RCPTGAMT" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Loanstatus_Customer_Code_Search_Assgn" FunctionName="CHAKRA_ERPModel.Store.pr_Loanstatus_Customer_Code_Search_Assgn">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Loanstatus_Customer_Code_Search_Assgn_Result">
+          <ScalarProperty Name="LOAN_CATE_CODE" ColumnName="LOAN_CATE_CODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATEADDR" ColumnName="CATEADDR" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="BRNDDESC" ColumnName="BRNDDESC" />
+          <ScalarProperty Name="CLRDESC" ColumnName="CLRDESC" />
+          <ScalarProperty Name="MDLDESC" ColumnName="MDLDESC" />
+          <ScalarProperty Name="KEYNO" ColumnName="KEYNO" />
+          <ScalarProperty Name="ENGNO" ColumnName="ENGNO" />
+          <ScalarProperty Name="VHLAMT" ColumnName="VHLAMT" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="LOANRATE" ColumnName="LOANRATE" />
+          <ScalarProperty Name="ITLAMT" ColumnName="ITLAMT" />
+          <ScalarProperty Name="RCPTPAMT" ColumnName="RCPTPAMT" />
+          <ScalarProperty Name="RCPTIAMT" ColumnName="RCPTIAMT" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_FRM_VHLNO_AMOUNT_NOI" FunctionName="CHAKRA_ERPModel.Store.pr_FRM_VHLNO_AMOUNT_NOI">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_FRM_VHLNO_AMOUNT_NOI_Result">
+          <ScalarProperty Name="COMPYID" ColumnName="COMPYID" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="PAMT" ColumnName="PAMT" />
+          <ScalarProperty Name="IAMT" ColumnName="IAMT" />
+          <ScalarProperty Name="IWAMT" ColumnName="IWAMT" />
+          <ScalarProperty Name="LOPAMT" ColumnName="LOPAMT" />
+          <ScalarProperty Name="DCAMT" ColumnName="DCAMT" />
+          <ScalarProperty Name="ADVAMT" ColumnName="ADVAMT" />
+          <ScalarProperty Name="STAMT" ColumnName="STAMT" />
+          <ScalarProperty Name="FIAMT" ColumnName="FIAMT" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLoanStatusMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchLoanStatusMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchLoanStatusMaster_Result">
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="LOANSMNO" ColumnName="LOANSMNO" />
+          <ScalarProperty Name="LOANSMDNO" ColumnName="LOANSMDNO" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="VHLAMT" ColumnName="VHLAMT" />
+          <ScalarProperty Name="LOANSMID" ColumnName="LOANSMID" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="GSTATUS" ColumnName="GSTATUS" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_GET_RECEIPT_DASHBOARD" FunctionName="CHAKRA_ERPModel.Store.PR_GET_RECEIPT_DASHBOARD">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_GET_RECEIPT_DASHBOARD_Result">
+          <ScalarProperty Name="RCPTDATE" ColumnName="RCPTDATE" />
+          <ScalarProperty Name="DRCPTNO" ColumnName="DRCPTNO" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="MODEDESC" ColumnName="MODEDESC" />
+          <ScalarProperty Name="RCPTGAMT" ColumnName="RCPTGAMT" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_GET_RECEIPT_DETAILS_DASHBOARD" FunctionName="CHAKRA_ERPModel.Store.PR_GET_RECEIPT_DETAILS_DASHBOARD">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_GET_RECEIPT_DETAILS_DASHBOARD_Result">
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="RCPTDATE" ColumnName="RCPTDATE" />
+          <ScalarProperty Name="CASH" ColumnName="CASH" />
+          <ScalarProperty Name="ECS" ColumnName="ECS" />
+          <ScalarProperty Name="CHEQUE" ColumnName="CHEQUE" />
+          <ScalarProperty Name="DEBIT_CARD" ColumnName="DEBIT_CARD" />
+          <ScalarProperty Name="ONLINE" ColumnName="ONLINE" />
+          <ScalarProperty Name="NEFT" ColumnName="NEFT" />
+          <ScalarProperty Name="GPAY" ColumnName="GPAY" />
+          <ScalarProperty Name="LFEE" ColumnName="LFEE" />
+          <ScalarProperty Name="EXPENSE" ColumnName="EXPENSE" />
+          <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_GET_RECEIPT_DETAILS_DASHBOARD_CONSOLIDATE" FunctionName="CHAKRA_ERPModel.Store.PR_GET_RECEIPT_DETAILS_DASHBOARD_CONSOLIDATE">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_GET_RECEIPT_DETAILS_DASHBOARD_CONSOLIDATE_Result">
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="CASH" ColumnName="CASH" />
+          <ScalarProperty Name="ECS" ColumnName="ECS" />
+          <ScalarProperty Name="CHEQUE" ColumnName="CHEQUE" />
+          <ScalarProperty Name="DEBIT_CARD" ColumnName="DEBIT_CARD" />
+          <ScalarProperty Name="ONLINE" ColumnName="ONLINE" />
+          <ScalarProperty Name="NEFT" ColumnName="NEFT" />
+          <ScalarProperty Name="GPAY" ColumnName="GPAY" />
+          <ScalarProperty Name="LFEE" ColumnName="LFEE" />
+          <ScalarProperty Name="EXPENSE" ColumnName="EXPENSE" />
+          <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_GET_RECEIPT_DETAILS_DASHBOARD_EMP_WISE" FunctionName="CHAKRA_ERPModel.Store.PR_GET_RECEIPT_DETAILS_DASHBOARD_EMP_WISE">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_GET_RECEIPT_DETAILS_DASHBOARD_EMP_WISE_Result">
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="EMPNAME" ColumnName="EMPNAME" />
+          <ScalarProperty Name="RCPTDATE" ColumnName="RCPTDATE" />
+          <ScalarProperty Name="CASH" ColumnName="CASH" />
+          <ScalarProperty Name="ECS" ColumnName="ECS" />
+          <ScalarProperty Name="CHEQUE" ColumnName="CHEQUE" />
+          <ScalarProperty Name="DEBIT_CARD" ColumnName="DEBIT_CARD" />
+          <ScalarProperty Name="ONLINE" ColumnName="ONLINE" />
+          <ScalarProperty Name="NEFT" ColumnName="NEFT" />
+          <ScalarProperty Name="GPAY" ColumnName="GPAY" />
+          <ScalarProperty Name="LFEE" ColumnName="LFEE" />
+          <ScalarProperty Name="EXPENSE" ColumnName="EXPENSE" />
+          <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_GET_RECEIPT_DETAILS_DASHBOARD_EMP_WISE_CONSOLIDATE" FunctionName="CHAKRA_ERPModel.Store.PR_GET_RECEIPT_DETAILS_DASHBOARD_EMP_WISE_CONSOLIDATE">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_GET_RECEIPT_DETAILS_DASHBOARD_EMP_WISE_CONSOLIDATE_Result">
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="EMPNAME" ColumnName="EMPNAME" />
+          <ScalarProperty Name="CASH" ColumnName="CASH" />
+          <ScalarProperty Name="ECS" ColumnName="ECS" />
+          <ScalarProperty Name="CHEQUE" ColumnName="CHEQUE" />
+          <ScalarProperty Name="DEBIT_CARD" ColumnName="DEBIT_CARD" />
+          <ScalarProperty Name="ONLINE" ColumnName="ONLINE" />
+          <ScalarProperty Name="NEFT" ColumnName="NEFT" />
+          <ScalarProperty Name="GPAY" ColumnName="GPAY" />
+          <ScalarProperty Name="LFEE" ColumnName="LFEE" />
+          <ScalarProperty Name="EXPENSE" ColumnName="EXPENSE" />
+          <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_GET_RECEIPT_DETAILS_DASHBOARD_LOCATION_WISE" FunctionName="CHAKRA_ERPModel.Store.PR_GET_RECEIPT_DETAILS_DASHBOARD_LOCATION_WISE">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_GET_RECEIPT_DETAILS_DASHBOARD_LOCATION_WISE_Result">
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="RCPTDATE" ColumnName="RCPTDATE" />
+          <ScalarProperty Name="CASH" ColumnName="CASH" />
+          <ScalarProperty Name="ECS" ColumnName="ECS" />
+          <ScalarProperty Name="CHEQUE" ColumnName="CHEQUE" />
+          <ScalarProperty Name="DEBIT_CARD" ColumnName="DEBIT_CARD" />
+          <ScalarProperty Name="ONLINE" ColumnName="ONLINE" />
+          <ScalarProperty Name="NEFT" ColumnName="NEFT" />
+          <ScalarProperty Name="GPAY" ColumnName="GPAY" />
+          <ScalarProperty Name="LFEE" ColumnName="LFEE" />
+          <ScalarProperty Name="EXPENSE" ColumnName="EXPENSE" />
+          <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PR_GET_RECEIPT_DETAILS_DASHBOARD_LOCATION_WISE_CONSOLIDATE" FunctionName="CHAKRA_ERPModel.Store.PR_GET_RECEIPT_DETAILS_DASHBOARD_LOCATION_WISE_CONSOLIDATE">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.PR_GET_RECEIPT_DETAILS_DASHBOARD_LOCATION_WISE_CONSOLIDATE_Result">
+          <ScalarProperty Name="BRNCHNAME" ColumnName="BRNCHNAME" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="CASH" ColumnName="CASH" />
+          <ScalarProperty Name="ECS" ColumnName="ECS" />
+          <ScalarProperty Name="CHEQUE" ColumnName="CHEQUE" />
+          <ScalarProperty Name="DEBIT_CARD" ColumnName="DEBIT_CARD" />
+          <ScalarProperty Name="ONLINE" ColumnName="ONLINE" />
+          <ScalarProperty Name="NEFT" ColumnName="NEFT" />
+          <ScalarProperty Name="GPAY" ColumnName="GPAY" />
+          <ScalarProperty Name="LFEE" ColumnName="LFEE" />
+          <ScalarProperty Name="EXPENSE" ColumnName="EXPENSE" />
+          <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_Search_Collection_Agent_Pending_List" FunctionName="CHAKRA_ERPModel.Store.pr_Search_Collection_Agent_Pending_List">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_Search_Collection_Agent_Pending_List_Result">
+          <ScalarProperty Name="LOANNO" ColumnName="LOANNO" />
+          <ScalarProperty Name="LOAN_CATE_CODE" ColumnName="LOAN_CATE_CODE" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="VHLAMT" ColumnName="VHLAMT" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="BAMT" ColumnName="BAMT" />
+          <ScalarProperty Name="ZNOI" ColumnName="ZNOI" />
+          <ScalarProperty Name="PNOI" ColumnName="PNOI" />
+          <ScalarProperty Name="PENDING_EMIAMT" ColumnName="PENDING_EMIAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchLoanLateeFeeMaster" FunctionName="CHAKRA_ERPModel.Store.pr_SearchLoanLateeFeeMaster">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchLoanLateeFeeMaster_Result">
+          <ScalarProperty Name="LFMDATE" ColumnName="LFMDATE" />
+          <ScalarProperty Name="LFMDNO" ColumnName="LFMDNO" />
+          <ScalarProperty Name="LOAN_CATE_CODE" ColumnName="LOAN_CATE_CODE" />
+          <ScalarProperty Name="LFMAMT" ColumnName="LFMAMT" />
+          <ScalarProperty Name="DISPSTATUS" ColumnName="DISPSTATUS" />
+          <ScalarProperty Name="LFMID" ColumnName="LFMID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Pr_On_Date_Remainder_SMS_View" FunctionName="CHAKRA_ERPModel.Store.Pr_On_Date_Remainder_SMS_View">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.Pr_On_Date_Remainder_SMS_View_Result">
+          <ScalarProperty Name="RPTID" ColumnName="RPTID" />
+          <ScalarProperty Name="KUSRID" ColumnName="KUSRID" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="TEMPID" ColumnName="TEMPID" />
+          <ScalarProperty Name="SMSCONTENT" ColumnName="SMSCONTENT" />
+          <ScalarProperty Name="SMSDESC" ColumnName="SMSDESC" />
+          <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchSMSOnDateRemainder" FunctionName="CHAKRA_ERPModel.Store.pr_SearchSMSOnDateRemainder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchSMSOnDateRemainder_Result">
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="LOANEDATE" ColumnName="LOANEDATE" />
+          <ScalarProperty Name="TEMI" ColumnName="TEMI" />
+          <ScalarProperty Name="REMI" ColumnName="REMI" />
+          <ScalarProperty Name="PEMI" ColumnName="PEMI" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="TPAMT" ColumnName="TPAMT" />
+          <ScalarProperty Name="LOANDATE" ColumnName="LOANDATE" />
+          <ScalarProperty Name="ONDATEREMAINDER_SMS" ColumnName="ONDATEREMAINDER_SMS" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchSMSOverDueRemainder" FunctionName="CHAKRA_ERPModel.Store.pr_SearchSMSOverDueRemainder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchSMSOverDueRemainder_Result">
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="LOANEDATE" ColumnName="LOANEDATE" />
+          <ScalarProperty Name="TEMI" ColumnName="TEMI" />
+          <ScalarProperty Name="REMI" ColumnName="REMI" />
+          <ScalarProperty Name="PEMI" ColumnName="PEMI" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="TPAMT" ColumnName="TPAMT" />
+          <ScalarProperty Name="LOANDATE" ColumnName="LOANDATE" />
+          <ScalarProperty Name="OVERDUEREMAINDER_SMS" ColumnName="OVERDUEREMAINDER_SMS" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="MDLCODE" ColumnName="MDLCODE" />
+          <ScalarProperty Name="VHLNO" ColumnName="VHLNO" />
+          <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchSMSPaymentRemainder" FunctionName="CHAKRA_ERPModel.Store.pr_SearchSMSPaymentRemainder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchSMSPaymentRemainder_Result">
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="LOANEDATE" ColumnName="LOANEDATE" />
+          <ScalarProperty Name="TEMI" ColumnName="TEMI" />
+          <ScalarProperty Name="REMI" ColumnName="REMI" />
+          <ScalarProperty Name="PEMI" ColumnName="PEMI" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="TPAMT" ColumnName="TPAMT" />
+          <ScalarProperty Name="LOANDATE" ColumnName="LOANDATE" />
+          <ScalarProperty Name="ONDATEREMAINDER_SMS" ColumnName="ONDATEREMAINDER_SMS" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchSMS_ECSRemainder" FunctionName="CHAKRA_ERPModel.Store.pr_SearchSMS_ECSRemainder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchSMS_ECSRemainder_Result">
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="LOANEDATE" ColumnName="LOANEDATE" />
+          <ScalarProperty Name="TEMI" ColumnName="TEMI" />
+          <ScalarProperty Name="REMI" ColumnName="REMI" />
+          <ScalarProperty Name="PEMI" ColumnName="PEMI" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="TPAMT" ColumnName="TPAMT" />
+          <ScalarProperty Name="LOANDATE" ColumnName="LOANDATE" />
+          <ScalarProperty Name="ONDATEREMAINDER_SMS" ColumnName="ONDATEREMAINDER_SMS" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="pr_SearchSMS_ECS_Bounced" FunctionName="CHAKRA_ERPModel.Store.pr_SearchSMS_ECS_Bounced">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CHAKRA_ERPModel.pr_SearchSMS_ECS_Bounced_Result">
+          <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+          <ScalarProperty Name="CATECODE" ColumnName="CATECODE" />
+          <ScalarProperty Name="LOCTDESC" ColumnName="LOCTDESC" />
+          <ScalarProperty Name="LOANAMT" ColumnName="LOANAMT" />
+          <ScalarProperty Name="LOANSDATE" ColumnName="LOANSDATE" />
+          <ScalarProperty Name="LOANEDATE" ColumnName="LOANEDATE" />
+          <ScalarProperty Name="TEMI" ColumnName="TEMI" />
+          <ScalarProperty Name="REMI" ColumnName="REMI" />
+          <ScalarProperty Name="PEMI" ColumnName="PEMI" />
+          <ScalarProperty Name="EMIAMT" ColumnName="EMIAMT" />
+          <ScalarProperty Name="TPAMT" ColumnName="TPAMT" />
+          <ScalarProperty Name="LOANDATE" ColumnName="LOANDATE" />
+          <ScalarProperty Name="ONDATEREMAINDER_SMS" ColumnName="ONDATEREMAINDER_SMS" />
+          <ScalarProperty Name="LOANMID" ColumnName="LOANMID" />
+          <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

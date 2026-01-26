@@ -1,0 +1,454 @@
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.AssemblyReference.cache
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\ClubMembership.dll.config
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\ClubMembership.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\ClubMembership.pdb
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Antlr3.Runtime.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\ClosedXML.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\CrystalDecisions.CrystalReports.Engine.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\CrystalDecisions.ReportSource.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\CrystalDecisions.Shared.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\EntityFramework.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\ExcelNumberFormat.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\log4net.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Newtonsoft.Json.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Owin.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.Helpers.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.Mvc.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.Optimization.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.Razor.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.WebPages.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\WebGrease.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\stdole.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\ClosedXML.pdb
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\ClosedXML.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\EntityFramework.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\ExcelNumberFormat.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\log4net.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.Helpers.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.Mvc.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.Optimization.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.Razor.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.WebPages.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Antlr3.Runtime.pdb
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\bin\Newtonsoft.Json.xml
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\obj\Debug\ClubMemb.D9EF714A.Up2Date
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\obj\Debug\ClubMembership.dll
+C:\Users\hp\Desktop\ClubMembership\ClubMembership\obj\Debug\ClubMembership.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll.config
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.CrystalReports.Engine.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.ReportSource.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.Shared.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\log4net.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Web.Infrastructure.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Owin.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\WebGrease.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\stdole.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\log4net.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.AssemblyReference.cache
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.Migrations.InitialCreate.resources
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.GenerateResource.cache
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.CoreCompileInputs.cache
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMemb.D9EF714A.Up2Date
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.pdb
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll.config
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.pdb
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.CrystalReports.Engine.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.ReportSource.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.Shared.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Owin.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\WebGrease.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.pdb
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.xml
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.pdb
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.AssemblyReference.cache
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.Migrations.InitialCreate.resources
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.GenerateResource.cache
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.CoreCompileInputs.cache
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMemb.D9EF714A.Up2Date
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.dll
+C:\Users\Surendhar\Downloads\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll.config
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.CrystalReports.Engine.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.ReportSource.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.Shared.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Web.Infrastructure.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Owin.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\WebGrease.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\stdole.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.AssemblyReference.cache
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.Migrations.InitialCreate.resources
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.GenerateResource.cache
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.CoreCompileInputs.cache
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMemb.D9EF714A.Up2Date
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.pdb
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll.config
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.pdb
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.CrystalReports.Engine.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.ReportSource.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.Shared.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Web.Infrastructure.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Owin.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\WebGrease.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.pdb
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.xml
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.pdb
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.AssemblyReference.cache
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.Migrations.InitialCreate.resources
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.GenerateResource.cache
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.CoreCompileInputs.cache
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMemb.D9EF714A.Up2Date
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.dll
+E:\FusionTec\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.pdb
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll.config
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClubMembership.pdb
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.CrystalReports.Engine.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.ReportSource.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.Shared.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Owin.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\WebGrease.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\stdole.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.pdb
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.xml
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.pdb
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.AssemblyReference.cache
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.Migrations.InitialCreate.resources
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.GenerateResource.cache
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.CoreCompileInputs.cache
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMemb.D9EF714A.Up2Date
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.dll
+C:\Users\HP\Desktop\membership\MemberShip\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\KVM_ERP.dll.config
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\KVM_ERP.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\KVM_ERP.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.CrystalReports.Engine.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.ReportSource.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\CrystalDecisions.Shared.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Web.Infrastructure.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Owin.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\WebGrease.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\stdole.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ClosedXML.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\DocumentFormat.OpenXml.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\EntityFramework.SqlServer.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\ExcelNumberFormat.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\log4net.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Core.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.Cookies.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Microsoft.Owin.Security.OAuth.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Newtonsoft.Json.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\PagedList.Mvc.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Helpers.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Mvc.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Optimization.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.Razor.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Deployment.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\System.Web.WebPages.Razor.xml
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\bin\Antlr3.Runtime.pdb
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.AssemblyReference.cache
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.Migrations.InitialCreate.resources
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.GenerateResource.cache
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMembership.csproj.CoreCompileInputs.cache
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\ClubMemb.D9EF714A.Up2Date
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\KVM_ERP.dll
+D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\MemberShip - Copy\ClubMembership\ClubMembership\ClubMembership\ClubMembership\obj\Debug\KVM_ERP.pdb

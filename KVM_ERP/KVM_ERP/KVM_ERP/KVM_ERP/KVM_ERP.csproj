@@ -1,0 +1,1376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9A53AD86-F83F-4992-99D1-33DAC7C4CBB5}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KVM_ERP</RootNamespace>
+    <AssemblyName>KVM_ERP</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <TypeScriptToolsVersion>4.3</TypeScriptToolsVersion>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.96.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.96.0\lib\net40\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\CrystalDecisions.CrystalReports.Engine.1.0.0\lib\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\CrystalDecisions.ReportSource.1.0.0\lib\CrystalDecisions.ReportSource.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\CrystalDecisions.Shared.1.0.0\lib\CrystalDecisions.Shared.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.16.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.16.0\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.1.0.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.1.0\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.16.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.16\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.2.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\GroupsController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ComingSoonController.cs" />
+    <Compile Include="Controllers\Masters\AccountGroupMasterController.cs" />
+    <Compile Include="Controllers\Masters\AccountHeadMasterController.cs" />
+    <Compile Include="Controllers\Masters\BloodGroupMasterController.cs" />
+    <Compile Include="Controllers\Masters\CommonController.cs" />
+    <Compile Include="Controllers\Masters\CompanyMasterController.cs" />
+    <!-- Excluded per cleanup (content modules) -->
+    <!-- <Compile Include="Controllers\Masters\AnnouncementMasterController.cs" /> -->
+    <!-- <Compile Include="Controllers\Masters\EventMasterController.cs" /> -->
+    <!-- <Compile Include="Controllers\Masters\GalleryMasterController.cs" /> -->
+    <Compile Include="Controllers\Masters\CategoryMasterController.cs" />
+    <Compile Include="Controllers\Masters\StateMasterController.cs" />
+    <!-- Excluded per cleanup -->
+    <!-- <Compile Include="Controllers\MinutesOfMeetingController.cs" /> -->
+    <!-- <Compile Include="Controllers\ContentController.cs" /> -->
+    <Compile Include="Controllers\Masters\DepartmentMasterController.cs" />
+    <Compile Include="Controllers\Masters\DesginationMasterController.cs" />
+    <Compile Include="Controllers\Masters\LocationMasterController.cs" />
+    <Compile Include="Controllers\Masters\EmployeeMasterController.cs" />
+    <Compile Include="Controllers\Masters\CustomerMasterController.cs" />
+    <Compile Include="Controllers\Masters\SupplierMasterController.cs" />
+    <Compile Include="Controllers\Masters\CurrencyMasterController.cs" />
+    <Compile Include="Controllers\Masters\LaboratoryMasterController.cs" />
+    <Compile Include="Controllers\MaterialTypeMasterController.cs" />
+    <Compile Include="Controllers\MaterialGroupMasterController.cs" />
+    <Compile Include="Controllers\UnitMasterController.cs" />
+    <Compile Include="Controllers\HSNCodeMasterController.cs" />
+    <Compile Include="Controllers\CostFactorMasterController.cs" />
+    <Compile Include="Controllers\PackingMasterController.cs" />
+    <Compile Include="Controllers\PackingTypeMasterController.cs" />
+    <Compile Include="Controllers\MaterialMasterController.cs" />
+    <Compile Include="Controllers\NavbarController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\RawMaterialIntakeController.cs" />
+    <Compile Include="Controllers\RawMaterialInvoiceController.cs" />
+    <Compile Include="Controllers\PurchaseInvoiceApprovalController.cs" />
+    <Compile Include="Controllers\StockViewController.cs" />
+    <Compile Include="Controllers\SupplierStockViewController.cs" />
+    <Compile Include="Controllers\StockViewReportController.cs" />
+    <Compile Include="Controllers\RenewalApprovalController.cs" />
+    <!-- Excluded per cleanup -->
+    <!-- <Compile Include="Controllers\ProfileMasterController.cs" /> -->
+    <Compile Include="Controllers\RolesController.cs" />
+    <Compile Include="Data\AspNetUser.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ClubMembership.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClubMembership.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ClubMembership.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ClubMembership.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClubMembership.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\PR_ACCOUNTINGYEAR_ID_CHK_Result.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\PR_COMPANYACCOUNTINGDETAIL_ID_CHK_Result.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\pr_SearchAccountGroup_Result.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\pr_SearchAccountHeadMaster_Result.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\pr_SearchBloodGroupMaster_Result.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\pr_SearchCompanyMaster_Result.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\pr_SearchStateMaster_Result.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\pr_Search_Roles_Result.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\pr_USER_MENU_DETAIL_ASSGN_Result.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\VW_USER_DETAILS.cs">
+      <DependentUpon>ClubMembership.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Domain\Domain.cs" />
+    <Compile Include="Filters\AuthActionFilter.cs" />
+    <Compile Include="Helpers\UrlHelper.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507291102292_InitialCreate.cs" />
+    <Compile Include="Migrations\202501010000000_AddContentManagementTables.cs" />
+    <Compile Include="Migrations\202507291102292_InitialCreate.Designer.cs">
+      <DependentUpon>202507291102292_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\202511130700000_AddTransactionInvoiceWeightDetails.cs" />
+    <!-- Excluded per cleanup: GovernmentProof migration removed -->
+    <!-- <Compile Include="Migrations\202501010000004_AddGovernmentProofTable.cs" /> -->
+    <!-- <Compile Include="Migrations\202501010000004_AddGovernmentProofTable.Designer.cs" /> -->
+    <Compile Include="Models\BloodGroupMaster.cs" />
+    <Compile Include="Models\DepartmentMaster.cs" />
+    <Compile Include="Models\DesignationMaster.cs" />
+    <Compile Include="Models\LocationMaster.cs" />
+    <Compile Include="Models\PaymentTypeTotal.cs" />
+    <Compile Include="Models\RenewalInfo.cs" />
+    <Compile Include="Models\RenewalPopupViewModel.cs" />
+    <Compile Include="Models\RenewalSubmitRequest.cs" />
+    <Compile Include="Models\RegionMaster.cs" />
+    <Compile Include="Models\RImageMaster.cs" />
+    <Compile Include="Models\MenuMaster.cs" />
+    <!-- Excluded per cleanup -->
+    <!-- <Compile Include="Models\UserDashboardViewModel.cs" /> -->
+    <Compile Include="Models\AccountGroupMaster.cs" />
+    <Compile Include="Models\AccountHeadMaster.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\ApplicationRole.cs" />
+    <Compile Include="Models\ApplicationRoleGroup.cs" />
+    <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\ApplicationUserGroup.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\CompanyDetail.cs" />
+    <Compile Include="Models\CompanyMaster.cs" />
+    <Compile Include="Models\DasnBoardList.cs" />
+    <Compile Include="Models\DisplayOrderMaster.cs" />
+    <Compile Include="Models\CategoryMaster.cs" />
+    <Compile Include="Models\EmployeeLinkMaster.cs" />
+    <Compile Include="Models\EmployeeList.cs" />
+    <Compile Include="Models\EmployeeMaster.cs" />
+    <Compile Include="Models\CustomerMaster.cs" />
+    <Compile Include="Models\SupplierMaster.cs" />
+    <Compile Include="Models\CurrencyMaster.cs" />
+    <Compile Include="Models\LaboratoryMaster.cs" />
+    <Compile Include="Models\MaterialTypeMaster.cs" />
+    <Compile Include="Models\MaterialGroupMaster.cs" />
+    <Compile Include="Models\UnitMaster.cs" />
+    <Compile Include="Models\HSNCodeMaster.cs" />
+    <Compile Include="Models\CostFactorMaster.cs" />
+    <Compile Include="Models\PackingMaster.cs" />
+    <Compile Include="Models\PackingTypeMaster.cs" />
+    <Compile Include="Models\MaterialMaster.cs" />
+    <Compile Include="Models\TransactionMaster.cs" />
+    <Compile Include="Models\TransactionDetail.cs" />
+    <Compile Include="Models\TransactionMasterFactor.cs" />
+    <Compile Include="Models\TransactionProductCalculation.cs" />
+    <Compile Include="Models\TransactionQualityCheck.cs" />
+    <Compile Include="Models\TransactionInvoiceWeightDetails.cs" />
+    <Compile Include="Models\GradeMaster.cs" />
+    <Compile Include="Models\ProductionColourMaster.cs" />
+    <Compile Include="Models\ReceivedTypeMaster.cs" />
+    <Compile Include="Models\PurchaseInvoiceStatus.cs" />
+    <Compile Include="Models\Subscription.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\IdentityManager.cs" />
+    <Compile Include="Models\JQueryDataTableParamModel.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\MenuNavbar.cs" />
+    <Compile Include="Models\MenuRoleMaster.cs" />
+    <Compile Include="Models\Navbar.cs" />
+    <!-- Excluded per cleanup -->
+    <!-- <Compile Include="Models\ContentSearchViewModel.cs" /> -->
+    <Compile Include="Models\Roles.cs" />
+    <Compile Include="Models\SoftDepartmentMaster.cs" />
+    <Compile Include="Models\Soft_Table_Delete_Detail.cs" />
+    <Compile Include="Models\StateMaster.cs" />
+    <Compile Include="Models\TMPRPT_IDS.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\VW_ACCOUNTING_YEAR_DETAIL_ASSGN.cs" />
+    <!-- Excluded per cleanup: GovernmentProof model removed -->
+    <!-- <Compile Include="Models\GovernmentProof.cs" /> -->
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionExpire.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Ajaxdata\ApprovalHead.txt" />
+    <Content Include="Content\Ajaxdata\chainproduction.txt" />
+    <Content Include="Content\Ajaxdata\designation.txt" />
+    <Content Include="Content\Ajaxdata\Employee.txt" />
+    <Content Include="Content\Ajaxdata\expenses.txt" />
+    <Content Include="Content\Ajaxdata\fireassay.txt" />
+    <Content Include="Content\Ajaxdata\GoodsReceiptNote.txt" />
+    <Content Include="Content\Ajaxdata\hmratecard.txt" />
+    <Content Include="Content\Ajaxdata\hmreceipt.txt" />
+    <Content Include="Content\Ajaxdata\IBPO.txt" />
+    <Content Include="Content\Ajaxdata\income.txt" />
+    <Content Include="Content\Ajaxdata\Invoice.txt" />
+    <Content Include="Content\Ajaxdata\IRF.txt" />
+    <Content Include="Content\Ajaxdata\markinginvoice.txt" />
+    <Content Include="Content\Ajaxdata\markingreceipt.txt" />
+    <Content Include="Content\Ajaxdata\MaterialOrder.txt" />
+    <Content Include="Content\Ajaxdata\MaterialRequest.txt" />
+    <Content Include="Content\Ajaxdata\metalissue.txt" />
+    <Content Include="Content\Ajaxdata\metalitemopening.txt" />
+    <Content Include="Content\Ajaxdata\Opening.txt" />
+    <Content Include="Content\Ajaxdata\OPF.txt" />
+    <Content Include="Content\Ajaxdata\OrderType.txt" />
+    <Content Include="Content\Ajaxdata\PackingSlip.txt" />
+    <Content Include="Content\Ajaxdata\ProformaInvoice.txt" />
+    <Content Include="Content\Ajaxdata\PurchaseOrder.txt" />
+    <Content Include="Content\Ajaxdata\Quotation.txt" />
+    <Content Include="Content\Ajaxdata\Region.txt" />
+    <Content Include="Content\Ajaxdata\ReportProduction.txt" />
+    <Content Include="Content\Ajaxdata\Segment.txt" />
+    <Content Include="Content\Ajaxdata\ServiceReport.txt" />
+    <Content Include="Content\Ajaxdata\SRF.txt" />
+    <Content Include="Content\Ajaxdata\stockitemopening.txt" />
+    <Content Include="Content\Ajaxdata\SupplierQuotation.txt" />
+    <Content Include="Content\Ajaxdata\testingexchange.txt" />
+    <Content Include="Content\Ajaxdata\testinglotissue.txt" />
+    <Content Include="Content\Ajaxdata\testingreceipt.txt" />
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-grid.rtl.css" />
+    <Content Include="Content\bootstrap-grid.rtl.min.css" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap-reboot.rtl.css" />
+    <Content Include="Content\bootstrap-reboot.rtl.min.css" />
+    <Content Include="Content\bootstrap-utilities.css" />
+    <Content Include="Content\bootstrap-utilities.min.css" />
+    <Content Include="Content\bootstrap-utilities.rtl.css" />
+    <Content Include="Content\bootstrap-utilities.rtl.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap.rtl.css" />
+    <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\dist\css\flat-ui.css" />
+    <Content Include="Content\dist\css\flat-ui.css.map" />
+    <Content Include="Content\dist\css\flat-ui.min.css" />
+    <Content Include="Content\dist\css\vendor\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\dist\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\dist\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\dist\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\dist\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\dist\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\dist\fonts\glyphicons\flat-ui-icons-regular.eot" />
+    <Content Include="Content\dist\fonts\glyphicons\flat-ui-icons-regular.svg" />
+    <Content Include="Content\dist\fonts\glyphicons\flat-ui-icons-regular.ttf" />
+    <Content Include="Content\dist\fonts\glyphicons\flat-ui-icons-regular.woff" />
+    <Content Include="Content\dist\fonts\glyphicons\selection.json" />
+    <Content Include="Content\dist\fonts\lato\lato-black.eot" />
+    <Content Include="Content\dist\fonts\lato\lato-black.svg" />
+    <Content Include="Content\dist\fonts\lato\lato-black.ttf" />
+    <Content Include="Content\dist\fonts\lato\lato-black.woff" />
+    <Content Include="Content\dist\fonts\lato\lato-bold.eot" />
+    <Content Include="Content\dist\fonts\lato\lato-bold.svg" />
+    <Content Include="Content\dist\fonts\lato\lato-bold.ttf" />
+    <Content Include="Content\dist\fonts\lato\lato-bold.woff" />
+    <Content Include="Content\dist\fonts\lato\lato-bolditalic.eot" />
+    <Content Include="Content\dist\fonts\lato\lato-bolditalic.svg" />
+    <Content Include="Content\dist\fonts\lato\lato-bolditalic.ttf" />
+    <Content Include="Content\dist\fonts\lato\lato-bolditalic.woff" />
+    <Content Include="Content\dist\fonts\lato\lato-italic.eot" />
+    <Content Include="Content\dist\fonts\lato\lato-italic.svg" />
+    <Content Include="Content\dist\fonts\lato\lato-italic.ttf" />
+    <Content Include="Content\dist\fonts\lato\lato-italic.woff" />
+    <Content Include="Content\dist\fonts\lato\lato-light.eot" />
+    <Content Include="Content\dist\fonts\lato\lato-light.svg" />
+    <Content Include="Content\dist\fonts\lato\lato-light.ttf" />
+    <Content Include="Content\dist\fonts\lato\lato-light.woff" />
+    <Content Include="Content\dist\fonts\lato\lato-regular.eot" />
+    <Content Include="Content\dist\fonts\lato\lato-regular.svg" />
+    <Content Include="Content\dist\fonts\lato\lato-regular.ttf" />
+    <Content Include="Content\dist\fonts\lato\lato-regular.woff" />
+    <Content Include="Content\dist\img\favicon.ico" />
+    <Content Include="Content\dist\img\icons\png\Book.png" />
+    <Content Include="Content\dist\img\icons\png\Calendar.png" />
+    <Content Include="Content\dist\img\icons\png\Chat.png" />
+    <Content Include="Content\dist\img\icons\png\Clipboard.png" />
+    <Content Include="Content\dist\img\icons\png\Compas.png" />
+    <Content Include="Content\dist\img\icons\png\Gift-Box.png" />
+    <Content Include="Content\dist\img\icons\png\Infinity-Loop.png" />
+    <Content Include="Content\dist\img\icons\png\Mail.png" />
+    <Content Include="Content\dist\img\icons\png\Map.png" />
+    <Content Include="Content\dist\img\icons\png\Pensils.png" />
+    <Content Include="Content\dist\img\icons\png\Pocket.png" />
+    <Content Include="Content\dist\img\icons\png\Retina-Ready.png" />
+    <Content Include="Content\dist\img\icons\png\Toilet-Paper.png" />
+    <Content Include="Content\dist\img\icons\png\Watches.png" />
+    <Content Include="Content\dist\img\icons\svg\book.svg" />
+    <Content Include="Content\dist\img\icons\svg\calendar.svg" />
+    <Content Include="Content\dist\img\icons\svg\chat.svg" />
+    <Content Include="Content\dist\img\icons\svg\clipboard.svg" />
+    <Content Include="Content\dist\img\icons\svg\clocks.svg" />
+    <Content Include="Content\dist\img\icons\svg\compas.svg" />
+    <Content Include="Content\dist\img\icons\svg\gift-box.svg" />
+    <Content Include="Content\dist\img\icons\svg\loop.svg" />
+    <Content Include="Content\dist\img\icons\svg\mail.svg" />
+    <Content Include="Content\dist\img\icons\svg\map.svg" />
+    <Content Include="Content\dist\img\icons\svg\paper-bag.svg" />
+    <Content Include="Content\dist\img\icons\svg\pencils.svg" />
+    <Content Include="Content\dist\img\icons\svg\retina.svg" />
+    <Content Include="Content\dist\img\icons\svg\ribbon.svg" />
+    <Content Include="Content\dist\img\icons\svg\toilet-paper.svg" />
+    <Content Include="Content\dist\img\login\icon.png" />
+    <Content Include="Content\dist\img\login\imac-2x.png" />
+    <Content Include="Content\dist\img\login\imac.png" />
+    <Content Include="Content\dist\img\tile\ribbon-2x.png" />
+    <Content Include="Content\dist\img\tile\ribbon.png" />
+    <Content Include="Content\dist\js\flat-ui.js" />
+    <Content Include="Content\dist\js\flat-ui.min.js" />
+    <Content Include="Content\dist\js\vendor\html5shiv.js" />
+    <Content Include="Content\dist\js\vendor\jquery.min.js" />
+    <Content Include="Content\dist\js\vendor\jquery.min.map" />
+    <Content Include="Content\dist\js\vendor\respond.min.js" />
+    <Content Include="Content\dist\js\vendor\video-js.swf" />
+    <Content Include="Content\dist\js\vendor\video.js" />
+    <Content Include="Content\font-awesome-4.1.0\css\font-awesome.css" />
+    <Content Include="Content\font-awesome-4.1.0\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome-4.1.0\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font-awesome-4.1.0\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\font-awesome-4.1.0\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome-4.1.0\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome-4.1.0\fonts\FontAwesome.otf" />
+    <Content Include="Content\font-awesome-4.1.0\less\bordered-pulled.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\core.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\fixed-width.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\font-awesome.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\icons.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\larger.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\list.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\mixins.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\path.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\rotated-flipped.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\spinning.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\stacked.less" />
+    <Content Include="Content\font-awesome-4.1.0\less\variables.less" />
+    <Content Include="Content\font-awesome-4.1.0\scss\font-awesome.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_bordered-pulled.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_core.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_fixed-width.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_icons.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_larger.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_list.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_mixins.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_path.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_rotated-flipped.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_spinning.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_stacked.scss" />
+    <Content Include="Content\font-awesome-4.1.0\scss\_variables.scss" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\foundation\css\example.css" />
+    <Content Include="Content\foundation\css\foundation-datepicker.css" />
+    <Content Include="Content\foundation\css\foundation-datepicker.css.map" />
+    <Content Include="Content\foundation\css\foundation-datepicker.min.css" />
+    <Content Include="Content\foundation\foundation\css\foundation.css" />
+    <Content Include="Content\foundation\foundation\css\foundation.min.css" />
+    <Content Include="Content\foundation\foundation\css\normalize.css" />
+    <Content Include="Content\foundation\foundation\fonts\foundation-icons.css" />
+    <Content Include="Content\foundation\foundation\fonts\foundation-icons.eot" />
+    <Content Include="Content\foundation\foundation\fonts\foundation-icons.svg" />
+    <Content Include="Content\foundation\foundation\fonts\foundation-icons.ttf" />
+    <Content Include="Content\foundation\foundation\fonts\foundation-icons.woff" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-address-book.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-alert.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-align-center.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-align-justify.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-align-left.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-align-right.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-anchor.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-annotate.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-archive.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-arrow-down.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-arrow-left.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-arrow-right.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-arrow-up.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-arrows-compress.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-arrows-expand.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-arrows-in.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-arrows-out.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-asl.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-asterisk.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-at-sign.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-background-color.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-battery-empty.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-battery-full.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-battery-half.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-bitcoin-circle.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-bitcoin.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-blind.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-bluetooth.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-bold.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-book-bookmark.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-book.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-bookmark.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-braille.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-burst-new.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-burst-sale.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-burst.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-calendar.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-camera.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-check.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-checkbox.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-clipboard-notes.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-clipboard-pencil.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-clipboard.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-clock.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-closed-caption.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-cloud.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-comment-minus.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-comment-quotes.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-comment-video.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-comment.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-comments.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-compass.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-contrast.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-credit-card.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-crop.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-crown.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-css3.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-database.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-die-five.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-die-four.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-die-one.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-die-six.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-die-three.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-die-two.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-dislike.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-dollar-bill.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-dollar.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-download.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-eject.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-elevator.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-euro.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-eye.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-fast-forward.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-female-symbol.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-female.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-filter.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-first-aid.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-flag.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-folder-add.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-folder-lock.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-folder.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-foot.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-foundation.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-graph-bar.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-graph-horizontal.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-graph-pie.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-graph-trend.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-guide-dog.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-hearing-aid.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-heart.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-home.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-html5.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-indent-less.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-indent-more.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-info.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-italic.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-key.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-laptop.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-layout.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-lightbulb.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-like.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-link.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-list-bullet.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-list-number.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-list-thumbnails.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-list.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-lock.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-loop.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-magnifying-glass.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-mail.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-male-female.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-male-symbol.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-male.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-map.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-marker.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-megaphone.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-microphone.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-minus-circle.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-minus.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-mobile-signal.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-mobile.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-monitor.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-mountains.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-music.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-next.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-no-dogs.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-no-smoking.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-add.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-copy.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-csv.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-delete.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-doc.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-edit.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-export-csv.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-export-doc.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-export-pdf.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-export.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-filled.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-multiple.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-pdf.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-remove.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page-search.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-page.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-paint-bucket.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-paperclip.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-pause.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-paw.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-paypal.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-pencil.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-photo.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-play-circle.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-play-video.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-play.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-plus.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-pound.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-power.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-previous.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-price-tag.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-pricetag-multiple.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-print.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-prohibited.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-projection-screen.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-puzzle.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-quote.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-record.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-refresh.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-results-demographics.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-results.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-rewind-ten.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-rewind.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-rss.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-safety-cone.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-save.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-share.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-sheriff-badge.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-shield.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-shopping-bag.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-shopping-cart.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-shuffle.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-skull.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-500px.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-adobe.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-amazon.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-android.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-apple.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-behance.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-bing.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-blogger.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-delicious.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-designer-news.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-deviant-art.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-digg.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-dribbble.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-drive.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-dropbox.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-evernote.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-facebook.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-flickr.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-forrst.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-foursquare.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-game-center.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-github.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-google-plus.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-hacker-news.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-hi5.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-instagram.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-joomla.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-lastfm.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-linkedin.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-medium.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-myspace.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-orkut.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-path.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-picasa.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-pinterest.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-rdio.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-reddit.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-skillshare.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-skype.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-smashing-mag.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-snapchat.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-spotify.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-squidoo.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-stack-overflow.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-steam.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-stumbleupon.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-treehouse.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-tumblr.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-twitter.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-vimeo.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-windows.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-xbox.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-yahoo.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-yelp.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-youtube.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-zerply.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-social-zurb.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-sound.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-star.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-stop.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-strikethrough.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-subscript.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-superscript.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-tablet-landscape.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-tablet-portrait.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-target-two.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-target.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-telephone-accessible.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-telephone.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-text-color.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-thumbnails.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-ticket.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-torso-business.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-torso-female.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-torso.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-torsos-all-female.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-torsos-all.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-torsos-female-male.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-torsos-male-female.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-torsos.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-trash.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-trees.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-trophy.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-underline.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-universal-access.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-unlink.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-unlock.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-upload-cloud.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-upload.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-usb.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-video.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-volume-none.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-volume-strike.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-volume.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-web.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-wheelchair.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-widget.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-wrench.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-x-circle.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-x.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-yen.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-zoom-in.svg" />
+    <Content Include="Content\foundation\foundation\fonts\svgs\fi-zoom-out.svg" />
+    <Content Include="Content\foundation\foundation\humans.txt" />
+    <Content Include="Content\foundation\foundation\img\.gitkeep" />
+    <Content Include="Content\foundation\foundation\index.html" />
+    <Content Include="Content\foundation\foundation\js\foundation.min.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.abide.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.accordion.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.alert.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.clearing.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.dropdown.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.equalizer.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.interchange.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.joyride.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.magellan.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.offcanvas.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.orbit.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.reveal.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.slider.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.tab.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.tooltip.js" />
+    <Content Include="Content\foundation\foundation\js\foundation\foundation.topbar.js" />
+    <Content Include="Content\foundation\foundation\js\vendor\fastclick.js" />
+    <Content Include="Content\foundation\foundation\js\vendor\jquery.cookie.js" />
+    <Content Include="Content\foundation\foundation\js\vendor\jquery.js" />
+    <Content Include="Content\foundation\foundation\js\vendor\modernizr.js" />
+    <Content Include="Content\foundation\foundation\js\vendor\placeholder.js" />
+    <Content Include="Content\foundation\foundation\robots.txt" />
+    <Content Include="Content\foundation\js\foundation-datepicker.js" />
+    <Content Include="Content\foundation\js\foundation-datepicker.min.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.ar.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.az.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.bg.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.bs.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.ca.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.cs.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.cy.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.da.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.de.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.el.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.en-GB.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.en.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.eo.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.es.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.et.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.eu.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.fa.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.fi.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.fo.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.fr-CH.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.fr.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.gl.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.he.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.hr.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.hu.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.hy.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.id.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.is.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.it-CH.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.it.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.ja.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.ka.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.kh.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.kk.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.ko.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.kr.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.lt.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.lv.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.me.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.mk.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.mn.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.ms.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.nb.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.nl-BE.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.nl.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.no.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.oc.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.pl.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.pt-br.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.pt.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.ro.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.rs-latin.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.rs.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.ru.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.sk.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.sl.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.sq.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.sr-latin.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.sr.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.sv.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.sw.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.th.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.tr.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.uk.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.vi.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.zh-CN.js" />
+    <Content Include="Content\foundation\js\locales\foundation-datepicker.zh-TW.js" />
+    <Content Include="Content\foundation\scss\foundation-datepicker.scss" />
+    <Content Include="Content\images\aabg.png" />
+    <Content Include="Content\images\bg.jpg" />
+    <Content Include="Content\images\delete_logo-small.png" />
+    <Content Include="Content\images\logo-small.png" />
+    <Content Include="Content\images\mediapro-logo-small.png" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\mediapro_logo.png" />
+    <Content Include="Content\images\old_logo.png" />
+    <Content Include="Content\images\org_bg.png" />
+    <Content Include="Content\images\sb-admin.png" />
+    <Content Include="Content\images\ui-bg_diagonals-thick_75_f3d8d8_40x40.png" />
+    <Content Include="Content\images\ui-bg_dots-small_65_a6a6a6_2x2.png" />
+    <Content Include="Content\images\ui-bg_glass_55_fbf8ee_1x400.png" />
+    <Content Include="Content\images\ui-bg_highlight-hard_100_eeeeee_1x100.png" />
+    <Content Include="Content\images\ui-bg_highlight-hard_100_f6f6f6_1x100.png" />
+    <Content Include="Content\images\ui-bg_highlight-soft_15_cc0000_1x100.png" />
+    <Content Include="Content\images\ui-icons_004276_256x240.png" />
+    <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\jquery.datetimepicker.css" />
+    <Content Include="Content\nifty.css" />
+    <Content Include="Content\nifty.min.css" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\plugins\morris.css" />
+    <Content Include="Content\sb-admin.css" />
+    <Content Include="Content\sweetalert2.min.css" />
+    <Content Include="Content\sweetalert2.minN.css" />
+    <Content Include="Content\themes\base\images\doc icon.jpg" />
+    <Content Include="Content\themes\base\images\loading.gif" />
+    <Content Include="Content\themes\base\images\pdf-icon.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-hard_100_eeeeee_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-hard_100_f6f6f6_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_15_cc0000_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_diagonals-thick_75_f3d8d8_40x40.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_dots-small_65_a6a6a6_2x2.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf8ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-hard_100_eeeeee_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-hard_100_f6f6f6_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_15_cc0000_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_004276_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.css" />
+    <Content Include="Content\themes\base\minified\jquery-ui.js" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.js" />
+    <Content Include="Content\themes\base\minified\jquery-ui.structure.css" />
+    <Content Include="Content\themes\base\minified\jquery-ui.structure.min.css" />
+    <Content Include="Content\themes\base\minified\jquery-ui.theme.css" />
+    <Content Include="Content\themes\base\minified\jquery-ui.theme.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\themes\base\ui.multiselect.css" />
+    <Content Include="Content\token-input-facebook.css" />
+    <Content Include="Content\token-input-mac.css" />
+    <Content Include="Content\token-input.css" />
+    <Content Include="Content\Wizard.css" />
+    <Content Include="Data\ClubMembership.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ClubMembership.edmx</DependentUpon>
+      <LastGenOutput>ClubMembership.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Data\ClubMembership.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ClubMembership.edmx</DependentUpon>
+      <LastGenOutput>ClubMembership.cs</LastGenOutput>
+    </Content>
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\bootstrap.rtl.min.css.map" />
+    <Content Include="Content\bootstrap.rtl.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.css.map" />
+    <Content Include="Content\bootstrap-utilities.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <EntityDeploy Include="Data\ClubMembership.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ClubMembership.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Data\ClubMembership.edmx.diagram">
+      <DependentUpon>ClubMembership.edmx</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\aurum.pubxml" />
+    <None Include="Properties\PublishProfiles\ClubMembership.pubxml" />
+    <None Include="Properties\PublishProfiles\newvbj.pubxml" />
+    <None Include="Properties\PublishProfiles\shefa.pubxml" />
+    <None Include="Properties\PublishProfiles\TIBC.pubxml" />
+    <None Include="Properties\PublishProfiles\VBJ.pubxml" />
+    <Content Include="jsonArray.txt" />
+    <Content Include="Scripts\bootstrap-switch.js" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap.esm.js" />
+    <Content Include="Scripts\bootstrap.esm.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Cost_factor_invoice.js" />
+    <Content Include="Scripts\Estimate-AutoGrid.js" />
+    <Content Include="Scripts\fusion.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Scripts\jquery-1.11.3.min.js" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.esm.min.js.map" />
+    <Content Include="Scripts\bootstrap.esm.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <None Include="Scripts\jquery-3.6.0-vsdoc.js" />
+    <None Include="Scripts\jquery-3.6.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.6.0.js" />
+    <Content Include="Scripts\jquery-3.6.0.min.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.min.js" />
+    <Content Include="Scripts\jquery-ft-min.js" />
+    <Content Include="Scripts\jquery-ui-1.11.1.js" />
+    <Content Include="Scripts\jquery-ui.min-1.11.1.js" />
+    <Content Include="Scripts\jquery.datetimepicker.js" />
+    <Content Include="Scripts\jquery.tokeninput.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.validate_tab.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\plugins\flot\excanvas.min.js" />
+    <Content Include="Scripts\plugins\flot\flot-data.js" />
+    <Content Include="Scripts\plugins\flot\jquery.flot.js" />
+    <Content Include="Scripts\plugins\flot\jquery.flot.pie.js" />
+    <Content Include="Scripts\plugins\flot\jquery.flot.resize.js" />
+    <Content Include="Scripts\plugins\flot\jquery.flot.tooltip.min.js" />
+    <Content Include="Scripts\plugins\morris\morris-data.js" />
+    <Content Include="Scripts\plugins\morris\morris.js" />
+    <Content Include="Scripts\plugins\morris\morris.min.js" />
+    <Content Include="Scripts\plugins\morris\raphael.min.js" />
+    <Content Include="Scripts\Purchase_Autocomplete.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\stockreceipt.js" />
+    <Content Include="Scripts\sweetalert2.all.js" />
+    <Content Include="Scripts\sweetalert2.all.min.js" />
+    <Content Include="Scripts\sweetalert2.js" />
+    <Content Include="Scripts\sweetalert2.min.css" />
+    <Content Include="Scripts\sweetalert2.min.js" />
+    <Content Include="Scripts\sweetalert2\dist\sweet-alert.init.js" />
+    <Content Include="Scripts\sweetalert2\dist\sweetalert2.all.js" />
+    <Content Include="Scripts\sweetalert2\dist\sweetalert2.all.min.js" />
+    <Content Include="Scripts\sweetalert2\dist\sweetalert2.css" />
+    <Content Include="Scripts\sweetalert2\dist\sweetalert2.js" />
+    <Content Include="Scripts\sweetalert2\dist\sweetalert2.min.css" />
+    <Content Include="Scripts\sweetalert2\dist\sweetalert2.min.js" />
+    <Content Include="Scripts\ui.multiselect.js" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\UserDashboard.cshtml" />
+    <Content Include="Views\Home\_RenewalPopup.cshtml" />
+    <Content Include="Views\Shared\_navbar.cshtml" />
+    <Content Include="Views\Home\Charts.cshtml" />
+    <Content Include="Views\Home\Tables.cshtml" />
+    <Content Include="Views\Home\Forms.cshtml" />
+    <Content Include="Views\Home\BootstrapElements.cshtml" />
+    <Content Include="Views\Home\BootstrapGrid.cshtml" />
+    <Content Include="Views\Home\BlankPage.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Shared\_Login.cshtml" />
+    <Content Include="Views\AccountGroupMaster\Index.cshtml" />
+    <Content Include="Views\AccountGroupMaster\Form.cshtml" />
+    <Content Include="Views\AccountHeadMaster\Index.cshtml" />
+    <Content Include="Views\AccountHeadMaster\Form.cshtml" />
+    <Content Include="Views\CostFactorMaster\Index.cshtml" />
+    <Content Include="Views\CostFactorMaster\Form.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Error\SavepointErr.cshtml" />
+    <Content Include="Views\CompanyMaster\Index.cshtml" />
+    <Content Include="Views\CompanyMaster\Form.cshtml" />
+    <Content Include="Views\Groups\Index.cshtml" />
+    <Content Include="Views\Groups\Create.cshtml" />
+    <Content Include="Views\Groups\Delete.cshtml" />
+    <Content Include="Views\Groups\Details.cshtml" />
+    <Content Include="Views\Groups\Edit.cshtml" />
+    <Content Include="Views\Groups\GroupRoles.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SelectGroupEditorViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SelectRoleEditorViewModel.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\UserGroups.cshtml" />
+    <Content Include="Views\Account\UserPermissions.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Account\Delete.cshtml" />
+    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="Views\Roles\Index.cshtml" />
+    <Content Include="Views\Roles\Edit.cshtml" />
+    <Content Include="Views\Roles\Create.cshtml" />
+    <Content Include="Views\Roles\Delete.cshtml" />
+    <Content Include="Views\Shared\_PopupLayout.cshtml" />
+    <Content Include="Views\DepartmentMaster\Index.cshtml" />
+    <Content Include="Views\DepartmentMaster\Form.cshtml" />
+    <Content Include="Views\CompanyMaster\NForm.cshtml" />
+    <Content Include="Views\Shared\_innerLayout.cshtml" />
+    <Content Include="Views\StateMaster\Index.cshtml" />
+    <Content Include="Views\HSNCodeMaster\Index.cshtml" />
+    <Content Include="Views\LocationMaster\Index.cshtml" />
+    <Content Include="Views\LocationMaster\Form.cshtml" />
+    <Content Include="Views\HSNCodeMaster\Form.cshtml" />
+    <Content Include="Views\DesginationMaster\Index.cshtml" />
+    <Content Include="Views\DesginationMaster\Form.cshtml" />
+    <Content Include="Views\EmployeeMaster\Index.cshtml" />
+    <Content Include="Views\EmployeeMaster\Form.cshtml" />
+    <Content Include="Views\CustomerMaster\Index.cshtml" />
+    <Content Include="Views\CustomerMaster\Form.cshtml" />
+    <Content Include="Views\CurrencyMaster\Index.cshtml" />
+    <Content Include="Views\CurrencyMaster\Form.cshtml" />
+    <Content Include="Views\LaboratoryMaster\Index.cshtml" />
+    <Content Include="Views\LaboratoryMaster\Form.cshtml" />
+    <Content Include="Views\MaterialTypeMaster\Index.cshtml" />
+    <Content Include="Views\MaterialTypeMaster\Form.cshtml" />
+    <Content Include="Views\MaterialGroupMaster\Index.cshtml" />
+    <Content Include="Views\MaterialGroupMaster\Form.cshtml" />
+    <Content Include="Views\UnitMaster\Index.cshtml" />
+    <Content Include="Views\UnitMaster\Form.cshtml" />
+    <Content Include="Views\RateCardMaster\Index.cshtml" />
+    <Content Include="Views\RateCardMaster\Form.cshtml" />
+    <Content Include="Views\RegionMaster\Index.cshtml" />
+    <Content Include="Views\RegionMaster\Form.cshtml" />
+    <Content Include="Views\EmployeeMaster\SForm.cshtml" />
+    <Content Include="Views\EmployeeMaster\LForm.cshtml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-3.6.0.min.map" />
+    <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Views\Home\TabExample.cshtml" />
+    <Content Include="Views\LanguageMaster\Index.cshtml" />
+    <Content Include="Views\LanguageMaster\Form.cshtml" />
+    <Content Include="Views\EditionMaster\Index.cshtml" />
+    <Content Include="Views\EditionMaster\Form.cshtml" />
+    <Content Include="Views\PositionMaster\Index.cshtml" />
+    <Content Include="Views\PositionMaster\Form.cshtml" />
+    <Content Include="Views\CategoryMaster\Index.cshtml" />
+    <Content Include="Views\CategoryMaster\Form.cshtml" />
+    <Content Include="Views\MediaUnitMaster\Index.cshtml" />
+    <Content Include="Views\MediaUnitMaster\Form.cshtml" />
+    <Content Include="Views\PublicationTypeMaster\Index.cshtml" />
+    <Content Include="Views\PublicationTypeMaster\Form.cshtml" />
+    <Content Include="Views\ReleaseOrder\Index.cshtml" />
+    <Content Include="Views\ReleaseOrder\Form.cshtml" />
+    <Content Include="Views\Invoice\Index.cshtml" />
+    <Content Include="Views\Invoice\Form.cshtml" />
+    <Content Include="Views\ReleaseOrder\BForm.cshtml" />
+    <Content Include="Views\ReleaseOrder\NForm.cshtml" />
+    <Content Include="Views\ProductionReleaseOrder\Index.cshtml" />
+    <Content Include="Views\ProductionReleaseOrder\Form.cshtml" />
+    <Content Include="Views\ProductionInvoice\Index.cshtml" />
+    <Content Include="Views\ProductionInvoice\Form.cshtml" />
+    <Content Include="Views\StudioBill\Index.cshtml" />
+    <Content Include="Views\StudioBill\Form.cshtml" />
+    <Content Include="Views\ClientMaster\Index.cshtml" />
+    <Content Include="Views\ClientMaster\Form.cshtml" />
+    <Content Include="Views\PublicationMaster\Index.cshtml" />
+    <Content Include="Views\PublicationMaster\Form.cshtml" />
+    <Content Include="Views\PublicationBill\Index.cshtml" />
+    <Content Include="Views\PublicationBill\Form.cshtml" />
+    <Content Include="Views\InvoiceReports\Index.cshtml" />
+    <Content Include="Views\ReleaseOrderReports\Index.cshtml" />
+    <Content Include="Views\PublicationBillReports\Index.cshtml" />
+    <Content Include="Views\Estimate\Index.cshtml" />
+    <Content Include="Views\Estimate\Form.cshtml" />
+    <Content Include="Views\StockView\Index.cshtml" />
+    <Content Include="Views\StockViewReport\Index.cshtml" />
+    <Content Include="Views\Reports\RawMaterialsImport.cshtml" />
+    <Content Include="Views\RawMaterialInvoice\Index.cshtml" />
+    <!-- Excluded per cleanup -->
+    <!-- <Content Include="Views\AnnouncementMaster\Index.cshtml" /> -->
+    <!-- <Content Include="Views\AnnouncementMaster\Form.cshtml" /> -->
+    <!-- <Content Include="Views\EventMaster\Index.cshtml" /> -->
+    <!-- <Content Include="Views\EventMaster\Form.cshtml" /> -->
+    <!-- <Content Include="Views\GalleryMaster\Index.cshtml" /> -->
+    <!-- <Content Include="Views\GalleryMaster\Form.cshtml" /> -->
+    <!-- <Content Include="Views\StateMaster\Form.cshtml" /> -->
+    <!-- <Content Include="Views\BloodGroupMaster\Form.cshtml" /> -->
+    <!-- <Content Include="Views\BloodGroupMaster\Index.cshtml" /> -->
+    <!-- <Content Include="Views\Register\Login_Register.cshtml" /> -->
+    <!-- <Content Include="Views\Account\Create.cshtml" /> -->
+    <!-- <Content Include="Views\ProfileMaster\Index.cshtml" /> -->
+    <!-- <Content Include="Views\Members\Index.cshtml" /> -->
+    <!-- <Content Include="Views\Members\Edit.cshtml" /> -->
+    <!-- <Content Include="Views\Members\Create.cshtml" /> -->
+    <!-- <Content Include="Views\Members\Delete.cshtml" /> -->
+    <!-- <Content Include="Views\ProfileMaster\_MemberForm.cshtml" /> -->
+    <!-- <Content Include="Views\ProfileMaster\Create.cshtml" /> -->
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="ItemImages\" />
+    <Folder Include="Views\Common\" />
+    <Folder Include="Views\MenuNavbar\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202507291102292_InitialCreate.resx">
+      <DependentUpon>202507291102292_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>16187</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:16187/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

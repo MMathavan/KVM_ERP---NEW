@@ -1,0 +1,163 @@
+﻿@model IEnumerable<ClubMembership.Models.PublicationMaster>
+@{
+    ViewBag.Title = "Publication Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>  @ViewBag.Title <a class="btn btn-danger btn-sm pull-right" style="padding:3px;margin:0 0 10px" href="@Url.Action("Form", "PublicationMaster")"><i class="fa fa-plus-square "></i> Add New </a> <div class="clearfix"> </div></h3>
+        </div>
+        <div class="col-lg-12" style="margin-top:10px">
+            <div class="alert alert-info  center-block " style="text-align:center">
+                <input class="uname form-control hide" id="uname" name="uname" value="@Session["BRNCHNAME"]" />
+
+                <form action="#" method="post" accept-charset="utf-8" id="exportcartingorderform" data-ng-controller="myController" name="exportcartingorderform">
+
+                    <input type="submit" name="submit" value="Search" class="btn btn-danger btn-sm hide" />
+                </form>
+
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class=" ">
+                        <div class="panel-body">
+
+                            <table id="example" class="display" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Name</th>
+                                        <th>Language</th>
+                                        <th>Type</th>
+                                        <th>State</th>
+                                        <th>GSTIN No.</th>
+                                        <th>Status</th>
+                                        <th>ID</th>
+                                        <th>Edit / Delete</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Name</th>
+                                        <th>Language</th>
+                                        <th>Type</th>
+                                        <th>State</th>
+                                        <th>GSTIN No.</th>
+                                        <th>Status</th>
+                                        <th>ID</th>
+                                        <th>Edit / Delete</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <script type="text/javascript" class="init">
+
+        var editor; // use a global for the submit and return data rendering in the examples
+        $(document).ready(function() {
+
+        table=$('#example').DataTable( {
+            ajax: "@Url.Action("GetAjaxData", "PublicationMaster")",//"/CostFactorMaster/GetAjaxData",
+		        columns: [
+                    { data: "PUBLNCODE" },
+                    { data: "PUBLNNAME" },
+                    { data: "LANGDESC" },
+                    { data: "PUBLNTDESC" },
+                    { data: "STATEDESC" },
+                    { data: "PUBLNGSTNO" },
+                    { data: "DISPSTATUS" },
+                    { data: "PUBLNID", "visible": false },
+			        {
+			            mRender: function (data, type, row) {
+                            return '<a href="@Url.Action("Form", "PublicationMaster")/' + row["PUBLNID"] + '"   class="editor_edit btn btn-warning btn-sm" ><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a href="#" id="' + row["PUBLNID"] + '\" class="editor_remove btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i></a>'
+			            }
+			        }
+		        ],
+            'rowCallback': function (row, data, index) {
+                //alert(data["DDAYS"]);
+                if (data['DISPSTATUS'] == "Enabled") {
+                    $(row).find('td:eq(6)').css('background-color', '#03C383');
+                    $(row).find('td:eq(6)').css('color', 'white');
+                }
+                else {
+                    $(row).find('td:eq(6)').css('background-color', '#D44865');
+                    $(row).find('td:eq(6)').css('color', 'white');
+                }
+                //if (data[6].toUpperCase() == 'EE') {
+                //    $(row).find('td:eq(2)').css('color', 'blue');
+                //}
+            }
+        });
+
+  //          alert("4");
+            //--------------Delete Record----------------//
+            $(document).on("click", "a.editor_remove", function () {
+                var r = confirm("Are you sure to delete this record ?");
+                if (r == true) {
+                    var idx = $(this).attr('id');
+                    base = window.location.origin;
+                    $.post(base + "/PublicationMaster/Del",
+                          {
+                              id: idx, fld: "PUBLICATIONMASTER"
+                          },
+                        function (data, status) {
+                            if (data == "Deleted Successfully ...")
+                                location.replace(base + "/PublicationMaster/Index");
+                            else if (data == "") alert("You are not authorize to Delete..!");
+                            else
+                                alert(data);
+                        });
+                }
+                return false;
+            });//end
+
+
+  //      alert("5");
+
+        $("#from").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: 'dd-mm-yy',
+            onClose: function (selectedDate) {
+                $("#to").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#to").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: 'dd-mm-yy',
+            onClose: function (selectedDate) {
+                $("#from").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+
+
+   //     alert("6");
+
+
+
+} );
+
+
+
+    </script>
+
+}

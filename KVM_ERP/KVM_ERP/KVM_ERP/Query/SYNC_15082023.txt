@@ -1,0 +1,43 @@
+TABLES
+------
+
+1. COMPANYMASTER
+   -------------
+
+STATEID	int	Unchecked
+COMPTANNO	varchar(50)	Checked
+COMP_DSGNDESC	varchar(100)	Checked
+COMPADDR1	varchar(100)	Checked
+COMPADDR2	varchar(100)	Checked
+COMPLOCTDESC	varchar(100)	Checked
+COMPPINCODE	varchar(100)	Checked
+COMPSTATECODE	varchar(100)	Checked
+
+
+2.
+
+Rename Existing Employeemaster as Employeemaster_15082023
+
+3. CUSTOMERMASTER
+   --------------
+
+STATEID	int	Unchecked
+
+4. CUSTOMERGROUPMASTER
+   -------------------
+
+STATEID	int	Unchecked
+
+5. SUPPLIERMASTER
+   --------------
+
+STATEID	int	Unchecked
+
+6. PRODUCTMASTER
+   -------------
+
+PRDTTID	int	Unchecked
+
+
+
+

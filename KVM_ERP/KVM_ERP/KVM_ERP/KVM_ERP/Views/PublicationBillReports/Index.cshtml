@@ -1,0 +1,344 @@
+﻿
+@{
+    ViewBag.Title = "Publication Bill Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/themes/base/ui.multiselect.css" rel="stylesheet" />
+<style>
+    .multiselect ul li.k-button {
+        float: right;
+    }
+</style>
+<div class="col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <i class="fa fa-bar-chart-o fa-fw"></i> @ViewBag.Title
+            </h3>
+        </div>
+
+        <div class="col-lg-12" style="margin-top:10px">
+            <div class="alert alert-info  center-block " style="text-align:center">
+                @*<input class="uname form-control hide" id="uname" name="uname" value="@Session["BRNCHNAME"]" />*@
+
+                <form action="@Url.Action("showrpt", "PublicationBillReports")" method="post" accept-charset="utf-8" id="exportgateinform" data-ng-controller="myController" name="exportgateinform" target="_blank" onsubmit="return Check()">
+                    @*<div class="box-content" data-ng-app="myModule" style="min-height:500px">*@
+
+                    <label for="from">From</label>
+                    <input type="text" id="from" name="from" value="@System.Web.HttpContext.Current.Session["SDATE"]">
+                    <label for="to">to</label>
+                    <input type="text" id="to" name="to" value="@System.Web.HttpContext.Current.Session["EDATE"]">
+                    <div>
+                        <input type="radio" value="1" name="prnttype" />  Excel <input type="radio" value="2" name="prnttype" checked />   Pdf
+                    </div>
+                    <div>
+                        <input name="rpttype" id="rpttype" class="rpttype hide" value="1" />
+                        <ul class="nav nav-tabs ">
+                            <li class="active"><a data-toggle="tab" href="#tab1">Date Wise</a></li>
+                            <li class="hide"><a data-toggle="tab" href="#tab2">Client Wise</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab3">Media Wise</a></li>
+                            <li class="hide"><a data-toggle="tab" href="#tab4">DOR Wise</a></li>
+                            <li class="hide"><a data-toggle="tab" href="#tab5">Media Register</a></li>
+                        </ul>
+                        <div class="tab-content">
+
+                            <div id="tab1" class="tab-pane  active col-lg-12">
+                                <br />
+                                <div id="PTYPEDIV"> </div>
+                                @*<p>Displays all record with the date period</p>*@
+                            </div>
+                            <div id="tab2" class="tab-pane fade col-lg-12">
+                                <br />
+                                <div id="CLIENTDIV"> </div>
+                            </div>
+                            <div id="tab3" class="tab-pane fade col-lg-12">
+                                <br />
+                                <div id="PUBLNDIV"> </div>
+                            </div>
+                            <div id="tab4" class="tab-pane fade col-lg-12">
+                                <br />
+                                <p>Displays all record with the date period</p>
+                            </div>
+                            <div id="tab5" class="tab-pane fade col-lg-12">
+                                <br />
+                                <p>Displays all record with the date period</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"> </div>
+                    <div class="row">
+                        <div class="col-xs-1"> </div>
+                    </div>
+                    <br />
+                    <div class="row center-block centered" style="text-align:center">
+                        <input type="submit" name="submit" value="Show Report" class="btn btn-primary" />
+                    </div>
+                    <br />
+                    <div class="clearfix"> </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class=" ">
+                        <div class="panel-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/Scripts/ui.multiselect.js"></script>
+    <script type="text/javascript" class="init">
+
+var editor; // use a global for the submit and return data rendering in the examples
+
+        $(document).ready(function () {
+
+            GetPublicationTypeList();
+
+            $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+                $("#rpttype").val($(e.target).attr('href').substr(4))
+                //alert("");
+                e.target // newly activated tab
+                e.relatedTarget // previous active tab
+
+                idx = $("#rpttype").val(); //alert(idx)
+                //alert(idx);
+                if (idx == 1 ) {//alert(idx)
+                    $("#PTYPEDIV").empty();
+                    $("#PTYPEDIV").html('<select id="PUBLNTID" name="PUBLNTID" class="multiselect PUBLNTID form-control" multiple="multiple" style="height:350px;"></select>');
+                    $.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetPublicationTypeList", "PublicationBillReports")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $.each(data, function (i, dataval) {
+                                $(".PUBLNTID").append('<option value="' + dataval.PUBLNTID + '">' + dataval.PUBLNTDESC + '</option>');
+                            });
+                            $(".multiselect").multiselect();
+                        }
+                    });
+                }
+
+                if (idx == 2) {//alert(idx)
+                    $("#CLIENTDIV").empty();
+                    $("#CLIENTDIV").html('<select id="CLNTID" name="CLNTID" class="multiselect CLNTID form-control" multiple="multiple" style="height:350px;"></select>');
+                    //$("#brdiv2").empty();
+                    //$("#brdiv2").html('<br/><label>BRANCH</label><select id="ABRNCHID" name="ABRNCHID" class="ABRNCHID form-control" placeholder="Select"></select><br/>');
+                    @*$.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetBranchList", "Common")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $(".ABRNCHID").append('<option value=0>Please Select Branch</option>');
+                            $.each(data, function (i, dataval) {
+                                $(".ABRNCHID").append('<option value="' + dataval.BRNCHID + '">' + dataval.LBRNCHNAME + '</option>');
+                            });
+                            //$(".multiselect").multiselect();
+                        }
+                    });*@
+
+                    $.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetClientList", "PublicationBillReports")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $.each(data, function (i, dataval) {
+                                $(".CLNTID").append('<option value="' + dataval.CLNTID + '">' + dataval.CLNTNAME + '</option>');
+                            });
+                            $(".multiselect").multiselect();
+                        }
+                    });
+                }
+
+                if (idx == 3) {//alert(idx)
+                    $("#PUBLNDIV").empty();
+                    $("#PUBLNDIV").html('<select id="PUBLNID" name="PUBLNID" class="multiselect PUBLNID form-control" multiple="multiple" style="height:350px;"></select>');
+                    $.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetPublicationList", "PublicationBillReports")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $.each(data, function (i, dataval) {
+                                $(".PUBLNID").append('<option value="' + dataval.PUBLNID + '">' + dataval.PUBLNNAME + '</option>');
+                            });
+                            $(".multiselect").multiselect();
+                        }
+                    });
+                    //$("#brdiv3").empty();
+                    //$("#brdiv3").html('<br/><label>BRANCH</label><select id="DBRNCHID" name="DBRNCHID" class="DBRNCHID form-control" placeholder="Select"></select><br/>');
+                    @*$.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetBillTypeList", "InvoiceReports")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $(".BTYPEID").append('<option value=0>Please Select Bill Type</option>');
+                            $.each(data, function (i, dataval) {
+                                $(".BTYPEID").append('<option value="' + dataval.BTypeId + '">' + dataval.BTypeDesc + '</option>');
+                            });
+                        }
+                    });*@
+
+                }
+
+                @*if (idx == 4) {//alert(idx)
+                    $("#NBILLTYPEDIV").empty();
+                    $("#NBILLTYPEDIV").html('<select id="NBTYPEID" name="NBTYPEID" class="multiselect NBTYPEID form-control" multiple="multiple" style="height:350px;"></select>');
+                    $.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetBillTypeList", "InvoiceReports")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $.each(data, function (i, dataval) {
+                                $(".NBTYPEID").append('<option value="' + dataval.BTypeId + '">' + dataval.BTypeDesc + '</option>');
+                            });
+                            $(".multiselect").multiselect();
+                        }
+                    });
+
+                }*@
+
+                @*if (idx == 5) {//alert(idx)
+                    $("#EAREADIV").empty();
+                    $("#EAREADIV").html('<select id="LOCTID" name="LOCTID" class="multiselect LOCTID form-control" multiple="multiple" style="height:350px;"></select>');
+                    $.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetLocationList", "Common")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $.each(data, function (i, dataval) {
+                                $(".LOCTID").append('<option value="' + dataval.LOCTID + '">' + dataval.LOCTDESC + '</option>');
+                            });
+                            $(".multiselect").multiselect();
+                        }
+                    });
+                    $("#brdiv5").empty();
+                    $("#brdiv5").html('<br/><label>BRANCH</label><select id="EBRNCHID" name="EBRNCHID" class="EBRNCHID form-control" placeholder="Select"></select><br/>');
+                    $.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetBranchList", "Common")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $(".EBRNCHID").append('<option value=0>Please Select Branch</option>');
+                            $.each(data, function (i, dataval) {
+                                $(".EBRNCHID").append('<option value="' + dataval.BRNCHID + '">' + dataval.LBRNCHNAME + '</option>');
+                            });
+                        }
+                    });
+
+                }*@
+            })
+
+
+            $("#from").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat: 'dd-mm-yy',
+                onClose: function (selectedDate) {
+                    $("#to").datepicker("option", "minDate", selectedDate);
+                }
+            });
+            $("#to").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat: 'dd-mm-yy',
+                onClose: function (selectedDate) {
+                    $("#from").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+        });
+
+        function GetPublicationTypeList() {
+                    $("#PTYPEDIV").empty();
+                    $("#PTYPEDIV").html('<select id="PUBLNTID" name="PUBLNTID" class="multiselect PUBLNTID form-control" multiple="multiple" style="height:350px;"></select>');
+                    //alert('@Url.Action("GetPublicationTypeList", "LoanDueListRpt")')
+                    //var url = "/SalesContractRpt/GetCustomerList?ids=" + roleid + "~" + emplid + "~" + regnid;
+                    $.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetPublicationTypeList", "PublicationBillReports")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $.each(data, function (i, dataval) {
+                                $(".PUBLNTID").append('<option value="' + dataval.PUBLNTID + '">' + dataval.PUBLNTDESC + '</option>');
+                            });
+                            $(".multiselect").multiselect();
+                        }
+                    });
+        }
+
+        function GetBranchList() {
+                    $("#BRNCHDIV").empty();
+                    $("#BRNCHDIV").html('<select id="BRNCHID" name="BRNCHID" class="multiselect BRNCHID form-control" multiple="multiple" style="height:350px;"></select>');
+                    //alert('@Url.Action("GetBranchList", "LoanDueListRpt")')
+                    //var url = "/SalesContractRpt/GetCustomerList?ids=" + roleid + "~" + emplid + "~" + regnid;
+                    $.ajax({
+                        type: 'get',
+                        url: '@Url.Action("GetBranchList", "Common")', // we are calling json method
+                        dataType: 'json',
+                        success: function (data) {//alert(data)
+                            $.each(data, function (i, dataval) {
+                                $(".BRNCHID").append('<option value="' + dataval.BRNCHID + '">' + dataval.LBRNCHNAME + '</option>');
+                            });
+                            $(".multiselect").multiselect();
+                        }
+                    });
+        }
+    function Check() {
+
+        rtype = $("#rpttype").val();
+        //alert(rtype);
+        //alert($(".BRNCHID").val());
+
+        switch(rtype) {
+            case "1":
+                //if ($(".BRNCHID").val() == null) {
+                //    alert("Please Select the Branch");
+                //    return false;
+                //}
+                break;
+            case "2":
+                if ($(".CLNTID").val() == null) {
+                    alert("Please Select the Client Name");
+                    return false;
+                }
+                break;
+            case "3":
+                if ($(".PUBLNID").val() == null) {
+                    alert("Please Select the Publication Name");
+                    return false;
+                }
+                break;
+            case "4":
+                //if ($(".NBTYPEID").val() == null) {
+                //    alert("Please Select the Bill Type");
+                //    return false;
+                //}
+                break;
+            case "5":
+                //if ($(".EBRNCHID").val() == null) {
+                //    alert("Please Select the Branch");
+                //    return false;
+                //}
+                //if ($(".LOCTID").val() == null) {
+                //    alert("Please Select the Location");
+                //    return false;
+                //}
+                break;
+            default:
+                //code block
+        }
+    }
+    </script>
+}
+
+
+

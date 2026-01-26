@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ClubMembershipModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar(max)" />
+    <Property Name="PasswordHash" Type="nvarchar(max)" />
+    <Property Name="SecurityStamp" Type="nvarchar(max)" />
+    <Property Name="FirstName" Type="nvarchar(max)" />
+    <Property Name="LastName" Type="nvarchar(max)" />
+    <Property Name="Email" Type="nvarchar(max)" />
+    <Property Name="Discriminator" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="NPassword" Type="nvarchar" MaxLength="50" />
+    <Property Name="BrnchId" Type="int" Nullable="false" />
+    <Property Name="UBrnchName" Type="nvarchar" MaxLength="100" />
+    <Property Name="DBrnchId" Type="int" Nullable="false" />
+    <Property Name="DeptName" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'ClubMembership.dbo.VW_USER_DETAILS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VW_USER_DETAILS">
+    <Key>
+      <PropertyRef Name="GroupId" />
+      <PropertyRef Name="GroupName" />
+    </Key>
+    <Property Name="GroupId" Type="int" Nullable="false" />
+    <Property Name="GroupName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar(max)" />
+  </EntityType>
+  <Function Name="PR_ACCOUNTINGYEAR_ID_CHK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PFYear" Type="int" Mode="In" />
+    <Parameter Name="PTYear" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailPublicationAmountCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailPublicationPartyCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailPublicationPrcntCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailPublicationSpaceCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailPublicationSpaceCbxSlct_Mod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BILLMID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailROAmountCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PPUBLNID" Type="int" Mode="In" />
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailRODORAmountCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PROID" Type="int" Mode="In" />
+    <Parameter Name="PKUsrId" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailRODORPartyCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PROID" Type="int" Mode="In" />
+    <Parameter Name="PKUsrId" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailRODORPrcntCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PROID" Type="int" Mode="In" />
+    <Parameter Name="PKUsrId" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailRODORSpaceCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PROID" Type="int" Mode="In" />
+    <Parameter Name="PKUsrId" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailROParyCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PPUBLNID" Type="int" Mode="In" />
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailROPrcntCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PPUBLNID" Type="int" Mode="In" />
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillDetailROSpaceCbxSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PPUBLNID" Type="int" Mode="In" />
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Billing_Production_Release_Order_No_Ctrl_Assgn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PBillMId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Billing_Release_Order_DOR_Ctrl_Assgn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PBillMId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Billing_Release_Order_No_Ctrl_Assgn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PBillMId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_BillMasterAmountWiseClntSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="pr_BillMasterParyWiseClntSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="pr_BillMasterPrcntWiseClntSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="pr_BillMasterSpaceWiseClntSlct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="PR_COMPANYACCOUNTINGDETAIL_ID_CHK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCompId" Type="int" Mode="In" />
+    <Parameter Name="PYrId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_CompanyDetail_Flx_Assgn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCOMPID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Estimate_Detail_Flx_Assgn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PEstiId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Get_Client_Address_Detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Get_Publication_Address_Detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Production_Bill_RO_Cbx_Assgn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCLNTID" Type="int" Mode="In" />
+    <Parameter Name="PKUsrId" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="pr_Publicattion_RO_Flx_Assgn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PCateId" Type="int" Mode="In" />
+    <Parameter Name="PPublnId" Type="int" Mode="In" />
+    <Parameter Name="PCompYId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Publicattion_RO_Flx_Assgn_Mod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PPBillId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_ReleaseOrderDetailCtrlAssgn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PRODID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_RO_Publication_Edition_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Publnid" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_Search_Roles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchAccountGroup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchAccountHeadMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchCategoryMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchClientMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchCompanyMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchDepartmentMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchDesignationMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchEditionMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchEmployeeMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchEstimate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="PSDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PEDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PCompyid" Type="int" Mode="In" />
+    <Parameter Name="PEmplid" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_SearchHSNCodeMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="PSDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PEDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PCompyid" Type="int" Mode="In" />
+    <Parameter Name="PEmplid" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_SearchLanguageMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchLocationMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchMediaUnitMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchPositionMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchProductionInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="PSDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PEDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PCompyid" Type="int" Mode="In" />
+    <Parameter Name="PEmplid" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_SearchProductionReleaseOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="PSDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PEDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PCompyid" Type="int" Mode="In" />
+    <Parameter Name="PEmplid" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_SearchPublicationBill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="PSDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PEDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PCompyid" Type="int" Mode="In" />
+    <Parameter Name="PEmplid" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_SearchPublicationMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchPublicationTypeMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchRegionMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchReleaseOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="PSDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PEDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PCompyid" Type="int" Mode="In" />
+    <Parameter Name="PEmplid" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pr_SearchStateMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="pr_SearchStudioInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FilterTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortIndex" Type="int" Mode="In" />
+    <Parameter Name="SortDirection" Type="char" Mode="In" />
+    <Parameter Name="StartRowNum" Type="int" Mode="In" />
+    <Parameter Name="EndRowNum" Type="int" Mode="In" />
+    <Parameter Name="TotalRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="FilteredRowsCount" Type="int" Mode="InOut" />
+    <Parameter Name="PSDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PEDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="PCompyid" Type="int" Mode="In" />
+    <Parameter Name="PEmplid" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="ClubMembershipModelStoreContainer">
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VW_USER_DETAILS" EntityType="Self.VW_USER_DETAILS" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VW_USER_DETAILS].[GroupId] AS [GroupId], 
+    [VW_USER_DETAILS].[GroupName] AS [GroupName], 
+    [VW_USER_DETAILS].[UserName] AS [UserName]
+    FROM [dbo].[VW_USER_DETAILS] AS [VW_USER_DETAILS]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>
