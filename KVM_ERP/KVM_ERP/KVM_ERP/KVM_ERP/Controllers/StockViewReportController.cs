@@ -578,7 +578,10 @@ namespace KVM_ERP.Controllers
                 try
                 {
                     // Common query for BKN and OTHERS with date and status filters
-                    // NOTE: Use PRODDATE from TransactionProductCalculations as the effective production date
+                    // NOTE: Use PRODDATE from TransactionProductCalculations as the effective production date.
+                    // In the new headless slab design, BKN and OTHERS are copied to each slab row for a
+                    // TRANDID+PACKMID combination. To avoid multiplying these values by the number of slab
+                    // rows, we collapse to one representative row per TRANDID+PACKMID when aggregating.
                     var baseCalcQuery = from tpc in db.TransactionProductCalculations
                                         join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
                                         join m in db.MaterialMasters on td.MTRLID equals m.MTRLID
@@ -590,13 +593,34 @@ namespace KVM_ERP.Controllers
                                         select new
                                         {
                                             TRANDATE = tpc.PRODDATE,
+                                            tpc.TRANDID,
+                                            tpc.PACKMID,
+                                            tpc.PACKTMID,
+                                            tpc.TRANPID,
                                             tpc.BKN,
                                             tpc.OTHERS
                                         };
 
-                    var bknData = baseCalcQuery.Where(x => x.BKN > 0).ToList();
-                    if (bknData.Any())
+                    // BKN aggregation with de-duplication per TRANDID+PACKMID
+                    var bknRaw = baseCalcQuery.Where(x => x.BKN > 0).ToList();
+                    if (bknRaw.Any())
                     {
+                        var bknData = bknRaw
+                            .GroupBy(x => new { x.TRANDID, x.PACKMID })
+                            .Select(g =>
+                            {
+                                var first = g
+                                    .OrderBy(c => c.PACKTMID) // header (PACKTMID = 0) first when present
+                                    .ThenBy(c => c.TRANPID)
+                                    .First();
+                                return new
+                                {
+                                    TRANDATE = first.TRANDATE,
+                                    BKN = first.BKN
+                                };
+                            })
+                            .ToList();
+
                         decimal openingBkn = bknData.Where(x => x.TRANDATE < fromDate).Sum(x => x.BKN);
                         decimal productionBkn = bknData.Where(x => x.TRANDATE >= fromDate && x.TRANDATE <= toDate).Sum(x => x.BKN);
                         decimal totalBkn = openingBkn + productionBkn;
@@ -621,9 +645,26 @@ namespace KVM_ERP.Controllers
                         }
                     }
 
-                    var othersData = baseCalcQuery.Where(x => x.OTHERS > 0).ToList();
-                    if (othersData.Any())
+                    // OTHERS aggregation with de-duplication per TRANDID+PACKMID
+                    var othersRaw = baseCalcQuery.Where(x => x.OTHERS > 0).ToList();
+                    if (othersRaw.Any())
                     {
+                        var othersData = othersRaw
+                            .GroupBy(x => new { x.TRANDID, x.PACKMID })
+                            .Select(g =>
+                            {
+                                var first = g
+                                    .OrderBy(c => c.PACKTMID) // header (PACKTMID = 0) first when present
+                                    .ThenBy(c => c.TRANPID)
+                                    .First();
+                                return new
+                                {
+                                    TRANDATE = first.TRANDATE,
+                                    OTHERS = first.OTHERS
+                                };
+                            })
+                            .ToList();
+
                         decimal openingOthers = othersData.Where(x => x.TRANDATE < fromDate).Sum(x => x.OTHERS);
                         decimal productionOthers = othersData.Where(x => x.TRANDATE >= fromDate && x.TRANDATE <= toDate).Sum(x => x.OTHERS);
                         decimal totalOthers = openingOthers + productionOthers;

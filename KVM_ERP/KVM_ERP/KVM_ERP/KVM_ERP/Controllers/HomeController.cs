@@ -320,11 +320,7 @@ namespace KVM_ERP.Controllers
                                      {
                                          ShrimpType = g.Key,
                                          Transactions = g.Count(),
-                                         TotalQuantity = g.Sum(x =>
-                                             x.PCK1 + x.PCK2 + x.PCK3 + x.PCK4 + x.PCK5 +
-                                             x.PCK6 + x.PCK7 + x.PCK8 + x.PCK9 + x.PCK10 +
-                                             x.PCK11 + x.PCK12 + x.PCK13 + x.PCK14 + x.PCK15 +
-                                             x.PCK16 + x.PCK17)
+                                         TotalQuantity = g.Sum(x => x.SLABVALUE)
                                      })
                                      .OrderByDescending(x => x.TotalQuantity)
                                      .Take(5)

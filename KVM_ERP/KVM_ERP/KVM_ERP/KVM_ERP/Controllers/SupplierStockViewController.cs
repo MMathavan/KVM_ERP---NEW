@@ -128,8 +128,26 @@ namespace KVM_ERP.Controllers
                     .Where(c => c.TRANMID == tranmid && (c.DISPSTATUS == 0 || c.DISPSTATUS == null) && c.PRODDATE.HasValue)
                     .ToList();
 
-                // Split-wise production: group by TRANDID and Production Date
-                var grouped = allCalcs
+                // IMPORTANT: In the new headless slab design, each logical calculation
+                // (TRANDID + PACKMID) can be stored as multiple rows (one per PACKTMID
+                // slab), and FACTORYWGT / TOTALYELDCOUNTS are copied to every row.
+                // If we sum directly over allCalcs we will incorrectly multiply
+                // weights and counts by the number of slab rows.
+
+                // Deduplicate to a single representative row per TRANDID + PACKMID + Date
+                // by preferring the header row (PACKTMID = 0) when present, otherwise the
+                // first slab row. This matches RawMaterialIntake's aggregation behaviour.
+                var headerCalcs = allCalcs
+                    .GroupBy(c => new { c.TRANDID, c.PACKMID, Date = c.PRODDATE.Value.Date })
+                    .Select(g => g
+                        .OrderBy(c => c.PACKTMID) // header row first when it exists
+                        .ThenBy(c => c.TRANPID)
+                        .First())
+                    .ToList();
+
+                // Split-wise production: group by TRANDID and Production Date using
+                // the deduplicated headerCalcs instead of raw slab rows
+                var grouped = headerCalcs
                     .GroupBy(c => new { Date = c.PRODDATE.Value.Date, c.TRANDID })
                     .OrderBy(g => g.Key.Date)
                     .ThenBy(g => g.Key.TRANDID)
@@ -140,6 +158,9 @@ namespace KVM_ERP.Controllers
 
                 foreach (var g in grouped)
                 {
+                    // Each group now contains at most one row per TRANDID+PACKMID,
+                    // so these sums reflect the true totals for that split without
+                    // being multiplied by the number of slab rows.
                     decimal totalKgs = g.Sum(x => x.KGWGT);
                     decimal totalCounts = g.Sum(x => x.TOTALYELDCOUNTS);
                     decimal ourKgs = g.Sum(x => x.FACTORYWGT);

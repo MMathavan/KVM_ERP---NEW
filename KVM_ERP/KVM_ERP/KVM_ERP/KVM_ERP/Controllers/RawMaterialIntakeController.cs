@@ -3455,20 +3455,40 @@ namespace KVM_ERP.Controllers
             try
             {
                 System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] Looking for TRANDID: {trandid}");
-                
+
+                // NOTE: In the new headless slab design, TRANSACTION_PRODUCT_CALCULATION
+                // can contain multiple rows per logical calculation (one per PACKTMID
+                // slab) and each row carries the same FACTORYWGT. Summing FACTORYWGT
+                // across all rows will therefore multiply the true weight by the number
+                // of slab rows. To avoid this, we collapse to a single representative
+                // row per TRANDID+PACKMID and sum FACTORYWGT from those headers only.
+
                 var calculations = db.TransactionProductCalculations
                     .Where(calc => calc.TRANDID == trandid && calc.DISPSTATUS == 0)
                     .ToList();
-                
-                System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] Found {calculations.Count} calculations for TRANDID {trandid}");
-                
-                var totalFactoryWeight = calculations.Sum(calc => calc.FACTORYWGT);
-                
-                System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] Total factory weight: {totalFactoryWeight}");
-                
-                foreach (var calc in calculations)
+
+                System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] Found {calculations.Count} raw calculation rows for TRANDID {trandid}");
+
+                // Group by TRANDID + PACKMID and pick the header (PACKTMID = 0) when
+                // present, otherwise the first available slab row. This matches the
+                // behaviour of GetAllProductCalculations and GetProductCalculation.
+                var groupedCalculations = calculations
+                    .GroupBy(c => new { c.TRANDID, c.PACKMID })
+                    .Select(g => g
+                        .OrderBy(c => c.PACKTMID) // header (0) first when it exists
+                        .ThenBy(c => c.TRANPID)
+                        .First())
+                    .ToList();
+
+                System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] Collapsed to {groupedCalculations.Count} calculation headers (by TRANDID+PACKMID)");
+
+                var totalFactoryWeight = groupedCalculations.Sum(calc => calc.FACTORYWGT);
+
+                System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] Total factory weight (deduplicated): {totalFactoryWeight}");
+
+                foreach (var calc in groupedCalculations)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] TRANPID: {calc.TRANPID}, PACKMID: {calc.PACKMID}, FACTORYWGT: {calc.FACTORYWGT}");
+                    System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] Header TRANPID: {calc.TRANPID}, PACKMID: {calc.PACKMID}, PACKTMID: {calc.PACKTMID}, FACTORYWGT: {calc.FACTORYWGT}");
                 }
 
                 return Json(new { success = true, factoryWeight = totalFactoryWeight }, JsonRequestBehavior.AllowGet);

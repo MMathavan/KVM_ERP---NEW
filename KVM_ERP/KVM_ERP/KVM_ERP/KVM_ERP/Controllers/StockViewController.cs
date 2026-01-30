@@ -325,23 +325,8 @@ namespace KVM_ERP.Controllers
                 // because BKN and OTHERS are handled as separate virtual products (-1 and -2).
                 allCalculations = allCalculations
                     .Where(x =>
-                        x.Calculation.PCK1 > 0 ||
-                        x.Calculation.PCK2 > 0 ||
-                        x.Calculation.PCK3 > 0 ||
-                        x.Calculation.PCK4 > 0 ||
-                        x.Calculation.PCK5 > 0 ||
-                        x.Calculation.PCK6 > 0 ||
-                        x.Calculation.PCK7 > 0 ||
-                        x.Calculation.PCK8 > 0 ||
-                        x.Calculation.PCK9 > 0 ||
-                        x.Calculation.PCK10 > 0 ||
-                        x.Calculation.PCK11 > 0 ||
-                        x.Calculation.PCK12 > 0 ||
-                        x.Calculation.PCK13 > 0 ||
-                        x.Calculation.PCK14 > 0 ||
-                        x.Calculation.PCK15 > 0 ||
-                        x.Calculation.PCK16 > 0 ||
-                        x.Calculation.PCK17 > 0)
+                        x.Calculation.PACKTMID != 0 &&
+                        x.Calculation.SLABVALUE > 0)
                     .ToList();
 
                 // If a specific calculation mode is requested, filter by normalized mode
@@ -430,54 +415,139 @@ namespace KVM_ERP.Controllers
 
                     var previousDate = selectedDate.AddDays(-1);
 
-                    // Filter from already loaded data in memory by PackingId, KGWGT, GRADEID, PCLRID, RCVDTID, and Date
-                    var upToPreviousDay = allCalculations
-                        .Where(x => x.PackingId == pm.PackingId 
-                                   && x.Calculation.KGWGT == pm.KgWeight
-                                   && x.Calculation.GRADEID == pm.GradeId
-                                   && x.Calculation.PCLRID == pm.PclrId
-                                   && x.Calculation.RCVDTID == pm.RcvdtId
-                                   && x.SupplierName == pm.SupplierName
-                                   && x.TranDate <= previousDate)
-                        .Select(x => x.Calculation)
+                    // Load packing types for this packing master to determine column mapping (PCK1..PCK17)
+                    var packingTypes = db.PackingTypeMasters
+                        .Where(pt => pt.PACKMID == pm.PackingId 
+                                  && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null)
+                                  && !pt.PACKTMDESC.ToUpper().Contains("BKN")
+                                  && !pt.PACKTMDESC.ToUpper().Contains("BROKEN")
+                                  && !pt.PACKTMDESC.ToUpper().Contains("OTHERS")
+                                  && !pt.PACKTMDESC.ToUpper().Contains("OTHER"))
+                        .OrderBy(pt => pt.PACKTMCODE)
                         .ToList();
 
-                    var selectedDay = allCalculations
+                    int maxColumns = Math.Min(17, packingTypes.Count);
+
+                    // Filter from already loaded data in memory by PackingId, KGWGT, GRADEID, PCLRID, RCVDTID and Supplier
+                    var rowsForPacking = allCalculations
                         .Where(x => x.PackingId == pm.PackingId 
                                    && x.Calculation.KGWGT == pm.KgWeight
                                    && x.Calculation.GRADEID == pm.GradeId
                                    && x.Calculation.PCLRID == pm.PclrId
                                    && x.Calculation.RCVDTID == pm.RcvdtId
-                                   && x.SupplierName == pm.SupplierName
-                                   && x.TranDate == selectedDate)
-                        .Select(x => x.Calculation)
+                                   && x.SupplierName == pm.SupplierName)
+                        .ToList();
+
+                    var upToPreviousDay = rowsForPacking
+                        .Where(x => x.TranDate <= previousDate)
+                        .ToList();
+
+                    var selectedDay = rowsForPacking
+                        .Where(x => x.TranDate == selectedDate)
                         .ToList();
                     
                     System.Diagnostics.Debug.WriteLine($"  Found {upToPreviousDay.Count} records up to previous day");
                     System.Diagnostics.Debug.WriteLine($"  Found {selectedDay.Count} records for selected day");
 
-                    // Calculate totals for up to previous day
+                    var upToPrevByPacktm = upToPreviousDay
+                        .GroupBy(x => x.Calculation.PACKTMID)
+                        .ToDictionary(g => g.Key, g => g.Sum(r => r.Calculation.SLABVALUE));
+
+                    var selectedByPacktm = selectedDay
+                        .GroupBy(x => x.Calculation.PACKTMID)
+                        .ToDictionary(g => g.Key, g => g.Sum(r => r.Calculation.SLABVALUE));
+
                     var upToPreviousData = new PackingDetailRow
                     {
-                        RowType = $"Up to {previousDate:dd/MM/yyyy}",
-                        PCK1 = upToPreviousDay.Sum(x => x.PCK1),
-                        PCK2 = upToPreviousDay.Sum(x => x.PCK2),
-                        PCK3 = upToPreviousDay.Sum(x => x.PCK3),
-                        PCK4 = upToPreviousDay.Sum(x => x.PCK4),
-                        PCK5 = upToPreviousDay.Sum(x => x.PCK5),
-                        PCK6 = upToPreviousDay.Sum(x => x.PCK6),
-                        PCK7 = upToPreviousDay.Sum(x => x.PCK7),
-                        PCK8 = upToPreviousDay.Sum(x => x.PCK8),
-                        PCK9 = upToPreviousDay.Sum(x => x.PCK9),
-                        PCK10 = upToPreviousDay.Sum(x => x.PCK10),
-                        PCK11 = upToPreviousDay.Sum(x => x.PCK11),
-                        PCK12 = upToPreviousDay.Sum(x => x.PCK12),
-                        PCK13 = upToPreviousDay.Sum(x => x.PCK13),
-                        PCK14 = upToPreviousDay.Sum(x => x.PCK14),
-                        PCK15 = upToPreviousDay.Sum(x => x.PCK15),
-                        PCK16 = upToPreviousDay.Sum(x => x.PCK16),
-                        PCK17 = upToPreviousDay.Sum(x => x.PCK17)
+                        RowType = $"Up to {previousDate:dd/MM/yyyy}"
                     };
+
+                    var selectedDayData = new PackingDetailRow
+                    {
+                        RowType = selectedDate.ToString("dd/MM/yyyy")
+                    };
+
+                    for (int index = 0; index < maxColumns; index++)
+                    {
+                        var packtmId = packingTypes[index].PACKTMID;
+                        decimal upVal = upToPrevByPacktm.ContainsKey(packtmId) ? upToPrevByPacktm[packtmId] : 0;
+                        decimal selVal = selectedByPacktm.ContainsKey(packtmId) ? selectedByPacktm[packtmId] : 0;
+
+                        int col = index + 1;
+
+                        switch (col)
+                        {
+                            case 1:
+                                upToPreviousData.PCK1 = upVal;
+                                selectedDayData.PCK1 = selVal;
+                                break;
+                            case 2:
+                                upToPreviousData.PCK2 = upVal;
+                                selectedDayData.PCK2 = selVal;
+                                break;
+                            case 3:
+                                upToPreviousData.PCK3 = upVal;
+                                selectedDayData.PCK3 = selVal;
+                                break;
+                            case 4:
+                                upToPreviousData.PCK4 = upVal;
+                                selectedDayData.PCK4 = selVal;
+                                break;
+                            case 5:
+                                upToPreviousData.PCK5 = upVal;
+                                selectedDayData.PCK5 = selVal;
+                                break;
+                            case 6:
+                                upToPreviousData.PCK6 = upVal;
+                                selectedDayData.PCK6 = selVal;
+                                break;
+                            case 7:
+                                upToPreviousData.PCK7 = upVal;
+                                selectedDayData.PCK7 = selVal;
+                                break;
+                            case 8:
+                                upToPreviousData.PCK8 = upVal;
+                                selectedDayData.PCK8 = selVal;
+                                break;
+                            case 9:
+                                upToPreviousData.PCK9 = upVal;
+                                selectedDayData.PCK9 = selVal;
+                                break;
+                            case 10:
+                                upToPreviousData.PCK10 = upVal;
+                                selectedDayData.PCK10 = selVal;
+                                break;
+                            case 11:
+                                upToPreviousData.PCK11 = upVal;
+                                selectedDayData.PCK11 = selVal;
+                                break;
+                            case 12:
+                                upToPreviousData.PCK12 = upVal;
+                                selectedDayData.PCK12 = selVal;
+                                break;
+                            case 13:
+                                upToPreviousData.PCK13 = upVal;
+                                selectedDayData.PCK13 = selVal;
+                                break;
+                            case 14:
+                                upToPreviousData.PCK14 = upVal;
+                                selectedDayData.PCK14 = selVal;
+                                break;
+                            case 15:
+                                upToPreviousData.PCK15 = upVal;
+                                selectedDayData.PCK15 = selVal;
+                                break;
+                            case 16:
+                                upToPreviousData.PCK16 = upVal;
+                                selectedDayData.PCK16 = selVal;
+                                break;
+                            case 17:
+                                upToPreviousData.PCK17 = upVal;
+                                selectedDayData.PCK17 = selVal;
+                                break;
+                        }
+                    }
+
                     upToPreviousData.Total = (upToPreviousData.PCK1 ?? 0) + (upToPreviousData.PCK2 ?? 0) + (upToPreviousData.PCK3 ?? 0) +
                                             (upToPreviousData.PCK4 ?? 0) + (upToPreviousData.PCK5 ?? 0) + (upToPreviousData.PCK6 ?? 0) +
                                             (upToPreviousData.PCK7 ?? 0) + (upToPreviousData.PCK8 ?? 0) + (upToPreviousData.PCK9 ?? 0) +
@@ -485,28 +555,6 @@ namespace KVM_ERP.Controllers
                                             (upToPreviousData.PCK13 ?? 0) + (upToPreviousData.PCK14 ?? 0) + (upToPreviousData.PCK15 ?? 0) +
                                             (upToPreviousData.PCK16 ?? 0) + (upToPreviousData.PCK17 ?? 0);
 
-                    // Calculate totals for selected day
-                    var selectedDayData = new PackingDetailRow
-                    {
-                        RowType = selectedDate.ToString("dd/MM/yyyy"),
-                        PCK1 = selectedDay.Sum(x => x.PCK1),
-                        PCK2 = selectedDay.Sum(x => x.PCK2),
-                        PCK3 = selectedDay.Sum(x => x.PCK3),
-                        PCK4 = selectedDay.Sum(x => x.PCK4),
-                        PCK5 = selectedDay.Sum(x => x.PCK5),
-                        PCK6 = selectedDay.Sum(x => x.PCK6),
-                        PCK7 = selectedDay.Sum(x => x.PCK7),
-                        PCK8 = selectedDay.Sum(x => x.PCK8),
-                        PCK9 = selectedDay.Sum(x => x.PCK9),
-                        PCK10 = selectedDay.Sum(x => x.PCK10),
-                        PCK11 = selectedDay.Sum(x => x.PCK11),
-                        PCK12 = selectedDay.Sum(x => x.PCK12),
-                        PCK13 = selectedDay.Sum(x => x.PCK13),
-                        PCK14 = selectedDay.Sum(x => x.PCK14),
-                        PCK15 = selectedDay.Sum(x => x.PCK15),
-                        PCK16 = selectedDay.Sum(x => x.PCK16),
-                        PCK17 = selectedDay.Sum(x => x.PCK17)
-                    };
                     selectedDayData.Total = (selectedDayData.PCK1 ?? 0) + (selectedDayData.PCK2 ?? 0) + (selectedDayData.PCK3 ?? 0) +
                                            (selectedDayData.PCK4 ?? 0) + (selectedDayData.PCK5 ?? 0) + (selectedDayData.PCK6 ?? 0) +
                                            (selectedDayData.PCK7 ?? 0) + (selectedDayData.PCK8 ?? 0) + (selectedDayData.PCK9 ?? 0) +
@@ -573,14 +621,7 @@ namespace KVM_ERP.Controllers
 
                     // Get column headers from PACKINGTYPEMASTER for this packing master
                     // Exclude BKN and OTHERS columns since they're now separate products
-                    var columnHeaders = db.PackingTypeMasters
-                        .Where(pt => pt.PACKMID == pm.PackingId 
-                                  && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null)
-                                  && !pt.PACKTMDESC.ToUpper().Contains("BKN")
-                                  && !pt.PACKTMDESC.ToUpper().Contains("BROKEN")
-                                  && !pt.PACKTMDESC.ToUpper().Contains("OTHERS")
-                                  && !pt.PACKTMDESC.ToUpper().Contains("OTHER"))
-                        .OrderBy(pt => pt.PACKTMCODE)
+                    var columnHeaders = packingTypes
                         .Select(pt => pt.PACKTMDESC)
                         .ToList();
 
@@ -663,7 +704,19 @@ namespace KVM_ERP.Controllers
                                      GradeDesc = grade != null ? grade.GRADEDESC : null
                                  }).ToList();
 
-                System.Diagnostics.Debug.WriteLine($"Loaded {allBKNData.Count} BKN records");
+                // IMPORTANT: BKN is stored on every slab row for a TRANDID+PACKMID combination
+                // in the new headless design. To avoid multiplying BKN by the number of slab
+                // rows, we must collapse to one record per TRANDID+PACKMID and use a single
+                // BKN value (they are identical within the group).
+                allBKNData = allBKNData
+                    .GroupBy(x => new { x.Calculation.TRANDID, x.Calculation.PACKMID })
+                    .Select(g => g
+                        .OrderBy(c => c.Calculation.PACKTMID) // header (PACKTMID = 0) first when present
+                        .ThenBy(c => c.Calculation.TRANPID)
+                        .First())
+                    .ToList();
+
+                System.Diagnostics.Debug.WriteLine($"Loaded {allBKNData.Count} distinct BKN calculation rows (grouped by TRANDID+PACKMID)");
 
                 // Group by Packing Master + KGWGT + Grade + Colour + Received Type + Product
                 var bknGroups = allBKNData
@@ -774,8 +827,8 @@ namespace KVM_ERP.Controllers
                     var noOfBoxesData = new PackingDetailRow
                     {
                         RowType = "NO OF CASES",
-                        PCK1 = CalculateBoxes(total),
-                        Total = CalculateBoxes(total)
+                        PCK1 = 0,
+                        Total = 0
                     };
 
                     // Create single column header for BKN
@@ -853,7 +906,19 @@ namespace KVM_ERP.Controllers
                                      GradeDesc = grade != null ? grade.GRADEDESC : null
                                  }).ToList();
 
-                System.Diagnostics.Debug.WriteLine($"Loaded {allOTHERSData.Count} OTHERS records");
+                // IMPORTANT: OTHERS is stored on every slab row for a TRANDID+PACKMID combination
+                // in the new headless design. To avoid multiplying OTHERS by the number of slab
+                // rows, we must collapse to one record per TRANDID+PACKMID and use a single
+                // OTHERS value (they are identical within the group).
+                allOTHERSData = allOTHERSData
+                    .GroupBy(x => new { x.Calculation.TRANDID, x.Calculation.PACKMID })
+                    .Select(g => g
+                        .OrderBy(c => c.Calculation.PACKTMID) // header (PACKTMID = 0) first when present
+                        .ThenBy(c => c.Calculation.TRANPID)
+                        .First())
+                    .ToList();
+
+                System.Diagnostics.Debug.WriteLine($"Loaded {allOTHERSData.Count} distinct OTHERS calculation rows (grouped by TRANDID+PACKMID)");
 
                 // Group by Packing Master + KGWGT + Grade + Colour + Received Type + Product
                 var othersGroups = allOTHERSData
@@ -873,11 +938,11 @@ namespace KVM_ERP.Controllers
                         // Build display name
                         string displayName = g.Key.PackingType;
 
-                        // Use total No of Boxes (PCKBOX) from calculations when available,
-                        // otherwise fall back to previous static value 6 to avoid disturbing
-                        // existing behaviour for older data without PCKBOX.
-                        int totalBoxes = g.Sum(x => x.Calculation.PCKBOX);
-                        int boxesForDisplay = totalBoxes > 0 ? totalBoxes : 6;
+                        // Use per-pack No of Boxes (PCKBOX) for the header (pack size),
+                        // not a sum across slabs. If there is no PCKBOX data yet, fall
+                        // back to 6 to preserve behaviour for older data.
+                        int packBoxSizeOthers = g.Max(x => x.Calculation.PCKBOX);
+                        int boxesForDisplay = packBoxSizeOthers > 0 ? packBoxSizeOthers : 6;
 
                         if (g.Key.KGWGT > 0)
                             displayName += " " + boxesForDisplay + " x " + g.Key.KGWGT.ToString("0.##");
@@ -1160,7 +1225,7 @@ namespace KVM_ERP.Controllers
                         return new List<object[]>();
                     }
 
-                    // STEP 2: Check for calculation records with PCK values within the date range
+                    // STEP 2: Check for calculation records with slab or BKN/OTHERS values within the date range
                     var rawCalcCount = db.Database.SqlQuery<int>(@"
                         SELECT COUNT(*) 
                         FROM TRANSACTION_PRODUCT_CALCULATION tpc
@@ -1169,13 +1234,10 @@ namespace KVM_ERP.Controllers
                         WHERE (tpc.DISPSTATUS = 0 OR tpc.DISPSTATUS IS NULL)
                         AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
                         AND tpc.PRODDATE <= @p0
-                        AND (PCK1 > 0 OR PCK2 > 0 OR PCK3 > 0 OR PCK4 > 0 OR PCK5 > 0 
-                             OR PCK6 > 0 OR PCK7 > 0 OR PCK8 > 0 OR PCK9 > 0 OR PCK10 > 0
-                             OR PCK11 > 0 OR PCK12 > 0 OR PCK13 > 0 OR PCK14 > 0 OR PCK15 > 0
-                             OR PCK16 > 0 OR PCK17 > 0 OR BKN > 0 OR OTHERS > 0)
+                        AND (tpc.SLABVALUE > 0 OR tpc.BKN > 0 OR tpc.OTHERS > 0)
                     ", asOnDate).FirstOrDefault();
 
-                    System.Diagnostics.Debug.WriteLine($"Found {rawCalcCount} calculation records with PCK values > 0 for date {asOnDate:yyyy-MM-dd}");
+                    System.Diagnostics.Debug.WriteLine($"Found {rawCalcCount} calculation records with slab/BKN/OTHERS values > 0 for date {asOnDate:yyyy-MM-dd}");
 
                 }
                 catch (Exception ex)
@@ -1188,7 +1250,35 @@ namespace KVM_ERP.Controllers
                 // STEP 3: Get products with their PCK totals
                 try
                 {
-                    // Load data into memory first to avoid EF translation issues with nullable decimals
+                    // Load packing type metadata once to map PACKTMID -> logical column order (PCK1..PCK17)
+                    var packingTypeMeta = db.PackingTypeMasters
+                        .Where(pt => (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null))
+                        .Select(pt => new
+                        {
+                            pt.PACKMID,
+                            pt.PACKTMID,
+                            pt.PACKTMDESC,
+                            pt.PACKTMCODE
+                        })
+                        .ToList();
+
+                    var brokenOrOthersPacktmIds = new HashSet<int>(
+                        packingTypeMeta
+                            .Where(pt => pt.PACKTMDESC.ToUpper().Contains("BKN")
+                                      || pt.PACKTMDESC.ToUpper().Contains("BROKEN")
+                                      || pt.PACKTMDESC.ToUpper().Contains("OTHERS")
+                                      || pt.PACKTMDESC.ToUpper().Contains("OTHER"))
+                            .Select(pt => pt.PACKTMID)
+                    );
+
+                    var packingTypesByPackmid = packingTypeMeta
+                        .Where(pt => !brokenOrOthersPacktmIds.Contains(pt.PACKTMID))
+                        .OrderBy(pt => pt.PACKMID)
+                        .ThenBy(pt => pt.PACKTMCODE)
+                        .GroupBy(pt => pt.PACKMID)
+                        .ToDictionary(g => g.Key, g => g.ToList());
+
+                    // Load slab-based calculation data into memory first to avoid EF translation issues
                     var allCalcs = (from tpc in db.TransactionProductCalculations
                                    join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
                                    join m in db.MaterialMasters on td.MTRLID equals m.MTRLID
@@ -1197,62 +1287,45 @@ namespace KVM_ERP.Controllers
                                          && (m.DISPSTATUS == 0 || m.DISPSTATUS == null)
                                          && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
                                          && tpc.PRODDATE <= asOnDate
+                                         && tpc.PACKTMID != 0
+                                         && tpc.SLABVALUE > 0
                                    select new {
                                        ProductId = m.MTRLID,
                                        ProductName = m.MTRLDESC,
-                                       PCK1 = tpc.PCK1,
-                                       PCK2 = tpc.PCK2,
-                                       PCK3 = tpc.PCK3,
-                                       PCK4 = tpc.PCK4,
-                                       PCK5 = tpc.PCK5,
-                                       PCK6 = tpc.PCK6,
-                                       PCK7 = tpc.PCK7,
-                                       PCK8 = tpc.PCK8,
-                                       PCK9 = tpc.PCK9,
-                                       PCK10 = tpc.PCK10,
-                                       PCK11 = tpc.PCK11,
-                                       PCK12 = tpc.PCK12,
-                                       PCK13 = tpc.PCK13,
-                                       PCK14 = tpc.PCK14,
-                                       PCK15 = tpc.PCK15,
-                                       PCK16 = tpc.PCK16,
-                                       PCK17 = tpc.PCK17,
-                                       // Extra fields so we can mirror the detail breakdown grouping
                                        PackingId = tpc.PACKMID,
                                        KgWeight = tpc.KGWGT,
                                        GradeId = tpc.GRADEID,
                                        PclrId = tpc.PCLRID,
                                        RcvdtId = tpc.RCVDTID,
-                                       // Supplier name so that cases are calculated per supplier, like the detail view
                                        SupplierName = tm.CATENAME,
-                                       // Use PCKBOX as the dynamic box size for this calculation row
                                        BoxSize = tpc.PCKBOX,
+                                       PackTmId = tpc.PACKTMID,
+                                       SlabValue = tpc.SLABVALUE,
                                        // Normalize calculation mode so that 1 and 0 are treated as Packing, 2 as Grade Weight
                                        CalculationMode = (tpc.CALCULATIONMODE == 2 ? 2 : 1)
                                    }).ToList();
 
-                    System.Diagnostics.Debug.WriteLine($"Loaded {allCalcs.Count} calculation records into memory");
+                    // Exclude slab rows that belong to BKN/OTHERS packing types; those are handled as virtual products
+                    allCalcs = allCalcs
+                        .Where(x => !brokenOrOthersPacktmIds.Contains(x.PackTmId))
+                        .ToList();
 
-                    // Now perform grouping and summing in .NET (client-side)
+                    System.Diagnostics.Debug.WriteLine($"Loaded {allCalcs.Count} slab calculation records into memory");
+
+                    // Group by product and calculation mode, summing all slab values
                     var productCalcs = allCalcs
                         .GroupBy(x => new { x.ProductId, x.ProductName, x.CalculationMode })
                         .Select(g => new {
                             ProductId = g.Key.ProductId,
                             ProductName = g.Key.ProductName,
                             CalculationMode = g.Key.CalculationMode,
-                            TotalPCK = g.Sum(tpc =>
-                                tpc.PCK1 + tpc.PCK2 + tpc.PCK3 +
-                                tpc.PCK4 + tpc.PCK5 + tpc.PCK6 +
-                                tpc.PCK7 + tpc.PCK8 + tpc.PCK9 +
-                                tpc.PCK10 + tpc.PCK11 + tpc.PCK12 +
-                                tpc.PCK13 + tpc.PCK14 + tpc.PCK15 +
-                                tpc.PCK16 + tpc.PCK17)
+                            TotalPCK = g.Sum(tpc => tpc.SlabValue)
                         })
                         .Where(x => x.TotalPCK > 0)
                         .OrderBy(x => x.ProductName)
                         .ToList();
 
-                    System.Diagnostics.Debug.WriteLine($"Product totals found: {productCalcs.Count}");
+                    System.Diagnostics.Debug.WriteLine($"Product totals found (from slabs): {productCalcs.Count}");
 
                     foreach (var product in productCalcs)
                     {
@@ -1265,6 +1338,7 @@ namespace KVM_ERP.Controllers
                             .ToList();
 
                         decimal totalCases = 0;
+                        decimal productTotalSlabs = 0;
 
                         // Group exactly like the detail breakdown: by packing + weight + grade + colour + received type + supplier
                         var productGroups = productRows
@@ -1276,45 +1350,46 @@ namespace KVM_ERP.Controllers
                             int packBoxSize = grp.Max(r => r.BoxSize);
                             int boxSize = packBoxSize > 0 ? packBoxSize : 6;
 
-                            // Column totals for this packing group
-                            decimal col1 = grp.Sum(r => r.PCK1);
-                            decimal col2 = grp.Sum(r => r.PCK2);
-                            decimal col3 = grp.Sum(r => r.PCK3);
-                            decimal col4 = grp.Sum(r => r.PCK4);
-                            decimal col5 = grp.Sum(r => r.PCK5);
-                            decimal col6 = grp.Sum(r => r.PCK6);
-                            decimal col7 = grp.Sum(r => r.PCK7);
-                            decimal col8 = grp.Sum(r => r.PCK8);
-                            decimal col9 = grp.Sum(r => r.PCK9);
-                            decimal col10 = grp.Sum(r => r.PCK10);
-                            decimal col11 = grp.Sum(r => r.PCK11);
-                            decimal col12 = grp.Sum(r => r.PCK12);
-                            decimal col13 = grp.Sum(r => r.PCK13);
-                            decimal col14 = grp.Sum(r => r.PCK14);
-                            decimal col15 = grp.Sum(r => r.PCK15);
-                            decimal col16 = grp.Sum(r => r.PCK16);
-                            decimal col17 = grp.Sum(r => r.PCK17);
+                            // Map slab values to logical columns PCK1..PCK17 using packing type order
+                            if (!packingTypesByPackmid.TryGetValue(grp.Key.PackingId, out var packTypes) || packTypes.Count == 0)
+                            {
+                                // If we have no packing type metadata, fall back to treating all slabs as a single column
+                                decimal fallbackTotalSlabs = grp.Sum(r => r.SlabValue);
+                                productTotalSlabs += fallbackTotalSlabs;
+                                totalCases += CalculateBoxes(fallbackTotalSlabs, boxSize);
+                                continue;
+                            }
+
+                            int maxCols = Math.Min(17, packTypes.Count);
+                            var slabByPacktm = grp
+                                .GroupBy(r => r.PackTmId)
+                                .ToDictionary(g => g.Key, g => g.Sum(x => x.SlabValue));
+
+                            decimal[] colTotals = new decimal[17];
+
+                            for (int index = 0; index < maxCols; index++)
+                            {
+                                var pt = packTypes[index];
+                                if (slabByPacktm.TryGetValue(pt.PACKTMID, out var val))
+                                {
+                                    colTotals[index] = val;
+                                }
+                            }
+
+                            decimal groupTotalSlabs = 0;
+                            for (int i = 0; i < maxCols; i++)
+                            {
+                                groupTotalSlabs += colTotals[i];
+                            }
 
                             // NO OF CASES for this packing group = sum of boxes per column (same as detail view)
-                            decimal groupCases =
-                                CalculateBoxes(col1, boxSize) +
-                                CalculateBoxes(col2, boxSize) +
-                                CalculateBoxes(col3, boxSize) +
-                                CalculateBoxes(col4, boxSize) +
-                                CalculateBoxes(col5, boxSize) +
-                                CalculateBoxes(col6, boxSize) +
-                                CalculateBoxes(col7, boxSize) +
-                                CalculateBoxes(col8, boxSize) +
-                                CalculateBoxes(col9, boxSize) +
-                                CalculateBoxes(col10, boxSize) +
-                                CalculateBoxes(col11, boxSize) +
-                                CalculateBoxes(col12, boxSize) +
-                                CalculateBoxes(col13, boxSize) +
-                                CalculateBoxes(col14, boxSize) +
-                                CalculateBoxes(col15, boxSize) +
-                                CalculateBoxes(col16, boxSize) +
-                                CalculateBoxes(col17, boxSize);
+                            decimal groupCases = 0;
+                            for (int i = 0; i < maxCols; i++)
+                            {
+                                groupCases += CalculateBoxes(colTotals[i], boxSize);
+                            }
 
+                            productTotalSlabs += groupTotalSlabs;
                             totalCases += groupCases;
                         }
 
@@ -1327,29 +1402,41 @@ namespace KVM_ERP.Controllers
                         productTotals.Add(new object[] {
                             product.ProductId,
                             displayName,
-                            product.TotalPCK.ToString("N2"),
+                            productTotalSlabs.ToString("N2"),
                             totalCases.ToString("N0"),
                             product.CalculationMode
                         });
 
-                        System.Diagnostics.Debug.WriteLine($"Added: {displayName} (ID: {product.ProductId}, Mode: {product.CalculationMode}) with total PCK: {product.TotalPCK:N2}, Cases (from NO OF CASES rows): {totalCases:N0}");
+                        System.Diagnostics.Debug.WriteLine($"Added: {displayName} (ID: {product.ProductId}, Mode: {product.CalculationMode}) with total PCK: {productTotalSlabs:N2}, Cases (from NO OF CASES rows): {totalCases:N0}");
                     }
                     
                     // STEP 4: Add BKN as a separate virtual product
-                    var bknData = (from tpc in db.TransactionProductCalculations
-                                  join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
-                                  join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
-                                  where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
-                                        && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
-                                        && tpc.PRODDATE <= asOnDate
-                                        && tpc.BKN > 0
-                                  select tpc.BKN).ToList();
-                    
-                    var bknTotal = bknData.Sum();
+                    // IMPORTANT: In the new headless slab design, BKN is copied to each
+                    // slab row for a TRANDID+PACKMID. To avoid multiplying BKN by the
+                    // number of slabs, we collapse to one record per TRANDID+PACKMID
+                    // and sum a single BKN value from each group.
+                    var allBknRows = (from tpc in db.TransactionProductCalculations
+                                      join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
+                                      join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
+                                      where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
+                                            && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
+                                            && tpc.PRODDATE <= asOnDate
+                                            && tpc.BKN > 0
+                                      select tpc).ToList();
+
+                    var bknTotal = allBknRows
+                        .GroupBy(t => new { t.TRANDID, t.PACKMID })
+                        .Select(g => g
+                            .OrderBy(c => c.PACKTMID) // header (PACKTMID = 0) first when present
+                            .ThenBy(c => c.TRANPID)
+                            .First().BKN)
+                        .DefaultIfEmpty(0)
+                        .Sum();
                     
                     if (bknTotal > 0)
                     {
-                        var bknCases = CalculateBoxes(bknTotal);
+                        // For BKN (Broken) we do not track cases; always display 0 cases
+                        decimal bknCases = 0;
 
                         // Add BKN as virtual product with ID = -1
                         productTotals.Add(new object[] { 
@@ -1363,16 +1450,25 @@ namespace KVM_ERP.Controllers
                     }
                     
                     // STEP 5: Add OTHERS as a separate virtual product
-                    var othersData = (from tpc in db.TransactionProductCalculations
-                                     join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
-                                     join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
-                                     where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
-                                           && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
-                                           && tpc.PRODDATE <= asOnDate
-                                           && tpc.OTHERS > 0
-                                     select tpc.OTHERS).ToList();
-                    
-                    var othersTotal = othersData.Sum();
+                    // Same reasoning as BKN: OTHERS is present on each slab row for a
+                    // TRANDID+PACKMID, so we must aggregate once per calculation.
+                    var allOthersRows = (from tpc in db.TransactionProductCalculations
+                                         join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
+                                         join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
+                                         where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
+                                               && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
+                                               && tpc.PRODDATE <= asOnDate
+                                               && tpc.OTHERS > 0
+                                         select tpc).ToList();
+
+                    var othersTotal = allOthersRows
+                        .GroupBy(t => new { t.TRANDID, t.PACKMID })
+                        .Select(g => g
+                            .OrderBy(c => c.PACKTMID) // header (PACKTMID = 0) first when present
+                            .ThenBy(c => c.TRANPID)
+                            .First().OTHERS)
+                        .DefaultIfEmpty(0)
+                        .Sum();
                     
                     if (othersTotal > 0)
                     {
