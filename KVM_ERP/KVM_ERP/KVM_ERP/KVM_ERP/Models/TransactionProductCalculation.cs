@@ -8,6 +8,7 @@ namespace KVM_ERP.Models
     public class TransactionProductCalculation
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("TRANPID")]
         public int TRANPID { get; set; }
 
@@ -23,55 +24,58 @@ namespace KVM_ERP.Models
         [Column("PACKMID")]
         public int PACKMID { get; set; }
 
-        [Column("PCK1")]
+        [Column("PACKTMID")]
+        public int PACKTMID { get; set; } = 0;
+
+        [NotMapped]
         public decimal PCK1 { get; set; } = 0;
 
-        [Column("PCK2")]
+        [NotMapped]
         public decimal PCK2 { get; set; } = 0;
 
-        [Column("PCK3")]
+        [NotMapped]
         public decimal PCK3 { get; set; } = 0;
 
-        [Column("PCK4")]
+        [NotMapped]
         public decimal PCK4 { get; set; } = 0;
 
-        [Column("PCK5")]
+        [NotMapped]
         public decimal PCK5 { get; set; } = 0;
 
-        [Column("PCK6")]
+        [NotMapped]
         public decimal PCK6 { get; set; } = 0;
 
-        [Column("PCK7")]
+        [NotMapped]
         public decimal PCK7 { get; set; } = 0;
 
-        [Column("PCK8")]
+        [NotMapped]
         public decimal PCK8 { get; set; } = 0;
 
-        [Column("PCK9")]
+        [NotMapped]
         public decimal PCK9 { get; set; } = 0;
 
-        [Column("PCK10")]
+        [NotMapped]
         public decimal PCK10 { get; set; } = 0;
 
-        [Column("PCK11")]
+        [NotMapped]
         public decimal PCK11 { get; set; } = 0;
 
-        [Column("PCK12")]
+        [NotMapped]
         public decimal PCK12 { get; set; } = 0;
 
-        [Column("PCK13")]
+        [NotMapped]
         public decimal PCK13 { get; set; } = 0;
 
-        [Column("PCK14")]
+        [NotMapped]
         public decimal PCK14 { get; set; } = 0;
 
-        [Column("PCK15")]
+        [NotMapped]
         public decimal PCK15 { get; set; } = 0;
 
-        [Column("PCK16")]
+        [NotMapped]
         public decimal PCK16 { get; set; } = 0;
 
-        [Column("PCK17")]
+        [NotMapped]
         public decimal PCK17 { get; set; } = 0;
 
         [Column("TOPCK")]
@@ -156,5 +160,8 @@ namespace KVM_ERP.Models
 
         [Column("ATRANDID")]
         public int ATRANDID { get; set; } = 0;
+
+        [Column("SLABVALUE")]
+        public decimal SLABVALUE { get; set; } = 0;
     }
 }

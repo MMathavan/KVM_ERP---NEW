@@ -2157,7 +2157,7 @@
                         <div class="${colClass} mb-3">
                             <div class="form-group">
                                 <label for="bkn_${packingId}">${field.label}:</label>
-                                <input type="number" class="form-control bkn-field" id="bkn_${packingId}" min="0" step="0.001" placeholder="0.000" data-multiplier="${getMultiplierFromLabel(field.label)}">
+                                <input type="number" class="form-control bkn-field" id="bkn_${packingId}" min="0" step="0.001" placeholder="0.000" data-multiplier="${getMultiplierFromLabel(field.label)}" data-packtmid="${field.id}">
                             </div>
                         </div>
                     `;
@@ -2167,7 +2167,7 @@
                         <div class="${colClass} mb-3">
                             <div class="form-group">
                                 <label for="others_${packingId}"><strong>${field.label}:</strong></label>
-                                <input type="number" class="form-control others-field" id="others_${packingId}" min="0" step="0.001" placeholder="0.000" data-multiplier="${getMultiplierFromLabel(field.label)}">
+                                <input type="number" class="form-control others-field" id="others_${packingId}" min="0" step="0.001" placeholder="0.000" data-multiplier="${getMultiplierFromLabel(field.label)}" data-packtmid="${field.id}">
                             </div>
                         </div>
                     `;
@@ -2178,7 +2178,7 @@
                         <div class="${colClass} mb-3">
                             <div class="form-group">
                                 <label for="pck${pckIndex}_${packingId}">${field.label}:</label>
-                                <input type="number" class="form-control pck-field" id="pck${pckIndex}_${packingId}" min="0" step="0.001" placeholder="0.000" data-multiplier="${getMultiplierFromLabel(field.label)}" data-pck-index="${pckIndex}">
+                                <input type="number" class="form-control pck-field" id="pck${pckIndex}_${packingId}" min="0" step="0.001" placeholder="0.000" data-multiplier="${getMultiplierFromLabel(field.label)}" data-pck-index="${pckIndex}" data-packtmid="${field.id}">
                             </div>
                         </div>
                     `;
@@ -2313,19 +2313,55 @@
             
             // Populate packing fields (no setTimeout - timing controlled by caller)
             console.log('Starting field population...');
-            for (let i = 1; i <= 17; i++) {
-                const val = calculation['PCK' + i];
-                const fieldId = `#pck${i}_${packingId}`;
-                const field = tabPane.find(fieldId);
-                
-                if (val !== null && val !== undefined && val > 0) { // Only log non-zero values
-                    console.log(`PCK${i}: value=${val}, fieldId=${fieldId}, fieldExists=${field.length > 0}`);
-                }
-                
-                if (val !== null && val !== undefined && field.length > 0) {
-                    field.val(val);
-                    if (val > 0) { // Only log successful sets for non-zero values
-                        console.log(`✓ Set ${fieldId} to ${val}`);
+
+            // 1) If we have normalized slab details from the server, use them as the
+            //    source of truth. This matches the new TRANSACTION_PRODUCT_CALCULATION
+            //    design where each PACKTMID/SLABVALUE pair is stored as its own row.
+            if (calculation.SlabDetails && calculation.SlabDetails.length > 0) {
+                console.log('Using SlabDetails from server to populate slab fields. Count =', calculation.SlabDetails.length);
+
+                // Clear existing slab inputs first so we don't mix old values
+                tabPane.find('.pck-field, .bkn-field, .others-field').each(function () {
+                    $(this).val('');
+                });
+
+                // Regular slab / BKN / OTHERS fields all carry data-packtmid attributes.
+                calculation.SlabDetails.forEach(function (slab) {
+                    const packtmid = slab.PACKTMID || slab.Packtmid || slab.packtmid;
+                    const value = slab.SLABVALUE || slab.SlabValue || slab.slabvalue;
+
+                    if (!packtmid || value === undefined || value === null) {
+                        return;
+                    }
+
+                    const $inputs = tabPane.find('[data-packtmid="' + packtmid + '"]');
+                    if ($inputs.length > 0) {
+                        console.log('Setting slab value for PACKTMID', packtmid, 'to', value, 'inputs found:', $inputs.length);
+                        $inputs.each(function () {
+                            $(this).val(value);
+                        });
+                    } else {
+                        console.log('No input found for PACKTMID', packtmid, 'while populating SlabDetails');
+                    }
+                });
+            } else {
+                // 2) Fallback for legacy data: use PCK1..PCK17 mapping (kept for
+                //    backward compatibility with existing rows that still rely on
+                //    PCK columns rather than normalized slab records.
+                for (let i = 1; i <= 17; i++) {
+                    const val = calculation['PCK' + i];
+                    const fieldId = `#pck${i}_${packingId}`;
+                    const field = tabPane.find(fieldId);
+
+                    if (val !== null && val !== undefined && val > 0) { // Only log non-zero values
+                        console.log(`PCK${i}: value=${val}, fieldId=${fieldId}, fieldExists=${field.length > 0}`);
+                    }
+
+                    if (val !== null && val !== undefined && field.length > 0) {
+                        field.val(val);
+                        if (val > 0) { // Only log successful sets for non-zero values
+                            console.log(`✓ Set ${fieldId} to ${val}`);
+                        }
                     }
                 }
             }
@@ -2342,16 +2378,28 @@
                 console.log('Set No of Cases (PCKBOX) field to:', calculation.PCKBOX);
             }
             
-            // Populate BKN field (tab-specific)
-            if (calculation.BKN !== null && calculation.BKN !== undefined) {
-                tabPane.find('.bkn-field').val(calculation.BKN);
-                console.log('Set BKN field to:', calculation.BKN);
-            }
-            
-            // Populate OTHERS field (tab-specific)
-            if (calculation.OTHERS !== null && calculation.OTHERS !== undefined) {
-                tabPane.find('.others-field').val(calculation.OTHERS);
-                console.log('Set OTHERS field to:', calculation.OTHERS);
+            // Populate BKN / OTHERS fields.
+            // - For legacy data (no SlabDetails), use calculation.BKN / calculation.OTHERS.
+            // - For new headless data (with SlabDetails), keep values already populated
+            //   from slab rows so they are not overwritten with 0.
+            const hasSlabDetails = calculation.SlabDetails && calculation.SlabDetails.length > 0;
+
+            if (!hasSlabDetails) {
+                // Legacy behaviour: header row holds BKN / OTHERS
+                if (calculation.BKN !== null && calculation.BKN !== undefined) {
+                    tabPane.find('.bkn-field').val(calculation.BKN);
+                    console.log('Set BKN field to (legacy):', calculation.BKN);
+                }
+
+                if (calculation.OTHERS !== null && calculation.OTHERS !== undefined) {
+                    tabPane.find('.others-field').val(calculation.OTHERS);
+                    console.log('Set OTHERS field to (legacy):', calculation.OTHERS);
+                }
+            } else {
+                // New design: BKN / OTHERS already loaded from SlabDetails via data-packtmid
+                const currentBkn = tabPane.find('.bkn-field').val();
+                const currentOthers = tabPane.find('.others-field').val();
+                console.log('BKN / OTHERS from SlabDetails -> BKN:', currentBkn, 'OTHERS:', currentOthers);
             }
             
             // NOTE: Global fields (date, factory fields, dropdowns) are set once on modal open
@@ -2766,6 +2814,44 @@
                 console.log(`PCK${pckIndex}: value=${value}, fieldId=${fieldId}, inputValue='${inputValue}'`);
             });
             
+            // Build dynamic slab details (PACKTMID + SLABVALUE) for all packing fields
+            const slabDetails = [];
+
+            // Regular slab fields
+            pckFields.each(function() {
+                const packtmid = $(this).data('packtmid');
+                const raw = $(this).val();
+                const value = raw && raw.trim() !== '' ? parseFloat(raw) : 0;
+                if (packtmid && value > 0) {
+                    slabDetails.push({ PACKTMID: packtmid, SLABVALUE: value });
+                }
+            });
+
+            // BKN field (if present)
+            tabPane.find('.bkn-field').each(function() {
+                const packtmid = $(this).data('packtmid');
+                const raw = $(this).val();
+                const value = raw && raw.trim() !== '' ? parseFloat(raw) : 0;
+                if (packtmid && value > 0) {
+                    slabDetails.push({ PACKTMID: packtmid, SLABVALUE: value });
+                }
+            });
+
+            // OTHERS field (if present)
+            tabPane.find('.others-field').each(function() {
+                const packtmid = $(this).data('packtmid');
+                const raw = $(this).val();
+                const value = raw && raw.trim() !== '' ? parseFloat(raw) : 0;
+                if (packtmid && value > 0) {
+                    slabDetails.push({ PACKTMID: packtmid, SLABVALUE: value });
+                }
+            });
+
+            // Attach serialized slab details to form data so server can work fully dynamically
+            if (slabDetails.length > 0) {
+                formData.SlabDetailsJson = JSON.stringify(slabDetails);
+            }
+
             // Also check if we have any PCK fields at all
             if (pckFields.length === 0) {
                 console.log('No PCK fields found! Checking all inputs in tab...');

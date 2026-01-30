@@ -478,6 +478,305 @@ namespace KVM_ERP.Controllers
             }
         }
 
+        private void CalculateProductValuesFromSlabs(TransactionProductCalculation model, List<SlabDetailDto> slabDetails)
+        {
+            if (slabDetails == null || slabDetails.Count == 0)
+            {
+                CalculateProductValues(model);
+                return;
+            }
+
+            model.TOPCK = slabDetails.Sum(s => s.SLABVALUE);
+
+            bool isGradeWeightMode = model.CALCULATIONMODE == 2;
+            System.Diagnostics.Debug.WriteLine($"Calculating from slabs in {(isGradeWeightMode ? "Grade Weight" : "Packing")} mode");
+
+            if (isGradeWeightMode)
+            {
+                model.PCKLVALUE = 0;
+                model.AVGPCKVALUE = 0;
+                model.TOTALPNDS = 0;
+                model.TOTALYELDCOUNTS = 0;
+
+                model.PCKKGWGT = 0;
+                model.WASTEPWGT = model.WASTEWGT;
+
+                if (model.KGWGT > 0 && model.TOPCK > 0)
+                {
+                    model.PCKKGWGT = model.KGWGT * model.TOPCK;
+                    model.WASTEPWGT = model.PCKKGWGT + model.WASTEWGT;
+                }
+
+                if (model.KGWGT > 0 && model.YELDPERCENT > 0 && model.TOPCK > 0)
+                {
+                    if (model.PCKKGWGT == 0)
+                    {
+                        model.PCKKGWGT = model.KGWGT * model.TOPCK;
+                        model.WASTEPWGT = model.PCKKGWGT + model.WASTEWGT;
+                    }
+
+                    model.FACTORYWGT = model.WASTEPWGT / (model.YELDPERCENT / 100);
+                }
+                else
+                {
+                    model.FACTORYWGT = model.TOPCK + model.WASTEWGT;
+                }
+
+                System.Diagnostics.Debug.WriteLine($"Grade Weight calculation (dynamic slabs): Slab={model.TOPCK}, Peeled={model.WASTEWGT}, KGWGT={model.KGWGT}, YELD%={model.YELDPERCENT}, PCKKGWGT={model.PCKKGWGT}, WASTEPWGT={model.WASTEPWGT}, Factory Weight={model.FACTORYWGT}");
+            }
+            else if (model.TOPCK > 0)
+            {
+                model.PCKLVALUE = CalculatePCKLValueFromSlabs(model, slabDetails);
+
+                model.AVGPCKVALUE = model.PCKLVALUE / model.TOPCK;
+
+                model.TOTALPNDS = model.AVGPCKVALUE * model.PNDSVALUE;
+
+                if (model.YELDPERCENT > 0)
+                {
+                    model.TOTALYELDCOUNTS = model.TOTALPNDS * (model.YELDPERCENT / 100);
+                }
+
+                model.PCKKGWGT = model.KGWGT * model.TOPCK;
+
+                model.WASTEPWGT = model.PCKKGWGT + model.WASTEWGT;
+
+                if (model.YELDPERCENT > 0)
+                {
+                    model.FACTORYWGT = model.WASTEPWGT / (model.YELDPERCENT / 100);
+                }
+            }
+        }
+
+        private void SaveProductSlabDetails(TransactionProductCalculation model, List<SlabDetailDto> slabDetails)
+        {
+            if (slabDetails == null || slabDetails.Count == 0)
+            {
+                return;
+            }
+
+            // Delete existing slab details for this TRANDID + PACKMID
+            db.Database.ExecuteSqlCommand(
+                @"DELETE FROM TRANSACTION_PRODUCT_CALCULATION WHERE TRANDID = @p0 AND PACKMID = @p1 AND PACKTMID <> 0",
+                model.TRANDID, model.PACKMID);
+
+            // Group by PACKTMID so that we store one row per packing type with aggregated slab value
+            var groupedSlabs = slabDetails
+                .GroupBy(s => s.PACKTMID)
+                .Select(g => new { PACKTMID = g.Key, SLABVALUE = g.Sum(x => x.SLABVALUE) })
+                .ToList();
+
+            // Generate a unique TRANPID sequence for new slab rows
+            var nextTranPid = GetNextTransactionProductId();
+
+            var currentUserId = Session["CUSRID"]?.ToString();
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                currentUserId = User?.Identity?.Name ?? "SYSTEM";
+            }
+
+            foreach (var slab in groupedSlabs)
+            {
+                if (slab.SLABVALUE <= 0)
+                {
+                    continue;
+                }
+
+                var detail = new TransactionProductCalculation
+                {
+                    TRANPID = nextTranPid++,
+                    TRANMID = model.TRANMID,
+                    TRANDID = model.TRANDID,
+                    PACKMID = model.PACKMID,
+                    PACKTMID = slab.PACKTMID,
+                    SLABVALUE = slab.SLABVALUE,
+                    // Copy all calculated and common fields from header so each slab row
+                    // has the same data as the main calculation row
+                    TOPCK = model.TOPCK,
+                    PCKLVALUE = model.PCKLVALUE,
+                    AVGPCKVALUE = model.AVGPCKVALUE,
+                    PNDSVALUE = model.PNDSVALUE,
+                    TOTALPNDS = model.TOTALPNDS,
+                    YELDPERCENT = model.YELDPERCENT,
+                    TOTALYELDCOUNTS = model.TOTALYELDCOUNTS,
+                    KGWGT = model.KGWGT,
+                    PCKKGWGT = model.PCKKGWGT,
+                    PCKBOX = model.PCKBOX,
+                    WASTEWGT = model.WASTEWGT,
+                    WASTEPWGT = model.WASTEPWGT,
+                    FACTORYWGT = model.FACTORYWGT,
+                    FACAVGWGT = model.FACAVGWGT,
+                    FACAVGCOUNT = model.FACAVGCOUNT,
+                    BKN = model.BKN,
+                    OTHERS = model.OTHERS,
+                    GRADEID = model.GRADEID,
+                    PCLRID = model.PCLRID,
+                    RCVDTID = model.RCVDTID,
+                    ATRANDID = model.ATRANDID,
+                    CALCULATIONMODE = model.CALCULATIONMODE,
+                    PRODDATE = model.PRODDATE,
+                    CUSRID = currentUserId,
+                    LMUSRID = currentUserId,
+                    DISPSTATUS = 0,
+                    PRCSDATE = DateTime.Now
+                };
+
+                db.TransactionProductCalculations.Add(detail);
+            }
+        }
+
+        private void SaveProductSlabDetails(TransactionProductCalculation model)
+        {
+            // Delete existing slab details for this TRANDID + PACKMID
+            db.Database.ExecuteSqlCommand(
+                @"DELETE FROM TRANSACTION_PRODUCT_CALCULATION WHERE TRANDID = @p0 AND PACKMID = @p1 AND PACKTMID <> 0",
+                model.TRANDID, model.PACKMID);
+
+            // Load packing types for this packing master in original database order
+            var packingTypes = db.PackingTypeMasters
+                .Where(pt => pt.PACKMID == model.PACKMID && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null))
+                .OrderBy(pt => pt.PACKTMCODE)
+                .ToList();
+
+            if (!packingTypes.Any())
+            {
+                return;
+            }
+
+            // Generate a unique TRANPID sequence for legacy PCK-based slab rows
+            var nextTranPid = GetNextTransactionProductId();
+
+            // Legacy PCK-based values
+            var pckValues = new[]
+            {
+                model.PCK1, model.PCK2, model.PCK3, model.PCK4, model.PCK5,
+                model.PCK6, model.PCK7, model.PCK8, model.PCK9, model.PCK10,
+                model.PCK11, model.PCK12, model.PCK13, model.PCK14, model.PCK15,
+                model.PCK16, model.PCK17
+            };
+
+            int pckIndex = 0;
+            var currentUserId = Session["CUSRID"]?.ToString();
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                currentUserId = User?.Identity?.Name ?? "SYSTEM";
+            }
+
+            int? bknPacktmId = null;
+            int? othersPacktmId = null;
+
+            foreach (var packingType in packingTypes)
+            {
+                var desc = packingType.PACKTMDESC ?? string.Empty;
+                bool isBKN = IsBknLabel(desc);
+                bool isOTHERS = IsOthersLabel(desc);
+
+                if (isBKN)
+                {
+                    // Capture BKN PACKTMID; actual insert is delegated to stored procedure
+                    bknPacktmId = packingType.PACKTMID;
+                }
+                else if (isOTHERS)
+                {
+                    // Capture OTHERS PACKTMID; actual insert is delegated to stored procedure
+                    othersPacktmId = packingType.PACKTMID;
+                }
+                else
+                {
+                    // Regular slab columns use sequential PCK1..PCK17 mapping
+                    if (pckIndex < pckValues.Length)
+                    {
+                        var value = pckValues[pckIndex];
+                        if (value > 0)
+                        {
+                            var detail = new TransactionProductCalculation
+                            {
+                                TRANPID = nextTranPid++,
+                                TRANMID = model.TRANMID,
+                                TRANDID = model.TRANDID,
+                                PACKMID = model.PACKMID,
+                                PACKTMID = packingType.PACKTMID,
+                                SLABVALUE = value,
+                                // Full calculation fields copied from header
+                                TOPCK = model.TOPCK,
+                                PCKLVALUE = model.PCKLVALUE,
+                                AVGPCKVALUE = model.AVGPCKVALUE,
+                                PNDSVALUE = model.PNDSVALUE,
+                                TOTALPNDS = model.TOTALPNDS,
+                                YELDPERCENT = model.YELDPERCENT,
+                                TOTALYELDCOUNTS = model.TOTALYELDCOUNTS,
+                                KGWGT = model.KGWGT,
+                                PCKKGWGT = model.PCKKGWGT,
+                                PCKBOX = model.PCKBOX,
+                                WASTEWGT = model.WASTEWGT,
+                                WASTEPWGT = model.WASTEPWGT,
+                                FACTORYWGT = model.FACTORYWGT,
+                                FACAVGWGT = model.FACAVGWGT,
+                                FACAVGCOUNT = model.FACAVGCOUNT,
+                                GRADEID = model.GRADEID,
+                                PCLRID = model.PCLRID,
+                                RCVDTID = model.RCVDTID,
+                                ATRANDID = model.ATRANDID,
+                                CALCULATIONMODE = model.CALCULATIONMODE,
+                                PRODDATE = model.PRODDATE,
+                                CUSRID = currentUserId,
+                                LMUSRID = currentUserId,
+                                DISPSTATUS = 0,
+                                PRCSDATE = DateTime.Now
+                            };
+
+                            db.TransactionProductCalculations.Add(detail);
+                        }
+
+                        pckIndex++;
+                    }
+                }
+            }
+
+            // Delegate BKN and OTHERS slab row creation to stored procedure so future
+            // business rule changes can be made in SQL only.
+            if ((model.BKN > 0 && bknPacktmId.HasValue) || (model.OTHERS > 0 && othersPacktmId.HasValue))
+            {
+                db.Database.ExecuteSqlCommand(
+                    @"EXEC USP_SaveBknOthersSlabs 
+                        @p0, @p1, @p2,
+                        @p3, @p4,
+                        @p5, @p6,
+                        @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27, @p28",
+                    model.TRANMID,
+                    model.TRANDID,
+                    model.PACKMID,
+                    bknPacktmId.HasValue ? (object)bknPacktmId.Value : DBNull.Value,
+                    othersPacktmId.HasValue ? (object)othersPacktmId.Value : DBNull.Value,
+                    model.BKN,
+                    model.OTHERS,
+                    model.TOPCK,
+                    model.PCKLVALUE,
+                    model.AVGPCKVALUE,
+                    model.PNDSVALUE,
+                    model.TOTALPNDS,
+                    model.YELDPERCENT,
+                    model.TOTALYELDCOUNTS,
+                    model.KGWGT,
+                    model.PCKKGWGT,
+                    model.PCKBOX,
+                    model.WASTEWGT,
+                    model.WASTEPWGT,
+                    model.FACTORYWGT,
+                    model.FACAVGWGT,
+                    model.FACAVGCOUNT,
+                    model.GRADEID,
+                    model.PCLRID,
+                    model.RCVDTID,
+                    model.ATRANDID,
+                    model.CALCULATIONMODE,
+                    model.PRODDATE.HasValue ? (object)model.PRODDATE.Value : DBNull.Value,
+                    currentUserId,
+                    currentUserId
+                );
+            }
+        }
+
         // JSON: Products by Material Group (enabled only)
         public JsonResult GetProducts(int groupId)
         {
@@ -674,6 +973,12 @@ namespace KVM_ERP.Controllers
             public int MTRLCOUNTS { get; set; }
         }
 
+        private class SlabDetailDto
+        {
+            public int PACKTMID { get; set; }
+            public decimal SLABVALUE { get; set; }
+        }
+
         // Get packing type fields based on packing master
         public JsonResult GetPackingTypeFields(int packingId)
         {
@@ -721,18 +1026,30 @@ namespace KVM_ERP.Controllers
             try
             {
                 System.Diagnostics.Debug.WriteLine($"Looking for calculation: TRANDID={trandid}, PACKMID={packingId}");
-                
+
+                // Prefer header row (PACKTMID = 0) when present, otherwise fall back
+                // to the first available slab row (PACKTMID <> 0). This supports both
+                // legacy data (with header) and new design (headerless).
                 var calculation = db.TransactionProductCalculations
-                    .FirstOrDefault(t => t.TRANDID == trandid && t.PACKMID == packingId);
-                    
+                    .Where(t => t.TRANDID == trandid && t.PACKMID == packingId)
+                    .OrderBy(t => t.PACKTMID)
+                    .ThenBy(t => t.TRANPID)
+                    .FirstOrDefault();
+
                 if (calculation != null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Found calculation: TRANPID={calculation.TRANPID}");
-                    System.Diagnostics.Debug.WriteLine($"PCK1: {calculation.PCK1}, PCK2: {calculation.PCK2}, PCK3: {calculation.PCK3}");
-                    System.Diagnostics.Debug.WriteLine($"PNDSVALUE: {calculation.PNDSVALUE}, YELDPERCENT: {calculation.YELDPERCENT}");
-                    System.Diagnostics.Debug.WriteLine($"PRODDATE: {calculation.PRODDATE}");
-                    System.Diagnostics.Debug.WriteLine($"CALCULATIONMODE: {calculation.CALCULATIONMODE}");
-                    
+                    // Load normalized slab detail rows (one per PACKTMID <> 0) for this TRANDID + PACKMID
+                    var slabDetails = db.TransactionProductCalculations
+                        .Where(t => t.TRANDID == trandid && t.PACKMID == packingId && t.PACKTMID != 0)
+                        .Select(t => new
+                        {
+                            t.PACKTMID,
+                            t.SLABVALUE
+                        })
+                        .ToList();
+
+                    System.Diagnostics.Debug.WriteLine($"Found calculation header: TRANPID={calculation.TRANPID}, slab rows={slabDetails.Count}");
+
                     // Create a custom object to ensure proper JSON serialization of dates
                     var result = new
                     {
@@ -784,14 +1101,16 @@ namespace KVM_ERP.Controllers
                             DISPSTATUS = calculation.DISPSTATUS,
                             CUSRID = calculation.CUSRID,
                             LMUSRID = calculation.LMUSRID,
-                            PRCSDATE = calculation.PRCSDATE
+                            PRCSDATE = calculation.PRCSDATE,
+                            // Normalized slab rows so the client can repopulate dynamic slab fields
+                            SlabDetails = slabDetails
                         }
                     };
-                    
+
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
-                
-                System.Diagnostics.Debug.WriteLine("No calculation found");
+
+                System.Diagnostics.Debug.WriteLine("No calculation found for specified TRANDID and PACKMID");
                 return Json(new { success = false, message = "No calculation found" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -807,70 +1126,96 @@ namespace KVM_ERP.Controllers
             try
             {
                 System.Diagnostics.Debug.WriteLine($"Batch loading calculations for TRANDID={trandid}");
-                
-                // NOTE: We must materialize the query *before* calling ToString on PRODDATE,
-                // otherwise LINQ-to-Entities will throw a translation error.
+
+                // Materialize all rows (header + slab detail rows) first
                 var rawCalculations = db.TransactionProductCalculations
                     .Where(t => t.TRANDID == trandid)
                     .ToList();
 
+                // Group by TRANDID + PACKMID so we can support both legacy header rows
+                // (PACKTMID = 0) and new headerless rows (only PACKTMID <> 0).
                 var calculations = rawCalculations
-                    .Select(calculation => new
+                    .GroupBy(c => new { c.TRANDID, c.PACKMID })
+                    .Select(group =>
                     {
-                        TRANPID = calculation.TRANPID,
-                        TRANDID = calculation.TRANDID,
-                        PACKMID = calculation.PACKMID,
-                        PCK1 = calculation.PCK1,
-                        PCK2 = calculation.PCK2,
-                        PCK3 = calculation.PCK3,
-                        PCK4 = calculation.PCK4,
-                        PCK5 = calculation.PCK5,
-                        PCK6 = calculation.PCK6,
-                        PCK7 = calculation.PCK7,
-                        PCK8 = calculation.PCK8,
-                        PCK9 = calculation.PCK9,
-                        PCK10 = calculation.PCK10,
-                        PCK11 = calculation.PCK11,
-                        PCK12 = calculation.PCK12,
-                        PCK13 = calculation.PCK13,
-                        PCK14 = calculation.PCK14,
-                        PCK15 = calculation.PCK15,
-                        PCK16 = calculation.PCK16,
-                        PCK17 = calculation.PCK17,
-                        TOPCK = calculation.TOPCK,
-                        PCKLVALUE = calculation.PCKLVALUE,
-                        AVGPCKVALUE = calculation.AVGPCKVALUE,
-                        PNDSVALUE = calculation.PNDSVALUE,
-                        TOTALPNDS = calculation.TOTALPNDS,
-                        YELDPERCENT = calculation.YELDPERCENT,
-                        TOTALYELDCOUNTS = calculation.TOTALYELDCOUNTS,
-                        KGWGT = calculation.KGWGT,
-                        PCKKGWGT = calculation.PCKKGWGT,
-                        PCKBOX = calculation.PCKBOX,
-                        WASTEWGT = calculation.WASTEWGT,
-                        WASTEPWGT = calculation.WASTEPWGT,
-                        FACTORYWGT = calculation.FACTORYWGT,
-                        FACAVGWGT = calculation.FACAVGWGT,
-                        FACAVGCOUNT = calculation.FACAVGCOUNT,
-                        // IMPORTANT: format PRODDATE as a plain date string to avoid timezone shifts on the client
-                        PRODDATE = calculation.PRODDATE.HasValue
-                            ? calculation.PRODDATE.Value.ToString("yyyy-MM-dd")
-                            : null,
-                        CALCULATIONMODE = calculation.CALCULATIONMODE,
-                        GRADEID = calculation.GRADEID,
-                        PCLRID = calculation.PCLRID,
-                        RCVDTID = calculation.RCVDTID,
-                        BKN = calculation.BKN,
-                        OTHERS = calculation.OTHERS,
-                        DISPSTATUS = calculation.DISPSTATUS,
-                        CUSRID = calculation.CUSRID,
-                        LMUSRID = calculation.LMUSRID,
-                        PRCSDATE = calculation.PRCSDATE
+                        // Prefer header if present, otherwise use first slab row
+                        var calculation = group
+                            .OrderBy(c => c.PACKTMID) // 0 first when exists
+                            .ThenBy(c => c.TRANPID)
+                            .FirstOrDefault();
+
+                        if (calculation == null)
+                        {
+                            return null;
+                        }
+
+                        return new
+                        {
+                            TRANPID = calculation.TRANPID,
+                            TRANDID = calculation.TRANDID,
+                            PACKMID = calculation.PACKMID,
+                            PCK1 = calculation.PCK1,
+                            PCK2 = calculation.PCK2,
+                            PCK3 = calculation.PCK3,
+                            PCK4 = calculation.PCK4,
+                            PCK5 = calculation.PCK5,
+                            PCK6 = calculation.PCK6,
+                            PCK7 = calculation.PCK7,
+                            PCK8 = calculation.PCK8,
+                            PCK9 = calculation.PCK9,
+                            PCK10 = calculation.PCK10,
+                            PCK11 = calculation.PCK11,
+                            PCK12 = calculation.PCK12,
+                            PCK13 = calculation.PCK13,
+                            PCK14 = calculation.PCK14,
+                            PCK15 = calculation.PCK15,
+                            PCK16 = calculation.PCK16,
+                            PCK17 = calculation.PCK17,
+                            TOPCK = calculation.TOPCK,
+                            PCKLVALUE = calculation.PCKLVALUE,
+                            AVGPCKVALUE = calculation.AVGPCKVALUE,
+                            PNDSVALUE = calculation.PNDSVALUE,
+                            TOTALPNDS = calculation.TOTALPNDS,
+                            YELDPERCENT = calculation.YELDPERCENT,
+                            TOTALYELDCOUNTS = calculation.TOTALYELDCOUNTS,
+                            KGWGT = calculation.KGWGT,
+                            PCKKGWGT = calculation.PCKKGWGT,
+                            PCKBOX = calculation.PCKBOX,
+                            WASTEWGT = calculation.WASTEWGT,
+                            WASTEPWGT = calculation.WASTEPWGT,
+                            FACTORYWGT = calculation.FACTORYWGT,
+                            FACAVGWGT = calculation.FACAVGWGT,
+                            FACAVGCOUNT = calculation.FACAVGCOUNT,
+                            // IMPORTANT: format PRODDATE as a plain date string to avoid timezone shifts on the client
+                            PRODDATE = calculation.PRODDATE.HasValue
+                                ? calculation.PRODDATE.Value.ToString("yyyy-MM-dd")
+                                : null,
+                            CALCULATIONMODE = calculation.CALCULATIONMODE,
+                            GRADEID = calculation.GRADEID,
+                            PCLRID = calculation.PCLRID,
+                            RCVDTID = calculation.RCVDTID,
+                            BKN = calculation.BKN,
+                            OTHERS = calculation.OTHERS,
+                            DISPSTATUS = calculation.DISPSTATUS,
+                            CUSRID = calculation.CUSRID,
+                            LMUSRID = calculation.LMUSRID,
+                            PRCSDATE = calculation.PRCSDATE,
+                            // Attach normalized slab rows for this TRANDID + PACKMID (PACKTMID <> 0)
+                            SlabDetails = group
+                                .Where(s => s.PACKTMID != 0)
+                                .Select(s => new
+                                {
+                                    s.PACKTMID,
+                                    s.SLABVALUE
+                                })
+                                .ToList()
+                        };
                     })
+                    .Where(x => x != null)
                     .ToList();
-                
-                System.Diagnostics.Debug.WriteLine($"Found {calculations.Count} calculations");
-                
+
+                System.Diagnostics.Debug.WriteLine($"Found {calculations.Count} calculation headers");
+
                 return Json(new { success = true, calculations = calculations }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -888,6 +1233,23 @@ namespace KVM_ERP.Controllers
             {
                 // Manually parse form data to handle empty strings properly
                 var model = ParseFormToModel(form);
+
+                // Parse dynamic slab details when provided from the client
+                List<SlabDetailDto> slabDetails = null;
+                var slabDetailsJson = form["SlabDetailsJson"];
+                if (!string.IsNullOrWhiteSpace(slabDetailsJson))
+                {
+                    try
+                    {
+                        slabDetails = JsonConvert.DeserializeObject<List<SlabDetailDto>>(slabDetailsJson);
+                        System.Diagnostics.Debug.WriteLine($"Parsed {slabDetails?.Count ?? 0} slab detail rows from SlabDetailsJson");
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error parsing SlabDetailsJson: {ex.Message}");
+                        slabDetails = null;
+                    }
+                }
                 
                 // Debug: Log received model data
                 System.Diagnostics.Debug.WriteLine($"Received calculation for TRANDID: {model.TRANDID}, PACKMID: {model.PACKMID}");
@@ -928,11 +1290,18 @@ namespace KVM_ERP.Controllers
                 model.TRANMID = transactionDetail;
 
                 // Calculate derived values
-                CalculateProductValues(model);
+                if (slabDetails != null && slabDetails.Any())
+                {
+                    CalculateProductValuesFromSlabs(model, slabDetails);
+                }
+                else
+                {
+                    CalculateProductValues(model);
+                }
 
-                // Check if record exists for this specific TRANDID and PACKMID combination
+                // Check if header record exists for this specific TRANDID and PACKMID combination
                 var existing = db.TransactionProductCalculations
-                    .FirstOrDefault(t => t.TRANDID == model.TRANDID && t.PACKMID == model.PACKMID);
+                    .FirstOrDefault(t => t.TRANDID == model.TRANDID && t.PACKMID == model.PACKMID && t.PACKTMID == 0);
                 
                 if (existing != null)
                 {
@@ -943,20 +1312,35 @@ namespace KVM_ERP.Controllers
                 }
                 else
                 {
-                    // Create new record
+                    // New design: do not create a separate header row with PACKTMID = 0.
+                    // Use the in-memory model only for calculations and let slab rows
+                    // (PACKTMID <> 0) carry the persisted data.
+
+                    model.TRANPID = GetNextTransactionProductId();
                     model.CUSRID = User?.Identity?.Name ?? "System";
                     model.LMUSRID = User?.Identity?.Name ?? "System";
                     model.DISPSTATUS = 0;
                     model.PRCSDATE = DateTime.Now;
-                    
-                    db.TransactionProductCalculations.Add(model);
+                }
+
+                // Maintain normalized slab details table (one row per PACKTMID)
+                if (slabDetails != null && slabDetails.Any())
+                {
+                    SaveProductSlabDetails(model, slabDetails);
+                }
+                else
+                {
+                    SaveProductSlabDetails(model);
                 }
 
                 db.SaveChanges();
                 
-                // Return the TRANPID for tracking
+                // Return the TRANPID for tracking (prefer header when present, otherwise any slab row)
                 var savedRecord = db.TransactionProductCalculations
-                    .FirstOrDefault(t => t.TRANDID == model.TRANDID && t.PACKMID == model.PACKMID);
+                    .Where(t => t.TRANDID == model.TRANDID && t.PACKMID == model.PACKMID)
+                    .OrderBy(t => t.PACKTMID)
+                    .ThenBy(t => t.TRANPID)
+                    .FirstOrDefault();
                 
                 return Json(new { 
                     success = true, 
@@ -969,6 +1353,18 @@ namespace KVM_ERP.Controllers
                 System.Diagnostics.Debug.WriteLine($"EntityCommandExecutionException: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
                 return Json(new { success = false, message = "Database error: " + (ex.InnerException?.Message ?? ex.Message) });
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateException ex)
+            {
+                // Log full inner exception chain so we can see the actual SQL/server error
+                System.Diagnostics.Debug.WriteLine($"DbUpdateException: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Inner: {ex.InnerException?.Message}");
+                System.Diagnostics.Debug.WriteLine($"Inner-Inner: {ex.InnerException?.InnerException?.Message}");
+
+                var innerMost = ex.InnerException?.InnerException ?? ex.InnerException;
+                var message = innerMost?.Message ?? ex.Message;
+
+                return Json(new { success = false, message = "Database error: " + message });
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException ex)
             {
@@ -1129,6 +1525,41 @@ namespace KVM_ERP.Controllers
                         pckIndex++;
                     }
                 }
+            }
+
+            return pcklValue;
+        }
+
+        private decimal CalculatePCKLValueFromSlabs(TransactionProductCalculation model, List<SlabDetailDto> slabDetails)
+        {
+            if (slabDetails == null || slabDetails.Count == 0)
+            {
+                return 0;
+            }
+
+            var packtmIds = slabDetails.Select(s => s.PACKTMID).Distinct().ToList();
+
+            var packingTypes = db.PackingTypeMasters
+                .Where(pt => pt.PACKMID == model.PACKMID && packtmIds.Contains(pt.PACKTMID) && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null))
+                .ToList();
+
+            decimal pcklValue = 0;
+
+            foreach (var detail in slabDetails)
+            {
+                if (detail.SLABVALUE <= 0)
+                {
+                    continue;
+                }
+
+                var packingType = packingTypes.FirstOrDefault(pt => pt.PACKTMID == detail.PACKTMID);
+                if (packingType == null)
+                {
+                    continue;
+                }
+
+                decimal multiplier = ExtractMultiplierFromDescription(packingType.PACKTMDESC);
+                pcklValue += detail.SLABVALUE * multiplier;
             }
 
             return pcklValue;
@@ -1330,17 +1761,6 @@ namespace KVM_ERP.Controllers
 
         private void SanitizePCKValues(TransactionProductCalculation model)
         {
-            // Ensure all PCK values are properly null if they are zero or invalid
-            // This prevents EntityCommandExecutionException when saving to database
-            
-            // PCK fields are now non-nullable with default value 0
-            // No need to convert 0 to null anymore
-            
-            // Don't convert these to null as they might legitimately be 0
-            // Only convert if they are exactly 0 and we want to store null instead
-            // Keep PNDSVALUE, YELDPERCENT, KGWGT, WASTEWGT as they are since 0 might be valid
-            
-            // Ensure required fields have valid values
             if (model.TRANDID <= 0)
             {
                 throw new ArgumentException("TRANDID is required and must be greater than 0");
@@ -1352,6 +1772,20 @@ namespace KVM_ERP.Controllers
             }
             
             System.Diagnostics.Debug.WriteLine("PCK values sanitized - zero values converted to null");
+        }
+
+        private int GetNextTransactionProductId()
+        {
+            var maxLocal = db.TransactionProductCalculations.Local.Any()
+                ? db.TransactionProductCalculations.Local.Max(t => t.TRANPID)
+                : 0;
+
+            var maxDb = db.TransactionProductCalculations.Any()
+                ? db.TransactionProductCalculations.Max(t => t.TRANPID)
+                : 0;
+
+            var max = Math.Max(maxLocal, maxDb);
+            return max + 1;
         }
 
         // Quality Check Methods
@@ -2136,24 +2570,68 @@ namespace KVM_ERP.Controllers
             </div>
         </div>";
 
-                    // Get packing type fields for this packing master
-                    var packingFields = GetPackingTypeFieldsForPDF(packingId);
-                    
-                    var pckValues = new[] { 
-                        calculation.PCK1, calculation.PCK2, calculation.PCK3, calculation.PCK4, 
-                        calculation.PCK5, calculation.PCK6, calculation.PCK7, calculation.PCK8, 
-                        calculation.PCK9, calculation.PCK10, calculation.PCK11, calculation.PCK12, 
-                        calculation.PCK13, calculation.PCK14, calculation.PCK15, calculation.PCK16, 
-                        calculation.PCK17 
-                    };
-
-                    // Build horizontal table with non-zero values
+                    // Build packing details from either legacy header PCK fields or
+                    // new headless normalized slab rows, so that PDF always reflects
+                    // the latest slab values shown in the UI.
                     var nonZeroPackings = new System.Collections.Generic.List<(string label, decimal value)>();
-                    for (int i = 0; i < pckValues.Length && i < packingFields.Count; i++)
+
+                    bool hasHeaderRow = packingGroup.Any(c => c.PACKTMID == 0);
+
+                    if (hasHeaderRow)
                     {
-                        if (pckValues[i] > 0)
+                        // Legacy mode: use header row PCK1..PCK17 mapped to packing type labels
+                        var headerCalc = packingGroup
+                            .Where(c => c.PACKTMID == 0)
+                            .OrderBy(c => c.TRANPID)
+                            .First();
+
+                        var packingFields = GetPackingTypeFieldsForPDF(packingId);
+
+                        var pckValues = new[]
                         {
-                            nonZeroPackings.Add((packingFields[i], pckValues[i]));
+                            headerCalc.PCK1, headerCalc.PCK2, headerCalc.PCK3, headerCalc.PCK4,
+                            headerCalc.PCK5, headerCalc.PCK6, headerCalc.PCK7, headerCalc.PCK8,
+                            headerCalc.PCK9, headerCalc.PCK10, headerCalc.PCK11, headerCalc.PCK12,
+                            headerCalc.PCK13, headerCalc.PCK14, headerCalc.PCK15, headerCalc.PCK16,
+                            headerCalc.PCK17
+                        };
+
+                        for (int i = 0; i < pckValues.Length && i < packingFields.Count; i++)
+                        {
+                            if (pckValues[i] > 0)
+                            {
+                                nonZeroPackings.Add((packingFields[i], pckValues[i]));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Headless mode: derive slab values directly from normalized
+                        // rows (PACKTMID <> 0) using packing type descriptions.
+                        var packingTypes = db.PackingTypeMasters
+                            .Where(pt => pt.PACKMID == packingId && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null))
+                            .OrderBy(pt => pt.PACKTMCODE)
+                            .ToList();
+
+                        foreach (var pt in packingTypes)
+                        {
+                            var desc = pt.PACKTMDESC ?? string.Empty;
+
+                            // Skip BKN / OTHERS here; they are appended explicitly below
+                            if (IsBknLabel(desc) || IsOthersLabel(desc))
+                            {
+                                continue;
+                            }
+
+                            var slabRow = packingGroup
+                                .Where(c => c.PACKTMID == pt.PACKTMID)
+                                .OrderByDescending(c => c.SLABVALUE)
+                                .FirstOrDefault();
+
+                            if (slabRow != null && slabRow.SLABVALUE > 0)
+                            {
+                                nonZeroPackings.Add((desc, slabRow.SLABVALUE));
+                            }
                         }
                     }
 
@@ -2166,7 +2644,7 @@ namespace KVM_ERP.Controllers
                     {
                         nonZeroPackings.Add(("Others", calculation.OTHERS));
                     }
-                    
+
                     html += @"
         <div style='margin: 15px 0;'>
             <div style='background-color: #6c757d; color: white; padding: 10px; font-weight: 600; margin-bottom: 10px; text-align: center; font-size: 13px;'>Packing Details</div>
@@ -2525,24 +3003,68 @@ namespace KVM_ERP.Controllers
             </div>
         </div>";
 
-                        // Get packing type fields for this packing master
-                        var packingFields = GetPackingTypeFieldsForPDF(packingId);
-                        
-                        var pckValues = new[] { 
-                            calculation.PCK1, calculation.PCK2, calculation.PCK3, calculation.PCK4, 
-                            calculation.PCK5, calculation.PCK6, calculation.PCK7, calculation.PCK8, 
-                            calculation.PCK9, calculation.PCK10, calculation.PCK11, calculation.PCK12, 
-                            calculation.PCK13, calculation.PCK14, calculation.PCK15, calculation.PCK16, 
-                            calculation.PCK17 
-                        };
-
-                        // Build horizontal table with non-zero values
+                        // Build packing details from either legacy header PCK fields or
+                        // new headless normalized slab rows, so that PDF always reflects
+                        // the latest slab values shown in the UI.
                         var nonZeroPackings = new System.Collections.Generic.List<(string label, decimal value)>();
-                        for (int i = 0; i < pckValues.Length && i < packingFields.Count; i++)
+
+                        bool hasHeaderRow = packingGroup.Any(c => c.PACKTMID == 0);
+
+                        if (hasHeaderRow)
                         {
-                            if (pckValues[i] > 0)
+                            // Legacy mode: use header row PCK1..PCK17 mapped to packing type labels
+                            var headerCalc = packingGroup
+                                .Where(c => c.PACKTMID == 0)
+                                .OrderBy(c => c.TRANPID)
+                                .First();
+
+                            var packingFields = GetPackingTypeFieldsForPDF(packingId);
+
+                            var pckValues = new[]
                             {
-                                nonZeroPackings.Add((packingFields[i], pckValues[i]));
+                                headerCalc.PCK1, headerCalc.PCK2, headerCalc.PCK3, headerCalc.PCK4,
+                                headerCalc.PCK5, headerCalc.PCK6, headerCalc.PCK7, headerCalc.PCK8,
+                                headerCalc.PCK9, headerCalc.PCK10, headerCalc.PCK11, headerCalc.PCK12,
+                                headerCalc.PCK13, headerCalc.PCK14, headerCalc.PCK15, headerCalc.PCK16,
+                                headerCalc.PCK17
+                            };
+
+                            for (int i = 0; i < pckValues.Length && i < packingFields.Count; i++)
+                            {
+                                if (pckValues[i] > 0)
+                                {
+                                    nonZeroPackings.Add((packingFields[i], pckValues[i]));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Headless mode: derive slab values directly from normalized
+                            // rows (PACKTMID <> 0) using packing type descriptions.
+                            var packingTypes = db.PackingTypeMasters
+                                .Where(pt => pt.PACKMID == packingId && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null))
+                                .OrderBy(pt => pt.PACKTMCODE)
+                                .ToList();
+
+                            foreach (var pt in packingTypes)
+                            {
+                                var desc = pt.PACKTMDESC ?? string.Empty;
+
+                                // Skip BKN / OTHERS here; they are appended explicitly below
+                                if (IsBknLabel(desc) || IsOthersLabel(desc))
+                                {
+                                    continue;
+                                }
+
+                                var slabRow = packingGroup
+                                    .Where(c => c.PACKTMID == pt.PACKTMID)
+                                    .OrderByDescending(c => c.SLABVALUE)
+                                    .FirstOrDefault();
+
+                                if (slabRow != null && slabRow.SLABVALUE > 0)
+                                {
+                                    nonZeroPackings.Add((desc, slabRow.SLABVALUE));
+                                }
                             }
                         }
 
@@ -2555,7 +3077,7 @@ namespace KVM_ERP.Controllers
                         {
                             nonZeroPackings.Add(("Others", calculation.OTHERS));
                         }
-                        
+
                         html += @"
         <div style='margin: 15px 0;'>
             <div style='background-color: #6c757d; color: white; padding: 10px; font-weight: 600; margin-bottom: 10px; text-align: center; font-size: 13px;'>Packing Details</div>

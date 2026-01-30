@@ -108,25 +108,7 @@ namespace KVM_ERP.Models
             modelBuilder.Entity<MaterialMaster>().Property(m => m.MTRLBRATE).HasPrecision(18, 2);
             
             // Configure TransactionProductCalculation decimal precision for all decimal fields
-            // PCK fields (PCK1-PCK17)
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK1).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK2).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK3).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK4).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK5).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK6).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK7).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK8).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK9).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK10).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK11).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK12).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK13).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK14).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK15).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK16).HasPrecision(18, 3);
-            modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCK17).HasPrecision(18, 3);
-            
+            // (dynamic slab-based model; PCK1-PCK17 are now in-memory only)
             // Calculated fields
             modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.TOPCK).HasPrecision(18, 3);
             modelBuilder.Entity<TransactionProductCalculation>().Property(t => t.PCKLVALUE).HasPrecision(18, 3);

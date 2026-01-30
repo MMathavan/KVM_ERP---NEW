@@ -1470,3 +1470,17 @@ System.Data.DataException: An exception occurred while initializing the database
    at System.Data.Entity.Internal.LazyInternalContext.InitializeDatabaseAction(Action`1 action)
    at System.Data.Entity.Internal.InternalContext.ExecuteSqlCommand(TransactionalBehavior transactionalBehavior, String sql, Object[] parameters)
    at KVM_ERP.MvcApplication.EnsureContentTablesExist() in D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\KVM_ERP\KVM_ERP\KVM_ERP\KVM_ERP\KVM_ERP\Global.asax.cs:line 43
+2026-01-28 12:15:59,218 [1] ERROR KVM_ERP.MvcApplication - Failed to ensure content tables exist
+System.InvalidOperationException: The property 'PCK1' is not a declared property on type 'TransactionProductCalculation'. Verify that the property has not been explicitly excluded from the model by using the Ignore method or NotMappedAttribute data annotation. Make sure that it is a valid primitive property.
+   at System.Data.Entity.ModelConfiguration.Configuration.Types.StructuralTypeConfiguration.Configure(String structuralTypeName, IEnumerable`1 properties, IEnumerable`1 propertyPath, PrimitivePropertyConfiguration propertyConfiguration)
+   at System.Data.Entity.ModelConfiguration.Configuration.Types.StructuralTypeConfiguration.Configure(String structuralTypeName, IEnumerable`1 properties, ICollection`1 dataModelAnnotations)
+   at System.Data.Entity.ModelConfiguration.Configuration.Types.EntityTypeConfiguration.Configure(EntityType entityType, EdmModel model)
+   at System.Data.Entity.ModelConfiguration.Configuration.ModelConfiguration.ConfigureEntities(EdmModel model)
+   at System.Data.Entity.DbModelBuilder.Build(DbProviderManifest providerManifest, DbProviderInfo providerInfo)
+   at System.Data.Entity.DbModelBuilder.Build(DbConnection providerConnection)
+   at System.Data.Entity.Internal.LazyInternalContext.CreateModel(LazyInternalContext internalContext)
+   at System.Data.Entity.Internal.RetryLazy`2.GetValue(TInput input)
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.Initialize()
+   at System.Data.Entity.Internal.InternalContext.ExecuteSqlCommand(TransactionalBehavior transactionalBehavior, String sql, Object[] parameters)
+   at KVM_ERP.MvcApplication.EnsureContentTablesExist() in D:\FUSIONTEC CLIENT COMPLETEDPROJECTS\KVM_ERP - New\KVM_ERP\KVM_ERP\KVM_ERP\KVM_ERP\Global.asax.cs:line 43
