@@ -454,24 +454,50 @@ namespace KVM_ERP.Controllers
                 // Group by packing master, product, calculation mode and supplier so that
                 // each supplier/mode combination gets its own row
                 var groupedByPackingAndProduct = allData
-                    .GroupBy(x => new { x.PackingMasterId, x.PackingMasterName, x.ProductId, x.ProductName, x.KGWGT, x.GradeName, x.ColorName, x.ReceivedTypeName, x.SupplierName, x.CALCULATIONMODE })
+                    .GroupBy(x => new
+                    {
+                        x.PackingMasterId,
+                        x.PackingMasterName,
+                        x.ProductId,
+                        x.ProductName,
+                        x.KGWGT,
+                        x.GradeName,
+                        x.ColorName,
+                        x.ReceivedTypeName,
+                        x.SupplierName,
+                        x.CALCULATIONMODE
+                    })
                     .ToList();
 
-                System.Diagnostics.Debug.WriteLine($"Grouped into {groupedByPackingAndProduct.Count} unique products");
+                // Pre-compute size metadata (PackIndex + SizeName) per packing master so that
+                // all products under the same packing type share the same column headers
+                var headersByPacking = allData
+                    .GroupBy(x => x.PackingMasterId)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g
+                            .GroupBy(x => new { x.PackIndex, x.SizeName })
+                            .OrderBy(h => h.Key.PackIndex)
+                            .Select(h => new { h.Key.PackIndex, h.Key.SizeName })
+                            .ToList()
+                    );
 
                 foreach (var productGroup in groupedByPackingAndProduct)
                 {
-                    // Get column headers for this packing master from PackingTypeMaster
-                    var packingTypes = db.PackingTypeMasters
-                        .Where(pt => pt.PACKMID == productGroup.Key.PackingMasterId
-                                  && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null))
-                        .OrderBy(pt => pt.PACKTMCODE)
-                        .ToList();
+                    // Determine size metadata for this packing master
+                    if (!headersByPacking.TryGetValue(productGroup.Key.PackingMasterId, out var sizeMeta) || sizeMeta.Count == 0)
+                    {
+                        continue;
+                    }
 
                     var columnHeaders = new List<string>();
-                    foreach (var pt in packingTypes)
+                    var openingDataArray = new List<decimal>();
+                    var productionDataArray = new List<decimal>();
+                    var totalDataArray = new List<decimal>();
+
+                    foreach (var sizeInfo in sizeMeta)
                     {
-                        var desc = pt.PACKTMDESC ?? string.Empty;
+                        var desc = sizeInfo.SizeName ?? string.Empty;
                         var upper = desc.ToUpper().Trim();
 
                         // Exclude BKN/BROKEN and OTHERS from slab headers – they are handled separately
@@ -482,42 +508,22 @@ namespace KVM_ERP.Controllers
                             continue;
 
                         columnHeaders.Add(desc);
-                    }
 
-                    // Split data based on DateCategory from stored procedure
-                    // DateCategory 0 = Opening Stock (before fromDate)
-                    // DateCategory 1 = Production (fromDate to toDate)
-                    var openingData = productGroup.Where(x => x.DateCategory == 0).ToList();
-                    var productionData = productGroup.Where(x => x.DateCategory == 1).ToList();
+                        long packIndex = sizeInfo.PackIndex;
+                        var sizeRows = productGroup.Where(x => x.PackIndex == packIndex);
 
-                    // Build dynamic data arrays
-                    var openingDataArray = new List<decimal>();
-                    var productionDataArray = new List<decimal>();
-                    var totalDataArray = new List<decimal>();
+                        // DateCategory 0 = Opening Stock (before fromDate)
+                        // DateCategory 1 = Production (fromDate to toDate)
+                        decimal openingSum = sizeRows
+                            .Where(x => x.DateCategory == 0)
+                            .Sum(x => x.SlabValue);
 
-                    // Get PCK values (PCK1-PCK17)
-                    var pckProperties = new[] { "PCK1", "PCK2", "PCK3", "PCK4", "PCK5", "PCK6", "PCK7", "PCK8", "PCK9", "PCK10", "PCK11", "PCK12", "PCK13", "PCK14", "PCK15", "PCK16", "PCK17" };
-                    
-                    for (int i = 0; i < columnHeaders.Count && i < pckProperties.Length; i++)
-                    {
-                        var prop = typeof(StockDataDTO).GetProperty(pckProperties[i]);
-                        
-                        decimal openingSum = 0;
-                        foreach (var dataItem in openingData)
-                        {
-                            var value = prop.GetValue(dataItem);
-                            openingSum += value != null ? (decimal)value : 0;
-                        }
+                        decimal productionSum = sizeRows
+                            .Where(x => x.DateCategory == 1)
+                            .Sum(x => x.SlabValue);
+
                         openingDataArray.Add(openingSum);
-
-                        decimal productionSum = 0;
-                        foreach (var dataItem in productionData)
-                        {
-                            var value = prop.GetValue(dataItem);
-                            productionSum += value != null ? (decimal)value : 0;
-                        }
                         productionDataArray.Add(productionSum);
-
                         totalDataArray.Add(openingSum + productionSum);
                     }
 
@@ -553,10 +559,10 @@ namespace KVM_ERP.Controllers
                     var item = new StockViewReportData
                     {
                         ProductName = $"{productGroup.Key.ProductName} {displayBoxSize} x {productGroup.Key.KGWGT}" +
-                                     (!string.IsNullOrEmpty(productGroup.Key.GradeName) ? $" - {productGroup.Key.GradeName}" : "") +
-                                     (!string.IsNullOrEmpty(productGroup.Key.ColorName) ? $" - {productGroup.Key.ColorName}" : "") +
-                                     (!string.IsNullOrEmpty(productGroup.Key.ReceivedTypeName) ? $" - {productGroup.Key.ReceivedTypeName}" : "") +
-                                     (!string.IsNullOrEmpty(productGroup.Key.SupplierName) ? $" - {productGroup.Key.SupplierName}" : ""),
+                                        (!string.IsNullOrEmpty(productGroup.Key.GradeName) ? $" - {productGroup.Key.GradeName}" : "") +
+                                        (!string.IsNullOrEmpty(productGroup.Key.ColorName) ? $" - {productGroup.Key.ColorName}" : "") +
+                                        (!string.IsNullOrEmpty(productGroup.Key.ReceivedTypeName) ? $" - {productGroup.Key.ReceivedTypeName}" : "") +
+                                        (!string.IsNullOrEmpty(productGroup.Key.SupplierName) ? $" - {productGroup.Key.SupplierName}" : ""),
                         Variety = productGroup.Key.ProductName,
                         ReceivedType = receivedTypeLabel,
                         PackingMasterId = productGroup.Key.PackingMasterId,
@@ -707,82 +713,51 @@ namespace KVM_ERP.Controllers
             }
         }
 
-        protected override void Dispose(bool disposing)
+        // Model for Stock View Report Data with Dynamic Columns
+        public class StockViewReportData
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            public string ProductName { get; set; }
+            public string Variety { get; set; }
+            public string ReceivedType { get; set; }
+            public int PackingMasterId { get; set; }
+            // Grade weight (KGWGT) - used only for grouping / display on the client
+            public decimal KGWGT { get; set; }
+            // Dynamic column headers for this packing type
+            public List<string> ColumnHeaders { get; set; }
+            // Opening Stock (before fromDate) - Dynamic data
+            public List<decimal> OpeningData { get; set; }
+            public decimal OpeningTotalSlabs { get; set; }
+            // Production (fromDate to toDate) - Dynamic data
+            public List<decimal> ProductionData { get; set; }
+            public decimal ProductionTotalSlabs { get; set; }
+            // Total (Opening + Production) - Dynamic data
+            public List<decimal> TotalData { get; set; }
+            public decimal TotalSlabs { get; set; }
         }
-    }
 
-    // Model for Stock View Report Data with Dynamic Columns
-    public class StockViewReportData
-    {
-        public string ProductName { get; set; }
-        public string Variety { get; set; }
-        public string ReceivedType { get; set; }
-        public int PackingMasterId { get; set; }
-
-        // Grade weight (KGWGT) - used only for grouping / display on the client
-        public decimal KGWGT { get; set; }
-
-        // Dynamic column headers for this packing type
-        public List<string> ColumnHeaders { get; set; }
-
-        // Opening Stock (before fromDate) - Dynamic data
-        public List<decimal> OpeningData { get; set; }
-        public decimal OpeningTotalSlabs { get; set; }
-
-        // Production (fromDate to toDate) - Dynamic data
-        public List<decimal> ProductionData { get; set; }
-        public decimal ProductionTotalSlabs { get; set; }
-
-        // Total (Opening + Production) - Dynamic data
-        public List<decimal> TotalData { get; set; }
-        public decimal TotalSlabs { get; set; }
-    }
-
-    // DTO for Stored Procedure pr_GetStockViewReportData
-    public class StockDataDTO
-    {
-        public DateTime TRANDATE { get; set; }
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
-        public int PackingMasterId { get; set; }
-        public string PackingMasterName { get; set; }
-        public decimal KGWGT { get; set; }
-        public int PCKBOX { get; set; }
-        public string GradeName { get; set; }
-        public string ColorName { get; set; }
-        public string ReceivedTypeName { get; set; }
-        public string SupplierName { get; set; }
-
-        // Calculation mode from TRANSACTION_PRODUCT_CALCULATION
-        // 1 = Packing Mode, 2 = Grade Weight Mode
-        public int CALCULATIONMODE { get; set; }
-
-        // PCK columns
-        public decimal PCK1 { get; set; }
-        public decimal PCK2 { get; set; }
-        public decimal PCK3 { get; set; }
-        public decimal PCK4 { get; set; }
-        public decimal PCK5 { get; set; }
-        public decimal PCK6 { get; set; }
-        public decimal PCK7 { get; set; }
-        public decimal PCK8 { get; set; }
-        public decimal PCK9 { get; set; }
-        public decimal PCK10 { get; set; }
-        public decimal PCK11 { get; set; }
-        public decimal PCK12 { get; set; }
-        public decimal PCK13 { get; set; }
-        public decimal PCK14 { get; set; }
-        public decimal PCK15 { get; set; }
-        public decimal PCK16 { get; set; }
-        public decimal PCK17 { get; set; }
-
-        // Date category: 0 = Opening (before fromDate), 1 = Production (fromDate to toDate)
-        public int DateCategory { get; set; }
+        // DTO for Stored Procedure pr_GetStockViewReportData
+        public class StockDataDTO
+        {
+            public DateTime TRANDATE { get; set; }
+            public int ProductId { get; set; }
+            public string ProductName { get; set; }
+            public int PackingMasterId { get; set; }
+            public string PackingMasterName { get; set; }
+            public decimal KGWGT { get; set; }
+            public int PCKBOX { get; set; }
+            public string GradeName { get; set; }
+            public string ColorName { get; set; }
+            public string ReceivedTypeName { get; set; }
+            public string SupplierName { get; set; }
+            // Calculation mode from TRANSACTION_PRODUCT_CALCULATION (1 = Packing, 2 = Grade Weight)
+            public int CALCULATIONMODE { get; set; }
+            // Dynamic size metadata from PackingTypes CTE
+            public long PackIndex { get; set; }
+            public string SizeName { get; set; }
+            // Date category: 0 = Opening (before fromDate), 1 = Production (fromDate to toDate)
+            public int DateCategory { get; set; }
+            // Slab count for this specific size row
+            public decimal SlabValue { get; set; }
+        }
     }
 }

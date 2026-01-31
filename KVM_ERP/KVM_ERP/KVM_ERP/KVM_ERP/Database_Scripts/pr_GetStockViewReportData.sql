@@ -48,32 +48,18 @@ BEGIN
 		ISNULL(color.PCLRDESC, '') AS ColorName,
 		ISNULL(rcvdType.RCVDTDESC, '') AS ReceivedTypeName,
 		ISNULL(tm.CATENAME, '') AS SupplierName,
-		
-		-- PCK columns derived from SLABVALUE and PACKTMID using packing type order
-		CASE WHEN pt.PackIndex = 1  THEN tpc.SLABVALUE ELSE 0 END AS PCK1,
-		CASE WHEN pt.PackIndex = 2  THEN tpc.SLABVALUE ELSE 0 END AS PCK2,
-		CASE WHEN pt.PackIndex = 3  THEN tpc.SLABVALUE ELSE 0 END AS PCK3,
-		CASE WHEN pt.PackIndex = 4  THEN tpc.SLABVALUE ELSE 0 END AS PCK4,
-		CASE WHEN pt.PackIndex = 5  THEN tpc.SLABVALUE ELSE 0 END AS PCK5,
-		CASE WHEN pt.PackIndex = 6  THEN tpc.SLABVALUE ELSE 0 END AS PCK6,
-		CASE WHEN pt.PackIndex = 7  THEN tpc.SLABVALUE ELSE 0 END AS PCK7,
-		CASE WHEN pt.PackIndex = 8  THEN tpc.SLABVALUE ELSE 0 END AS PCK8,
-		CASE WHEN pt.PackIndex = 9  THEN tpc.SLABVALUE ELSE 0 END AS PCK9,
-		CASE WHEN pt.PackIndex = 10 THEN tpc.SLABVALUE ELSE 0 END AS PCK10,
-		CASE WHEN pt.PackIndex = 11 THEN tpc.SLABVALUE ELSE 0 END AS PCK11,
-		CASE WHEN pt.PackIndex = 12 THEN tpc.SLABVALUE ELSE 0 END AS PCK12,
-		CASE WHEN pt.PackIndex = 13 THEN tpc.SLABVALUE ELSE 0 END AS PCK13,
-		CASE WHEN pt.PackIndex = 14 THEN tpc.SLABVALUE ELSE 0 END AS PCK14,
-		CASE WHEN pt.PackIndex = 15 THEN tpc.SLABVALUE ELSE 0 END AS PCK15,
-		CASE WHEN pt.PackIndex = 16 THEN tpc.SLABVALUE ELSE 0 END AS PCK16,
-		CASE WHEN pt.PackIndex = 17 THEN tpc.SLABVALUE ELSE 0 END AS PCK17,
+		pt.PackIndex,
+		pt.PACKTMDESC AS SizeName,
 		
 		-- Date category: 0 = Opening (before fromDate), 1 = Production (fromDate to toDate)
 		CASE 
 			WHEN tpc.PRODDATE < @FromDate THEN 0  -- Opening Stock
 			WHEN tpc.PRODDATE >= @FromDate AND tpc.PRODDATE <= @ToDate THEN 1  -- Production
 			ELSE 2  -- Exclude (after toDate, should not happen)
-		END AS DateCategory
+		END AS DateCategory,
+		
+		-- Slab value for this specific size (one row per size)
+		tpc.SLABVALUE AS SlabValue
 	FROM 
 		TRANSACTION_PRODUCT_CALCULATION tpc
 		INNER JOIN TRANSACTIONDETAIL td ON tpc.TRANDID = td.TRANDID
@@ -98,6 +84,7 @@ BEGIN
 		grade.GRADEDESC,
 		color.PCLRDESC,
 		rcvdType.RCVDTDESC,
+		pt.PackIndex,
 		tpc.PRODDATE
 END
 GO
