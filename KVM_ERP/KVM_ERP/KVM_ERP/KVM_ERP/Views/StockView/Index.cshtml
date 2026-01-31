@@ -561,8 +561,15 @@
                             allTablesHtml += '<th style="padding: 8px; text-align: center; background-color: #28a745; font-weight: bold;">TOTAL</th>';
                             allTablesHtml += '</tr></thead><tbody>';
                             
-                            // Store number of columns for this packing master
-                            var numColumns = packingMaster.ColumnHeaders ? packingMaster.ColumnHeaders.length : 17;
+                            // Store number of columns for this packing master (fully dynamic)
+                            var numColumns = 0;
+                            if (packingMaster.ColumnHeaders && packingMaster.ColumnHeaders.length) {
+                                numColumns = packingMaster.ColumnHeaders.length;
+                            } else if (packingMaster.Rows && packingMaster.Rows.length > 0 &&
+                                       packingMaster.Rows[0].Values && packingMaster.Rows[0].Values.length) {
+                                // Fallback: infer from the first row's Values length
+                                numColumns = packingMaster.Rows[0].Values.length;
+                            }
                             
                             // Data rows for this packing master
                             packingMaster.Rows.forEach(function(row, rowIndex) {
@@ -579,9 +586,12 @@
                                 allTablesHtml += '<tr style="' + rowStyle + '">';
                                 allTablesHtml += '<td style="padding: 6px; font-weight: bold;">' + row.RowType + '</td>';
                                 
-                                // PCK1 to PCK[numColumns] - Use dynamic number of columns
-                                for (var i = 1; i <= numColumns; i++) {
-                                    var pckValue = row['PCK' + i] || 0;
+                                // Dynamic slab columns - use Values array aligned with ColumnHeaders
+                                for (var i = 0; i < numColumns; i++) {
+                                    var pckValue = 0;
+                                    if (row.Values && row.Values.length > i && row.Values[i] != null) {
+                                        pckValue = row.Values[i];
+                                    }
                                     var displayValue = '';
                                     
                                     if (row.RowType === 'NO OF CASES') {

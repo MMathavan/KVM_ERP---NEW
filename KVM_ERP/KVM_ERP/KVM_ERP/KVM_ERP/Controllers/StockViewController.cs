@@ -415,7 +415,7 @@ namespace KVM_ERP.Controllers
 
                     var previousDate = selectedDate.AddDays(-1);
 
-                    // Load packing types for this packing master to determine column mapping (PCK1..PCK17)
+                    // Load packing types for this packing master to determine dynamic slab columns
                     var packingTypes = db.PackingTypeMasters
                         .Where(pt => pt.PACKMID == pm.PackingId 
                                   && (pt.DISPSTATUS == 0 || pt.DISPSTATUS == null)
@@ -426,7 +426,15 @@ namespace KVM_ERP.Controllers
                         .OrderBy(pt => pt.PACKTMCODE)
                         .ToList();
 
-                    int maxColumns = Math.Min(17, packingTypes.Count);
+                    // Use all available packing types as dynamic columns
+                    var effectivePackingTypes = packingTypes;
+                    int columnCount = effectivePackingTypes.Count;
+
+                    if (columnCount == 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"  {pm.PackingType}: No packing types found, skipping.");
+                        continue;
+                    }
 
                     // Filter from already loaded data in memory by PackingId, KGWGT, GRADEID, PCLRID, RCVDTID and Supplier
                     var rowsForPacking = allCalculations
@@ -457,171 +465,67 @@ namespace KVM_ERP.Controllers
                         .GroupBy(x => x.Calculation.PACKTMID)
                         .ToDictionary(g => g.Key, g => g.Sum(r => r.Calculation.SLABVALUE));
 
+                    // Build value arrays for each row type
+                    var upToPreviousValues = new List<decimal>(new decimal[columnCount]);
+                    var selectedDayValues = new List<decimal>(new decimal[columnCount]);
+
+                    for (int index = 0; index < columnCount; index++)
+                    {
+                        var packtmId = effectivePackingTypes[index].PACKTMID;
+                        decimal upVal = upToPrevByPacktm.ContainsKey(packtmId) ? upToPrevByPacktm[packtmId] : 0;
+                        decimal selVal = selectedByPacktm.ContainsKey(packtmId) ? selectedByPacktm[packtmId] : 0;
+
+                        upToPreviousValues[index] = upVal;
+                        selectedDayValues[index] = selVal;
+                    }
+
                     var upToPreviousData = new PackingDetailRow
                     {
-                        RowType = $"Up to {previousDate:dd/MM/yyyy}"
+                        RowType = $"Up to {previousDate:dd/MM/yyyy}",
+                        Values = upToPreviousValues,
+                        Total = upToPreviousValues.Sum()
                     };
 
                     var selectedDayData = new PackingDetailRow
                     {
-                        RowType = selectedDate.ToString("dd/MM/yyyy")
+                        RowType = selectedDate.ToString("dd/MM/yyyy"),
+                        Values = selectedDayValues,
+                        Total = selectedDayValues.Sum()
                     };
 
-                    for (int index = 0; index < maxColumns; index++)
+                    // Calculate TOTAL row (sum of both)
+                    var totalValues = new List<decimal>(columnCount);
+                    for (int i = 0; i < columnCount; i++)
                     {
-                        var packtmId = packingTypes[index].PACKTMID;
-                        decimal upVal = upToPrevByPacktm.ContainsKey(packtmId) ? upToPrevByPacktm[packtmId] : 0;
-                        decimal selVal = selectedByPacktm.ContainsKey(packtmId) ? selectedByPacktm[packtmId] : 0;
-
-                        int col = index + 1;
-
-                        switch (col)
-                        {
-                            case 1:
-                                upToPreviousData.PCK1 = upVal;
-                                selectedDayData.PCK1 = selVal;
-                                break;
-                            case 2:
-                                upToPreviousData.PCK2 = upVal;
-                                selectedDayData.PCK2 = selVal;
-                                break;
-                            case 3:
-                                upToPreviousData.PCK3 = upVal;
-                                selectedDayData.PCK3 = selVal;
-                                break;
-                            case 4:
-                                upToPreviousData.PCK4 = upVal;
-                                selectedDayData.PCK4 = selVal;
-                                break;
-                            case 5:
-                                upToPreviousData.PCK5 = upVal;
-                                selectedDayData.PCK5 = selVal;
-                                break;
-                            case 6:
-                                upToPreviousData.PCK6 = upVal;
-                                selectedDayData.PCK6 = selVal;
-                                break;
-                            case 7:
-                                upToPreviousData.PCK7 = upVal;
-                                selectedDayData.PCK7 = selVal;
-                                break;
-                            case 8:
-                                upToPreviousData.PCK8 = upVal;
-                                selectedDayData.PCK8 = selVal;
-                                break;
-                            case 9:
-                                upToPreviousData.PCK9 = upVal;
-                                selectedDayData.PCK9 = selVal;
-                                break;
-                            case 10:
-                                upToPreviousData.PCK10 = upVal;
-                                selectedDayData.PCK10 = selVal;
-                                break;
-                            case 11:
-                                upToPreviousData.PCK11 = upVal;
-                                selectedDayData.PCK11 = selVal;
-                                break;
-                            case 12:
-                                upToPreviousData.PCK12 = upVal;
-                                selectedDayData.PCK12 = selVal;
-                                break;
-                            case 13:
-                                upToPreviousData.PCK13 = upVal;
-                                selectedDayData.PCK13 = selVal;
-                                break;
-                            case 14:
-                                upToPreviousData.PCK14 = upVal;
-                                selectedDayData.PCK14 = selVal;
-                                break;
-                            case 15:
-                                upToPreviousData.PCK15 = upVal;
-                                selectedDayData.PCK15 = selVal;
-                                break;
-                            case 16:
-                                upToPreviousData.PCK16 = upVal;
-                                selectedDayData.PCK16 = selVal;
-                                break;
-                            case 17:
-                                upToPreviousData.PCK17 = upVal;
-                                selectedDayData.PCK17 = selVal;
-                                break;
-                        }
+                        totalValues.Add(upToPreviousValues[i] + selectedDayValues[i]);
                     }
 
-                    upToPreviousData.Total = (upToPreviousData.PCK1 ?? 0) + (upToPreviousData.PCK2 ?? 0) + (upToPreviousData.PCK3 ?? 0) +
-                                            (upToPreviousData.PCK4 ?? 0) + (upToPreviousData.PCK5 ?? 0) + (upToPreviousData.PCK6 ?? 0) +
-                                            (upToPreviousData.PCK7 ?? 0) + (upToPreviousData.PCK8 ?? 0) + (upToPreviousData.PCK9 ?? 0) +
-                                            (upToPreviousData.PCK10 ?? 0) + (upToPreviousData.PCK11 ?? 0) + (upToPreviousData.PCK12 ?? 0) +
-                                            (upToPreviousData.PCK13 ?? 0) + (upToPreviousData.PCK14 ?? 0) + (upToPreviousData.PCK15 ?? 0) +
-                                            (upToPreviousData.PCK16 ?? 0) + (upToPreviousData.PCK17 ?? 0);
-
-                    selectedDayData.Total = (selectedDayData.PCK1 ?? 0) + (selectedDayData.PCK2 ?? 0) + (selectedDayData.PCK3 ?? 0) +
-                                           (selectedDayData.PCK4 ?? 0) + (selectedDayData.PCK5 ?? 0) + (selectedDayData.PCK6 ?? 0) +
-                                           (selectedDayData.PCK7 ?? 0) + (selectedDayData.PCK8 ?? 0) + (selectedDayData.PCK9 ?? 0) +
-                                           (selectedDayData.PCK10 ?? 0) + (selectedDayData.PCK11 ?? 0) + (selectedDayData.PCK12 ?? 0) +
-                                           (selectedDayData.PCK13 ?? 0) + (selectedDayData.PCK14 ?? 0) + (selectedDayData.PCK15 ?? 0) +
-                                           (selectedDayData.PCK16 ?? 0) + (selectedDayData.PCK17 ?? 0);
-
-                    // Calculate TOTAL row (sum of both)
                     var totalData = new PackingDetailRow
                     {
                         RowType = "TOTAL",
-                        PCK1 = (upToPreviousData.PCK1 ?? 0) + (selectedDayData.PCK1 ?? 0),
-                        PCK2 = (upToPreviousData.PCK2 ?? 0) + (selectedDayData.PCK2 ?? 0),
-                        PCK3 = (upToPreviousData.PCK3 ?? 0) + (selectedDayData.PCK3 ?? 0),
-                        PCK4 = (upToPreviousData.PCK4 ?? 0) + (selectedDayData.PCK4 ?? 0),
-                        PCK5 = (upToPreviousData.PCK5 ?? 0) + (selectedDayData.PCK5 ?? 0),
-                        PCK6 = (upToPreviousData.PCK6 ?? 0) + (selectedDayData.PCK6 ?? 0),
-                        PCK7 = (upToPreviousData.PCK7 ?? 0) + (selectedDayData.PCK7 ?? 0),
-                        PCK8 = (upToPreviousData.PCK8 ?? 0) + (selectedDayData.PCK8 ?? 0),
-                        PCK9 = (upToPreviousData.PCK9 ?? 0) + (selectedDayData.PCK9 ?? 0),
-                        PCK10 = (upToPreviousData.PCK10 ?? 0) + (selectedDayData.PCK10 ?? 0),
-                        PCK11 = (upToPreviousData.PCK11 ?? 0) + (selectedDayData.PCK11 ?? 0),
-                        PCK12 = (upToPreviousData.PCK12 ?? 0) + (selectedDayData.PCK12 ?? 0),
-                        PCK13 = (upToPreviousData.PCK13 ?? 0) + (selectedDayData.PCK13 ?? 0),
-                        PCK14 = (upToPreviousData.PCK14 ?? 0) + (selectedDayData.PCK14 ?? 0),
-                        PCK15 = (upToPreviousData.PCK15 ?? 0) + (selectedDayData.PCK15 ?? 0),
-                        PCK16 = (upToPreviousData.PCK16 ?? 0) + (selectedDayData.PCK16 ?? 0),
-                        PCK17 = (upToPreviousData.PCK17 ?? 0) + (selectedDayData.PCK17 ?? 0),
-                        Total = (upToPreviousData.Total ?? 0) + (selectedDayData.Total ?? 0)
+                        Values = totalValues,
+                        Total = totalValues.Sum()
                     };
 
                     // Calculate NO OF CASES row using dynamic box size (PCKBOX per packing master)
                     var boxSize = pm.BoxSize > 0 ? pm.BoxSize : 6;
 
+                    var noOfCasesValues = new List<decimal>(columnCount);
+                    for (int i = 0; i < columnCount; i++)
+                    {
+                        noOfCasesValues.Add(CalculateBoxes(totalValues[i], boxSize));
+                    }
+
                     var noOfBoxesData = new PackingDetailRow
                     {
                         RowType = "NO OF CASES",
-                        PCK1 = CalculateBoxes(totalData.PCK1, boxSize),
-                        PCK2 = CalculateBoxes(totalData.PCK2, boxSize),
-                        PCK3 = CalculateBoxes(totalData.PCK3, boxSize),
-                        PCK4 = CalculateBoxes(totalData.PCK4, boxSize),
-                        PCK5 = CalculateBoxes(totalData.PCK5, boxSize),
-                        PCK6 = CalculateBoxes(totalData.PCK6, boxSize),
-                        PCK7 = CalculateBoxes(totalData.PCK7, boxSize),
-                        PCK8 = CalculateBoxes(totalData.PCK8, boxSize),
-                        PCK9 = CalculateBoxes(totalData.PCK9, boxSize),
-                        PCK10 = CalculateBoxes(totalData.PCK10, boxSize),
-                        PCK11 = CalculateBoxes(totalData.PCK11, boxSize),
-                        PCK12 = CalculateBoxes(totalData.PCK12, boxSize),
-                        PCK13 = CalculateBoxes(totalData.PCK13, boxSize),
-                        PCK14 = CalculateBoxes(totalData.PCK14, boxSize),
-                        PCK15 = CalculateBoxes(totalData.PCK15, boxSize),
-                        PCK16 = CalculateBoxes(totalData.PCK16, boxSize),
-                        PCK17 = CalculateBoxes(totalData.PCK17, boxSize)
+                        Values = noOfCasesValues,
+                        Total = noOfCasesValues.Sum()
                     };
-                    
-                    // Total for NO OF CASES = Sum of individual column boxes (not division of grand total)
-                    noOfBoxesData.Total = (noOfBoxesData.PCK1 ?? 0) + (noOfBoxesData.PCK2 ?? 0) + (noOfBoxesData.PCK3 ?? 0) +
-                                         (noOfBoxesData.PCK4 ?? 0) + (noOfBoxesData.PCK5 ?? 0) + (noOfBoxesData.PCK6 ?? 0) +
-                                         (noOfBoxesData.PCK7 ?? 0) + (noOfBoxesData.PCK8 ?? 0) + (noOfBoxesData.PCK9 ?? 0) +
-                                         (noOfBoxesData.PCK10 ?? 0) + (noOfBoxesData.PCK11 ?? 0) + (noOfBoxesData.PCK12 ?? 0) +
-                                         (noOfBoxesData.PCK13 ?? 0) + (noOfBoxesData.PCK14 ?? 0) + (noOfBoxesData.PCK15 ?? 0) +
-                                         (noOfBoxesData.PCK16 ?? 0) + (noOfBoxesData.PCK17 ?? 0);
 
-                    // Get column headers from PACKINGTYPEMASTER for this packing master
-                    // Exclude BKN and OTHERS columns since they're now separate products
-                    var columnHeaders = packingTypes
+                    // Get column headers from PACKINGTYPEMASTER for this packing master.
+                    // Use all effective packing types so headers and data columns stay perfectly aligned.
+                    var columnHeaders = effectivePackingTypes
                         .Select(pt => pt.PACKTMDESC)
                         .ToList();
 
@@ -806,28 +710,28 @@ namespace KVM_ERP.Controllers
                     var upToPreviousData = new PackingDetailRow
                     {
                         RowType = $"Up to {previousDate:dd/MM/yyyy}",
-                        PCK1 = upToPreviousDay,
+                        Values = new List<decimal> { upToPreviousDay },
                         Total = upToPreviousDay
                     };
 
                     var selectedDayData = new PackingDetailRow
                     {
                         RowType = selectedDate.ToString("dd/MM/yyyy"),
-                        PCK1 = selectedDay,
+                        Values = new List<decimal> { selectedDay },
                         Total = selectedDay
                     };
 
                     var totalData = new PackingDetailRow
                     {
                         RowType = "TOTAL",
-                        PCK1 = total,
+                        Values = new List<decimal> { total },
                         Total = total
                     };
 
                     var noOfBoxesData = new PackingDetailRow
                     {
                         RowType = "NO OF CASES",
-                        PCK1 = 0,
+                        Values = new List<decimal> { 0 },
                         Total = 0
                     };
 
@@ -1008,28 +912,28 @@ namespace KVM_ERP.Controllers
                     var upToPreviousData = new PackingDetailRow
                     {
                         RowType = $"Up to {previousDate:dd/MM/yyyy}",
-                        PCK1 = upToPreviousDay,
+                        Values = new List<decimal> { upToPreviousDay },
                         Total = upToPreviousDay
                     };
 
                     var selectedDayData = new PackingDetailRow
                     {
                         RowType = selectedDate.ToString("dd/MM/yyyy"),
-                        PCK1 = selectedDay,
+                        Values = new List<decimal> { selectedDay },
                         Total = selectedDay
                     };
 
                     var totalData = new PackingDetailRow
                     {
                         RowType = "TOTAL",
-                        PCK1 = total,
+                        Values = new List<decimal> { total },
                         Total = total
                     };
 
                     var noOfBoxesData = new PackingDetailRow
                     {
                         RowType = "NO OF CASES",
-                        PCK1 = CalculateBoxes(total),
+                        Values = new List<decimal> { CalculateBoxes(total) },
                         Total = CalculateBoxes(total)
                     };
 
@@ -1350,7 +1254,8 @@ namespace KVM_ERP.Controllers
                             int packBoxSize = grp.Max(r => r.BoxSize);
                             int boxSize = packBoxSize > 0 ? packBoxSize : 6;
 
-                            // Map slab values to logical columns PCK1..PCK17 using packing type order
+                            // Map slab values to logical columns using packing type order.
+                            // We no longer cap at 17 columns; use all configured slab sizes.
                             if (!packingTypesByPackmid.TryGetValue(grp.Key.PackingId, out var packTypes) || packTypes.Count == 0)
                             {
                                 // If we have no packing type metadata, fall back to treating all slabs as a single column
@@ -1360,14 +1265,14 @@ namespace KVM_ERP.Controllers
                                 continue;
                             }
 
-                            int maxCols = Math.Min(17, packTypes.Count);
+                            int columnCount = packTypes.Count;
                             var slabByPacktm = grp
                                 .GroupBy(r => r.PackTmId)
                                 .ToDictionary(g => g.Key, g => g.Sum(x => x.SlabValue));
 
-                            decimal[] colTotals = new decimal[17];
+                            decimal[] colTotals = new decimal[columnCount];
 
-                            for (int index = 0; index < maxCols; index++)
+                            for (int index = 0; index < columnCount; index++)
                             {
                                 var pt = packTypes[index];
                                 if (slabByPacktm.TryGetValue(pt.PACKTMID, out var val))
@@ -1376,15 +1281,11 @@ namespace KVM_ERP.Controllers
                                 }
                             }
 
-                            decimal groupTotalSlabs = 0;
-                            for (int i = 0; i < maxCols; i++)
-                            {
-                                groupTotalSlabs += colTotals[i];
-                            }
+                            decimal groupTotalSlabs = colTotals.Sum();
 
                             // NO OF CASES for this packing group = sum of boxes per column (same as detail view)
                             decimal groupCases = 0;
-                            for (int i = 0; i < maxCols; i++)
+                            for (int i = 0; i < columnCount; i++)
                             {
                                 groupCases += CalculateBoxes(colTotals[i], boxSize);
                             }
@@ -1407,14 +1308,8 @@ namespace KVM_ERP.Controllers
                             product.CalculationMode
                         });
 
-                        System.Diagnostics.Debug.WriteLine($"Added: {displayName} (ID: {product.ProductId}, Mode: {product.CalculationMode}) with total PCK: {productTotalSlabs:N2}, Cases (from NO OF CASES rows): {totalCases:N0}");
                     }
-                    
-                    // STEP 4: Add BKN as a separate virtual product
-                    // IMPORTANT: In the new headless slab design, BKN is copied to each
-                    // slab row for a TRANDID+PACKMID. To avoid multiplying BKN by the
-                    // number of slabs, we collapse to one record per TRANDID+PACKMID
-                    // and sum a single BKN value from each group.
+
                     var allBknRows = (from tpc in db.TransactionProductCalculations
                                       join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
                                       join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
@@ -1568,24 +1463,14 @@ namespace KVM_ERP.Controllers
 
     public class PackingDetailRow
     {
-        public string RowType { get; set; } // "Up to DD/MM/YYYY", "DD/MM/YYYY", "TOTAL", "NO OF CASES"
-        public decimal? PCK1 { get; set; }
-        public decimal? PCK2 { get; set; }
-        public decimal? PCK3 { get; set; }
-        public decimal? PCK4 { get; set; }
-        public decimal? PCK5 { get; set; }
-        public decimal? PCK6 { get; set; }
-        public decimal? PCK7 { get; set; }
-        public decimal? PCK8 { get; set; }
-        public decimal? PCK9 { get; set; }
-        public decimal? PCK10 { get; set; }
-        public decimal? PCK11 { get; set; }
-        public decimal? PCK12 { get; set; }
-        public decimal? PCK13 { get; set; }
-        public decimal? PCK14 { get; set; }
-        public decimal? PCK15 { get; set; }
-        public decimal? PCK16 { get; set; }
-        public decimal? PCK17 { get; set; }
+        // RowType values: "Up to DD/MM/YYYY", "DD/MM/YYYY", "TOTAL", "NO OF CASES"
+        public string RowType { get; set; }
+
+        // Dynamic slab values aligned with ColumnHeaders.
+        // Each entry in Values corresponds to one slab size column.
+        public List<decimal> Values { get; set; }
+
+        // Row total (sum of Values for weight rows, sum of boxes for NO OF CASES rows)
         public decimal? Total { get; set; }
     }
 }
