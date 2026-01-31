@@ -307,7 +307,13 @@ namespace KVM_ERP.Controllers
                 System.Diagnostics.Debug.WriteLine($"✓ Monthly Invoices: {monthlyInvoices.Count} months with data");
 
                 // TOP 5 SHRIMP TYPES BY QUANTITY (Active records only)
-                var topShrimpTypes = (from tpc in _db.TransactionProductCalculations
+                // With the normalized TRANSACTION_PRODUCT_CALCULATION design, there can be multiple
+                // calculation rows per TRANDID (one per PACKTMID). We want:
+                //   - Transactions: number of distinct intake detail rows (TRANDID) per shrimp type
+                //   - TotalQuantity: sum of all slab values across those transactions
+
+                // STEP 1: Work at slab-row level, but only for real slabs (PACKTMID <> 0)
+                var slabRowsQuery = from tpc in _db.TransactionProductCalculations
                                      join td in _db.TransactionDetails on tpc.TRANDID equals td.TRANDID
                                      join tm in _db.TransactionMasters on td.TRANMID equals tm.TRANMID
                                      join m in _db.MaterialMasters on td.MTRLID equals m.MTRLID
@@ -315,16 +321,37 @@ namespace KVM_ERP.Controllers
                                          && (td.DISPSTATUS == 0 || td.DISPSTATUS == null)
                                          && (m.DISPSTATUS == 0 || m.DISPSTATUS == null)
                                          && tm.REGSTRID == 1  // Raw Material Intake
-                                     group tpc by m.MTRLDESC into g
-                                     select new TopShrimpTypeDTO
+                                         && tpc.PACKTMID != 0 // Only slab rows carry SLABVALUE
+                                     select new
                                      {
-                                         ShrimpType = g.Key,
-                                         Transactions = g.Count(),
-                                         TotalQuantity = g.Sum(x => x.SLABVALUE)
-                                     })
-                                     .OrderByDescending(x => x.TotalQuantity)
-                                     .Take(5)
-                                     .ToList();
+                                         td.TRANDID,
+                                         m.MTRLDESC,
+                                         tpc.SLABVALUE
+                                     };
+
+                // STEP 2: Aggregate per transaction (TRANDID) and shrimp type
+                var perTransaction = slabRowsQuery
+                    .GroupBy(x => new { x.TRANDID, x.MTRLDESC })
+                    .Select(g => new
+                    {
+                        g.Key.MTRLDESC,
+                        TransactionQuantity = g.Sum(x => x.SLABVALUE)
+                    })
+                    .ToList();
+
+                // STEP 3: Aggregate per shrimp type for final dashboard display
+                var topShrimpTypes = perTransaction
+                    .GroupBy(x => x.MTRLDESC)
+                    .Select(g => new TopShrimpTypeDTO
+                    {
+                        ShrimpType = g.Key,
+                        // Each entry in perTransaction represents one TRANDID for that shrimp type
+                        Transactions = g.Count(),
+                        TotalQuantity = g.Sum(x => x.TransactionQuantity)
+                    })
+                    .OrderByDescending(x => x.TotalQuantity)
+                    .Take(5)
+                    .ToList();
                 ViewBag.TopShrimpTypes = topShrimpTypes;
                 System.Diagnostics.Debug.WriteLine($"✓ Top Shrimp Types: {topShrimpTypes.Count} items");
 

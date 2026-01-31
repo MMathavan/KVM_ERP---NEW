@@ -483,38 +483,52 @@ namespace KVM_ERP.Controllers
                 System.Diagnostics.Debug.WriteLine($"Found supplier code: {supplierCode}");
                 
                 var items = context.Database.SqlQuery<SupplierItemViewModel>(@"
+                    WITH UniqueTpc AS (
+                        SELECT *
+                        FROM (
+                            SELECT 
+                                tpc.*,
+                                ROW_NUMBER() OVER (
+                                    PARTITION BY tpc.TRANDID, tpc.PACKMID 
+                                    ORDER BY tpc.PACKTMID, tpc.TRANPID
+                                ) AS rn
+                            FROM TRANSACTION_PRODUCT_CALCULATION tpc
+                            WHERE (tpc.DISPSTATUS = 0 OR tpc.DISPSTATUS IS NULL)
+                        ) x
+                        WHERE x.rn = 1
+                    )
                     SELECT DISTINCT
                         m.MTRLID as ItemId,
                         m.MTRLDESC as ItemName,
                         td.MTRLGID as MaterialGroupId,
-                        ISNULL(tpc.GRADEID, 0) as GradeId,
+                        ISNULL(ut.GRADEID, 0) as GradeId,
                         g.GRADEDESC as Grade,
-                        ISNULL(tpc.PCLRID, 0) as ProductionColourId,
+                        ISNULL(ut.PCLRID, 0) as ProductionColourId,
                         pcm.PCLRDESC as ProductionColour,
-                        ISNULL(tpc.RCVDTID, 0) as ReceivedTypeId,
+                        ISNULL(ut.RCVDTID, 0) as ReceivedTypeId,
                         rt.RCVDTDESC as ReceivedType,
-                        ISNULL(tpc.FACTORYWGT, 0) as ActualWeight,
-                        ISNULL(tpc.WASTEWGT, 0) as WasteWeight,
-                        ISNULL(tpc.WASTEPWGT, 0) as WastePWeight,
-                        ISNULL(tpc.TRANPID, 0) as TRANPID,
+                        ISNULL(ut.FACTORYWGT, 0) as ActualWeight,
+                        ISNULL(ut.WASTEWGT, 0) as WasteWeight,
+                        ISNULL(ut.WASTEPWGT, 0) as WastePWeight,
+                        ISNULL(ut.TRANPID, 0) as TRANPID,
                         CASE 
-                            WHEN ISNULL(tpc.BKN, 0) <> 0 OR ISNULL(tpc.OTHERS, 0) <> 0 THEN 1 
+                            WHEN ISNULL(ut.BKN, 0) <> 0 OR ISNULL(ut.OTHERS, 0) <> 0 THEN 1 
                             ELSE 0 
                         END as HasBknOrOthers
                     FROM TRANSACTIONMASTER tm
                     INNER JOIN TRANSACTIONDETAIL td ON tm.TRANMID = td.TRANMID
                     INNER JOIN MATERIALMASTER m ON td.MTRLID = m.MTRLID
-                    LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON td.TRANDID = tpc.TRANDID
-                    LEFT JOIN GRADEMASTER g ON tpc.GRADEID = g.GRADEID
-                    LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON tpc.PCLRID = pcm.PCLRID
-                    LEFT JOIN RECEIVEDTYPEMASTER rt ON tpc.RCVDTID = rt.RCVDTID
+                    LEFT JOIN UniqueTpc ut ON td.TRANDID = ut.TRANDID
+                    LEFT JOIN GRADEMASTER g ON ut.GRADEID = g.GRADEID
+                    LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON ut.PCLRID = pcm.PCLRID
+                    LEFT JOIN RECEIVEDTYPEMASTER rt ON ut.RCVDTID = rt.RCVDTID
                     WHERE tm.CATECODE = @p0
                         AND tm.REGSTRID = 1
                         AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
                         AND (td.DISPSTATUS = 0 OR td.DISPSTATUS IS NULL)
-                        AND tpc.TRANPID IS NOT NULL
-                        AND tpc.TRANPID > 0
-                        AND tpc.TRANPID NOT IN (
+                        AND ut.TRANPID IS NOT NULL
+                        AND ut.TRANPID > 0
+                        AND ut.TRANPID NOT IN (
                             SELECT DISTINCT TRANDAID 
                             FROM TRANSACTIONDETAIL invtd
                             INNER JOIN TRANSACTIONMASTER invtm ON invtd.TRANMID = invtm.TRANMID
@@ -649,35 +663,49 @@ namespace KVM_ERP.Controllers
                 // STEP 2: Get ALL available items from Raw Material Intake
                 // Show items that are NOT invoiced OR already in THIS invoice
                 var allItems = context.Database.SqlQuery<SupplierItemViewModel>(@"
+                    WITH UniqueTpc AS (
+                        SELECT *
+                        FROM (
+                            SELECT 
+                                tpc.*,
+                                ROW_NUMBER() OVER (
+                                    PARTITION BY tpc.TRANDID, tpc.PACKMID 
+                                    ORDER BY tpc.PACKTMID, tpc.TRANPID
+                                ) AS rn
+                            FROM TRANSACTION_PRODUCT_CALCULATION tpc
+                            WHERE (tpc.DISPSTATUS = 0 OR tpc.DISPSTATUS IS NULL)
+                        ) x
+                        WHERE x.rn = 1
+                    )
                     SELECT DISTINCT
                         m.MTRLID as ItemId,
                         m.MTRLDESC as ItemName,
                         td.MTRLGID as MaterialGroupId,
-                        ISNULL(tpc.GRADEID, 0) as GradeId,
+                        ISNULL(ut.GRADEID, 0) as GradeId,
                         g.GRADEDESC as Grade,
-                        ISNULL(tpc.PCLRID, 0) as ProductionColourId,
+                        ISNULL(ut.PCLRID, 0) as ProductionColourId,
                         pcm.PCLRDESC as ProductionColour,
-                        ISNULL(tpc.RCVDTID, 0) as ReceivedTypeId,
+                        ISNULL(ut.RCVDTID, 0) as ReceivedTypeId,
                         rt.RCVDTDESC as ReceivedType,
-                        ISNULL(tpc.FACTORYWGT, 0) as ActualWeight,
-                        ISNULL(tpc.WASTEWGT, 0) as WasteWeight,
-                        ISNULL(tpc.WASTEPWGT, 0) as WastePWeight,
-                        ISNULL(tpc.TRANPID, 0) as TRANPID
+                        ISNULL(ut.FACTORYWGT, 0) as ActualWeight,
+                        ISNULL(ut.WASTEWGT, 0) as WasteWeight,
+                        ISNULL(ut.WASTEPWGT, 0) as WastePWeight,
+                        ISNULL(ut.TRANPID, 0) as TRANPID
                     FROM TRANSACTIONMASTER tm
                     INNER JOIN TRANSACTIONDETAIL td ON tm.TRANMID = td.TRANMID
                     INNER JOIN MATERIALMASTER m ON td.MTRLID = m.MTRLID
-                    LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON td.TRANDID = tpc.TRANDID
-                    LEFT JOIN GRADEMASTER g ON tpc.GRADEID = g.GRADEID
-                    LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON tpc.PCLRID = pcm.PCLRID
-                    LEFT JOIN RECEIVEDTYPEMASTER rt ON tpc.RCVDTID = rt.RCVDTID
+                    LEFT JOIN UniqueTpc ut ON td.TRANDID = ut.TRANDID
+                    LEFT JOIN GRADEMASTER g ON ut.GRADEID = g.GRADEID
+                    LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON ut.PCLRID = pcm.PCLRID
+                    LEFT JOIN RECEIVEDTYPEMASTER rt ON ut.RCVDTID = rt.RCVDTID
                     WHERE tm.CATECODE = @p0
                         AND tm.REGSTRID = 1
                         AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
                         AND (td.DISPSTATUS = 0 OR td.DISPSTATUS IS NULL)
-                        AND tpc.TRANPID IS NOT NULL
-                        AND tpc.TRANPID > 0
+                        AND ut.TRANPID IS NOT NULL
+                        AND ut.TRANPID > 0
                         AND (
-                            tpc.TRANPID NOT IN (
+                            ut.TRANPID NOT IN (
                                 SELECT DISTINCT TRANDAID 
                                 FROM TRANSACTIONDETAIL invtd
                                 INNER JOIN TRANSACTIONMASTER invtm ON invtd.TRANMID = invtm.TRANMID
@@ -686,7 +714,7 @@ namespace KVM_ERP.Controllers
                                     AND invtd.TRANDAID > 0
                                     AND pis.PUINSTCODE != 'PUS002'  -- Exclude only Cancelled invoices
                             )
-                            OR tpc.TRANPID IN (
+                            OR ut.TRANPID IN (
                                 SELECT DISTINCT TRANDAID 
                                 FROM TRANSACTIONDETAIL invtd
                                 WHERE invtd.TRANMID = @p1
@@ -1889,121 +1917,103 @@ namespace KVM_ERP.Controllers
                 System.Diagnostics.Debug.WriteLine($"GetSlabData called for tranpId: {tranpId}");
                 Console.WriteLine($"*** GetSlabData called for tranpId: {tranpId}");
 
-                // Get all PCK columns, BKN, OTHERS and packing master info for this TRANPID
-                var slabRecord = context.Database.SqlQuery<SlabDataRecord>($@"
-                    SELECT tpc.PCK1, tpc.PCK2, tpc.PCK3, tpc.PCK4, tpc.PCK5, 
-                           tpc.PCK6, tpc.PCK7, tpc.PCK8, tpc.PCK9, tpc.PCK10,
-                           tpc.PCK11, tpc.PCK12, tpc.PCK13, tpc.PCK14, tpc.PCK15,
-                           tpc.PCK16, tpc.PCK17, tpc.BKN, tpc.OTHERS, 
-                           tpc.PACKMID, pm.PACKMDESC, tpc.WASTEPWGT
-                    FROM TRANSACTION_PRODUCT_CALCULATION tpc
-                    INNER JOIN PACKINGMASTER pm ON tpc.PACKMID = pm.PACKMID
-                    WHERE tpc.TRANPID = @p0
+                // STEP 1: Locate the TRANDID and PACKMID for this canonical TRANPID
+                var header = context.Database.SqlQuery<SlabHeaderInfo>($@"
+                    SELECT TOP 1 TRANDID, PACKMID
+                    FROM TRANSACTION_PRODUCT_CALCULATION
+                    WHERE TRANPID = @p0
                 ", tranpId).FirstOrDefault();
 
-                // Convert to proper format
-                var formattedSlabData = new List<object>();
-                
-                if (slabRecord != null)
+                if (header == null)
                 {
-                    // Get dynamic packing type ranges for this packing master
-                    var packingTypes = context.Database.SqlQuery<PackingTypeInfo>($@"
-                        SELECT PACKTMDESC, PACKTMCODE
-                        FROM PACKINGTYPEMASTER 
-                        WHERE PACKMID = @p0 AND (DISPSTATUS = 0 OR DISPSTATUS IS NULL)
-                        ORDER BY PACKTMCODE
-                    ", slabRecord.PACKMID).ToList();
-
-                    Console.WriteLine($"*** Found {packingTypes.Count} packing types for PACKMID {slabRecord.PACKMID}");
-
-                    // All PCK values from PCK1 to PCK17
-                    var allSlabValues = new[] { 
-                        slabRecord.PCK1, slabRecord.PCK2, slabRecord.PCK3, slabRecord.PCK4, slabRecord.PCK5,
-                        slabRecord.PCK6, slabRecord.PCK7, slabRecord.PCK8, slabRecord.PCK9, slabRecord.PCK10,
-                        slabRecord.PCK11, slabRecord.PCK12, slabRecord.PCK13, slabRecord.PCK14, slabRecord.PCK15,
-                        slabRecord.PCK16, slabRecord.PCK17
-                    };
-
-                    // Map packing types to PCK values using sequential logic (same as Raw Material Intake)
-                    int pckIndex = 0;
-                    foreach (var packingType in packingTypes)
+                    Console.WriteLine($"*** GetSlabData: No TRANSACTION_PRODUCT_CALCULATION row found for TRANPID {tranpId}");
+                    return Json(new
                     {
-                        // Check if this is BKN field
-                        bool isBKN = packingType.PACKTMDESC.ToUpper().Trim() == "BKN" || 
-                                     packingType.PACKTMDESC.ToUpper().Trim() == "BROKEN" || 
-                                     packingType.PACKTMDESC.ToUpper().Contains("BKN");
-                        
-                        // Check if this is OTHERS field
-                        bool isOTHERS = packingType.PACKTMDESC.ToUpper().Trim() == "OTHERS" || 
-                                        packingType.PACKTMDESC.ToUpper().Trim() == "OTHER" || 
-                                        packingType.PACKTMDESC.ToUpper().Contains("OTHERS");
-                        
-                        if (isBKN)
-                        {
-                            // Handle BKN separately (not from PCK columns)
-                            if (slabRecord.BKN > 0)
-                            {
-                                formattedSlabData.Add(new { 
-                                    range = packingType.PACKTMDESC, 
-                                    value = slabRecord.BKN,
-                                    pckColumn = "BKN"
-                                });
-                                Console.WriteLine($"*** Mapped {packingType.PACKTMDESC} -> BKN = {slabRecord.BKN}");
-                            }
-                        }
-                        else if (isOTHERS)
-                        {
-                            // Handle OTHERS separately (not from PCK columns)
-                            if (slabRecord.OTHERS > 0)
-                            {
-                                formattedSlabData.Add(new { 
-                                    range = packingType.PACKTMDESC, 
-                                    value = slabRecord.OTHERS,
-                                    pckColumn = "OTHERS"
-                                });
-                                Console.WriteLine($"*** Mapped {packingType.PACKTMDESC} -> OTHERS = {slabRecord.OTHERS}");
-                            }
-                        }
-                        else
-                        {
-                            // Handle regular PCK fields sequentially
-                            if (pckIndex < allSlabValues.Length && allSlabValues[pckIndex] > 0)
-                            {
-                                formattedSlabData.Add(new { 
-                                    range = packingType.PACKTMDESC, 
-                                    value = allSlabValues[pckIndex],
-                                    pckColumn = $"PCK{pckIndex + 1}"
-                                });
-                                Console.WriteLine($"*** Mapped {packingType.PACKTMDESC} -> PCK{pckIndex + 1} = {allSlabValues[pckIndex]}");
-                            }
-                            pckIndex++; // Only increment for regular PCK fields
-                        }
-                    }
-
-                    // Return packing master info, Peeled + Weight (WASTEPWGT), and slab data
-                    return Json(new { 
-                        success = true, 
-                        data = formattedSlabData,
-                        packingMaster = new {
-                            id = slabRecord.PACKMID,
-                            name = slabRecord.PACKMDESC
-                        },
-                        wastePWeight = slabRecord.WASTEPWGT
+                        success = true,
+                        data = new List<object>(),
+                        packingMaster = new { id = 0, name = "Packing" },
+                        wastePWeight = 0.00m
                     });
                 }
 
-                Console.WriteLine($"*** GetSlabData: Found {formattedSlabData.Count} slab entries for tranpId {tranpId}");
-                
+                Console.WriteLine($"*** GetSlabData: Using TRANDID={header.TRANDID}, PACKMID={header.PACKMID} for TRANPID {tranpId}");
+
+                // STEP 2: Load packing master information
+                var packingMaster = context.Database.SqlQuery<PackingMasterInfo>($@"
+                    SELECT PACKMID, PACKMDESC
+                    FROM PACKINGMASTER
+                    WHERE PACKMID = @p0
+                ", header.PACKMID).FirstOrDefault();
+
+                // STEP 3: Get dynamic packing type ranges for this packing master
+                var packingTypes = context.Database.SqlQuery<PackingTypeInfo>($@"
+                    SELECT PACKTMID, PACKTMDESC, PACKTMCODE
+                    FROM PACKINGTYPEMASTER 
+                    WHERE PACKMID = @p0 AND (DISPSTATUS = 0 OR DISPSTATUS IS NULL)
+                    ORDER BY PACKTMCODE
+                ", header.PACKMID).ToList();
+
+                Console.WriteLine($"*** Found {packingTypes.Count} packing types for PACKMID {header.PACKMID}");
+
+                // STEP 4: Load normalized slab values (one row per PACKTMID with aggregated SLABVALUE)
+                var normalizedSlabs = context.Database.SqlQuery<NormalizedSlabValue>($@"
+                    SELECT PACKTMID, SUM(SLABVALUE) AS SLABVALUE
+                    FROM TRANSACTION_PRODUCT_CALCULATION
+                    WHERE TRANDID = @p0 
+                      AND PACKMID = @p1
+                      AND PACKTMID <> 0
+                      AND (DISPSTATUS = 0 OR DISPSTATUS IS NULL)
+                    GROUP BY PACKTMID
+                ", header.TRANDID, header.PACKMID).ToList();
+
+                Console.WriteLine($"*** GetSlabData: Found {normalizedSlabs.Count} normalized slab row(s) for TRANPID {tranpId}");
+
+                // STEP 5: Map packing types to normalized SLABVALUE values
+                var formattedSlabData = new List<object>();
+
+                foreach (var packingType in packingTypes)
+                {
+                    var slab = normalizedSlabs.FirstOrDefault(s => s.PACKTMID == packingType.PACKTMID);
+                    if (slab != null && slab.SLABVALUE > 0)
+                    {
+                        formattedSlabData.Add(new
+                        {
+                            range = packingType.PACKTMDESC,
+                            value = slab.SLABVALUE,
+                            // Legacy field kept for compatibility with existing JS; not used server-side.
+                            pckColumn = string.Empty
+                        });
+
+                        Console.WriteLine($"*** Mapped {packingType.PACKTMDESC} -> SLABVALUE = {slab.SLABVALUE}");
+                    }
+                }
+
+                // STEP 6: Get Peeled + Weight (WASTEPWGT) from any row for this TRANDID + PACKMID
+                var wastePWeight = context.Database.SqlQuery<decimal?>($@"
+                    SELECT TOP 1 WASTEPWGT
+                    FROM TRANSACTION_PRODUCT_CALCULATION
+                    WHERE TRANDID = @p0 
+                      AND PACKMID = @p1
+                      AND (DISPSTATUS = 0 OR DISPSTATUS IS NULL)
+                    ORDER BY PACKTMID, TRANPID
+                ", header.TRANDID, header.PACKMID).FirstOrDefault() ?? 0.00m;
+
                 if (formattedSlabData.Count == 0)
                 {
-                    Console.WriteLine($"*** GetSlabData: No slab data found - checking if TRANPID {tranpId} exists in TRANSACTION_PRODUCT_CALCULATION");
-                    var recordExists = context.Database.SqlQuery<int>($@"
-                        SELECT COUNT(*) FROM TRANSACTION_PRODUCT_CALCULATION WHERE TRANPID = @p0
-                    ", tranpId).FirstOrDefault();
-                    Console.WriteLine($"*** GetSlabData: TRANPID {tranpId} exists in table: {recordExists > 0}");
+                    Console.WriteLine($"*** GetSlabData: No normalized slab data found for TRANPID {tranpId}, TRANDID {header.TRANDID}, PACKMID {header.PACKMID}");
                 }
-                
-                return Json(new { success = true, data = formattedSlabData });
+
+                return Json(new
+                {
+                    success = true,
+                    data = formattedSlabData,
+                    packingMaster = new
+                    {
+                        id = packingMaster?.PACKMID ?? header.PACKMID,
+                        name = packingMaster?.PACKMDESC ?? "Packing"
+                    },
+                    wastePWeight = wastePWeight
+                });
             }
             catch (Exception ex)
             {
@@ -2013,31 +2023,11 @@ namespace KVM_ERP.Controllers
             }
         }
 
-        // Helper class for slab data
-        public class SlabDataRecord
+        // Helper class for locating TRANDID and PACKMID from a canonical TRANPID
+        public class SlabHeaderInfo
         {
-            public decimal PCK1 { get; set; }
-            public decimal PCK2 { get; set; }
-            public decimal PCK3 { get; set; }
-            public decimal PCK4 { get; set; }
-            public decimal PCK5 { get; set; }
-            public decimal PCK6 { get; set; }
-            public decimal PCK7 { get; set; }
-            public decimal PCK8 { get; set; }
-            public decimal PCK9 { get; set; }
-            public decimal PCK10 { get; set; }
-            public decimal PCK11 { get; set; }
-            public decimal PCK12 { get; set; }
-            public decimal PCK13 { get; set; }
-            public decimal PCK14 { get; set; }
-            public decimal PCK15 { get; set; }
-            public decimal PCK16 { get; set; }
-            public decimal PCK17 { get; set; }
-            public decimal BKN { get; set; }
-            public decimal OTHERS { get; set; }
+            public int TRANDID { get; set; }
             public int PACKMID { get; set; }
-            public string PACKMDESC { get; set; }
-            public decimal WASTEPWGT { get; set; }
         }
 
         // Helper class for packing type info
@@ -2046,6 +2036,20 @@ namespace KVM_ERP.Controllers
             public int PACKTMID { get; set; }
             public string PACKTMDESC { get; set; }
             public string PACKTMCODE { get; set; }
+        }
+
+        // Helper class for normalized slab values (one per PACKTMID)
+        public class NormalizedSlabValue
+        {
+            public int PACKTMID { get; set; }
+            public decimal SLABVALUE { get; set; }
+        }
+
+        // Helper class for packing master info
+        public class PackingMasterInfo
+        {
+            public int PACKMID { get; set; }
+            public string PACKMDESC { get; set; }
         }
 
         [HttpPost]
