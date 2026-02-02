@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using KVM_ERP.Models;
 
@@ -14,6 +17,89 @@ namespace KVM_ERP.Controllers
         {
             ViewBag.Title = "Opening Stock";
             return View();
+        }
+
+        public ActionResult GetAjaxData(string fromDate = null, string toDate = null)
+        {
+            try
+            {
+                string whereClause = string.Empty;
+                var parameters = new List<object>();
+                int paramIndex = 0;
+
+                if (!string.IsNullOrEmpty(fromDate))
+                {
+                    DateTime fromDateTime;
+                    if (DateTime.TryParse(fromDate, out fromDateTime))
+                    {
+                        whereClause += " AND tm.TRANDATE >= @p" + paramIndex;
+                        parameters.Add(fromDateTime.Date);
+                        paramIndex++;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(toDate))
+                {
+                    DateTime toDateTime;
+                    if (DateTime.TryParse(toDate, out toDateTime))
+                    {
+                        whereClause += " AND tm.TRANDATE <= @p" + paramIndex;
+                        parameters.Add(toDateTime.Date.AddDays(1).AddSeconds(-1));
+                        paramIndex++;
+                    }
+                }
+
+                string sql = @"SELECT 
+                                    tm.TRANMID,
+                                    tm.TRANDATE,
+                                    mg.MTRLGDESC AS ProductType,
+                                    m.MTRLDESC AS Product,
+                                    pm.PACKMDESC AS PackingMaster,
+                                    ISNULL(SUM(tpc.SLABVALUE), 0) AS NoOfSlabs
+                                FROM TRANSACTIONMASTER tm
+                                INNER JOIN TRANSACTIONDETAIL td ON td.TRANMID = tm.TRANMID
+                                INNER JOIN MATERIALGROUPMASTER mg ON mg.MTRLGID = td.MTRLGID
+                                INNER JOIN MATERIALMASTER m ON m.MTRLID = td.MTRLID
+                                LEFT JOIN PACKINGMASTER pm ON pm.PACKMID = m.PACKMID
+                                LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON tpc.TRANDID = td.TRANDID
+                                WHERE tm.REGSTRID = 3
+                                  AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
+                                  AND (mg.DISPSTATUS = 0 OR mg.DISPSTATUS IS NULL)
+                                  AND (m.DISPSTATUS = 0 OR m.DISPSTATUS IS NULL)" +
+                               whereClause +
+                               @" GROUP BY tm.TRANMID, tm.TRANDATE, mg.MTRLGDESC, m.MTRLDESC, pm.PACKMDESC
+                                  ORDER BY tm.TRANDATE DESC, tm.TRANMID DESC";
+
+                var rows = parameters.Count > 0
+                    ? db.Database.SqlQuery<OpeningStockRow>(sql, parameters.ToArray()).ToList()
+                    : db.Database.SqlQuery<OpeningStockRow>(sql).ToList();
+
+                var data = rows.Select((r, index) => new
+                {
+                    TRANMID = r.TRANMID,
+                    TRANDATE = r.TRANDATE.ToString("yyyy-MM-dd"),
+                    ProductType = r.ProductType ?? string.Empty,
+                    Product = r.Product ?? string.Empty,
+                    PackingMaster = r.PackingMaster ?? string.Empty,
+                    NoOfSlabs = r.NoOfSlabs
+                }).ToList();
+
+                return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        private class OpeningStockRow
+        {
+            public int TRANMID { get; set; }
+            public DateTime TRANDATE { get; set; }
+            public string ProductType { get; set; }
+            public string Product { get; set; }
+            public string PackingMaster { get; set; }
+            public decimal NoOfSlabs { get; set; }
         }
     }
 }
