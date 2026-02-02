@@ -19,6 +19,33 @@ namespace KVM_ERP.Controllers
             return View();
         }
 
+        // GET: OpeningStock/Form
+        // Simple form used when clicking "Add New" from the Opening Stock index page.
+        // Provides: As on Date, Product Type, Product, Packing dropdowns.
+        [Authorize(Roles = "OpeningStockCreate,OpeningStockEdit")]
+        public ActionResult Form()
+        {
+            var model = new TransactionMaster
+            {
+                TRANDATE = System.DateTime.Today
+            };
+
+            // Product Type (Material Group) dropdown - enabled groups only
+            var materialGroups = db.MaterialGroupMasters
+                .Where(g => g.DISPSTATUS == 0 || g.DISPSTATUS == null)
+                .OrderBy(g => g.MTRLGDESC)
+                .Select(g => new SelectListItem
+                {
+                    Text = g.MTRLGDESC,
+                    Value = g.MTRLGID.ToString()
+                })
+                .ToList();
+
+            ViewBag.MaterialGroups = materialGroups;
+
+            return View(model);
+        }
+
         public ActionResult GetAjaxData(string fromDate = null, string toDate = null)
         {
             try
@@ -90,6 +117,33 @@ namespace KVM_ERP.Controllers
             {
                 return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        // JSON: Products by Material Group (enabled only) for Opening Stock form
+        [HttpGet]
+        public JsonResult GetProducts(int groupId)
+        {
+            var prods = db.MaterialMasters
+                .Where(m => m.MTRLGID == groupId && (m.DISPSTATUS == 0 || m.DISPSTATUS == null))
+                .OrderBy(m => m.MTRLDESC)
+                .Select(m => new { id = m.MTRLID, text = m.MTRLDESC })
+                .ToList();
+
+            return Json(prods, JsonRequestBehavior.AllowGet);
+        }
+
+        // JSON: Packing masters filtered by Product Type (Material Group)
+        [HttpGet]
+        public JsonResult GetPackingMasters(int groupId)
+        {
+            var packs = db.PackingMasters
+                .Where(p => (p.DISPSTATUS == 0 || p.DISPSTATUS == null)
+                            && (p.MTRLGID == groupId || p.MTRLGID == null))
+                .OrderBy(p => p.PACKMDESC)
+                .Select(p => new { id = p.PACKMID, text = p.PACKMDESC })
+                .ToList();
+
+            return Json(packs, JsonRequestBehavior.AllowGet);
         }
 
         private class OpeningStockRow

@@ -1,0 +1,247 @@
+@model KVM_ERP.Models.TransactionMaster
+@{
+    ViewBag.Title = "Opening Stock - Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var materialGroups = ViewBag.MaterialGroups as List<System.Web.Mvc.SelectListItem> ?? new List<System.Web.Mvc.SelectListItem>();
+}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    .main-container { background: white; min-height: 100vh; padding: 20px 0; }
+    .form-container { background: white; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,.1); margin: 20px; overflow: hidden; border: 1px solid #e9ecef; }
+    .form-header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 25px 30px; border-radius: 15px 15px 0 0; }
+    .form-title { font-size: 28px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 15px; }
+    .form-body { padding: 30px; background: white; }
+    .form-group { margin-bottom: 18px; }
+    .control-label { font-weight: 600; color: #2d3436; margin-bottom: 8px; display: block; }
+    .form-control { border: 2px solid #e9ecef; border-radius: 8px; padding: 10px 12px; font-size: 14px; background: #f8f9fa; }
+    .form-control:focus { border-color: #4facfe; box-shadow: 0 0 0 0.2rem rgba(79,172,254,.25); background: white; }
+
+    .select2-container { width: 100% !important; }
+    .select2-container--default .select2-selection--single {
+        height: 42px; border: 2px solid #e9ecef; border-radius: 8px; background: #f8f9fa;
+        display: flex; align-items: center; padding: 0 12px; transition: all 0.3s ease;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 38px; font-size: 14px; padding-left: 0;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow { height: 38px; right: 10px; }
+
+    .table-section { margin-top: 25px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9; }
+    .table-section-title { margin-bottom: 15px; font-weight: 600; color: #2c3e50; display: flex; align-items: center; gap: 10px; }
+
+    .slab-table-wrapper { overflow-x: auto; }
+    .slab-table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    .slab-table thead th {
+        background: #7f88e9; color: #fff; padding: 8px; border: 1px solid #6c75d3; text-align: center; white-space: nowrap;
+    }
+    .slab-table tbody td { padding: 6px; border: 1px solid #dee2e6; text-align: center; }
+    .slab-table tbody tr.total-row { background: #d4edda; font-weight: 600; }
+    .slab-table tbody tr.no-of-cases-row { background: #fff3cd; font-weight: 600; }
+    .slab-table tbody td.particulars-cell { text-align: left; font-weight: 600; }
+</style>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">
+                <i class="fa fa-play-circle"></i>
+                Opening Stock
+            </h1>
+        </div>
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">As on Date <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.TRANDATE, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", id = "asOnDate", required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Product Type <span class="text-danger">*</span></label>
+                        @Html.DropDownList("ProductTypeId", materialGroups, "-- Select Product Type --", new { @class = "form-control select2", id = "productType" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Product <span class="text-danger">*</span></label>
+                        <select id="product" class="form-control select2">
+                            <option value="">-- Select Product --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Packing <span class="text-danger">*</span></label>
+                        <select id="packing" class="form-control select2">
+                            <option value="">-- Select Packing --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="table-section-title">
+                    <i class="fa fa-table"></i> Opening Stock Slab Details
+                </div>
+                <div id="slabTableContainer">
+                    <p class="text-muted">Select As on Date, Product Type, Product and Packing to view slab-wise opening stock.</p>
+                </div>
+            </div>
+
+            <div class="form-group text-center" style="margin-top: 25px;">
+                <a href="@Url.Action("Index", "OpeningStock")" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                placeholder: '-- Select --',
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#productType').on('change', function () {
+                var groupId = $(this).val();
+                $('#product').empty().append('<option value="">-- Select Product --</option>');
+                $('#packing').empty().append('<option value="">-- Select Packing --</option>');
+                if (!groupId) {
+                    return;
+                }
+
+                $.getJSON('@Url.Action("GetProducts", "OpeningStock")', { groupId: groupId })
+                    .done(function (list) {
+                        $.each(list, function (_, item) {
+                            $('#product').append('<option value="' + item.id + '">' + item.text + '</option>');
+                        });
+                        $('#product').trigger('change.select2');
+                    });
+
+                $.getJSON('@Url.Action("GetPackingMasters", "OpeningStock")', { groupId: groupId })
+                    .done(function (list) {
+                        $.each(list, function (_, item) {
+                            $('#packing').append('<option value="' + item.id + '">' + item.text + '</option>');
+                        });
+                        $('#packing').trigger('change.select2');
+                    });
+            });
+
+            function tryRenderTable() {
+                var asOn = $('#asOnDate').val();
+                var productId = $('#product').val();
+                var packingId = $('#packing').val();
+
+                if (!asOn || !productId || !packingId) {
+                    $('#slabTableContainer').html('<p class="text-muted">Select As on Date, Product Type, Product and Packing to view slab-wise opening stock.</p>');
+                    return;
+                }
+
+                // Reuse StockView breakdown logic for a single product/packing as on As on Date
+                $.ajax({
+                    url: '@Url.Action("GetItemDetails", "StockView")',
+                    type: 'POST',
+                    data: {
+                        itemId: productId,
+                        asOnDate: asOn,
+                        calculationMode: null
+                    },
+                    success: function (response) {
+                        if (response && response.success && response.packingMasters && response.packingMasters.length > 0) {
+                            var pmList = response.packingMasters;
+                            var selectedPm = null;
+                            var packText = $('#packing option:selected').text() || '';
+                            var normalizedSelected = $.trim(packText).toLowerCase();
+
+                            for (var i = 0; i < pmList.length; i++) {
+                                var pm = pmList[i];
+                                if (!pm.PackingType) continue;
+                                var name = pm.PackingType.toLowerCase();
+                                if (normalizedSelected && name.indexOf(normalizedSelected) === 0) {
+                                    selectedPm = pm;
+                                    break;
+                                }
+                            }
+                            if (!selectedPm) {
+                                selectedPm = pmList[0];
+                            }
+
+                            renderSlabTable(selectedPm);
+                        } else {
+                            $('#slabTableContainer').html('<p class="text-muted">No slab data available for selected combination.</p>');
+                        }
+                    },
+                    error: function () {
+                        $('#slabTableContainer').html('<p class="text-danger">Error loading slab data.</p>');
+                    }
+                });
+            }
+
+            function renderSlabTable(packingMaster) {
+                var columnHeaders = packingMaster.ColumnHeaders || [];
+                var rows = packingMaster.Rows || [];
+                var colCount = columnHeaders.length;
+
+                var html = '';
+                html += '<div class="slab-table-wrapper">';
+                html += '<table class="slab-table">';
+                html += '<thead><tr>';
+                html += '<th>Particulars</th>';
+                for (var i = 0; i < colCount; i++) {
+                    html += '<th>' + columnHeaders[i] + '</th>';
+                }
+                html += '<th>TOTAL NO. OF SLABS</th>';
+                html += '</tr></thead><tbody>';
+
+                for (var r = 0; r < rows.length; r++) {
+                    var row = rows[r];
+                    var rowType = row.RowType || '';
+                    var values = row.Values || [];
+                    var total = row.Total || 0;
+
+                    var rowClass = '';
+                    if (rowType === 'TOTAL') rowClass = 'total-row';
+                    if (rowType === 'NO OF CASES') rowClass = 'no-of-cases-row';
+
+                    html += '<tr class="' + rowClass + '">';
+                    html += '<td class="particulars-cell">' + rowType + '</td>';
+
+                    for (var c = 0; c < colCount; c++) {
+                        var v = values.length > c && values[c] != null ? values[c] : 0;
+                        var display = '';
+                        if (rowType === 'NO OF CASES') {
+                            display = v >= 1 ? Math.floor(v) : '';
+                        } else {
+                            display = v > 0 ? v.toFixed(2).replace(/\.00$/, '') : '';
+                        }
+                        html += '<td>' + display + '</td>';
+                    }
+
+                    var totalDisplay = '';
+                    if (rowType === 'NO OF CASES') {
+                        totalDisplay = total >= 1 ? Math.floor(total) : '';
+                    } else {
+                        totalDisplay = total > 0 ? total.toFixed(2).replace(/\.00$/, '') : '';
+                    }
+                    html += '<td>' + totalDisplay + '</td>';
+                    html += '</tr>';
+                }
+
+                html += '</tbody></table></div>';
+                $('#slabTableContainer').html(html);
+            }
+
+            $('#asOnDate, #product, #packing').on('change', function () {
+                tryRenderTable();
+            });
+        });
+    </script>
+}
