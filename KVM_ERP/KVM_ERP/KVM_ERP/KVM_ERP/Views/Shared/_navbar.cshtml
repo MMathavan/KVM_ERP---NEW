@@ -341,6 +341,15 @@
                                         </a>
                                     </li>
                                 }
+                                @if (User.IsInRole("OpeningStocckIndex"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "OpeningStock")"
+                                           data-role="OpeningStock" data-menugroupid="1" data-menuorder="6">
+                                            <i class="bi bi-globe2"></i> Opening Stock
+                                        </a>
+                                    </li>
+                                }
                                 <!-- Invoice - Order: 4, GroupId: 1 -->
                                 @if (User.IsInRole("PurchaseInvoiceIndex"))
                                 {

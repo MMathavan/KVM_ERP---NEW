@@ -229,6 +229,7 @@
     <Compile Include="Controllers\RawMaterialInvoiceController.cs" />
     <Compile Include="Controllers\PurchaseInvoiceApprovalController.cs" />
     <Compile Include="Controllers\StockViewController.cs" />
+    <Compile Include="Controllers\OpeningStockController.cs" />
     <Compile Include="Controllers\SupplierStockViewController.cs" />
     <Compile Include="Controllers\StockViewReportController.cs" />
     <Compile Include="Controllers\RenewalApprovalController.cs" />
@@ -1284,6 +1285,7 @@
     <Content Include="Views\PublicationBillReports\Index.cshtml" />
     <Content Include="Views\Estimate\Index.cshtml" />
     <Content Include="Views\Estimate\Form.cshtml" />
+    <Content Include="Views\OpeningStock\Index.cshtml" />
     <Content Include="Views\StockView\Index.cshtml" />
     <Content Include="Views\StockViewReport\Index.cshtml" />
     <Content Include="Views\Reports\RawMaterialsImport.cshtml" />
