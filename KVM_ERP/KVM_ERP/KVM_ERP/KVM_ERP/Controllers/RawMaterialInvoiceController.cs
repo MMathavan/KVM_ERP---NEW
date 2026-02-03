@@ -511,6 +511,7 @@ namespace KVM_ERP.Controllers
                         ISNULL(ut.WASTEWGT, 0) as WasteWeight,
                         ISNULL(ut.WASTEPWGT, 0) as WastePWeight,
                         ISNULL(ut.TRANPID, 0) as TRANPID,
+                        ISNULL(tqc.REMARKS, '') as Remarks,
                         CASE 
                             WHEN ISNULL(ut.BKN, 0) <> 0 OR ISNULL(ut.OTHERS, 0) <> 0 THEN 1 
                             ELSE 0 
@@ -522,6 +523,7 @@ namespace KVM_ERP.Controllers
                     LEFT JOIN GRADEMASTER g ON ut.GRADEID = g.GRADEID
                     LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON ut.PCLRID = pcm.PCLRID
                     LEFT JOIN RECEIVEDTYPEMASTER rt ON ut.RCVDTID = rt.RCVDTID
+                    LEFT JOIN TRANSACTION_QUALITY_CHECK tqc ON tm.TRANMID = tqc.TRANMID
                     WHERE tm.CATECODE = @p0
                         AND tm.REGSTRID = 1
                         AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
@@ -590,6 +592,7 @@ namespace KVM_ERP.Controllers
                         ISNULL(tpc.WASTEPWGT, 0) as WastePWeight,
                         ISNULL(tpc.WASTEWGT, 0) as WasteWeight,
                         ISNULL(td.TRANDINCAMT, 0) as IncentiveAmount,
+                        ISNULL(tqc.REMARKS, '') as Remarks,
                         CASE 
                             WHEN ISNULL(tpc.WASTEWGT, 0) > 0 
                                  AND ABS(ISNULL(td.TRANAQTY, 0) - ISNULL(tpc.WASTEWGT, 0)) < 0.0001 
@@ -605,6 +608,7 @@ namespace KVM_ERP.Controllers
                     LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON td.PCLRID = pcm.PCLRID
                     LEFT JOIN RECEIVEDTYPEMASTER rt ON td.RCVDTID = rt.RCVDTID
                     LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON td.TRANDAID = tpc.TRANPID
+                    LEFT JOIN TRANSACTION_QUALITY_CHECK tqc ON tpc.TRANMID = tqc.TRANMID
                     LEFT JOIN (
                         SELECT 
                             TRANDID,
@@ -690,7 +694,8 @@ namespace KVM_ERP.Controllers
                         ISNULL(ut.FACTORYWGT, 0) as ActualWeight,
                         ISNULL(ut.WASTEWGT, 0) as WasteWeight,
                         ISNULL(ut.WASTEPWGT, 0) as WastePWeight,
-                        ISNULL(ut.TRANPID, 0) as TRANPID
+                        ISNULL(ut.TRANPID, 0) as TRANPID,
+                        ISNULL(tqc.REMARKS, '') as Remarks
                     FROM TRANSACTIONMASTER tm
                     INNER JOIN TRANSACTIONDETAIL td ON tm.TRANMID = td.TRANMID
                     INNER JOIN MATERIALMASTER m ON td.MTRLID = m.MTRLID
@@ -698,6 +703,7 @@ namespace KVM_ERP.Controllers
                     LEFT JOIN GRADEMASTER g ON ut.GRADEID = g.GRADEID
                     LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON ut.PCLRID = pcm.PCLRID
                     LEFT JOIN RECEIVEDTYPEMASTER rt ON ut.RCVDTID = rt.RCVDTID
+                    LEFT JOIN TRANSACTION_QUALITY_CHECK tqc ON tm.TRANMID = tqc.TRANMID
                     WHERE tm.CATECODE = @p0
                         AND tm.REGSTRID = 1
                         AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
@@ -786,6 +792,7 @@ namespace KVM_ERP.Controllers
                         TRANPID = item.TRANPID,
                         TRANDID = savedItem?.TRANDID ?? 0,  // Include TRANDID for rate updates
                         IncentiveAmount = savedItem?.IncentiveAmount ?? 0,
+                        Remarks = savedItem?.Remarks ?? item.Remarks,
                         IsSelected = isSelected  // Checked if it was saved
                     };
                 }).ToList();
@@ -2619,6 +2626,7 @@ namespace KVM_ERP.Controllers
         public decimal WastePWeight { get; set; }
         public decimal WasteWeight { get; set; }  // WASTEWGT from TRANSACTION_PRODUCT_CALCULATION
         public int TRANPID { get; set; }  // Transaction Product Calculation ID
+        public string Remarks { get; set; }
         public int HasBknOrOthers { get; set; }
     }
 
@@ -2701,6 +2709,7 @@ namespace KVM_ERP.Controllers
         public decimal WasteWeight { get; set; }  // WASTEWGT from TRANSACTION_PRODUCT_CALCULATION
         public decimal IncentiveAmount { get; set; } // TRANDINCAMT (line-level incentive)
         public int IsWasteRow { get; set; }       // 1 if this TRANSACTIONDETAIL row represents a Waste Weight line, otherwise 0
+        public string Remarks { get; set; }
         public int HasBknOrOthers { get; set; }
     }
 
