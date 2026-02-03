@@ -268,6 +268,15 @@
                 <div class="purchase-note-title" style="font-size: 16px; font-weight: 700; text-decoration: underline; margin-top: 4px;">
                     RAW MATERIAL PURCHASE-NOTE
                 </div>
+                @* Show status only for specific invoices (ids 421 and 423) directly under the title *@
+                @if ((Model.TRANMID == 421 || Model.TRANMID == 423) && !string.IsNullOrEmpty(Model.StatusDescription))
+                {
+                    <div style="text-align: center; margin-top: 6px;">
+                        <span style="display: inline-block; padding: 3px 10px; font-size: 12px; font-weight: 700; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 4px;">
+                            @Model.StatusDescription
+                        </span>
+                    </div>
+                }
             </div>
         </div>
 
@@ -344,13 +353,8 @@
                 <span class="tax-value">₹ @Model.TRANGAMT.ToString("N2")</span>
             </div>
 
-            <div class="tax-summary-row">
-                <span class="tax-label">Discount on Packing:</span>
-                <span class="tax-value">₹ @Model.TRANPACKAMT.ToString("N2")</span>
-            </div>
-
             @* Invoice-level Incentive (TRANINCAMT) *@
-            @if (Model.TRANINCAMT != 0)
+            @if (false && Model.TRANINCAMT != 0)
             {
                 <div class="tax-summary-row">
                     <span class="tax-label">Incentive:</span>
