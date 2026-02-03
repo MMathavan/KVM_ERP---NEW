@@ -2566,8 +2566,9 @@
             
             var totalTax = hsnGSTTotal + manualCostFactorTotal;
 
-            // Business rule: Grand Total is the total of the Net Amount column only
-            var grandTotal = totalNetAmount;
+            // Business rule: Grand Total = Net Amount total + total Incentive
+            // i.e. (Subtotal - Packing Discount) + Incentive
+            var grandTotal = totalNetAmount + totalIncentiveAmount;
 
             // Update Grand Total display
             $('#grandTotalDisplay').text('₹ ' + grandTotal.toFixed(2));
