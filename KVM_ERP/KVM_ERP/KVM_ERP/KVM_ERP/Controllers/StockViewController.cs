@@ -114,7 +114,7 @@ namespace KVM_ERP.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetItemDetails(int itemId, string asOnDate, int? calculationMode = null)
+        public ActionResult GetItemDetails(int itemId, string asOnDate, int? calculationMode = null, int? packingId = null)
         {
             try
             {
@@ -124,10 +124,10 @@ namespace KVM_ERP.Controllers
                     DateTime.TryParse(asOnDate, out filterDate);
                 }
 
-                System.Diagnostics.Debug.WriteLine($"GetItemDetails called - ItemId: {itemId}, AsOnDate: {filterDate:yyyy-MM-dd}, CalculationMode: {calculationMode}");
+                System.Diagnostics.Debug.WriteLine($"GetItemDetails called - ItemId: {itemId}, AsOnDate: {filterDate:yyyy-MM-dd}, CalculationMode: {calculationMode}, PackingId: {packingId}");
 
                 // Get detailed breakdown split by date ranges for the specific item
-                var details = GetItemDetailBreakdownByDateRange(itemId, filterDate, calculationMode);
+                var details = GetItemDetailBreakdownByDateRange(itemId, filterDate, calculationMode, packingId);
 
                 return Json(new
                 {
@@ -267,7 +267,7 @@ namespace KVM_ERP.Controllers
             }
         }
 
-        private PackingMasterBreakdown GetItemDetailBreakdownByDateRange(int itemId, DateTime selectedDate, int? calculationMode)
+        private PackingMasterBreakdown GetItemDetailBreakdownByDateRange(int itemId, DateTime selectedDate, int? calculationMode, int? packingId = null)
         {
             try
             {
@@ -319,6 +319,18 @@ namespace KVM_ERP.Controllers
                                       }).ToList();
 
                 System.Diagnostics.Debug.WriteLine($"Loaded {allCalculations.Count} total calculation records (including BKN/OTHERS)");
+
+                // If a specific packing master is requested (e.g. from Opening Stock form),
+                // filter calculations down to that PACKMID before building breakdown rows.
+                if (packingId.HasValue)
+                {
+                    int pid = packingId.Value;
+                    allCalculations = allCalculations
+                        .Where(x => x.PackingId == pid)
+                        .ToList();
+
+                    System.Diagnostics.Debug.WriteLine($"After filtering by PackingId={pid}, remaining calculations: {allCalculations.Count}");
+                }
 
                 // Exclude records that have no slab values (all PCK1-PCK17 are null or zero).
                 // This prevents BKN/OTHERS-only rows from creating empty packing tables under products

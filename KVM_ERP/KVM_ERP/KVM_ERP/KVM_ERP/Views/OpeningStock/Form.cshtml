@@ -40,6 +40,15 @@
     .slab-table tbody tr.total-row { background: #d4edda; font-weight: 600; }
     .slab-table tbody tr.no-of-cases-row { background: #fff3cd; font-weight: 600; }
     .slab-table tbody td.particulars-cell { text-align: left; font-weight: 600; }
+    .slab-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 2px 4px;
+        font-size: 11px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        text-align: right;
+    }
 </style>
 
 <div class="main-container">
@@ -152,29 +161,20 @@
                     data: {
                         itemId: productId,
                         asOnDate: asOn,
-                        calculationMode: null
+                        calculationMode: null,
+                        packingId: packingId
                     },
                     success: function (response) {
                         if (response && response.success && response.packingMasters && response.packingMasters.length > 0) {
-                            var pmList = response.packingMasters;
-                            var selectedPm = null;
-                            var packText = $('#packing option:selected').text() || '';
-                            var normalizedSelected = $.trim(packText).toLowerCase();
+                            // When packingId is supplied, StockView already filters to the
+                            // matching packing master, so the first (and typically only)
+                            // entry is the one we need.
+                            var selectedPm = response.packingMasters[0];
 
-                            for (var i = 0; i < pmList.length; i++) {
-                                var pm = pmList[i];
-                                if (!pm.PackingType) continue;
-                                var name = pm.PackingType.toLowerCase();
-                                if (normalizedSelected && name.indexOf(normalizedSelected) === 0) {
-                                    selectedPm = pm;
-                                    break;
-                                }
-                            }
-                            if (!selectedPm) {
-                                selectedPm = pmList[0];
-                            }
-
-                            renderSlabTable(selectedPm);
+                            // Use the selectedDate value returned by StockView so our Inward row
+                            // matches exactly the date grouping used there.
+                            var selectedDateKey = response.selectedDate || asOn;
+                            renderSlabTable(selectedPm, selectedDateKey);
                         } else {
                             $('#slabTableContainer').html('<p class="text-muted">No slab data available for selected combination.</p>');
                         }
@@ -185,58 +185,133 @@
                 });
             }
 
-            function renderSlabTable(packingMaster) {
+            function renderSlabTable(packingMaster, selectedDateKey) {
                 var columnHeaders = packingMaster.ColumnHeaders || [];
                 var rows = packingMaster.Rows || [];
                 var colCount = columnHeaders.length;
+
+                // In StockView breakdown each packing master always has rows in this order:
+                // 0: Up to previous day, 1: Selected day, 2: TOTAL, 3: NO OF CASES.
+                // For Opening Stock, "As On Date" means stock up to and including
+                // that date, so we use the TOTAL row as Inward (non-editable).
+                var inwardValues = new Array(colCount);
+                for (var i = 0; i < colCount; i++) inwardValues[i] = 0;
+
+                var totalRow = null;
+                if (rows && rows.length) {
+                    for (var r = 0; r < rows.length; r++) {
+                        if (rows[r].RowType === 'TOTAL') {
+                            totalRow = rows[r];
+                            break;
+                        }
+                    }
+                }
+
+                // Fallbacks in case RowType is missing but order is kept
+                var sourceRow = totalRow;
+                if (!sourceRow && rows && rows.length > 2) sourceRow = rows[2];
+                if (!sourceRow && rows && rows.length > 1) sourceRow = rows[1];
+                if (!sourceRow && rows && rows.length > 0) sourceRow = rows[0];
+
+                if (sourceRow && sourceRow.Values) {
+                    for (var c = 0; c < colCount; c++) {
+                        var v = (sourceRow.Values.length > c && sourceRow.Values[c] != null)
+                            ? sourceRow.Values[c]
+                            : 0;
+                        inwardValues[c] = v;
+                    }
+                }
 
                 var html = '';
                 html += '<div class="slab-table-wrapper">';
                 html += '<table class="slab-table">';
                 html += '<thead><tr>';
                 html += '<th>Particulars</th>';
-                for (var i = 0; i < colCount; i++) {
-                    html += '<th>' + columnHeaders[i] + '</th>';
+                for (var h = 0; h < colCount; h++) {
+                    html += '<th>' + columnHeaders[h] + '</th>';
                 }
-                html += '<th>TOTAL NO. OF SLABS</th>';
                 html += '</tr></thead><tbody>';
 
-                for (var r = 0; r < rows.length; r++) {
-                    var row = rows[r];
-                    var rowType = row.RowType || '';
-                    var values = row.Values || [];
-                    var total = row.Total || 0;
+                var rowDefs = [
+                    { key: 'opening', label: 'Opening', css: '' },
+                    { key: 'inward', label: 'Inward', css: '' },
+                    { key: 'issued', label: 'Issued', css: 'total-row' },
+                    { key: 'closing', label: 'Closing', css: 'no-of-cases-row' }
+                ];
 
-                    var rowClass = '';
-                    if (rowType === 'TOTAL') rowClass = 'total-row';
-                    if (rowType === 'NO OF CASES') rowClass = 'no-of-cases-row';
-
-                    html += '<tr class="' + rowClass + '">';
-                    html += '<td class="particulars-cell">' + rowType + '</td>';
+                for (var rd = 0; rd < rowDefs.length; rd++) {
+                    var def = rowDefs[rd];
+                    html += '<tr class="' + def.css + '">';
+                    html += '<td class="particulars-cell">' + def.label + '</td>';
 
                     for (var c = 0; c < colCount; c++) {
-                        var v = values.length > c && values[c] != null ? values[c] : 0;
-                        var display = '';
-                        if (rowType === 'NO OF CASES') {
-                            display = v >= 1 ? Math.floor(v) : '';
-                        } else {
-                            display = v > 0 ? v.toFixed(2).replace(/\.00$/, '') : '';
+                        var cellVal = 0;
+                        if (def.key === 'inward') {
+                            cellVal = inwardValues[c] || 0;
                         }
-                        html += '<td>' + display + '</td>';
+
+                        var display = cellVal > 0 ? formatNumber(cellVal) : '';
+                        var readOnlyAttr = (def.key === 'inward' || def.key === 'closing') ? ' readonly' : '';
+                        var inputClass = 'slab-input slab-' + def.key;
+
+                        // Opening and Issued should accept only numeric input
+                        var inputType = (def.key === 'opening' || def.key === 'issued') ? 'number' : 'text';
+                        var extraAttrs = '';
+                        if (inputType === 'number') {
+                            extraAttrs = ' step="any" min="0"';
+                        }
+
+                        html += '<td><input type="' + inputType + '" class="' + inputClass + '" data-row="' + def.key + '" data-col="' + c + '" value="' + display + '"' + readOnlyAttr + extraAttrs + ' /></td>';
                     }
 
-                    var totalDisplay = '';
-                    if (rowType === 'NO OF CASES') {
-                        totalDisplay = total >= 1 ? Math.floor(total) : '';
-                    } else {
-                        totalDisplay = total > 0 ? total.toFixed(2).replace(/\.00$/, '') : '';
-                    }
-                    html += '<td>' + totalDisplay + '</td>';
                     html += '</tr>';
                 }
 
                 html += '</tbody></table></div>';
                 $('#slabTableContainer').html(html);
+
+                // Store column count for calculations and wire events
+                $('#slabTableContainer').data('colCount', colCount);
+                attachSlabEvents();
+                recalcClosing();
+            }
+
+            function parseNumber(val) {
+                if (val === null || val === undefined) return 0;
+                var s = ('' + val).replace(/,/g, '').trim();
+                if (s === '') return 0;
+                var n = parseFloat(s);
+                return isNaN(n) ? 0 : n;
+            }
+
+            function formatNumber(n) {
+                if (!n || isNaN(n)) return '';
+                if (Math.abs(n % 1) < 0.0000001) {
+                    return n.toString();
+                }
+                return n.toFixed(2).replace(/\.00$/, '');
+            }
+
+            function recalcClosing() {
+                var colCount = $('#slabTableContainer').data('colCount') || 0;
+
+                for (var c = 0; c < colCount; c++) {
+                    var o = parseNumber($('input.slab-opening[data-col="' + c + '"]').val());
+                    var i = parseNumber($('input.slab-inward[data-col="' + c + '"]').val());
+                    var iss = parseNumber($('input.slab-issued[data-col="' + c + '"]').val());
+
+                    var clos = o + i - iss;
+
+                    $('input.slab-closing[data-col="' + c + '"]').val(clos !== 0 ? formatNumber(clos) : '');
+                }
+            }
+
+            function attachSlabEvents() {
+                // Rebind to avoid duplicate handlers when table re-renders
+                $(document).off('input.slab-calc change.slab-calc', '.slab-opening, .slab-issued');
+                $(document).on('input.slab-calc change.slab-calc', '.slab-opening, .slab-issued', function () {
+                    recalcClosing();
+                });
             }
 
             $('#asOnDate, #product, #packing').on('change', function () {
