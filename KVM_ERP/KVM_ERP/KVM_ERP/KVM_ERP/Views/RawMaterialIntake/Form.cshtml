@@ -1121,6 +1121,9 @@
             $('#modal-no-boxes').text(noOfBoxes);
             $('#modal-count-per-kg').text(countPerKg);
             $('#modal-client-weight').text('@(Model != null ? (Model.CLIENTWGHT.ToString("0.000")) : "")');
+            // Remarks from main form Quality Check section
+            var qcRemarks = $('#remarks').val() || '';
+            $('#modal-remarks').text(qcRemarks);
             
             // Store TRANDID and Material Group for saving / filtering
             $('#productCalculationModal').data('trandid', trandid);
@@ -3657,7 +3660,12 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-4">
-                                <strong>Client Weight (KG):</strong> <span id="modal-client-weight"></span>
+                                <strong>Factory Weight (KG):</strong> <span id="modal-client-weight"></span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <strong>Remarks:</strong> <span id="modal-remarks"></span>
                             </div>
                         </div>
                         <div class="row mt-3">
