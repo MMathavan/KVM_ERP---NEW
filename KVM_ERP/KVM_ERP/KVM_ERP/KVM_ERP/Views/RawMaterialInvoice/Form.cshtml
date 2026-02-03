@@ -1402,7 +1402,13 @@
                     html += '<td class="packing-amount-cell"><input type="text" readonly class="packing-amount" data-index="' + index + '" value="0.00" /></td>';
                     html += '<td class="incentive-cell"><input type="text" readonly class="incentive-amount" data-index="' + index + '" value="' + incentiveAmount + '" /></td>';
                     html += '<td class="net-amount-cell"><input type="text" readonly class="net-amount" data-index="' + index + '" value="0.00" /></td>';
-                    html += '<td class="action-cell"><button type="button" class="btn btn-sm btn-info" onclick="openRateModal(' + index + ')" title="Rate Calculation"><i class="fa fa-calculator"></i> R</button></td>';
+
+                    // In approval screen for special invoices (421, 423), hide the R button
+                    if (isSpecialInvoice && isApprovalModePage === "true") {
+                        html += '<td class="action-cell"></td>';
+                    } else {
+                        html += '<td class="action-cell"><button type="button" class="btn btn-sm btn-info" onclick="openRateModal(' + index + ')" title="Rate Calculation"><i class="fa fa-calculator"></i> R</button></td>';
+                    }
                 }
                 
                 html += '</tr>';
@@ -2272,19 +2278,30 @@
                 }
             }
             
-            // Recalculate gross amount after amount changes
-            calculateGrossAmount();
-            
-            // Recalculate all tax rows if tax exists
+            // Detect if we are on the approval screen for special invoices (421, 423)
+            var approvalModeFlag = '@(ViewBag.IsApprovalMode != null && ViewBag.IsApprovalMode == true ? "true" : "false")';
+            var currentInvoiceId = @(ViewBag.EditId ?? 0);
+            var specialInvoiceIds = [421, 423];
+            var isSpecialApprovalScreen = (approvalModeFlag === "true" && specialInvoiceIds.indexOf(currentInvoiceId) !== -1);
+
+            if (isSpecialApprovalScreen) {
+                // Approval screen behaviour for special invoices:
+                //  - Do NOT recalculate Packing Amount or Incentive
+                //  - Recalculate Net Amount using the new Amount and existing Packing Amount
+                calculateNetAmount(index);
+            } else {
+                // Normal behaviour (non-approval or other invoices):
+                //  - Recalculate Packing Amount, which in turn updates Net Amount and totals
+                calculatePackingAmount(index);
+            }
+
+            // Recalculate all tax rows if tax exists (uses updated totals from calculateNetAmount/calculatePackingAmount)
             if ($('#taxTableBody tr').length > 0) {
                 $('#taxTableBody tr').each(function() {
                     var rowId = $(this).data('row-id');
                     calculateTaxRow(rowId);
                 });
             }
-            
-            // Also recalculate packing amounts when amount changes
-            calculatePackingAmount(index);
         }
 
         // Calculate Packing Amount
