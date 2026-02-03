@@ -1496,21 +1496,35 @@
 
         // Toggle column visibility based on mode
         function toggleColumnsForMode(isEditMode) {
+            // Detect if this is the approval screen for special invoices (421, 423)
+            var approvalModeFlag = '@(ViewBag.IsApprovalMode != null && ViewBag.IsApprovalMode == true ? "true" : "false")';
+            var editId = @(ViewBag.EditId ?? 0);
+            var specialInvoiceIds = [421, 423];
+            var isSpecialApprovalScreen = (approvalModeFlag === "true" && specialInvoiceIds.indexOf(editId) !== -1);
+
             if (isEditMode) {
+                // Always show editable value columns in edit mode
                 $('#rateColumn').css('display', 'table-cell');
                 $('#amountColumn').css('display', 'table-cell');
                 $('#packingKgColumn').css('display', 'table-cell');
                 $('#packingAmountColumn').css('display', 'table-cell');
                 $('#incentiveColumn').css('display', 'table-cell');
                 $('#netAmountColumn').css('display', 'table-cell');
-                $('#actionColumn').css('display', 'table-cell');
                 $('.rate-cell').css('display', 'table-cell');
                 $('.amount-cell').css('display', 'table-cell');
                 $('.packing-kg-cell').css('display', 'table-cell');
                 $('.packing-amount-cell').css('display', 'table-cell');
                 $('.incentive-cell').css('display', 'table-cell');
                 $('.net-amount-cell').css('display', 'table-cell');
-                $('.action-cell').css('display', 'table-cell');
+
+                // Action column is hidden only on approval screen for special invoices
+                if (isSpecialApprovalScreen) {
+                    $('#actionColumn').css('display', 'none');
+                    $('.action-cell').css('display', 'none');
+                } else {
+                    $('#actionColumn').css('display', 'table-cell');
+                    $('.action-cell').css('display', 'table-cell');
+                }
             } else {
                 $('#rateColumn, #amountColumn, #packingKgColumn, #packingAmountColumn, #incentiveColumn, #netAmountColumn, #actionColumn').css('display', 'none');
                 $('.rate-cell, .amount-cell, .packing-kg-cell, .packing-amount-cell, .incentive-cell, .net-amount-cell, .action-cell').css('display', 'none');
