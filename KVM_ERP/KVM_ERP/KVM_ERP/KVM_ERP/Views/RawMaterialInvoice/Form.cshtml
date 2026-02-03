@@ -1348,7 +1348,12 @@
         function renderItemsTable() {
             var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
             var editId = @(ViewBag.EditId ?? 0);
-            console.log('renderItemsTable called - isEditMode:', isEditMode, 'editId:', editId, 'itemsData.length:', itemsData.length);
+            // Behaviour tweak requested only for specific invoices (currently 421 and 423)
+            var specialInvoiceIds = [421, 423];
+            var isSpecialInvoice = specialInvoiceIds.indexOf(editId) !== -1;
+            var isApprovalModePage = '@(ViewBag.IsApprovalMode != null && ViewBag.IsApprovalMode == true ? "true" : "false")';
+
+            console.log('renderItemsTable called - isEditMode:', isEditMode, 'editId:', editId, 'itemsData.length:', itemsData.length, 'isSpecialInvoice:', isSpecialInvoice, 'isApprovalMode:', isApprovalModePage);
             var html = '';
             itemsData.forEach(function (item, index) {
                 var actualWeight = (item.ActualWeight || 0).toFixed(2);
@@ -1371,8 +1376,25 @@
                 // Conditionally render Rate, Amount, and new Packing columns based on edit mode
                 var shouldShowEditColumns = (isEditMode === "true") || (editId > 0);
                 if (shouldShowEditColumns) {
-                    var rateReadonly = isBknOrOthers ? '' : ' readonly';
-                    var packingReadonly = isBknOrOthers ? '' : ' readonly';
+                    var rateReadonly;
+                    var packingReadonly;
+
+                    if (isSpecialInvoice) {
+                        // Invoice 421:
+                        //  - Normal invoice screen: Rate & Packing/Kg must be read-only for main rows with R button
+                        //  - Approval screen (source=approval): Rate editable, Packing/Kg read-only
+                        if (isApprovalModePage === "true") {
+                            rateReadonly = '';
+                            packingReadonly = ' readonly';
+                        } else {
+                            rateReadonly = ' readonly';
+                            packingReadonly = ' readonly';
+                        }
+                    } else {
+                        // Other invoices: keep existing BKN/OTHERS behaviour
+                        rateReadonly = isBknOrOthers ? '' : ' readonly';
+                        packingReadonly = isBknOrOthers ? '' : ' readonly';
+                    }
 
                     html += '<td class="rate-cell"><input type="number" step="0.01" class="rate' + (isBknOrOthers ? ' bkn-others-cell' : '') + '" data-index="' + index + '" placeholder="0.00" data-bkn-others="' + (isBknOrOthers ? '1' : '0') + '"' + rateReadonly + ' /></td>';
                     html += '<td class="amount-cell"><input type="text" readonly class="amount" data-index="' + index + '" value="0.00" /></td>';
@@ -1421,10 +1443,20 @@
             // For main rows, calculations are normally driven by the R-button modal.
             // Exception: rows with HasBknOrOthers=1 allow manual editing of Rate and Packing/Kg.
 
-            $('.net-weight[data-bkn-others="1"], .rate[data-bkn-others="1"]').on('input', function () {
-                var index = $(this).data('index');
-                calculateAmount(index);
-            });
+            if (isSpecialInvoice && isApprovalModePage === "true") {
+                // Approval screen for invoice 421:
+                // Any change in Net Weight or Rate should recalc the Amount for that row.
+                $('.net-weight, .rate').on('input', function () {
+                    var index = $(this).data('index');
+                    calculateAmount(index);
+                });
+            } else {
+                // Normal behaviour: only BKN/OTHERS rows drive inline recalculation
+                $('.net-weight[data-bkn-others="1"], .rate[data-bkn-others="1"]').on('input', function () {
+                    var index = $(this).data('index');
+                    calculateAmount(index);
+                });
+            }
 
             $('.packing-kg[data-bkn-others="1"]').on('input', function () {
                 var index = $(this).data('index');
