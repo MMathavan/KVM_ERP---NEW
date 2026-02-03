@@ -265,18 +265,19 @@
                 <div class="company-address" style="font-size: 12px; margin-bottom: 6px;">
                     No. 61, Venkatesa Gramani Street, Chintadripet, Chennai - 600 002.
                 </div>
-                <div class="purchase-note-title" style="font-size: 16px; font-weight: 700; text-decoration: underline; margin-top: 4px;">
-                    RAW MATERIAL PURCHASE-NOTE
-                </div>
-                @* Show status only for specific invoices (ids 421 and 423) directly under the title *@
-                @if ((Model.TRANMID == 421 || Model.TRANMID == 423) && !string.IsNullOrEmpty(Model.StatusDescription))
-                {
-                    <div style="text-align: center; margin-top: 6px;">
-                        <span style="display: inline-block; padding: 3px 10px; font-size: 12px; font-weight: 700; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 4px;">
-                            @Model.StatusDescription
-                        </span>
+                <div style="margin-top: 4px; text-align: center;">
+                    <div class="purchase-note-title" style="font-size: 16px; font-weight: 700; text-decoration: underline;">
+                        RAW MATERIAL PURCHASE-NOTE
                     </div>
-                }
+                    @if (!string.IsNullOrEmpty(Model.StatusDescription))
+                    {
+                        <div class="invoice-status-text" style="margin-top: 4px; font-size: 12px; font-weight: 700;">
+                            <span style="display: inline-block; padding: 3px 10px; font-size: 12px; font-weight: 700; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 4px;">
+                                @Model.StatusDescription
+                            </span>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
 
