@@ -251,6 +251,55 @@
         var osProducts = [];
         var osPackingFields = [];
 
+        function osIsBknLabel(fieldLabelUpper) {
+            if (!fieldLabelUpper) return false;
+            var upper = fieldLabelUpper.toUpperCase().trim();
+            return upper === 'BKN' || upper === 'BROKEN' || upper.indexOf('BKN') !== -1;
+        }
+
+        function osIsOthersLabel(fieldLabelUpper) {
+            if (!fieldLabelUpper) return false;
+            var upper = fieldLabelUpper.toUpperCase().trim();
+            return upper === 'OTHERS' || upper === 'OTHER' || upper.indexOf('OTHERS') !== -1;
+        }
+
+        function osGetPackingFieldOrderKey(labelUpper) {
+            if (!labelUpper) return 1000;
+            var upper = labelUpper.toUpperCase().trim();
+
+            if (osIsBknLabel(upper)) return 9000;
+            if (osIsOthersLabel(upper)) return 9001;
+
+            var normalized = upper.replace(/\s+/g, '').replace(/:/g, '');
+
+            var orderMap = {
+                'U-5': 1,
+                'U-7': 2,
+                'U-10': 3,
+                'U-15': 4,
+                '10-20': 5,
+                '20-30': 6,
+                '30/40': 7,
+                '30-40': 7,
+                '40/50': 8,
+                '40-50': 8,
+                '50/60': 9,
+                '50-60': 9
+            };
+
+            if (orderMap.hasOwnProperty(normalized)) {
+                return orderMap[normalized];
+            }
+
+            var numbers = upper.match(/\d+/g);
+            if (numbers && numbers.length > 0) {
+                var max = Math.max.apply(null, numbers.map(function (n) { return parseInt(n, 10) || 0; }));
+                return 100 + max;
+            }
+
+            return 500;
+        }
+
         function osShowLoading() {
             $('#openingLoadingSpinner').show();
             $('#openingStockSummary').hide();
@@ -278,9 +327,14 @@
 
             var wrapper = $('<div class="os-slabs-row"></div>');
             var sorted = osPackingFields.slice().sort(function (a, b) {
-                var al = (a.label || '').toUpperCase();
-                var bl = (b.label || '').toUpperCase();
-                return al.localeCompare(bl);
+                var al = (a.label || '').toUpperCase().trim();
+                var bl = (b.label || '').toUpperCase().trim();
+                var aKey = osGetPackingFieldOrderKey(al);
+                var bKey = osGetPackingFieldOrderKey(bl);
+                if (aKey === bKey) {
+                    return al.localeCompare(bl);
+                }
+                return aKey - bKey;
             });
 
             for (var i = 0; i < sorted.length; i++) {
