@@ -225,14 +225,6 @@
                     </thead>
                     <tbody id="openingStockBody">
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th style="text-align:center;">S.No</th>
-                            <th style="text-align:left;">Item Description</th>
-                            <th style="text-align:left;">Slabs</th>
-                            <th style="text-align:center;">Action</th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
 
@@ -409,7 +401,10 @@
         }
 
         function osAddRow(afterRow) {
-            if (!osProducts || osProducts.length === 0) {
+            // If user clicks + before selecting a Product Type (no products
+            // loaded yet), block adding extra rows but still allow the
+            // initial default row created by osResetGrid.
+            if (afterRow && (!osProducts || osProducts.length === 0)) {
                 alert('Please select Product Type first.');
                 return;
             }
@@ -442,9 +437,10 @@
 
         function osResetGrid() {
             $('#openingStockBody').empty();
-            if (osProducts && osProducts.length > 0) {
-                osAddRow();
-            }
+            // Always ensure at least one row exists, even if products are
+            // not yet loaded. The item dropdown will simply be empty until
+            // a Product Type is selected.
+            osAddRow();
         }
 
         function osLoadProducts(groupId) {
@@ -555,11 +551,20 @@
                 $(this).closest('tr').remove();
                 osRenumberRows();
                 osRefreshItemOptions();
+                // Never allow the grid to be completely empty; if the last
+                // row was removed, recreate a fresh blank row.
+                if ($('#openingStockBody tr.os-row').length === 0) {
+                    osAddRow();
+                }
             });
 
             $(document).on('change', '.os-item-select', function () {
                 osRefreshItemOptions();
             });
+
+            // On initial load, render one default row even before any
+            // filters are selected.
+            osResetGrid();
         });
     </script>
 }
