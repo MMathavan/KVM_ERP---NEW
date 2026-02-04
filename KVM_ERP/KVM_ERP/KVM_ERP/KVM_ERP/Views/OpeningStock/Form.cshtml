@@ -3,6 +3,9 @@
     ViewBag.Title = "Opening Stock - Form";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var materialGroups = ViewBag.MaterialGroups as List<System.Web.Mvc.SelectListItem> ?? new List<System.Web.Mvc.SelectListItem>();
+    var gradeList = ViewBag.Grades as List<System.Web.Mvc.SelectListItem> ?? new List<System.Web.Mvc.SelectListItem>();
+    var colourList = ViewBag.ProductionColours as List<System.Web.Mvc.SelectListItem> ?? new List<System.Web.Mvc.SelectListItem>();
+    var receivedTypes = ViewBag.ReceivedTypes as List<System.Web.Mvc.SelectListItem> ?? new List<System.Web.Mvc.SelectListItem>();
 }
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -63,41 +66,85 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label class="control-label">As on Date <span class="text-danger">*</span></label>
+                        <label class="control-label">Date <span class="text-danger">*</span></label>
                         @Html.TextBoxFor(m => m.TRANDATE, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", id = "asOnDate", required = "required" })
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">Product Type <span class="text-danger">*</span></label>
-                        @Html.DropDownList("ProductTypeId", materialGroups, "-- Select Product Type --", new { @class = "form-control select2", id = "productType" })
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="control-label">Product <span class="text-danger">*</span></label>
-                        <select id="product" class="form-control select2">
-                            <option value="">-- Select Product --</option>
-                        </select>
+                        @Html.DropDownList("ProductTypeId", materialGroups, "-- Select Product Type --", new { @class = "form-control select2", id = "productType", required = "required" })
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">Packing <span class="text-danger">*</span></label>
-                        <select id="packing" class="form-control select2">
+                        <select id="packing" class="form-control select2" required>
                             <option value="">-- Select Packing --</option>
                         </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Grade <span class="text-danger">*</span></label>
+                        @Html.DropDownList("GradeId", gradeList, "-- Select Grade --", new { @class = "form-control select2", id = "grade", required = "required" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Production Colour <span class="text-danger">*</span></label>
+                        @Html.DropDownList("ProductionColourId", colourList, "-- Select Colour --", new { @class = "form-control select2", id = "productionColour", required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Received Type <span class="text-danger">*</span></label>
+                        @Html.DropDownList("ReceivedTypeId", receivedTypes, "-- Select Received Type --", new { @class = "form-control select2", id = "receivedType", required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Packing Weight with Glazing <span class="text-danger">*</span></label>
+                        <input id="packingWeight" type="number" class="form-control" step="0.001" min="0" required />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">No of Slabs <span class="text-danger">*</span></label>
+                        <input id="noOfSlabs" type="number" class="form-control" step="1" min="0" required />
                     </div>
                 </div>
             </div>
 
             <div class="table-section">
                 <div class="table-section-title">
-                    <i class="fa fa-table"></i> Opening Stock Slab Details
+                    <i class="fa fa-table"></i> Opening Stock Summary
                 </div>
-                <div id="slabTableContainer">
-                    <p class="text-muted">Select As on Date, Product Type, Product and Packing to view slab-wise opening stock.</p>
+                <div class="loading-spinner" id="openingLoadingSpinner" style="display:none; text-align:center; padding:1rem;">
+                    <div class="spinner" style="border:4px solid #f3f3f3;border-top:4px solid #4facfe;border-radius:50%;width:30px;height:30px;animation:spin 1s linear infinite;margin:0 auto 0.5rem;"></div>
+                    <p>Loading opening stock...</p>
                 </div>
+                <table id="openingStockSummary" class="display table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;">S.No</th>
+                            <th style="text-align:left;">Item</th>
+                            <th style="text-align:left;">Total</th>
+                            <th style="text-align:left;">Cases</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th style="text-align:center;">S.No</th>
+                            <th style="text-align:left;">Item</th>
+                            <th style="text-align:left;">Total</th>
+                            <th style="text-align:left;">Cases</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
 
             <div class="form-group text-center" style="margin-top: 25px;">
@@ -111,7 +158,145 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
+        var openingStockTable = null;
+        var osProductGroupMap = @Html.Raw(System.Web.Helpers.Json.Encode(ViewBag.ProductGroupMap));
+
+        function osFormatNumber(value, decimalPlaces) {
+            if (value === null || value === undefined || value === '') {
+                return '';
+            }
+
+            var strValue = value.toString().replace(/,/g, '');
+            var num = parseFloat(strValue);
+            if (isNaN(num)) {
+                return '';
+            }
+            if (Math.floor(num) === num) {
+                return num.toString();
+            }
+            decimalPlaces = (typeof decimalPlaces === 'number') ? decimalPlaces : 2;
+            var str = num.toFixed(decimalPlaces);
+            str = str.replace(/(\.\d*?[1-9])0+$/, '$1').replace(/\.0+$/, '').replace(/\.$/, '');
+            return str;
+        }
+
+        function osShowLoading() {
+            $('#openingLoadingSpinner').show();
+            $('#openingStockSummary').hide();
+        }
+
+        function osHideLoading() {
+            $('#openingLoadingSpinner').hide();
+            $('#openingStockSummary').show();
+        }
+
+        function osReloadSummary() {
+            var asOn = $('#asOnDate').val();
+            var groupId = $('#productType').val();
+            var packingId = $('#packing').val();
+            var gradeId = $('#grade').val();
+            var colourId = $('#productionColour').val();
+            var receivedType = $('#receivedType').val();
+            var packingWeight = $('#packingWeight').val();
+            var noOfSlabs = $('#noOfSlabs').val();
+
+            if (!asOn || !groupId || !packingId || !gradeId || !colourId || !receivedType || !packingWeight || !noOfSlabs) {
+                if (openingStockTable) {
+                    openingStockTable.clear().draw();
+                }
+                return;
+            }
+
+            osShowLoading();
+
+            $.ajax({
+                url: '@Url.Action("GetAjaxData", "StockView")',
+                type: 'POST',
+                data: {
+                    asOnDate: asOn
+                },
+                success: function (response) {
+                    osHideLoading();
+
+                    var data = (response && response.data) ? response.data : [];
+
+                    // Filter items by selected Product Type (Material Group)
+                    if (osProductGroupMap && groupId) {
+                        var gid = parseInt(groupId, 10);
+                        data = $.grep(data, function (row) {
+                            var itemId = row && row.length > 0 ? row[0] : null;
+                            if (itemId === null || itemId === undefined) return false;
+                            var mapped = osProductGroupMap[itemId];
+                            return mapped === gid;
+                        });
+                    }
+
+                    if (!openingStockTable) {
+                        openingStockTable = $('#openingStockSummary').DataTable({
+                            data: data,
+                            destroy: true,
+                            columns: [
+                                {
+                                    data: null,
+                                    orderable: false,
+                                    searchable: false,
+                                    width: '10%',
+                                    className: 'text-center',
+                                    render: function (data, type, row, meta) {
+                                        return meta.row + 1;
+                                    }
+                                },
+                                {
+                                    data: 1,
+                                    width: '55%',
+                                    render: function (data) {
+                                        return '<span>' + data + '</span>';
+                                    }
+                                },
+                                {
+                                    data: 2,
+                                    width: '20%',
+                                    render: function (data) {
+                                        var display = osFormatNumber(data);
+                                        return '<span style="font-weight:600;color:#28a745;">' + display + ' SLAB</span>';
+                                    }
+                                },
+                                {
+                                    data: 3,
+                                    width: '15%',
+                                    render: function (data) {
+                                        var display = osFormatNumber(data);
+                                        return '<span style="font-weight:600;color:#28a745;">' + display + ' CASES</span>';
+                                    }
+                                }
+                            ],
+                            pageLength: 10,
+                            lengthMenu: [[10, 25, 50], [10, 25, 50]],
+                            language: {
+                                search: 'Search Items:',
+                                lengthMenu: 'Show _MENU_ items per page',
+                                info: 'Showing _START_ to _END_ of _TOTAL_ items',
+                                emptyTable: 'No stock data available'
+                            },
+                            responsive: true,
+                            autoWidth: false
+                        });
+                    } else {
+                        openingStockTable.clear();
+                        openingStockTable.rows.add(data);
+                        openingStockTable.draw();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    osHideLoading();
+                    alert('Error loading opening stock summary: ' + error);
+                }
+            });
+        }
+
         $(document).ready(function () {
             $('.select2').select2({
                 placeholder: '-- Select --',
@@ -121,19 +306,21 @@
 
             $('#productType').on('change', function () {
                 var groupId = $(this).val();
-                $('#product').empty().append('<option value="">-- Select Product --</option>');
+
                 $('#packing').empty().append('<option value="">-- Select Packing --</option>');
+                $('#grade').val('').trigger('change');
+                $('#productionColour').val('').trigger('change');
+                $('#receivedType').val('').trigger('change');
+                // Clear numeric inputs for Packing Weight with Glazing and No of Slabs
+                $('#packingWeight').val('');
+                $('#noOfSlabs').val('');
+
                 if (!groupId) {
+                    if (openingStockTable) {
+                        openingStockTable.clear().draw();
+                    }
                     return;
                 }
-
-                $.getJSON('@Url.Action("GetProducts", "OpeningStock")', { groupId: groupId })
-                    .done(function (list) {
-                        $.each(list, function (_, item) {
-                            $('#product').append('<option value="' + item.id + '">' + item.text + '</option>');
-                        });
-                        $('#product').trigger('change.select2');
-                    });
 
                 $.getJSON('@Url.Action("GetPackingMasters", "OpeningStock")', { groupId: groupId })
                     .done(function (list) {
@@ -142,180 +329,23 @@
                         });
                         $('#packing').trigger('change.select2');
                     });
+
+                $.getJSON('@Url.Action("GetFilterValues", "OpeningStock")', { groupId: groupId, asOnDate: $('#asOnDate').val() })
+                    .done(function (data) {
+                        // Optionally pre-fill numeric inputs using backend-calculated values
+                        // while still allowing the user to override.
+                        if (data && data.packingWeights && data.packingWeights.length > 0) {
+                            $('#packingWeight').val(data.packingWeights[0].value);
+                        }
+
+                        if (data && data.noOfSlabs && data.noOfSlabs.length > 0) {
+                            $('#noOfSlabs').val(data.noOfSlabs[0].value);
+                        }
+                    });
             });
 
-            function tryRenderTable() {
-                var asOn = $('#asOnDate').val();
-                var productId = $('#product').val();
-                var packingId = $('#packing').val();
-
-                if (!asOn || !productId || !packingId) {
-                    $('#slabTableContainer').html('<p class="text-muted">Select As on Date, Product Type, Product and Packing to view slab-wise opening stock.</p>');
-                    return;
-                }
-
-                // Reuse StockView breakdown logic for a single product/packing as on As on Date
-                $.ajax({
-                    url: '@Url.Action("GetItemDetails", "StockView")',
-                    type: 'POST',
-                    data: {
-                        itemId: productId,
-                        asOnDate: asOn,
-                        calculationMode: null,
-                        packingId: packingId
-                    },
-                    success: function (response) {
-                        if (response && response.success && response.packingMasters && response.packingMasters.length > 0) {
-                            // When packingId is supplied, StockView already filters to the
-                            // matching packing master, so the first (and typically only)
-                            // entry is the one we need.
-                            var selectedPm = response.packingMasters[0];
-
-                            // Use the selectedDate value returned by StockView so our Inward row
-                            // matches exactly the date grouping used there.
-                            var selectedDateKey = response.selectedDate || asOn;
-                            renderSlabTable(selectedPm, selectedDateKey);
-                        } else {
-                            $('#slabTableContainer').html('<p class="text-muted">No slab data available for selected combination.</p>');
-                        }
-                    },
-                    error: function () {
-                        $('#slabTableContainer').html('<p class="text-danger">Error loading slab data.</p>');
-                    }
-                });
-            }
-
-            function renderSlabTable(packingMaster, selectedDateKey) {
-                var columnHeaders = packingMaster.ColumnHeaders || [];
-                var rows = packingMaster.Rows || [];
-                var colCount = columnHeaders.length;
-
-                // In StockView breakdown each packing master always has rows in this order:
-                // 0: Up to previous day, 1: Selected day, 2: TOTAL, 3: NO OF CASES.
-                // For Opening Stock, "As On Date" means stock up to and including
-                // that date, so we use the TOTAL row as Inward (non-editable).
-                var inwardValues = new Array(colCount);
-                for (var i = 0; i < colCount; i++) inwardValues[i] = 0;
-
-                var totalRow = null;
-                if (rows && rows.length) {
-                    for (var r = 0; r < rows.length; r++) {
-                        if (rows[r].RowType === 'TOTAL') {
-                            totalRow = rows[r];
-                            break;
-                        }
-                    }
-                }
-
-                // Fallbacks in case RowType is missing but order is kept
-                var sourceRow = totalRow;
-                if (!sourceRow && rows && rows.length > 2) sourceRow = rows[2];
-                if (!sourceRow && rows && rows.length > 1) sourceRow = rows[1];
-                if (!sourceRow && rows && rows.length > 0) sourceRow = rows[0];
-
-                if (sourceRow && sourceRow.Values) {
-                    for (var c = 0; c < colCount; c++) {
-                        var v = (sourceRow.Values.length > c && sourceRow.Values[c] != null)
-                            ? sourceRow.Values[c]
-                            : 0;
-                        inwardValues[c] = v;
-                    }
-                }
-
-                var html = '';
-                html += '<div class="slab-table-wrapper">';
-                html += '<table class="slab-table">';
-                html += '<thead><tr>';
-                html += '<th>Particulars</th>';
-                for (var h = 0; h < colCount; h++) {
-                    html += '<th>' + columnHeaders[h] + '</th>';
-                }
-                html += '</tr></thead><tbody>';
-
-                var rowDefs = [
-                    { key: 'opening', label: 'Opening', css: '' },
-                    { key: 'inward', label: 'Inward', css: '' },
-                    { key: 'issued', label: 'Issued', css: 'total-row' },
-                    { key: 'closing', label: 'Closing', css: 'no-of-cases-row' }
-                ];
-
-                for (var rd = 0; rd < rowDefs.length; rd++) {
-                    var def = rowDefs[rd];
-                    html += '<tr class="' + def.css + '">';
-                    html += '<td class="particulars-cell">' + def.label + '</td>';
-
-                    for (var c = 0; c < colCount; c++) {
-                        var cellVal = 0;
-                        if (def.key === 'inward') {
-                            cellVal = inwardValues[c] || 0;
-                        }
-
-                        var display = cellVal > 0 ? formatNumber(cellVal) : '';
-                        var readOnlyAttr = (def.key === 'inward' || def.key === 'closing') ? ' readonly' : '';
-                        var inputClass = 'slab-input slab-' + def.key;
-
-                        // Opening and Issued should accept only numeric input
-                        var inputType = (def.key === 'opening' || def.key === 'issued') ? 'number' : 'text';
-                        var extraAttrs = '';
-                        if (inputType === 'number') {
-                            extraAttrs = ' step="any" min="0"';
-                        }
-
-                        html += '<td><input type="' + inputType + '" class="' + inputClass + '" data-row="' + def.key + '" data-col="' + c + '" value="' + display + '"' + readOnlyAttr + extraAttrs + ' /></td>';
-                    }
-
-                    html += '</tr>';
-                }
-
-                html += '</tbody></table></div>';
-                $('#slabTableContainer').html(html);
-
-                // Store column count for calculations and wire events
-                $('#slabTableContainer').data('colCount', colCount);
-                attachSlabEvents();
-                recalcClosing();
-            }
-
-            function parseNumber(val) {
-                if (val === null || val === undefined) return 0;
-                var s = ('' + val).replace(/,/g, '').trim();
-                if (s === '') return 0;
-                var n = parseFloat(s);
-                return isNaN(n) ? 0 : n;
-            }
-
-            function formatNumber(n) {
-                if (!n || isNaN(n)) return '';
-                if (Math.abs(n % 1) < 0.0000001) {
-                    return n.toString();
-                }
-                return n.toFixed(2).replace(/\.00$/, '');
-            }
-
-            function recalcClosing() {
-                var colCount = $('#slabTableContainer').data('colCount') || 0;
-
-                for (var c = 0; c < colCount; c++) {
-                    var o = parseNumber($('input.slab-opening[data-col="' + c + '"]').val());
-                    var i = parseNumber($('input.slab-inward[data-col="' + c + '"]').val());
-                    var iss = parseNumber($('input.slab-issued[data-col="' + c + '"]').val());
-
-                    var clos = o + i - iss;
-
-                    $('input.slab-closing[data-col="' + c + '"]').val(clos !== 0 ? formatNumber(clos) : '');
-                }
-            }
-
-            function attachSlabEvents() {
-                // Rebind to avoid duplicate handlers when table re-renders
-                $(document).off('input.slab-calc change.slab-calc', '.slab-opening, .slab-issued');
-                $(document).on('input.slab-calc change.slab-calc', '.slab-opening, .slab-issued', function () {
-                    recalcClosing();
-                });
-            }
-
-            $('#asOnDate, #product, #packing').on('change', function () {
-                tryRenderTable();
+            $('#asOnDate, #packing, #grade, #productionColour, #receivedType, #packingWeight, #noOfSlabs').on('change', function () {
+                osReloadSummary();
             });
         });
     </script>
