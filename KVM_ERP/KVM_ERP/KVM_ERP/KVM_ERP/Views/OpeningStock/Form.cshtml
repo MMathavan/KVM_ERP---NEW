@@ -34,6 +34,93 @@
     .table-section { margin-top: 25px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9; }
     .table-section-title { margin-bottom: 15px; font-weight: 600; color: #2c3e50; display: flex; align-items: center; gap: 10px; }
 
+    /* Opening Stock custom grid styling */
+    #openingStockSummary {
+        table-layout: fixed;
+    }
+
+    #openingStockSummary thead th {
+        background-color: #f1f3f5;
+        border-bottom: 1px solid #dee2e6;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    #openingStockSummary tbody td {
+        vertical-align: top;
+        background-color: #ffffff;
+    }
+
+    #openingStockSummary tfoot th {
+        background-color: #f8f9fa;
+        font-size: 12px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    #openingStockSummary th:nth-child(1),
+    #openingStockSummary td.os-sno {
+        width: 60px;
+    }
+
+    #openingStockSummary th:nth-child(2),
+    #openingStockSummary td.os-item-cell {
+        width: 22%;
+    }
+
+    #openingStockSummary th:nth-child(3),
+    #openingStockSummary td.os-slabs-cell {
+        width: auto;
+    }
+
+    #openingStockSummary th:nth-child(4),
+    #openingStockSummary td.os-action-cell {
+        width: 90px;
+        white-space: nowrap;
+    }
+
+    #openingStockSummary td.os-item-cell,
+    #openingStockSummary td.os-action-cell {
+        vertical-align: middle;
+    }
+
+    #openingStockSummary td.os-slabs-cell {
+        padding: 4px 6px !important;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+    }
+
+    #openingStockSummary .os-slabs-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, max-content));
+        column-gap: 6px;
+        row-gap: 4px;
+        align-items: flex-start;
+    }
+
+    #openingStockSummary .os-slab {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #openingStockSummary .os-slab label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 2px;
+        color: #495057;
+    }
+
+    #openingStockSummary .os-slab .os-slab-input {
+        height: 28px;
+        font-size: 12px;
+        width: 60px;
+        text-align: right;
+    }
+
+    #openingStockSummary .os-item-select {
+        width: 100%;
+    }
+
     .slab-table-wrapper { overflow-x: auto; }
     .slab-table { border-collapse: collapse; width: 100%; font-size: 12px; }
     .slab-table thead th {
@@ -125,29 +212,31 @@
                 </div>
                 <div class="loading-spinner" id="openingLoadingSpinner" style="display:none; text-align:center; padding:1rem;">
                     <div class="spinner" style="border:4px solid #f3f3f3;border-top:4px solid #4facfe;border-radius:50%;width:30px;height:30px;animation:spin 1s linear infinite;margin:0 auto 0.5rem;"></div>
-                    <p>Loading opening stock...</p>
+                    <p>Loading products...</p>
                 </div>
-                <table id="openingStockSummary" class="display table table-striped" cellspacing="0" width="100%">
+                <table id="openingStockSummary" class="table table-bordered table-sm" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th style="text-align:center;">S.No</th>
-                            <th style="text-align:left;">Item</th>
-                            <th style="text-align:left;">Total</th>
-                            <th style="text-align:left;">Cases</th>
+                            <th style="text-align:left;">Item Description</th>
+                            <th style="text-align:left;">Slabs</th>
+                            <th style="text-align:center;">Action</th>
                         </tr>
                     </thead>
+                    <tbody id="openingStockBody">
+                    </tbody>
                     <tfoot>
                         <tr>
                             <th style="text-align:center;">S.No</th>
-                            <th style="text-align:left;">Item</th>
-                            <th style="text-align:left;">Total</th>
-                            <th style="text-align:left;">Cases</th>
+                            <th style="text-align:left;">Item Description</th>
+                            <th style="text-align:left;">Slabs</th>
+                            <th style="text-align:center;">Action</th>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
-            <div class="form-group text-center" style="margin-top: 25px;">
+            <div class="form-group" style="margin-top: 25px;">
                 <a href="@Url.Action("Index", "OpeningStock")" class="btn btn-secondary">
                     <i class="fa fa-arrow-left"></i> Back to List
                 </a>
@@ -158,30 +247,9 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
-        var openingStockTable = null;
-        var osProductGroupMap = @Html.Raw(System.Web.Helpers.Json.Encode(ViewBag.ProductGroupMap));
-
-        function osFormatNumber(value, decimalPlaces) {
-            if (value === null || value === undefined || value === '') {
-                return '';
-            }
-
-            var strValue = value.toString().replace(/,/g, '');
-            var num = parseFloat(strValue);
-            if (isNaN(num)) {
-                return '';
-            }
-            if (Math.floor(num) === num) {
-                return num.toString();
-            }
-            decimalPlaces = (typeof decimalPlaces === 'number') ? decimalPlaces : 2;
-            var str = num.toFixed(decimalPlaces);
-            str = str.replace(/(\.\d*?[1-9])0+$/, '$1').replace(/\.0+$/, '').replace(/\.$/, '');
-            return str;
-        }
+        var osProducts = [];
+        var osPackingFields = [];
 
         function osShowLoading() {
             $('#openingLoadingSpinner').show();
@@ -193,107 +261,143 @@
             $('#openingStockSummary').show();
         }
 
-        function osReloadSummary() {
-            var asOn = $('#asOnDate').val();
-            var groupId = $('#productType').val();
-            var packingId = $('#packing').val();
-            var gradeId = $('#grade').val();
-            var colourId = $('#productionColour').val();
-            var receivedType = $('#receivedType').val();
-            var packingWeight = $('#packingWeight').val();
-            var noOfSlabs = $('#noOfSlabs').val();
+        function osRenumberRows() {
+            $('#openingStockBody tr.os-row').each(function (index) {
+                $(this).find('.os-sno').text(index + 1);
+            });
+        }
 
-            if (!asOn || !groupId || !packingId || !gradeId || !colourId || !receivedType || !packingWeight || !noOfSlabs) {
-                if (openingStockTable) {
-                    openingStockTable.clear().draw();
-                }
+        function osRenderSlabsForRow($row) {
+            var $cell = $row.find('.os-slabs-cell');
+            $cell.empty();
+
+            if (!osPackingFields || osPackingFields.length === 0) {
+                $cell.append('<span class="text-muted">Select Packing to show slabs.</span>');
+                return;
+            }
+
+            var wrapper = $('<div class="os-slabs-row"></div>');
+            var sorted = osPackingFields.slice().sort(function (a, b) {
+                var al = (a.label || '').toUpperCase();
+                var bl = (b.label || '').toUpperCase();
+                return al.localeCompare(bl);
+            });
+
+            for (var i = 0; i < sorted.length; i++) {
+                var field = sorted[i];
+                var $slab = $('<div class="os-slab"></div>');
+                var labelHtml = '<label>' + (field.label || '') + ':</label>';
+                var inputHtml = '<input type="number" class="form-control os-slab-input" min="0" step="0.001" data-packtmid="' + field.id + '" />';
+                $slab.append(labelHtml);
+                $slab.append(inputHtml);
+                wrapper.append($slab);
+            }
+
+            $cell.append(wrapper);
+        }
+
+        function osBuildItemSelect() {
+            var $select = $('<select class="form-control os-item-select"></select>');
+            $select.append('<option></option>');
+            $.each(osProducts, function (_, item) {
+                $select.append('<option value="' + item.id + '">' + item.text + '</option>');
+            });
+            return $select;
+        }
+
+        function osEnhanceItemSelect($select) {
+            $select.select2({
+                placeholder: 'Search Item Description',
+                allowClear: true,
+                width: '100%'
+            });
+        }
+
+        function osAddRow(afterRow) {
+            if (!osProducts || osProducts.length === 0) {
+                alert('Please select Product Type first.');
+                return;
+            }
+
+            var $row = $('<tr class="os-row"></tr>');
+            $row.append('<td class="os-sno text-center"></td>');
+            $row.append('<td class="os-item-cell"></td>');
+            $row.append('<td class="os-slabs-cell"></td>');
+            $row.append('<td class="os-action-cell text-center"></td>');
+
+            var $select = osBuildItemSelect();
+            $row.find('.os-item-cell').append($select);
+
+            var actionsHtml = '' +
+                '<button type="button" class="btn btn-sm btn-success os-add-row"><i class="fa fa-plus"></i></button> ' +
+                '<button type="button" class="btn btn-sm btn-danger os-remove-row"><i class="fa fa-trash"></i></button>';
+            $row.find('.os-action-cell').html(actionsHtml);
+
+            if (afterRow && afterRow.length) {
+                afterRow.after($row);
+            } else {
+                $('#openingStockBody').append($row);
+            }
+
+            osEnhanceItemSelect($select);
+            osRenderSlabsForRow($row);
+            osRenumberRows();
+        }
+
+        function osResetGrid() {
+            $('#openingStockBody').empty();
+            if (osProducts && osProducts.length > 0) {
+                osAddRow();
+            }
+        }
+
+        function osLoadProducts(groupId) {
+            osProducts = [];
+            if (!groupId) {
+                osResetGrid();
                 return;
             }
 
             osShowLoading();
-
-            $.ajax({
-                url: '@Url.Action("GetAjaxData", "StockView")',
-                type: 'POST',
-                data: {
-                    asOnDate: asOn
-                },
-                success: function (response) {
+            $.getJSON('@Url.Action("GetProducts", "OpeningStock")', { groupId: groupId })
+                .done(function (list) {
                     osHideLoading();
-
-                    var data = (response && response.data) ? response.data : [];
-
-                    // Filter items by selected Product Type (Material Group)
-                    if (osProductGroupMap && groupId) {
-                        var gid = parseInt(groupId, 10);
-                        data = $.grep(data, function (row) {
-                            var itemId = row && row.length > 0 ? row[0] : null;
-                            if (itemId === null || itemId === undefined) return false;
-                            var mapped = osProductGroupMap[itemId];
-                            return mapped === gid;
-                        });
-                    }
-
-                    if (!openingStockTable) {
-                        openingStockTable = $('#openingStockSummary').DataTable({
-                            data: data,
-                            destroy: true,
-                            columns: [
-                                {
-                                    data: null,
-                                    orderable: false,
-                                    searchable: false,
-                                    width: '10%',
-                                    className: 'text-center',
-                                    render: function (data, type, row, meta) {
-                                        return meta.row + 1;
-                                    }
-                                },
-                                {
-                                    data: 1,
-                                    width: '55%',
-                                    render: function (data) {
-                                        return '<span>' + data + '</span>';
-                                    }
-                                },
-                                {
-                                    data: 2,
-                                    width: '20%',
-                                    render: function (data) {
-                                        var display = osFormatNumber(data);
-                                        return '<span style="font-weight:600;color:#28a745;">' + display + ' SLAB</span>';
-                                    }
-                                },
-                                {
-                                    data: 3,
-                                    width: '15%',
-                                    render: function (data) {
-                                        var display = osFormatNumber(data);
-                                        return '<span style="font-weight:600;color:#28a745;">' + display + ' CASES</span>';
-                                    }
-                                }
-                            ],
-                            pageLength: 10,
-                            lengthMenu: [[10, 25, 50], [10, 25, 50]],
-                            language: {
-                                search: 'Search Items:',
-                                lengthMenu: 'Show _MENU_ items per page',
-                                info: 'Showing _START_ to _END_ of _TOTAL_ items',
-                                emptyTable: 'No stock data available'
-                            },
-                            responsive: true,
-                            autoWidth: false
-                        });
-                    } else {
-                        openingStockTable.clear();
-                        openingStockTable.rows.add(data);
-                        openingStockTable.draw();
-                    }
-                },
-                error: function (xhr, status, error) {
+                    osProducts = list || [];
+                    osResetGrid();
+                })
+                .fail(function (xhr, status, error) {
                     osHideLoading();
-                    alert('Error loading opening stock summary: ' + error);
-                }
+                    alert('Error loading products: ' + error);
+                });
+        }
+
+        function osLoadPackingTypes(packingId) {
+            osPackingFields = [];
+            if (!packingId) {
+                osRefreshAllSlabs();
+                return;
+            }
+
+            osShowLoading();
+            $.getJSON('@Url.Action("GetPackingTypeFields", "RawMaterialIntake")', { packingId: packingId })
+                .done(function (data) {
+                    osHideLoading();
+                    if (data && data.success && data.fields) {
+                        osPackingFields = data.fields;
+                    }
+                    osRefreshAllSlabs();
+                })
+                .fail(function () {
+                    osHideLoading();
+                    osPackingFields = [];
+                    osRefreshAllSlabs();
+                    alert('Error loading packing type fields.');
+                });
+        }
+
+        function osRefreshAllSlabs() {
+            $('#openingStockBody tr.os-row').each(function () {
+                osRenderSlabsForRow($(this));
             });
         }
 
@@ -311,14 +415,11 @@
                 $('#grade').val('').trigger('change');
                 $('#productionColour').val('').trigger('change');
                 $('#receivedType').val('').trigger('change');
-                // Clear numeric inputs for Packing Weight with Glazing and No of Slabs
                 $('#packingWeight').val('');
                 $('#noOfSlabs').val('');
 
                 if (!groupId) {
-                    if (openingStockTable) {
-                        openingStockTable.clear().draw();
-                    }
+                    osLoadProducts(null);
                     return;
                 }
 
@@ -327,13 +428,11 @@
                         $.each(list, function (_, item) {
                             $('#packing').append('<option value="' + item.id + '">' + item.text + '</option>');
                         });
-                        $('#packing').trigger('change.select2');
+                        $('#packing').trigger('change.select2').trigger('change');
                     });
 
                 $.getJSON('@Url.Action("GetFilterValues", "OpeningStock")', { groupId: groupId, asOnDate: $('#asOnDate').val() })
                     .done(function (data) {
-                        // Optionally pre-fill numeric inputs using backend-calculated values
-                        // while still allowing the user to override.
                         if (data && data.packingWeights && data.packingWeights.length > 0) {
                             $('#packingWeight').val(data.packingWeights[0].value);
                         }
@@ -342,10 +441,23 @@
                             $('#noOfSlabs').val(data.noOfSlabs[0].value);
                         }
                     });
+
+                osLoadProducts(groupId);
             });
 
-            $('#asOnDate, #packing, #grade, #productionColour, #receivedType, #packingWeight, #noOfSlabs').on('change', function () {
-                osReloadSummary();
+            $('#packing').on('change', function () {
+                var packingId = $(this).val();
+                osLoadPackingTypes(packingId);
+            });
+
+            $(document).on('click', '.os-add-row', function () {
+                var $row = $(this).closest('tr');
+                osAddRow($row);
+            });
+
+            $(document).on('click', '.os-remove-row', function () {
+                $(this).closest('tr').remove();
+                osRenumberRows();
             });
         });
     </script>
