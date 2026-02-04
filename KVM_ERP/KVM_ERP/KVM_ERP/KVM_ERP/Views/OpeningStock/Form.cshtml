@@ -228,10 +228,13 @@
                 </table>
             </div>
 
-            <div class="form-group" style="margin-top: 25px;">
+            <div class="form-group" style="margin-top: 25px; display:flex; gap:10px;">
                 <a href="@Url.Action("Index", "OpeningStock")" class="btn btn-secondary">
                     <i class="fa fa-arrow-left"></i> Back to List
                 </a>
+                <button type="button" id="btnSaveOpening" class="btn btn-primary save-btn" onclick="saveOpeningStock()">
+                    <i class="fa fa-save"></i> Save Opening Stock
+                </button>
             </div>
         </div>
     </div>
@@ -566,5 +569,120 @@
             // filters are selected.
             osResetGrid();
         });
+
+        function saveOpeningStock() {
+            var $btn = $('#btnSaveOpening');
+
+            var asOnDate = $('#asOnDate').val();
+            var productTypeId = $('#productType').val();
+            var packingId = $('#packing').val();
+            var gradeId = $('#grade').val();
+            var productionColourId = $('#productionColour').val();
+            var receivedTypeId = $('#receivedType').val();
+            var packingWeight = parseFloat($('#packingWeight').val()) || 0;
+            var noOfSlabs = parseInt($('#noOfSlabs').val(), 10) || 0;
+
+            if (!asOnDate) {
+                alert('Please select Date.');
+                return;
+            }
+            if (!productTypeId) {
+                alert('Please select Product Type.');
+                return;
+            }
+            if (!packingId) {
+                alert('Please select Packing.');
+                return;
+            }
+            if (!gradeId) {
+                alert('Please select Grade.');
+                return;
+            }
+            if (!productionColourId) {
+                alert('Please select Production Colour.');
+                return;
+            }
+            if (!receivedTypeId) {
+                alert('Please select Received Type.');
+                return;
+            }
+            if (packingWeight <= 0) {
+                alert('Packing Weight with Glazing must be greater than zero.');
+                return;
+            }
+            if (noOfSlabs <= 0) {
+                alert('No of Slabs must be greater than zero.');
+                return;
+            }
+
+            var items = [];
+
+            $('#openingStockBody tr.os-row').each(function () {
+                var $row = $(this);
+                var itemId = $row.find('.os-item-select').val();
+                if (!itemId) {
+                    return; // skip blank rows
+                }
+
+                var slabs = [];
+                $row.find('.os-slab-input').each(function () {
+                    var v = parseFloat($(this).val());
+                    var packtmid = parseInt($(this).data('packtmid'), 10) || 0;
+                    if (packtmid > 0 && !isNaN(v) && v > 0) {
+                        slabs.push({
+                            PackingTypeId: packtmid,
+                            Value: v
+                        });
+                    }
+                });
+
+                if (slabs.length > 0) {
+                    items.push({
+                        ItemId: parseInt(itemId, 10),
+                        Slabs: slabs
+                    });
+                }
+            });
+
+            if (items.length === 0) {
+                alert('Please select at least one item and enter slab values.');
+                return;
+            }
+
+            var model = {
+                OpeningId: null,
+                AsOnDate: asOnDate,
+                ProductTypeId: parseInt(productTypeId, 10),
+                PackingId: parseInt(packingId, 10),
+                GradeId: parseInt(gradeId, 10),
+                ProductionColourId: parseInt(productionColourId, 10),
+                ReceivedTypeId: parseInt(receivedTypeId, 10),
+                PackingWeight: packingWeight,
+                NoOfSlabs: noOfSlabs,
+                Items: items
+            };
+
+            $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
+
+            $.ajax({
+                url: '@Url.Action("Save", "OpeningStock")',
+                type: 'POST',
+                data: JSON.stringify(model),
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response && response.success) {
+                        alert(response.message || 'Opening Stock saved successfully.');
+                        window.location.href = '@Url.Action("Index", "OpeningStock")';
+                    } else {
+                        alert('Error: ' + (response && response.message ? response.message : 'Unknown error'));
+                        $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save Opening Stock');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Failed to save Opening Stock: ' + error);
+                    $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save Opening Stock');
+                }
+            });
+        }
     </script>
 }

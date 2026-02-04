@@ -323,8 +323,8 @@
                             var id = row['TRANMID'];
                             var buttons = '';
 
-                            buttons += '<a href="#" class="btn btn-action btn-edit" data-id="' + id + '"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                            buttons += '<a href="#" class="btn btn-action btn-delete" data-id="' + id + '"><i class="fa fa-trash"></i> Delete</a>&nbsp;';
+                            buttons += '<a href="' + '@Url.Action("Form", "OpeningStock")' + '/' + id + '" class="btn btn-action btn-edit"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+                            buttons += '<a href="#" class="btn btn-action btn-delete editor_remove" data-id="' + id + '"><i class="fa fa-trash"></i> Delete</a>&nbsp;';
                             buttons += '<a href="#" class="btn btn-action btn-print" data-id="' + id + '"><i class="fa fa-print"></i> Print</a>';
 
                             return buttons;
@@ -388,6 +388,26 @@
             $('#toDate').val(today);
 
             table.ajax.reload();
+
+            // Delete handler for Opening Stock
+            $(document).on('click', 'a.editor_remove', function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                if (!id) return false;
+                if (confirm('Are you sure you want to delete this Opening Stock entry?')) {
+                    $.post('@Url.Action("Del", "OpeningStock")', { id: id })
+                        .done(function (response) {
+                            if (typeof response === 'string' && response.indexOf('Successfully') !== -1) {
+                                table.ajax.reload();
+                                alert('Deleted successfully');
+                            } else {
+                                alert('Error: ' + (response && response.error ? response.error : response));
+                            }
+                        })
+                        .fail(function () { alert('Error occurred while deleting the record.'); });
+                }
+                return false;
+            });
         });
     </script>
 }
