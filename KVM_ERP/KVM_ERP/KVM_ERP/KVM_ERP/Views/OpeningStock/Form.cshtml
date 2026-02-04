@@ -245,6 +245,11 @@
     <script>
         var osProducts = [];
         var osPackingFields = [];
+        var osExistingOpening = @Html.Raw(string.IsNullOrEmpty(ViewBag.ExistingOpeningJson as string) ? "null" : ViewBag.ExistingOpeningJson);
+        var osIsEditMode = !!(osExistingOpening && osExistingOpening.OpeningId);
+        var osEditGridInitialized = false;
+        var osProductsLoaded = false;
+        var osPackingFieldsLoaded = false;
 
         function osIsBknLabel(fieldLabelUpper) {
             if (!fieldLabelUpper) return false;
@@ -448,6 +453,7 @@
 
         function osLoadProducts(groupId) {
             osProducts = [];
+            osProductsLoaded = false;
             if (!groupId) {
                 osResetGrid();
                 return;
@@ -458,16 +464,22 @@
                 .done(function (list) {
                     osHideLoading();
                     osProducts = list || [];
+                    osProductsLoaded = true;
                     osResetGrid();
+                    osMaybeInitEditGrid();
                 })
                 .fail(function (xhr, status, error) {
                     osHideLoading();
+                    osProducts = [];
+                    osProductsLoaded = true;
+                    osMaybeInitEditGrid();
                     alert('Error loading products: ' + error);
                 });
         }
 
         function osLoadPackingTypes(packingId) {
             osPackingFields = [];
+            osPackingFieldsLoaded = false;
             if (!packingId) {
                 osRefreshAllSlabs();
                 return;
@@ -480,12 +492,21 @@
                     if (data && data.success && data.fields) {
                         osPackingFields = data.fields;
                     }
-                    osRefreshAllSlabs();
+                    osPackingFieldsLoaded = true;
+                    if (!osIsEditMode) {
+                        osRefreshAllSlabs();
+                    }
+                    osMaybeInitEditGrid();
                 })
                 .fail(function () {
                     osHideLoading();
                     osPackingFields = [];
-                    osRefreshAllSlabs();
+                    osPackingFieldsLoaded = true;
+                    if (!osIsEditMode) {
+                        osRefreshAllSlabs();
+                    } else {
+                        osMaybeInitEditGrid();
+                    }
                     alert('Error loading packing type fields.');
                 });
         }
@@ -494,6 +515,52 @@
             $('#openingStockBody tr.os-row').each(function () {
                 osRenderSlabsForRow($(this));
             });
+        }
+        function osMaybeInitEditGrid() {
+            if (!osIsEditMode || osEditGridInitialized) return;
+            if (!osProductsLoaded || !osPackingFieldsLoaded) return;
+            if (!osExistingOpening || !osExistingOpening.Items || !osExistingOpening.Items.length) {
+                osEditGridInitialized = true;
+                osResetGrid();
+                return;
+            }
+
+            $('#openingStockBody').empty();
+
+            $.each(osExistingOpening.Items, function (_, item) {
+                var $row = $('<tr class="os-row"></tr>');
+                $row.append('<td class="os-sno text-center"></td>');
+                $row.append('<td class="os-item-cell"></td>');
+                $row.append('<td class="os-slabs-cell"></td>');
+                $row.append('<td class="os-action-cell text-center"></td>');
+
+                var $select = osBuildItemSelect();
+                $row.find('.os-item-cell').append($select);
+
+                var actionsHtml = '' +
+                    '<button type="button" class="btn btn-sm btn-success os-add-row"><i class="fa fa-plus"></i></button> ' +
+                    '<button type="button" class="btn btn-sm btn-danger os-remove-row"><i class="fa fa-trash"></i></button>';
+                $row.find('.os-action-cell').html(actionsHtml);
+
+                $('#openingStockBody').append($row);
+
+                osEnhanceItemSelect($select);
+                osRenderSlabsForRow($row);
+
+                if (item.ItemId && item.ItemId > 0) {
+                    $select.val(item.ItemId.toString()).trigger('change');
+                }
+
+                if (item.Slabs && item.Slabs.length) {
+                    $.each(item.Slabs, function (_, slab) {
+                        $row.find('.os-slab-input[data-packtmid="' + slab.PackingTypeId + '"]').val(slab.Value);
+                    });
+                }
+            });
+
+            osRenumberRows();
+            osRefreshItemOptions();
+            osEditGridInitialized = true;
         }
 
         $(document).ready(function () {
@@ -510,8 +577,11 @@
                 $('#grade').val('').trigger('change');
                 $('#productionColour').val('').trigger('change');
                 $('#receivedType').val('').trigger('change');
-                $('#packingWeight').val('');
-                $('#noOfSlabs').val('');
+
+                if (!osIsEditMode) {
+                    $('#packingWeight').val('');
+                    $('#noOfSlabs').val('');
+                }
 
                 if (!groupId) {
                     osLoadProducts(null);
@@ -523,17 +593,24 @@
                         $.each(list, function (_, item) {
                             $('#packing').append('<option value="' + item.id + '">' + item.text + '</option>');
                         });
+
+                        if (osIsEditMode && osExistingOpening && osExistingOpening.PackingId) {
+                            $('#packing').val(osExistingOpening.PackingId.toString());
+                        }
+
                         $('#packing').trigger('change.select2').trigger('change');
                     });
 
                 $.getJSON('@Url.Action("GetFilterValues", "OpeningStock")', { groupId: groupId, asOnDate: $('#asOnDate').val() })
                     .done(function (data) {
-                        if (data && data.packingWeights && data.packingWeights.length > 0) {
-                            $('#packingWeight').val(data.packingWeights[0].value);
-                        }
+                        if (!osIsEditMode) {
+                            if (data && data.packingWeights && data.packingWeights.length > 0) {
+                                $('#packingWeight').val(data.packingWeights[0].value);
+                            }
 
-                        if (data && data.noOfSlabs && data.noOfSlabs.length > 0) {
-                            $('#noOfSlabs').val(data.noOfSlabs[0].value);
+                            if (data && data.noOfSlabs && data.noOfSlabs.length > 0) {
+                                $('#noOfSlabs').val(data.noOfSlabs[0].value);
+                            }
                         }
                     });
 
@@ -565,9 +642,30 @@
                 osRefreshItemOptions();
             });
 
-            // On initial load, render one default row even before any
-            // filters are selected.
-            osResetGrid();
+            if (osIsEditMode && osExistingOpening) {
+                if (osExistingOpening.AsOnDate) {
+                    $('#asOnDate').val(osExistingOpening.AsOnDate);
+                }
+                if (osExistingOpening.ProductTypeId) {
+                    $('#productType').val(osExistingOpening.ProductTypeId.toString()).trigger('change');
+                }
+                if (osExistingOpening.GradeId) {
+                    $('#grade').val(osExistingOpening.GradeId.toString()).trigger('change');
+                }
+                if (osExistingOpening.ProductionColourId) {
+                    $('#productionColour').val(osExistingOpening.ProductionColourId.toString()).trigger('change');
+                }
+                if (osExistingOpening.ReceivedTypeId) {
+                    $('#receivedType').val(osExistingOpening.ReceivedTypeId.toString()).trigger('change');
+                }
+
+                $('#packingWeight').val(osExistingOpening.PackingWeight);
+                $('#noOfSlabs').val(osExistingOpening.NoOfSlabs);
+            } else {
+                // On initial load in add mode, render one default row even
+                // before any filters are selected.
+                osResetGrid();
+            }
         });
 
         function saveOpeningStock() {
@@ -650,7 +748,7 @@
             }
 
             var model = {
-                OpeningId: null,
+                OpeningId: osExistingOpening ? osExistingOpening.OpeningId : null,
                 AsOnDate: asOnDate,
                 ProductTypeId: parseInt(productTypeId, 10),
                 PackingId: parseInt(packingId, 10),

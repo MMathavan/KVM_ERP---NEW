@@ -19,11 +19,11 @@ namespace KVM_ERP.Controllers
             return View();
         }
 
-        // GET: OpeningStock/Form
-        // Simple form used when clicking "Add New" from the Opening Stock index page.
-        // Provides: As on Date, Product Type, Product, Packing dropdowns.
+        // GET: OpeningStock/Form/{id}
+        // When id is provided, load existing Opening Stock (REGSTRID = 11)
+        // and pass a JSON-ready model for client-side population.
         [Authorize(Roles = "OpeningStockCreate,OpeningStockEdit")]
-        public ActionResult Form()
+        public ActionResult Form(int? id)
         {
             var model = new TransactionMaster
             {
@@ -91,6 +91,74 @@ namespace KVM_ERP.Controllers
                 .ToDictionary(x => x.MTRLID.ToString(), x => x.MTRLGID);
 
             ViewBag.ProductGroupMap = productGroupMap;
+
+            ViewBag.ExistingOpeningJson = "";
+
+            if (id.HasValue && id.Value > 0)
+            {
+                var tranMid = id.Value;
+
+                var header = db.TransactionMasters
+                    .FirstOrDefault(t => t.TRANMID == tranMid && t.REGSTRID == 11);
+
+                if (header != null)
+                {
+                    model = header;
+
+                    // Load details and calculations to reconstruct the client model
+                    var details = db.TransactionDetails
+                        .Where(d => d.TRANMID == tranMid)
+                        .ToList();
+
+                    var trandIds = details.Select(d => d.TRANDID).ToList();
+
+                    var calcs = db.TransactionProductCalculations
+                        .Where(c => trandIds.Contains(c.TRANDID))
+                        .ToList();
+
+                    // Derive shared header fields from the first detail/calculation row
+                    int productTypeId = details.FirstOrDefault()?.MTRLGID ?? 0;
+                    int gradeId = details.FirstOrDefault()?.GRADEID ?? 0;
+                    int productionColourId = details.FirstOrDefault()?.PCLRID ?? 0;
+                    int receivedTypeId = details.FirstOrDefault()?.RCVDTID ?? 0;
+
+                    int packingId = calcs.FirstOrDefault()?.PACKMID ?? 0;
+                    decimal packingWeight = calcs.FirstOrDefault()?.KGWGT ?? 0m;
+                    int noOfSlabs = calcs.FirstOrDefault()?.PCKBOX ?? 0;
+
+                    var items = details
+                        .Select(d => new OpeningStockItemModel
+                        {
+                            ItemId = d.MTRLID,
+                            Slabs = calcs
+                                .Where(c => c.TRANDID == d.TRANDID)
+                                .Select(c => new OpeningStockSlabModel
+                                {
+                                    PackingTypeId = c.PACKTMID,
+                                    Value = c.SLABVALUE
+                                })
+                                .ToList()
+                        })
+                        .Where(i => i.Slabs != null && i.Slabs.Any())
+                        .ToList();
+
+                    var existingModel = new OpeningStockSaveModel
+                    {
+                        OpeningId = tranMid,
+                        AsOnDate = header.TRANDATE.ToString("yyyy-MM-dd"),
+                        ProductTypeId = productTypeId,
+                        PackingId = packingId,
+                        GradeId = gradeId,
+                        ProductionColourId = productionColourId,
+                        ReceivedTypeId = receivedTypeId,
+                        PackingWeight = packingWeight,
+                        NoOfSlabs = noOfSlabs,
+                        Items = items
+                    };
+
+                    ViewBag.ExistingOpeningJson = Newtonsoft.Json.JsonConvert.SerializeObject(existingModel);
+                }
+            }
 
             return View(model);
         }
