@@ -341,15 +341,6 @@
                                         </a>
                                     </li>
                                 }
-                                @if (User.IsInRole("OpeningStocckIndex"))
-                                {
-                                    <li>
-                                        <a class="dropdown-item" href="@Url.Action("Index", "OpeningStock")"
-                                           data-role="OpeningStock" data-menugroupid="1" data-menuorder="6">
-                                            <i class="fa fa-play-circle"></i> Opening Stock
-                                        </a>
-                                    </li>
-                                }
                                 <!-- Invoice - Order: 4, GroupId: 1 -->
                                 @if (User.IsInRole("PurchaseInvoiceIndex"))
                                 {
@@ -476,6 +467,24 @@
                             </ul>
                         </li>
                     }*@
+
+                    @if (User.IsInRole("OpeningStocckIndex"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="stockDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-boxes"></i> Stock
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="stockDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "OpeningStock")"
+                                       data-role="OpeningStock" data-menugroupid="2" data-menuorder="1">
+                                        <i class="fa fa-play-circle"></i> Opening Stock
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
 
                     @*@if (Model != null && (links.Any(x => x.MenuGId == 5)))
                     {
