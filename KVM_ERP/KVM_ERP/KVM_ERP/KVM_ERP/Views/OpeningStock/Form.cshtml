@@ -367,6 +367,47 @@
             });
         }
 
+        function osGetSelectedProductIds() {
+            var ids = [];
+            $('#openingStockBody .os-item-select').each(function () {
+                var v = $(this).val();
+                if (v) {
+                    ids.push(v.toString());
+                }
+            });
+            return ids;
+        }
+
+        function osRefreshItemOptions() {
+            if (!osProducts || osProducts.length === 0) return;
+
+            var used = osGetSelectedProductIds();
+
+            $('#openingStockBody .os-item-select').each(function () {
+                var $sel = $(this);
+                var current = $sel.val();
+                var currentStr = current ? current.toString() : null;
+
+                $sel.find('option').remove();
+                $sel.append('<option></option>');
+
+                $.each(osProducts, function (_, item) {
+                    var idStr = item.id != null ? item.id.toString() : '';
+
+                    if (currentStr && idStr === currentStr) {
+                        // Always keep the currently selected product in its own row
+                        $sel.append('<option value="' + item.id + '" selected="selected">' + item.text + '</option>');
+                    } else if (used.indexOf(idStr) === -1) {
+                        // Only include products not already selected in other rows
+                        $sel.append('<option value="' + item.id + '">' + item.text + '</option>');
+                    }
+                });
+
+                // Refresh Select2 display without retriggering our own change handler
+                $sel.trigger('change.select2');
+            });
+        }
+
         function osAddRow(afterRow) {
             if (!osProducts || osProducts.length === 0) {
                 alert('Please select Product Type first.');
@@ -396,6 +437,7 @@
             osEnhanceItemSelect($select);
             osRenderSlabsForRow($row);
             osRenumberRows();
+            osRefreshItemOptions();
         }
 
         function osResetGrid() {
@@ -512,6 +554,11 @@
             $(document).on('click', '.os-remove-row', function () {
                 $(this).closest('tr').remove();
                 osRenumberRows();
+                osRefreshItemOptions();
+            });
+
+            $(document).on('change', '.os-item-select', function () {
+                osRefreshItemOptions();
             });
         });
     </script>

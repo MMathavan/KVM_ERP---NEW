@@ -290,23 +290,24 @@ namespace KVM_ERP.Controllers
                     })
                     .ToList();
 
-                // No of Slabs: total slabs for this product type as a
-                // single dropdown option (derived from SLABVALUE).
-                decimal totalSlabs = materialised
-                    .Select(x => x.tpc.SLABVALUE)
+                // No of Slabs: use per-pack No of Slabs/Boxes (PCKBOX) as
+                // captured in Raw Material Intake instead of summing
+                // SLABVALUE. This mirrors the "No of Slabs" field shown
+                // below "Packing with Glazing" in the intake form.
+                var slabBoxSizes = materialised
+                    .Select(x => x.tpc.PCKBOX)
                     .Where(v => v > 0)
-                    .DefaultIfEmpty(0)
-                    .Sum();
+                    .Distinct()
+                    .OrderBy(v => v)
+                    .ToList();
 
-                var noOfSlabs = new List<object>();
-                if (totalSlabs > 0)
-                {
-                    noOfSlabs.Add(new
+                var noOfSlabs = slabBoxSizes
+                    .Select(v => new
                     {
-                        value = totalSlabs,
-                        text = totalSlabs.ToString("0.###")
-                    });
-                }
+                        value = (decimal)v,
+                        text = v.ToString("0")
+                    })
+                    .ToList();
 
                 return Json(new
                 {
