@@ -198,7 +198,7 @@ namespace KVM_ERP.Controllers
                                     tm.TRANDATE,
                                     mg.MTRLGDESC AS ProductType,
                                     m.MTRLDESC AS Product,
-                                    pm.PACKMDESC AS PackingMaster,
+                                    COALESCE(rcv.RCVDTDESC, pm.PACKMDESC) AS PackingMaster,
                                     ISNULL(SUM(tpc.SLABVALUE), 0) AS NoOfSlabs
                                 FROM TRANSACTIONMASTER tm
                                 INNER JOIN TRANSACTIONDETAIL td ON td.TRANMID = tm.TRANMID
@@ -206,12 +206,13 @@ namespace KVM_ERP.Controllers
                                 INNER JOIN MATERIALMASTER m ON m.MTRLID = td.MTRLID
                                 LEFT JOIN PACKINGMASTER pm ON pm.PACKMID = m.PACKMID
                                 LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON tpc.TRANDID = td.TRANDID
+                                LEFT JOIN RECEIVEDTYPEMASTER rcv ON tpc.RCVDTID = rcv.RCVDTID
                                 WHERE tm.REGSTRID = 11
                                   AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
                                   AND (mg.DISPSTATUS = 0 OR mg.DISPSTATUS IS NULL)
                                   AND (m.DISPSTATUS = 0 OR m.DISPSTATUS IS NULL)" +
                                whereClause +
-                               @" GROUP BY tm.TRANMID, tm.TRANDATE, mg.MTRLGDESC, m.MTRLDESC, pm.PACKMDESC
+                               @" GROUP BY tm.TRANMID, tm.TRANDATE, mg.MTRLGDESC, m.MTRLDESC, pm.PACKMDESC, rcv.RCVDTDESC
                                   ORDER BY tm.TRANDATE DESC, tm.TRANMID DESC";
 
                 var rows = parameters.Count > 0
