@@ -7,7 +7,10 @@
         r.RoleName.Contains("RawMaterialInvoice") ||     // RawMaterialInvoice* (old name)
         r.RoleName.Contains("StockView") || 
         r.RoleName.Contains("PurchaseInvoice") || 
-        r.RoleName.Contains("Print")
+        r.RoleName.Contains("Print") ||
+        r.RoleName.Contains("OpeningStock") ||           // Opening Stock screens
+        r.RoleName.Contains("OpeningStocck") ||          // In case of older typo roles
+        r.RoleName.Contains("IssuedStock")               // Issued Stock screens
     ).ToList();
     
     // Master roles: Everything else (not in transactionRoles)
