@@ -1,20 +1,774 @@
+@model KVM_ERP.Models.TransactionMaster
 @{
     ViewBag.Title = "Issued Stock - Form";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var materialGroups = ViewBag.MaterialGroups as List<System.Web.Mvc.SelectListItem> ?? new List<System.Web.Mvc.SelectListItem>();
+    var gradeList = ViewBag.Grades as List<System.Web.Mvc.SelectListItem> ?? new List<System.Web.Mvc.SelectListItem>();
+    var colourList = ViewBag.ProductionColours as List<System.Web.Mvc.SelectListItem> ?? new List<System.Web.Mvc.SelectListItem>();
+    var receivedTypes = ViewBag.ReceivedTypes as List<System.Web.Mvc.SelectListItem> ?? new List<System.Web.Mvc.SelectListItem>();
 }
 
-<div class="container-fluid mt-3">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title mb-0">
-                <i class="fa fa-file-invoice"></i>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    .main-container { background: white; min-height: 100vh; padding: 20px 0; }
+    .form-container { background: white; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,.1); margin: 20px; overflow: hidden; border: 1px solid #e9ecef; }
+    .form-header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 25px 30px; border-radius: 15px 15px 0 0; }
+    .form-title { font-size: 28px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 15px; }
+    .form-body { padding: 30px; background: white; }
+    .form-group { margin-bottom: 18px; }
+    .control-label { font-weight: 600; color: #2d3436; margin-bottom: 8px; display: block; }
+    .form-control { border: 2px solid #e9ecef; border-radius: 8px; padding: 10px 12px; font-size: 14px; background: #f8f9fa; }
+    .form-control:focus { border-color: #4facfe; box-shadow: 0 0 0 0.2rem rgba(79,172,254,.25); background: white; }
+
+    .select2-container { width: 100% !important; }
+    .select2-container--default .select2-selection--single {
+        height: 42px; border: 2px solid #e9ecef; border-radius: 8px; background: #f8f9fa;
+        display: flex; align-items: center; padding: 0 12px; transition: all 0.3s ease;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 38px; font-size: 14px; padding-left: 0;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow { height: 38px; right: 10px; }
+
+    .table-section { margin-top: 25px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9; }
+    .table-section-title { margin-bottom: 15px; font-weight: 600; color: #2c3e50; display: flex; align-items: center; gap: 10px; }
+
+    #openingStockSummary {
+        table-layout: fixed;
+    }
+
+    #openingStockSummary thead th {
+        background-color: #f1f3f5;
+        border-bottom: 1px solid #dee2e6;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    #openingStockSummary tbody td {
+        vertical-align: top;
+        background-color: #ffffff;
+    }
+
+    #openingStockSummary tfoot th {
+        background-color: #f8f9fa;
+        font-size: 12px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    #openingStockSummary th:nth-child(1),
+    #openingStockSummary td.os-sno {
+        width: 60px;
+    }
+
+    #openingStockSummary th:nth-child(2),
+    #openingStockSummary td.os-item-cell {
+        width: 22%;
+    }
+
+    #openingStockSummary th:nth-child(3),
+    #openingStockSummary td.os-slabs-cell {
+        width: auto;
+    }
+
+    #openingStockSummary th:nth-child(4),
+    #openingStockSummary td.os-action-cell {
+        width: 90px;
+        white-space: nowrap;
+    }
+
+    #openingStockSummary td.os-item-cell,
+    #openingStockSummary td.os-action-cell {
+        vertical-align: middle;
+    }
+
+    #openingStockSummary td.os-slabs-cell {
+        padding: 4px 6px !important;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+    }
+
+    #openingStockSummary .os-slabs-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, max-content));
+        column-gap: 6px;
+        row-gap: 4px;
+        align-items: flex-start;
+    }
+
+    #openingStockSummary .os-slab {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #openingStockSummary .os-slab label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 2px;
+        color: #495057;
+    }
+
+    #openingStockSummary .os-slab .os-slab-input {
+        height: 28px;
+        font-size: 12px;
+        width: 80px;
+        text-align: right;
+    }
+
+    #openingStockSummary .os-item-select {
+        width: 100%;
+    }
+
+    .slab-table-wrapper { overflow-x: auto; }
+    .slab-table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    .slab-table thead th {
+        background: #7f88e9; color: #fff; padding: 8px; border: 1px solid #6c75d3; text-align: center; white-space: nowrap;
+    }
+    .slab-table tbody td { padding: 6px; border: 1px solid #dee2e6; text-align: center; }
+    .slab-table tbody tr.total-row { background: #d4edda; font-weight: 600; }
+    .slab-table tbody tr.no-of-cases-row { background: #fff3cd; font-weight: 600; }
+    .slab-table tbody td.particulars-cell { text-align: left; font-weight: 600; }
+    .slab-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 2px 4px;
+        font-size: 11px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        text-align: right;
+    }
+</style>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">
+                <i class="bi bi-sign-turn-slight-right-fill"></i>
                 Issued Stock
-            </h3>
+            </h1>
         </div>
-        <div class="card-body">
-            <p class="text-muted">
-                This is a placeholder form for Issued Stock. Add the required fields and behaviour here.
-            </p>
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Date <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.TRANDATE, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", id = "asOnDate", required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Product Type <span class="text-danger">*</span></label>
+                        @Html.DropDownList("ProductTypeId", materialGroups, "-- Select Product Type --", new { @class = "form-control select2", id = "productType", required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Packing <span class="text-danger">*</span></label>
+                        <select id="packing" class="form-control select2" required>
+                            <option value="">-- Select Packing --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Grade <span class="text-danger">*</span></label>
+                        @Html.DropDownList("GradeId", gradeList, "-- Select Grade --", new { @class = "form-control select2", id = "grade", required = "required" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Production Colour <span class="text-danger">*</span></label>
+                        @Html.DropDownList("ProductionColourId", colourList, "-- Select Colour --", new { @class = "form-control select2", id = "productionColour", required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Received Type <span class="text-danger">*</span></label>
+                        @Html.DropDownList("ReceivedTypeId", receivedTypes, "-- Select Received Type --", new { @class = "form-control select2", id = "receivedType", required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Packing Weight with Glazing <span class="text-danger">*</span></label>
+                        <input id="packingWeight" type="number" class="form-control" step="0.001" min="0" required />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">No of Slabs <span class="text-danger">*</span></label>
+                        <input id="noOfSlabs" type="number" class="form-control" step="1" min="0" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="table-section-title">
+                    <i class="fa fa-table"></i> Issued Stock Summary
+                </div>
+                <div class="loading-spinner" id="openingLoadingSpinner" style="display:none; text-align:center; padding:1rem;">
+                    <div class="spinner" style="border:4px solid #f3f3f3;border-top:4px solid #4facfe;border-radius:50%;width:30px;height:30px;animation:spin 1s linear infinite;margin:0 auto 0.5rem;"></div>
+                    <p>Loading products...</p>
+                </div>
+                <table id="openingStockSummary" class="table table-bordered table-sm" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;">S.No</th>
+                            <th style="text-align:left;">Item Description</th>
+                            <th style="text-align:left;">Slabs</th>
+                            <th style="text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="openingStockBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 25px; display:flex; gap:10px;">
+                <a href="@Url.Action("Index", "IssuedStock")" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"></i> Back to List
+                </a>
+                <button type="button" id="btnSaveIssued" class="btn btn-primary save-btn" onclick="saveIssuedStock()">
+                    <i class="fa fa-save"></i> Save Issued Stock
+                </button>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        var osProducts = [];
+        var osPackingFields = [];
+        var osExistingOpening = @Html.Raw(string.IsNullOrEmpty(ViewBag.ExistingOpeningJson as string) ? "null" : ViewBag.ExistingOpeningJson);
+        var osIsEditMode = !!(osExistingOpening && osExistingOpening.OpeningId);
+        var osEditGridInitialized = false;
+        var osProductsLoaded = false;
+        var osPackingFieldsLoaded = false;
+
+        function osIsBknLabel(fieldLabelUpper) {
+            if (!fieldLabelUpper) return false;
+            var upper = fieldLabelUpper.toUpperCase().trim();
+            return upper === 'BKN' || upper === 'BROKEN' || upper.indexOf('BKN') !== -1;
+        }
+
+        function osIsOthersLabel(fieldLabelUpper) {
+            if (!fieldLabelUpper) return false;
+            var upper = fieldLabelUpper.toUpperCase().trim();
+            return upper === 'OTHERS' || upper === 'OTHER' || upper.indexOf('OTHERS') !== -1;
+        }
+
+        function osGetPackingFieldOrderKey(labelUpper) {
+            if (!labelUpper) return 1000;
+            var upper = labelUpper.toUpperCase().trim();
+
+            if (osIsBknLabel(upper)) return 9000;
+            if (osIsOthersLabel(upper)) return 9001;
+
+            var normalized = upper.replace(/\s+/g, '').replace(/:/g, '');
+
+            var orderMap = {
+                'U-5': 1,
+                'U-7': 2,
+                'U-10': 3,
+                'U-15': 4,
+                '10-20': 5,
+                '20-30': 6,
+                '30/40': 7,
+                '30-40': 7,
+                '40/50': 8,
+                '40-50': 8,
+                '50/60': 9,
+                '50-60': 9
+            };
+
+            if (orderMap.hasOwnProperty(normalized)) {
+                return orderMap[normalized];
+            }
+
+            var numbers = upper.match(/\d+/g);
+            if (numbers && numbers.length > 0) {
+                var max = Math.max.apply(null, numbers.map(function (n) { return parseInt(n, 10) || 0; }));
+                return 100 + max;
+            }
+
+            return 500;
+        }
+
+        function osShowLoading() {
+            $('#openingLoadingSpinner').show();
+            $('#openingStockSummary').hide();
+        }
+
+        function osHideLoading() {
+            $('#openingLoadingSpinner').hide();
+            $('#openingStockSummary').show();
+        }
+
+        function osRenumberRows() {
+            $('#openingStockBody tr.os-row').each(function (index) {
+                $(this).find('.os-sno').text(index + 1);
+            });
+        }
+
+        function osRenderSlabsForRow($row) {
+            var $cell = $row.find('.os-slabs-cell');
+            $cell.empty();
+
+            if (!osPackingFields || osPackingFields.length === 0) {
+                $cell.append('<span class="text-muted">Select Packing to show slabs.</span>');
+                return;
+            }
+
+            var wrapper = $('<div class="os-slabs-row"></div>');
+            var sorted = osPackingFields.slice().sort(function (a, b) {
+                var al = (a.label || '').toUpperCase().trim();
+                var bl = (b.label || '').toUpperCase().trim();
+                var aKey = osGetPackingFieldOrderKey(al);
+                var bKey = osGetPackingFieldOrderKey(bl);
+                if (aKey === bKey) {
+                    return al.localeCompare(bl);
+                }
+                return aKey - bKey;
+            });
+
+            for (var i = 0; i < sorted.length; i++) {
+                var field = sorted[i];
+                var $slab = $('<div class="os-slab"></div>');
+                var labelHtml = '<label>' + (field.label || '') + ':</label>';
+                var inputHtml = '<input type="number" class="form-control os-slab-input" min="0" step="0.001" data-packtmid="' + field.id + '" />';
+                $slab.append(labelHtml);
+                $slab.append(inputHtml);
+                wrapper.append($slab);
+            }
+
+            $cell.append(wrapper);
+        }
+
+        function osBuildItemSelect() {
+            var $select = $('<select class="form-control os-item-select"></select>');
+            $select.append('<option></option>');
+            $.each(osProducts, function (_, item) {
+                $select.append('<option value="' + item.id + '">' + item.text + '</option>');
+            });
+            return $select;
+        }
+
+        function osEnhanceItemSelect($select) {
+            $select.select2({
+                placeholder: 'Search Item Description',
+                allowClear: true,
+                width: '100%'
+            });
+        }
+
+        function osGetSelectedProductIds() {
+            var ids = [];
+            $('#openingStockBody .os-item-select').each(function () {
+                var v = $(this).val();
+                if (v) {
+                    ids.push(v.toString());
+                }
+            });
+            return ids;
+        }
+
+        function osRefreshItemOptions() {
+            if (!osProducts || osProducts.length === 0) return;
+
+            var used = osGetSelectedProductIds();
+
+            $('#openingStockBody .os-item-select').each(function () {
+                var $sel = $(this);
+                var current = $sel.val();
+                var currentStr = current ? current.toString() : null;
+
+                $sel.find('option').remove();
+                $sel.append('<option></option>');
+
+                $.each(osProducts, function (_, item) {
+                    var idStr = item.id != null ? item.id.toString() : '';
+
+                    if (currentStr && idStr === currentStr) {
+                        $sel.append('<option value="' + item.id + '" selected="selected">' + item.text + '</option>');
+                    } else if (used.indexOf(idStr) === -1) {
+                        $sel.append('<option value="' + item.id + '">' + item.text + '</option>');
+                    }
+                });
+
+                $sel.trigger('change.select2');
+            });
+        }
+
+        function osAddRow(afterRow) {
+            if (afterRow && (!osProducts || osProducts.length === 0)) {
+                alert('Please select Product Type first.');
+                return;
+            }
+
+            var $row = $('<tr class="os-row"></tr>');
+            $row.append('<td class="os-sno text-center"></td>');
+            $row.append('<td class="os-item-cell"></td>');
+            $row.append('<td class="os-slabs-cell"></td>');
+            $row.append('<td class="os-action-cell text-center"></td>');
+
+            var $select = osBuildItemSelect();
+            $row.find('.os-item-cell').append($select);
+
+            var actionsHtml = '' +
+                '<button type="button" class="btn btn-sm btn-success os-add-row"><i class="fa fa-plus"></i></button> ' +
+                '<button type="button" class="btn btn-sm btn-danger os-remove-row"><i class="fa fa-trash"></i></button>';
+            $row.find('.os-action-cell').html(actionsHtml);
+
+            if (afterRow && afterRow.length) {
+                afterRow.after($row);
+            } else {
+                $('#openingStockBody').append($row);
+            }
+
+            osEnhanceItemSelect($select);
+            osRenderSlabsForRow($row);
+            osRenumberRows();
+            osRefreshItemOptions();
+        }
+
+        function osResetGrid() {
+            $('#openingStockBody').empty();
+            osAddRow();
+        }
+
+        function osLoadProducts(groupId) {
+            osProducts = [];
+            osProductsLoaded = false;
+            if (!groupId) {
+                osResetGrid();
+                return;
+            }
+
+            osShowLoading();
+            $.getJSON('@Url.Action("GetProducts", "OpeningStock")', { groupId: groupId })
+                .done(function (list) {
+                    osHideLoading();
+                    osProducts = list || [];
+                    osProductsLoaded = true;
+                    osResetGrid();
+                    osMaybeInitEditGrid();
+                })
+                .fail(function (xhr, status, error) {
+                    osHideLoading();
+                    osProducts = [];
+                    osProductsLoaded = true;
+                    osMaybeInitEditGrid();
+                    alert('Error loading products: ' + error);
+                });
+        }
+
+        function osLoadPackingTypes(packingId) {
+            osPackingFields = [];
+            osPackingFieldsLoaded = false;
+            if (!packingId) {
+                osRefreshAllSlabs();
+                return;
+            }
+
+            osShowLoading();
+            $.getJSON('@Url.Action("GetPackingTypeFields", "RawMaterialIntake")', { packingId: packingId })
+                .done(function (data) {
+                    osHideLoading();
+                    if (data && data.success && data.fields) {
+                        osPackingFields = data.fields;
+                    }
+                    osPackingFieldsLoaded = true;
+                    if (!osIsEditMode) {
+                        osRefreshAllSlabs();
+                    }
+                    osMaybeInitEditGrid();
+                })
+                .fail(function () {
+                    osHideLoading();
+                    osPackingFields = [];
+                    osPackingFieldsLoaded = true;
+                    if (!osIsEditMode) {
+                        osRefreshAllSlabs();
+                    } else {
+                        osMaybeInitEditGrid();
+                    }
+                    alert('Error loading packing type fields.');
+                });
+        }
+
+        function osRefreshAllSlabs() {
+            $('#openingStockBody tr.os-row').each(function () {
+                osRenderSlabsForRow($(this));
+            });
+        }
+
+        function osMaybeInitEditGrid() {
+            if (!osIsEditMode || osEditGridInitialized) return;
+            if (!osProductsLoaded || !osPackingFieldsLoaded) return;
+            if (!osExistingOpening || !osExistingOpening.Items || !osExistingOpening.Items.length) {
+                osEditGridInitialized = true;
+                osResetGrid();
+                return;
+            }
+
+            $('#openingStockBody').empty();
+
+            $.each(osExistingOpening.Items, function (_, item) {
+                var $row = $('<tr class="os-row"></tr>');
+                $row.append('<td class="os-sno text-center"></td>');
+                $row.append('<td class="os-item-cell"></td>');
+                $row.append('<td class="os-slabs-cell"></td>');
+                $row.append('<td class="os-action-cell text-center"></td>');
+
+                var $select = osBuildItemSelect();
+                $row.find('.os-item-cell').append($select);
+
+                var actionsHtml = '' +
+                    '<button type="button" class="btn btn-sm btn-success os-add-row"><i class="fa fa-plus"></i></button> ' +
+                    '<button type="button" class="btn btn-sm btn-danger os-remove-row"><i class="fa fa-trash"></i></button>';
+                $row.find('.os-action-cell').html(actionsHtml);
+
+                $('#openingStockBody').append($row);
+
+                osEnhanceItemSelect($select);
+                osRenderSlabsForRow($row);
+
+                if (item.ItemId && item.ItemId > 0) {
+                    $select.val(item.ItemId.toString()).trigger('change');
+                }
+
+                if (item.Slabs && item.Slabs.length) {
+                    $.each(item.Slabs, function (_, slab) {
+                        $row.find('.os-slab-input[data-packtmid="' + slab.PackingTypeId + '"]').val(slab.Value);
+                    });
+                }
+            });
+
+            osRenumberRows();
+            osRefreshItemOptions();
+            osEditGridInitialized = true;
+        }
+
+        $(document).ready(function () {
+            $('.select2').select2({
+                placeholder: '-- Select --',
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#productType').on('change', function () {
+                var groupId = $(this).val();
+
+                $('#packing').empty().append('<option value="">-- Select Packing --</option>');
+                $('#grade').val('').trigger('change');
+                $('#productionColour').val('').trigger('change');
+                $('#receivedType').val('').trigger('change');
+
+                if (!osIsEditMode) {
+                    $('#packingWeight').val('');
+                    $('#noOfSlabs').val('');
+                }
+
+                if (!groupId) {
+                    osLoadProducts(null);
+                    return;
+                }
+
+                $.getJSON('@Url.Action("GetPackingMasters", "OpeningStock")', { groupId: groupId })
+                    .done(function (list) {
+                        $.each(list, function (_, item) {
+                            $('#packing').append('<option value="' + item.id + '">' + item.text + '</option>');
+                        });
+
+                        if (osIsEditMode && osExistingOpening && osExistingOpening.PackingId) {
+                            $('#packing').val(osExistingOpening.PackingId.toString());
+                        }
+
+                        $('#packing').trigger('change.select2').trigger('change');
+                    });
+
+                $.getJSON('@Url.Action("GetFilterValues", "OpeningStock")', { groupId: groupId, asOnDate: $('#asOnDate').val() })
+                    .done(function (data) {
+                        if (!osIsEditMode) {
+                            if (data && data.packingWeights && data.packingWeights.length > 0) {
+                                $('#packingWeight').val(data.packingWeights[0].value);
+                            }
+
+                            if (data && data.noOfSlabs && data.noOfSlabs.length > 0) {
+                                $('#noOfSlabs').val(data.noOfSlabs[0].value);
+                            }
+                        }
+                    });
+
+                osLoadProducts(groupId);
+            });
+
+            $('#packing').on('change', function () {
+                var packingId = $(this).val();
+                osLoadPackingTypes(packingId);
+            });
+
+            $(document).on('click', '.os-add-row', function () {
+                var $row = $(this).closest('tr');
+                osAddRow($row);
+            });
+
+            $(document).on('click', '.os-remove-row', function () {
+                $(this).closest('tr').remove();
+                osRenumberRows();
+                osRefreshItemOptions();
+                if ($('#openingStockBody tr.os-row').length === 0) {
+                    osAddRow();
+                }
+            });
+
+            $(document).on('change', '.os-item-select', function () {
+                osRefreshItemOptions();
+            });
+
+            if (osIsEditMode && osExistingOpening) {
+                if (osExistingOpening.AsOnDate) {
+                    $('#asOnDate').val(osExistingOpening.AsOnDate);
+                }
+                if (osExistingOpening.ProductTypeId) {
+                    $('#productType').val(osExistingOpening.ProductTypeId.toString()).trigger('change');
+                }
+                if (osExistingOpening.GradeId) {
+                    $('#grade').val(osExistingOpening.GradeId.toString()).trigger('change');
+                }
+                if (osExistingOpening.ProductionColourId) {
+                    $('#productionColour').val(osExistingOpening.ProductionColourId.toString()).trigger('change');
+                }
+                if (osExistingOpening.ReceivedTypeId) {
+                    $('#receivedType').val(osExistingOpening.ReceivedTypeId.toString()).trigger('change');
+                }
+
+                $('#packingWeight').val(osExistingOpening.PackingWeight);
+                $('#noOfSlabs').val(osExistingOpening.NoOfSlabs);
+            } else {
+                osResetGrid();
+            }
+        });
+
+        function saveIssuedStock() {
+            var $btn = $('#btnSaveIssued');
+
+            var asOnDate = $('#asOnDate').val();
+            var productTypeId = $('#productType').val();
+            var packingId = $('#packing').val();
+            var gradeId = $('#grade').val();
+            var productionColourId = $('#productionColour').val();
+            var receivedTypeId = $('#receivedType').val();
+            var packingWeight = parseFloat($('#packingWeight').val()) || 0;
+            var noOfSlabs = parseInt($('#noOfSlabs').val(), 10) || 0;
+
+            if (!asOnDate) {
+                alert('Please select Date.');
+                return;
+            }
+            if (!productTypeId) {
+                alert('Please select Product Type.');
+                return;
+            }
+            if (!packingId) {
+                alert('Please select Packing.');
+                return;
+            }
+            if (!gradeId) {
+                alert('Please select Grade.');
+                return;
+            }
+            if (!productionColourId) {
+                alert('Please select Production Colour.');
+                return;
+            }
+            if (!receivedTypeId) {
+                alert('Please select Received Type.');
+                return;
+            }
+            if (packingWeight <= 0) {
+                alert('Packing Weight with Glazing must be greater than zero.');
+                return;
+            }
+            if (noOfSlabs <= 0) {
+                alert('No of Slabs must be greater than zero.');
+                return;
+            }
+
+            var items = [];
+
+            $('#openingStockBody tr.os-row').each(function () {
+                var $row = $(this);
+                var itemId = $row.find('.os-item-select').val();
+                if (!itemId) {
+                    return;
+                }
+
+                var slabs = [];
+                $row.find('.os-slab-input').each(function () {
+                    var v = parseFloat($(this).val());
+                    var packtmid = parseInt($(this).data('packtmid'), 10) || 0;
+                    if (packtmid > 0 && !isNaN(v) && v > 0) {
+                        slabs.push({
+                            PackingTypeId: packtmid,
+                            Value: v
+                        });
+                    }
+                });
+
+                if (slabs.length > 0) {
+                    items.push({
+                        ItemId: parseInt(itemId, 10),
+                        Slabs: slabs
+                    });
+                }
+            });
+
+            if (items.length === 0) {
+                alert('Please select at least one item and enter slab values.');
+                return;
+            }
+
+            var model = {
+                OpeningId: osExistingOpening ? osExistingOpening.OpeningId : null,
+                AsOnDate: asOnDate,
+                ProductTypeId: parseInt(productTypeId, 10),
+                PackingId: parseInt(packingId, 10),
+                GradeId: parseInt(gradeId, 10),
+                ProductionColourId: parseInt(productionColourId, 10),
+                ReceivedTypeId: parseInt(receivedTypeId, 10),
+                PackingWeight: packingWeight,
+                NoOfSlabs: noOfSlabs,
+                Items: items
+            };
+
+            $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
+
+            $.ajax({
+                url: '@Url.Action("Save", "IssuedStock")',
+                type: 'POST',
+                data: JSON.stringify(model),
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response && response.success) {
+                        alert(response.message || 'Issued Stock saved successfully.');
+                        window.location.href = '@Url.Action("Index", "IssuedStock")';
+                    } else {
+                        alert('Error: ' + (response && response.message ? response.message : 'Unknown error'));
+                        $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save Issued Stock');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Failed to save Issued Stock: ' + error);
+                    $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save Issued Stock');
+                }
+            });
+        }
+    </script>
+}
+
