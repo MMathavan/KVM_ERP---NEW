@@ -228,13 +228,17 @@
                 </table>
             </div>
 
-            <div class="form-group" style="margin-top: 25px; display:flex; gap:10px;">
-                <a href="@Url.Action("Index", "OpeningStock")" class="btn btn-secondary">
-                    <i class="fa fa-arrow-left"></i> Back to List
-                </a>
-                <button type="button" id="btnSaveOpening" class="btn btn-primary save-btn" onclick="saveOpeningStock()">
-                    <i class="fa fa-save"></i> Save Opening Stock
-                </button>
+            <div class="form-group" style="margin-top: 25px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div>
+                    <a href="@Url.Action("Index", "OpeningStock")" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+                <div>
+                    <button type="button" id="btnSaveOpening" class="btn btn-primary save-btn" onclick="saveOpeningStock()">
+                        <i class="fa fa-save"></i> Save Opening Stock
+                    </button>
+                </div>
             </div>
         </div>
     </div>
