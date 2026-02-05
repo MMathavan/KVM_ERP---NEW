@@ -323,14 +323,89 @@
                             var id = row['TRANMID'];
                             var buttons = '';
 
-                            buttons += '<a href="@Url.Action("Form", "IssuedStock")/' + id + '" class="btn btn-edit btn-action" title="Edit"><i class="fa fa-edit"></i></a>';
-                            buttons += '<a href="@Url.Action("Delete", "IssuedStock")/' + id + '" class="btn btn-delete btn-action" title="Delete"><i class="fa fa-trash"></i></a>';
-                            buttons += '<a href="@Url.Action("Print", "IssuedStock")/' + id + '" class="btn btn-print btn-action" title="Print"><i class="fa fa-print"></i></a>';
+                            buttons += '<a href="' + '@Url.Action("Form", "IssuedStock")' + '/' + id + '" class="btn btn-action btn-edit"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+                            buttons += '<a href="#" class="btn btn-action btn-delete editor_remove" data-id="' + id + '"><i class="fa fa-trash"></i> Delete</a>';
 
                             return buttons;
                         }
                     }
-                ]
+                ],
+                dom: '<"row mb-3"<"col-md-6"l><"col-md-6"f>>rt<"row mt-3"<"col-md-6"i><"col-md-6"p>>',
+                responsive: true,
+                pageLength: 10,
+                order: [[1, 'desc']],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search..."
+                }
+            });
+
+            $('#filterBtn').on('click', function () {
+                var fromDate = $('#fromDate').val();
+                var toDate = $('#toDate').val();
+
+                if (fromDate && toDate && fromDate > toDate) {
+                    alert('From Date cannot be greater than To Date');
+                    return;
+                }
+
+                var $btn = $(this);
+                var originalHtml = $btn.html();
+                $btn.html('<i class="fa fa-spinner fa-spin"></i> Filtering...');
+                $btn.prop('disabled', true);
+
+                table.ajax.reload(function () {
+                    $btn.html(originalHtml);
+                    $btn.prop('disabled', false);
+                });
+            });
+
+            $('#clearBtn').on('click', function () {
+                var today = new Date().toISOString().split('T')[0];
+                $('#fromDate').val(today);
+                $('#toDate').val(today);
+
+                var $btn = $(this);
+                var originalHtml = $btn.html();
+                $btn.html('<i class="fa fa-spinner fa-spin"></i> Clearing...');
+                $btn.prop('disabled', true);
+
+                table.ajax.reload(function () {
+                    $btn.html(originalHtml);
+                    $btn.prop('disabled', false);
+                });
+            });
+
+            $('#fromDate, #toDate').on('keypress', function (e) {
+                if (e.which === 13) {
+                    $('#filterBtn').click();
+                }
+            });
+
+            var today = new Date().toISOString().split('T')[0];
+            $('#fromDate').val(today);
+            $('#toDate').val(today);
+
+            table.ajax.reload();
+
+            // Delete handler for Issued Stock
+            $(document).on('click', 'a.editor_remove', function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                if (!id) return false;
+                if (confirm('Are you sure you want to delete this Issued Stock entry?')) {
+                    $.post('@Url.Action("Del", "IssuedStock")', { id: id })
+                        .done(function (response) {
+                            if (typeof response === 'string' && response.indexOf('Successfully') !== -1) {
+                                table.ajax.reload();
+                                alert('Deleted successfully');
+                            } else {
+                                alert('Error: ' + (response && response.error ? response.error : response));
+                            }
+                        })
+                        .fail(function () { alert('Error occurred while deleting the record.'); });
+                }
+                return false;
             });
         });
     </script>

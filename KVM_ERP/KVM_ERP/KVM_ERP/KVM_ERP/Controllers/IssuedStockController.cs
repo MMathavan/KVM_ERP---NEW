@@ -137,8 +137,8 @@ namespace KVM_ERP.Controllers
                                 INNER JOIN TRANSACTIONDETAIL td ON td.TRANMID = tm.TRANMID
                                 INNER JOIN MATERIALGROUPMASTER mg ON mg.MTRLGID = td.MTRLGID
                                 INNER JOIN MATERIALMASTER m ON m.MTRLID = td.MTRLID
-                                LEFT JOIN PACKINGMASTER pm ON pm.PACKMID = m.PACKMID
                                 LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON tpc.TRANDID = td.TRANDID
+                                LEFT JOIN PACKINGMASTER pm ON pm.PACKMID = tpc.PACKMID
                                 WHERE tm.REGSTRID = 22
                                   AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
                                   AND (mg.DISPSTATUS = 0 OR mg.DISPSTATUS IS NULL)
