@@ -2612,9 +2612,10 @@
             
             var totalTax = hsnGSTTotal + manualCostFactorTotal;
 
-            // Business rule: Grand Total = Net Amount total + total Incentive
-            // i.e. (Subtotal - Packing Discount) + Incentive
-            var grandTotal = totalNetAmount + totalIncentiveAmount;
+            // Business rule: Grand Total = Subtotal
+            // Note: Expenses, Incentive, and GST are shown as breakup info only
+            // because the Subtotal already includes everything from the R button calculation.
+            var grandTotal = grossAmount;
 
             // Update Grand Total display
             $('#grandTotalDisplay').text('₹ ' + grandTotal.toFixed(2));
