@@ -371,8 +371,10 @@
                        Report Items:
                        1. Stock View Report (StockViewReport)
                        2. Raw Materials Intake Report (RawMaterialIntakeReport)
+                       3. Stock Maintain Report (StockMaintainReport)
+
                     *@
-                    @if (Model != null && (User.IsInRole("StockViewReportIndex") || User.IsInRole("RawMaterialIntakeReportIndex")))
+                    @if (Model != null && (User.IsInRole("StockViewReportIndex") || User.IsInRole("RawMaterialIntakeReportIndex") || User.IsInRole("StockMaintainReportIndex")))
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="reportsDropdownUser" role="button"
@@ -396,7 +398,17 @@
                                     <li>
                                         <a class="dropdown-item" href="@Url.Action("RawMaterialsImport", "Reports")"
                                            data-role="RawMaterialIntakeReport" data-menugroupid="5" data-menuorder="2">
-                                            <i class="fa fa-truck-loading"></i> Raw Materials Intake Report
+                                            <i class="bi bi-truck"></i> Raw Materials Intake Report
+                                        </a>
+                                    </li>
+                                }
+                                <!-- Stock Maintain Report - Order: 3, GroupId: 5 -->
+                                @if (User.IsInRole("StockMaintainReportIndex"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Action", "StockMaintainReport")"
+                                           data-role="StockMaintainReport" data-menugroupid="5" data-menuorder="3">
+                                            <i class="bi bi-bar-chart-fill"></i> Stock Maintain Report
                                         </a>
                                     </li>
                                 }
