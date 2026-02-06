@@ -43,6 +43,7 @@ namespace KVM_ERP.Models
         public DbSet<ReceivedTypeMaster> ReceivedTypeMasters { get; set; }
         public DbSet<PurchaseInvoiceStatus> PurchaseInvoiceStatuses { get; set; }
         public DbSet<TransactionInvoiceWeightDetails> TransactionInvoiceWeightDetails { get; set; }
+        public DbSet<YieldPercentMaster> YieldPercentMasters { get; set; }
 
         new public virtual IDbSet<ApplicationRole> Roles { get; set; }
         public virtual IDbSet<Group> Groups { get; set; }
@@ -172,6 +173,9 @@ namespace KVM_ERP.Models
             modelBuilder.Entity<TransactionInvoiceWeightDetails>().Property(t => t.INCENTIVEPERCENT).HasPrecision(18, 3);
             modelBuilder.Entity<TransactionInvoiceWeightDetails>().Property(t => t.INCENTIVEVALUE).HasPrecision(18, 3);
             modelBuilder.Entity<TransactionInvoiceWeightDetails>().Property(t => t.INCENTIVETOTALVALUE).HasPrecision(18, 3);
+
+            // Configure YieldPercentMaster decimal precision
+            modelBuilder.Entity<YieldPercentMaster>().Property(y => y.YIPREVALUE).HasPrecision(18, 3);
 
             // Keep this:
             modelBuilder.Entity<IdentityUser>().ToTable("AspNetUsers");

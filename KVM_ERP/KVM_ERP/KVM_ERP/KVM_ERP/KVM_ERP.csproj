@@ -343,6 +343,7 @@
     <Compile Include="Models\PackingMaster.cs" />
     <Compile Include="Models\PackingTypeMaster.cs" />
     <Compile Include="Models\MaterialMaster.cs" />
+    <Compile Include="Models\YieldPercentMaster.cs" />
     <Compile Include="Models\TransactionMaster.cs" />
     <Compile Include="Models\TransactionDetail.cs" />
     <Compile Include="Models\TransactionMasterFactor.cs" />

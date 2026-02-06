@@ -788,6 +788,82 @@ namespace KVM_ERP.Controllers
             return Json(prods, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetYieldPercent(int mtrlgid, int mtrlid, int packmid, string counts)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(counts))
+                {
+                    return Json(new { success = true, value = 0 }, JsonRequestBehavior.AllowGet);
+                }
+
+                // 1. Try exact match first (after normalization)
+                string normalizedCounts = counts.Replace("-", "/").Replace(" ", "");
+                string originalCounts = counts.Trim();
+
+                var yields = db.YieldPercentMasters
+                    .Where(y => y.MTRLGID == mtrlgid && 
+                                y.MTRLID == mtrlid && 
+                                y.PACKMID == packmid && 
+                                y.DISPSTATUS == 0)
+                    .ToList();
+
+                var exactMatch = yields.FirstOrDefault(y => 
+                    y.YIPRECOUNTS == normalizedCounts || 
+                    y.YIPRECOUNTS == originalCounts);
+
+                if (exactMatch != null)
+                {
+                    return Json(new { success = true, value = exactMatch.YIPREVALUE }, JsonRequestBehavior.AllowGet);
+                }
+
+                // 2. Try range match if counts is a numeric value
+                if (decimal.TryParse(counts, out decimal countVal))
+                {
+                    foreach (var yield in yields)
+                    {
+                        if (string.IsNullOrEmpty(yield.YIPRECOUNTS)) continue;
+
+                        // Parse ranges like "40-50", "40/50", "U-10"
+                        string range = yield.YIPRECOUNTS.Replace(" ", "");
+                        string[] parts = range.Split('-', '/');
+
+                        if (parts.Length == 2)
+                        {
+                            // Handle formats like "40-50" or "40/50"
+                            if (decimal.TryParse(parts[0], out decimal min) && 
+                                decimal.TryParse(parts[1], out decimal max))
+                            {
+                                if (countVal >= min && countVal <= max)
+                                {
+                                    return Json(new { success = true, value = yield.YIPREVALUE }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }
+                        else if (range.StartsWith("U", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Handle formats like "U-10" or "U10" (Under 10)
+                            string numPart = range.Substring(1).Trim('-', '/');
+                            if (decimal.TryParse(numPart, out decimal uMax))
+                            {
+                                if (countVal <= uMax)
+                                {
+                                    return Json(new { success = true, value = yield.YIPREVALUE }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return Json(new { success = true, value = 0 }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // AJAX: RawMaterialIntake/GetAjaxData
         public ActionResult GetAjaxData(string fromDate = null, string toDate = null)
         {
@@ -1261,7 +1337,10 @@ namespace KVM_ERP.Controllers
                 SanitizePCKValues(model);
                 
                 // VALIDATION: Grade, Production Colour and Received Type are required for each calculation
-                if (model.GRADEID <= 0 || model.PCLRID <= 0 || model.RCVDTID <= 0)
+                // Only validate if there is actual slab/weight data to save
+                bool hasData = model.TOPCK > 0 || model.KGWGT > 0 || model.WASTEWGT > 0;
+                
+                if (hasData && (model.GRADEID <= 0 || model.PCLRID <= 0 || model.RCVDTID <= 0))
                 {
                     System.Diagnostics.Debug.WriteLine($"Validation failed - GRADEID: {model.GRADEID}, PCLRID: {model.PCLRID}, RCVDTID: {model.RCVDTID}");
                     return Json(new { success = false, message = "Please select Grade, Production Colour and Received Type for this calculation." });

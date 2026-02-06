@@ -2087,31 +2087,85 @@
         }
 
         function loadPackingTypeFieldsForTab(packingId) {
-            // Check if fields are already loaded for this tab
-            const container = $(`#pane-${packingId} .packing-fields-container`);
-            const existingFields = container.find('.pck-field');
+            console.log('--- LOADING PACKING FIELDS FOR TAB:', packingId, '---');
+            const tabPane = $(`#pane-${packingId}`);
+            const fieldContainer = tabPane.find('.packing-fields-container');
             
-            if (existingFields.length > 0) {
-                console.log('Fields already exist for tab:', packingId, '- skipping reload');
-                return; // Don't reload if fields already exist
+            // CRITICAL: Clear loading state if container is empty but not loading
+            if (fieldContainer.is(':empty')) {
+                tabPane.data('fields-loading', false);
             }
-            
-            console.log('Loading fields for tab:', packingId);
-            $.ajax({
-                url: '@Url.Action("GetPackingTypeFields", "RawMaterialIntake")',
-                type: 'GET',
-                data: { packingId: packingId },
-                success: function(data) {
-                    if (data.success) {
-                        renderPackingTypeFieldsForTab(data.fields, packingId);
-                    } else {
-                        container.html('<div class="col-12"><div class="alert alert-warning">No packing type fields found.</div></div>');
-                    }
-                },
-                error: function() {
-                    container.html('<div class="col-12"><div class="alert alert-danger">Error loading packing type fields.</div></div>');
-                }
+
+            // If already loading, don't trigger another request
+            if (tabPane.data('fields-loading')) {
+                console.log('Fields already loading for tab:', packingId);
+                return;
+            }
+
+            // If fields are already loaded (indicated by presence of pck-field), don't reload
+            if (fieldContainer.find('.pck-field, .bkn-field, .others-field').length > 0) {
+                console.log('Fields already present for tab:', packingId);
+                return;
+            }
+
+            const mtrlgid = $('#productCalculationModal').data('product-group-id');
+            const modalTrandid = $('#productCalculationModal').data('trandid');
+            const $mainRow = $('#detailsTable tbody tr').filter(function() {
+                return $(this).data('trandid') == modalTrandid;
             });
+            const mtrlid = $mainRow.find('select.product').val();
+            const counts = $('#modal-count-per-kg').text().trim();
+
+            tabPane.data('fields-loading', true);
+            fieldContainer.html('<div class="text-center p-4"><i class="fa fa-spinner fa-spin fa-2x"></i><p>Loading fields...</p></div>');
+
+            $.get('@Url.Action("GetPackingTypeFields", "RawMaterialIntake")', { packingId: packingId })
+                .done(function(data) {
+                    tabPane.data('fields-loading', false);
+                    console.log('GetPackingTypeFields response:', data);
+                    
+                    // Clear spinner
+                    fieldContainer.empty();
+
+                    // Check response format
+                    if (data && data.success && data.fields) {
+                        renderPackingTypeFieldsForTab(data.fields, packingId);
+                    } else if (Array.isArray(data)) {
+                        renderPackingTypeFieldsForTab(data, packingId);
+                    } else if (typeof data === 'string' && data.indexOf('<div') !== -1) {
+                        fieldContainer.html(data);
+                    } else {
+                        fieldContainer.html('<div class="alert alert-warning">No fields found for this packing.</div>');
+                    }
+                    
+                    console.log('Fields rendered successfully for tab:', packingId);
+                    
+                    // After fields are loaded, check if we have stored data to populate
+                    const storedCalc = tabPane.data('existing-calculation');
+                    if (storedCalc) {
+                        populateTabCalculation(storedCalc, packingId);
+                    } else {
+                        // For NEW rows (no stored data), attempt to fetch Yield Percent immediately
+                        if (mtrlgid && mtrlid && counts && counts !== '0.000' && counts !== '0') {
+                            $.getJSON('@Url.Action("GetYieldPercent", "RawMaterialIntake")', {
+                                mtrlgid: mtrlgid,
+                                mtrlid: mtrlid,
+                                packmid: packingId,
+                                counts: counts
+                            }).done(function(res) {
+                                if (res.success && res.value > 0) {
+                                    tabPane.find('.yield-percent').val(res.value).trigger('input');
+                                    calculateTabTotals(tabPane, true);
+                                }
+                            });
+                        }
+                    }
+                })
+                .fail(function(xhr) {
+                    console.error('Error loading fields:', xhr.responseText);
+                    fieldContainer.html('<div class="alert alert-danger">Error loading fields.</div>');
+                    tabPane.data('fields-loading', false);
+                });
         }
 
         function renderPackingTypeFieldsForTab(fields, packingId) {
@@ -2549,11 +2603,11 @@
             return rounded.toFixed(3);
         }
 
-        function calculateGradeWeightMode(tabPane) {
+        function calculateGradeWeightMode(tabPane, skipYieldFetch) {
             // Fast calculation for Grade Weight mode - focus on Factory Weight and key weight fields
             let slabValue = 0;
 
-            // Sum all PCK fields
+            //sum all PCK fields
             tabPane.find('.pck-field').each(function() {
                 const val = parseFloat(this.value) || 0;
                 slabValue += val;
@@ -2574,12 +2628,50 @@
             // Update Slab display immediately
             tabPane.find('.total-counts').text(formatDecimalForCalc(slabValue));
 
+            // Fetch Yield Percent from DB if fields are changed
+            if (!skipYieldFetch) {
+                const mtrlgid = $('#productCalculationModal').data('product-group-id');
+                const modalTrandid = $('#productCalculationModal').data('trandid');
+                const $mainRow = $('#detailsTable tbody tr').filter(function() {
+                    return $(this).data('trandid') == modalTrandid;
+                });
+                const mtrlid = $mainRow.find('select.product').val();
+                const packmid = tabPane.attr('id').replace('pane-', '');
+                // Try getting from local variable first, then fallback to span
+                const counts = (typeof countPerKg !== 'undefined' && countPerKg) ? countPerKg : $('#modal-count-per-kg').text().trim();
+
+                console.log('--- Yield Percent Fetch (GradeWeight) ---');
+                console.log('MTRLGID:', mtrlgid, 'MTRLID:', mtrlid, 'PACKMID:', packmid, 'COUNTS:', counts);
+
+                if (mtrlgid && mtrlid && packmid && counts && counts !== '0.000' && counts !== '0') {
+                    $.getJSON('@Url.Action("GetYieldPercent", "RawMaterialIntake")', {
+                        mtrlgid: mtrlgid,
+                        mtrlid: mtrlid,
+                        packmid: packmid,
+                        counts: counts
+                    }).done(function(res) {
+                        console.log('Response (GradeWeight):', res);
+                        if (res.success && res.value > 0) {
+                            tabPane.find('.yield-percent').val(res.value).trigger('input');
+                            calculateGradeWeightMode(tabPane, true);
+                        }
+                    });
+                }
+            }
+
             // Get Peeled value (wastage field)
             const peeledValue = parseFloat(tabPane.find('.wastage').val()) || 0;
 
             // New weight-based inputs
             const perKgWeight = parseFloat(tabPane.find('.per-kg-weight').val()) || 0; // Packing weight with glazing
             const yieldPercent = parseFloat(tabPane.find('.yield-percent').val()) || 0;
+
+            console.log('GradeWeight Calculation Check:', {
+                slabValue,
+                perKgWeight,
+                yieldPercent,
+                peeledValue
+            });
 
             const topck = slabValue; // Total packs/counts for this grade
 
@@ -2615,7 +2707,7 @@
             tabPane.find(fieldsToReset).text(formatDecimalForCalc(0));
         }
 
-        function calculatePackingMode(tabPane) {
+        function calculatePackingMode(tabPane, skipYieldFetch) {
             console.log('=== CALCULATING PACKING MODE ===');
             console.log('Tab pane ID:', tabPane.attr('id'));
             
@@ -2658,6 +2750,37 @@
             
             console.log('Total PCK + BKN + OTHERS (TOPCK):', topck);
             tabPane.find('.total-counts').text(formatDecimalForCalc(topck));
+
+            // Fetch Yield Percent from DB if fields are changed
+            if (!skipYieldFetch) {
+                const mtrlgid = $('#productCalculationModal').data('product-group-id');
+                const modalTrandid = $('#productCalculationModal').data('trandid');
+                const $mainRow = $('#detailsTable tbody tr').filter(function() {
+                    return $(this).data('trandid') == modalTrandid;
+                });
+                const mtrlid = $mainRow.find('select.product').val();
+                const packmid = tabPane.attr('id').replace('pane-', '');
+                // Try getting from local variable first, then fallback to span
+                const counts = (typeof countPerKg !== 'undefined' && countPerKg) ? countPerKg : $('#modal-count-per-kg').text().trim();
+
+                console.log('--- Yield Percent Fetch (PackingMode) ---');
+                console.log('MTRLGID:', mtrlgid, 'MTRLID:', mtrlid, 'PACKMID:', packmid, 'COUNTS:', counts);
+
+                if (mtrlgid && mtrlid && packmid && counts && counts !== '0.000' && counts !== '0') {
+                    $.getJSON('@Url.Action("GetYieldPercent", "RawMaterialIntake")', {
+                        mtrlgid: mtrlgid,
+                        mtrlid: mtrlid,
+                        packmid: packmid,
+                        counts: counts
+                    }).done(function(res) {
+                        console.log('Response (PackingMode):', res);
+                        if (res.success && res.value > 0) {
+                            tabPane.find('.yield-percent').val(res.value).trigger('input');
+                            calculatePackingMode(tabPane, true);
+                        }
+                    });
+                }
+            }
 
             if (topck === 0) {
                 console.log('TOPCK is 0, setting all calculations to 0.000');
@@ -2703,6 +2826,14 @@
 
             // Calculate TOTALYELDCOUNTS
             const yieldPercent = parseFloat(tabPane.find('.yield-percent').val()) || 0;
+
+            console.log('PackingMode Calculation Check:', {
+                topck,
+                avgPckValue,
+                totalPounds,
+                yieldPercent
+            });
+
             const totalYieldCounts = totalPounds * (yieldPercent / 100);
             tabPane.find('.total-yield-counts').text(formatDecimalForCalc(totalYieldCounts));
 
