@@ -124,10 +124,8 @@
         });
         (function initRange(){
             var today = new Date();
-            var start = new Date();
-            start.setDate(today.getDate() - 30);
             $('#toDate').val(today.toISOString().split('T')[0]);
-            $('#fromDate').val(start.toISOString().split('T')[0]);
+            $('#fromDate').val(today.toISOString().split('T')[0]);
             setBadge($('#fromDate').val(), $('#toDate').val());
             loadData();
         })();

@@ -398,9 +398,8 @@
 
         $(document).ready(function () {
             var today = new Date();
-            var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
 
-            $('#fromDate').val(firstDay.toISOString().split('T')[0]);
+            $('#fromDate').val(today.toISOString().split('T')[0]);
             $('#toDate').val(today.toISOString().split('T')[0]);
 
             initializeStockTable();
