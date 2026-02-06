@@ -233,6 +233,7 @@
     <Compile Include="Controllers\IssuedStockController.cs" />
     <Compile Include="Controllers\SupplierStockViewController.cs" />
     <Compile Include="Controllers\StockViewReportController.cs" />
+    <Compile Include="Controllers\StockMaintainReportController.cs" />
     <Compile Include="Controllers\RenewalApprovalController.cs" />
     <!-- Excluded per cleanup -->
     <!-- <Compile Include="Controllers\ProfileMasterController.cs" /> -->

@@ -1,0 +1,164 @@
+@{
+    ViewBag.Title = "Stock Maintain Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-container {
+        background: white;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .content-wrapper {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid #e9ecef;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px 15px 0 0;
+        position: relative;
+    }
+
+    .header-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .filter-section {
+        padding: 30px;
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .form-label {
+        font-size: 14px;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 10px 12px;
+        transition: all 0.3s ease;
+    }
+
+    #loadDataBtn {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #loadDataBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+
+    .export-btn {
+        background: #11998e;
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 15px;
+        font-weight: 600;
+        color: white;
+        position: absolute;
+        top: 25px;
+        right: 30px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .export-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(56, 239, 125, 0.4);
+        color: white;
+    }
+
+    .report-status {
+        padding: 40px;
+        text-align: center;
+        color: #6c757d;
+        font-size: 16px;
+    }
+</style>
+
+<div class="main-container">
+    <div class="content-wrapper">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h1 class="header-title">
+                <i class="bi bi-bar-chart-fill"></i>
+                Stock Maintain Report
+            </h1>
+            <button id="exportBtn" class="btn export-btn">
+                <i class="fa fa-file-excel"></i> Export to Excel
+            </button>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="row align-items-end">
+                <div class="col-md-3">
+                    <div class="form-group mb-0">
+                        <label class="form-label">From Date:</label>
+                        <input type="date" id="fromDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-0">
+                        <label class="form-label">To Date:</label>
+                        <input type="date" id="toDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button id="loadDataBtn" class="btn btn-primary">
+                        <i class="fa fa-search"></i> Load Data
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status/Report Area -->
+        <div class="report-status">
+            Select dates and click "Load Data" to view the report.
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#loadDataBtn').on('click', function() {
+                // Design only - no functionality
+                console.log('Load Data clicked (Design Only Mode)');
+            });
+
+            $('#exportBtn').on('click', function() {
+                // Design only - no functionality
+                console.log('Export to Excel clicked (Design Only Mode)');
+            });
+        });
+    </script>
+}
