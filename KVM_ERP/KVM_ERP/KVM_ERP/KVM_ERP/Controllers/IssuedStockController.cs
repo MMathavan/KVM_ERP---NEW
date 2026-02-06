@@ -190,26 +190,52 @@ namespace KVM_ERP.Controllers
                     }
                 }
 
-                string sql = @"SELECT 
-                                    tm.TRANMID,
-                                    tm.TRANDATE,
-                                    mg.MTRLGDESC AS ProductType,
-                                    m.MTRLDESC AS Product,
-                                    pm.PACKMDESC AS PackingMaster,
-                                    ISNULL(SUM(tpc.SLABVALUE), 0) AS NoOfSlabs
-                                FROM TRANSACTIONMASTER tm
-                                INNER JOIN TRANSACTIONDETAIL td ON td.TRANMID = tm.TRANMID
-                                INNER JOIN MATERIALGROUPMASTER mg ON mg.MTRLGID = td.MTRLGID
-                                INNER JOIN MATERIALMASTER m ON m.MTRLID = td.MTRLID
-                                LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON tpc.TRANDID = td.TRANDID
-                                LEFT JOIN PACKINGMASTER pm ON pm.PACKMID = tpc.PACKMID
-                                WHERE tm.REGSTRID = 22
-                                  AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
-                                  AND (mg.DISPSTATUS = 0 OR mg.DISPSTATUS IS NULL)
-                                  AND (m.DISPSTATUS = 0 OR m.DISPSTATUS IS NULL)" +
+                // Return ONE row per Issued Stock (TRANMID) for Index view.
+                // Aggregate Products and their NoOfSlabs into comma-separated strings.
+                string sql = @";WITH ItemTotals AS (
+                                    SELECT
+                                        tm.TRANMID,
+                                        tm.TRANDATE,
+                                        mg.MTRLGDESC AS ProductType,
+                                        pm.PACKMDESC AS PackingMaster,
+                                        m.MTRLDESC AS Product,
+                                        CAST(ISNULL(SUM(tpc.SLABVALUE), 0) AS DECIMAL(18,2)) AS NoOfSlabs
+                                    FROM TRANSACTIONMASTER tm
+                                    INNER JOIN TRANSACTIONDETAIL td ON td.TRANMID = tm.TRANMID
+                                    INNER JOIN MATERIALGROUPMASTER mg ON mg.MTRLGID = td.MTRLGID
+                                    INNER JOIN MATERIALMASTER m ON m.MTRLID = td.MTRLID
+                                    LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON tpc.TRANDID = td.TRANDID
+                                    LEFT JOIN PACKINGMASTER pm ON pm.PACKMID = tpc.PACKMID
+                                    WHERE tm.REGSTRID = 22
+                                      AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
+                                      AND (mg.DISPSTATUS = 0 OR mg.DISPSTATUS IS NULL)
+                                      AND (m.DISPSTATUS = 0 OR m.DISPSTATUS IS NULL)" +
                                whereClause +
-                               @" GROUP BY tm.TRANMID, tm.TRANDATE, mg.MTRLGDESC, m.MTRLDESC, pm.PACKMDESC
-                                  ORDER BY tm.TRANDATE DESC, tm.TRANMID DESC";
+                               @"
+                                    GROUP BY tm.TRANMID, tm.TRANDATE, mg.MTRLGDESC, pm.PACKMDESC, m.MTRLDESC
+                                )
+                                SELECT
+                                    it.TRANMID,
+                                    MAX(it.TRANDATE) AS TRANDATE,
+                                    MAX(it.ProductType) AS ProductType,
+                                    MAX(it.PackingMaster) AS PackingMaster,
+                                    STUFF((
+                                        SELECT ', ' + it2.Product
+                                        FROM ItemTotals it2
+                                        WHERE it2.TRANMID = it.TRANMID
+                                        ORDER BY it2.Product
+                                        FOR XML PATH(''), TYPE
+                                    ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS Product,
+                                    STUFF((
+                                        SELECT ', ' + CAST(CAST(it2.NoOfSlabs AS INT) AS NVARCHAR(50))
+                                        FROM ItemTotals it2
+                                        WHERE it2.TRANMID = it.TRANMID
+                                        ORDER BY it2.Product
+                                        FOR XML PATH(''), TYPE
+                                    ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS NoOfSlabs
+                                FROM ItemTotals it
+                                GROUP BY it.TRANMID
+                                ORDER BY MAX(it.TRANDATE) DESC, it.TRANMID DESC";
 
                 var rows = parameters.Count > 0
                     ? db.Database.SqlQuery<IssuedStockRow>(sql, parameters.ToArray()).ToList()
@@ -222,7 +248,7 @@ namespace KVM_ERP.Controllers
                     ProductType = r.ProductType ?? string.Empty,
                     Product = r.Product ?? string.Empty,
                     PackingMaster = r.PackingMaster ?? string.Empty,
-                    NoOfSlabs = r.NoOfSlabs
+                    NoOfSlabs = r.NoOfSlabs ?? string.Empty
                 }).ToList();
 
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
@@ -575,7 +601,7 @@ namespace KVM_ERP.Controllers
             public string ProductType { get; set; }
             public string Product { get; set; }
             public string PackingMaster { get; set; }
-            public decimal NoOfSlabs { get; set; }
+            public string NoOfSlabs { get; set; }
         }
 
         private class ExistingIssuedData
