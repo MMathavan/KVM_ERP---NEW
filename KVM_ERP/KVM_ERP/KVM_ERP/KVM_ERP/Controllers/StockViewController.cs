@@ -1149,6 +1149,7 @@ namespace KVM_ERP.Controllers
                         INNER JOIN TRANSACTIONMASTER tm ON td.TRANMID = tm.TRANMID
                         WHERE (tpc.DISPSTATUS = 0 OR tpc.DISPSTATUS IS NULL)
                         AND (tm.DISPSTATUS = 0 OR tm.DISPSTATUS IS NULL)
+                        AND tm.REGSTRID = 1
                         AND tpc.PRODDATE <= @p0
                         AND (tpc.SLABVALUE > 0 OR tpc.BKN > 0 OR tpc.OTHERS > 0)
                     ", asOnDate).FirstOrDefault();
@@ -1199,12 +1200,13 @@ namespace KVM_ERP.Controllers
                                    join td in db.TransactionDetails on tpc.TRANDID equals td.TRANDID
                                    join m in db.MaterialMasters on td.MTRLID equals m.MTRLID
                                    join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
-                                   where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
-                                         && (m.DISPSTATUS == 0 || m.DISPSTATUS == null)
-                                         && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
-                                         && tpc.PRODDATE <= asOnDate
-                                         && tpc.PACKTMID != 0
-                                         && tpc.SLABVALUE > 0
+                                    where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
+                                          && (m.DISPSTATUS == 0 || m.DISPSTATUS == null)
+                                          && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
+                                          && tm.REGSTRID == 1
+                                          && tpc.PRODDATE <= asOnDate
+                                          && tpc.PACKTMID != 0
+                                          && tpc.SLABVALUE > 0
                                    select new {
                                        ProductId = m.MTRLID,
                                        ProductName = m.MTRLDESC,
@@ -1327,6 +1329,7 @@ namespace KVM_ERP.Controllers
                                       join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
                                       where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
                                             && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
+                                            && tm.REGSTRID == 1
                                             && tpc.PRODDATE <= asOnDate
                                             && tpc.BKN > 0
                                       select tpc).ToList();
@@ -1364,6 +1367,7 @@ namespace KVM_ERP.Controllers
                                          join tm in db.TransactionMasters on td.TRANMID equals tm.TRANMID
                                          where (tpc.DISPSTATUS == 0 || tpc.DISPSTATUS == null)
                                                && (tm.DISPSTATUS == 0 || tm.DISPSTATUS == null)
+                                               && tm.REGSTRID == 1
                                                && tpc.PRODDATE <= asOnDate
                                                && tpc.OTHERS > 0
                                          select tpc).ToList();
