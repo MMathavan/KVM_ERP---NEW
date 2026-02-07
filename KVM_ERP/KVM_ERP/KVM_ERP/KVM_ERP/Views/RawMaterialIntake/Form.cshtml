@@ -1124,6 +1124,10 @@
             // Remarks from main form Quality Check section
             var qcRemarks = $('#remarks').val() || '';
             $('#modal-remarks').text(qcRemarks);
+
+            // Reset Yield Weight display on open
+            $('#modal-yield-weight').text('');
+            $('#modal-client-minus-yield-weight').text('');
             
             // Store TRANDID and Material Group for saving / filtering
             $('#productCalculationModal').data('trandid', trandid);
@@ -2352,6 +2356,18 @@
                 console.log('ERROR: No calculation data provided');
                 return;
             }
+
+            // Update Yield Weight display under Remarks for existing calculations
+            try {
+                // Use modal-level Client Weight field (facAvgWeight) for subtraction
+                const clientWeight = parseFloat($('#facAvgWeight').val()) || parseFloat(calculation.FACAVGWGT) || 0;
+                const yieldWeight = parseFloat(calculation.YIELDWEIGHT) || 0;
+                $('#modal-yield-weight').text(yieldWeight.toFixed(3));
+                $('#modal-client-minus-yield-weight').text((clientWeight - yieldWeight).toFixed(3));
+            } catch (e) {
+                $('#modal-yield-weight').text('');
+                $('#modal-client-minus-yield-weight').text('');
+            }
             
             // Populate packing fields (no setTimeout - timing controlled by caller)
             console.log('Starting field population...');
@@ -2946,6 +2962,18 @@
                         
                         // Update the weight column for this product row
                         updateFactoryWeightDisplay(trandid);
+
+                        // Update Yield Weight display under Remarks
+                        // Use modal-level Client Weight field (facAvgWeight) for subtraction
+                        const clientWeight = parseFloat($('#facAvgWeight').val()) || 0;
+                        const yieldWeight = parseFloat(response.yieldWeight) || 0;
+                        if (yieldWeight > 0) {
+                            $('#modal-yield-weight').text(yieldWeight.toFixed(3));
+                            $('#modal-client-minus-yield-weight').text((clientWeight - yieldWeight).toFixed(3));
+                        } else {
+                            $('#modal-yield-weight').text('0.000');
+                            $('#modal-client-minus-yield-weight').text((clientWeight - 0).toFixed(3));
+                        }
                     } else {
                         alert('Error: ' + (response.message || 'Failed to save calculation'));
                     }
@@ -3722,6 +3750,14 @@
                                 <strong>Remarks:</strong> <span id="modal-remarks"></span>
                             </div>
                         </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <strong>Yield Weight:</strong> <span id="modal-yield-weight"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Supplier Weight - Yield Weight:</strong> <span id="modal-client-minus-yield-weight"></span>
+                            </div>
+                        </div>
                         <div class="row mt-3">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -3751,13 +3787,13 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="facAvgWeight" class="control-label"><strong>Client Weight:</strong></label>
+                                    <label for="facAvgWeight" class="control-label"><strong>Supplier Weight:</strong></label>
                                     <input type="number" class="form-control fac-avg-weight" id="facAvgWeight" step="0.001" min="0" placeholder="0.000" />
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="facAvgCount" class="control-label"><strong>Client Count:</strong></label>
+                                    <label for="facAvgCount" class="control-label"><strong>Supplier Count:</strong></label>
                                     <input type="number" class="form-control fac-avg-count" id="facAvgCount" step="0.001" min="0" placeholder="0.000" />
                                 </div>
                             </div>

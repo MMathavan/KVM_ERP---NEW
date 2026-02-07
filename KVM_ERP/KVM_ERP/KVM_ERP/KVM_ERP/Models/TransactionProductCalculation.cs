@@ -114,6 +114,9 @@ namespace KVM_ERP.Models
         [Column("WASTEPWGT")]
         public decimal WASTEPWGT { get; set; } = 0;
 
+        [Column("YIELDWEIGHT")]
+        public decimal YIELDWEIGHT { get; set; } = 0;
+
         [Column("FACTORYWGT")]
         public decimal FACTORYWGT { get; set; } = 0;
 

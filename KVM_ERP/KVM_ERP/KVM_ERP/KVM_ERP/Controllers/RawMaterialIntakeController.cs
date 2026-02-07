@@ -604,6 +604,7 @@ namespace KVM_ERP.Controllers
                     PCKBOX = model.PCKBOX,
                     WASTEWGT = model.WASTEWGT,
                     WASTEPWGT = model.WASTEPWGT,
+                    YIELDWEIGHT = model.YIELDWEIGHT,
                     FACTORYWGT = model.FACTORYWGT,
                     FACAVGWGT = model.FACAVGWGT,
                     FACAVGCOUNT = model.FACAVGCOUNT,
@@ -710,6 +711,7 @@ namespace KVM_ERP.Controllers
                                 PCKBOX = model.PCKBOX,
                                 WASTEWGT = model.WASTEWGT,
                                 WASTEPWGT = model.WASTEPWGT,
+                                YIELDWEIGHT = model.YIELDWEIGHT,
                                 FACTORYWGT = model.FACTORYWGT,
                                 FACAVGWGT = model.FACAVGWGT,
                                 FACAVGCOUNT = model.FACAVGCOUNT,
@@ -1183,6 +1185,7 @@ namespace KVM_ERP.Controllers
                             PCKBOX = calculation.PCKBOX,
                             WASTEWGT = calculation.WASTEWGT,
                             WASTEPWGT = calculation.WASTEPWGT,
+                            YIELDWEIGHT = calculation.YIELDWEIGHT,
                             FACTORYWGT = calculation.FACTORYWGT,
                             FACAVGWGT = calculation.FACAVGWGT,
                             FACAVGCOUNT = calculation.FACAVGCOUNT,
@@ -1302,6 +1305,72 @@ namespace KVM_ERP.Controllers
                     CalculateProductValues(model);
                 }
 
+                // Compute YIELDWEIGHT (new) using YieldPercentMaster mapping (MTRLGID + MTRLID + PACKMID + COUNTS)
+                try
+                {
+                    var detailInfo = db.Database.SqlQuery<RawMaterialDetailInfo>(
+                        "SELECT TOP 1 MTRLGID, MTRLID, CAST(MTRLCOUNTS AS VARCHAR(50)) AS MTRLCOUNTS FROM TRANSACTIONDETAIL WHERE TRANDID = @p0",
+                        model.TRANDID).FirstOrDefault();
+
+                    if (detailInfo != null)
+                    {
+                        var yipreValue = LookupYieldPercentValue(detailInfo.MTRLGID, detailInfo.MTRLID, model.PACKMID, detailInfo.MTRLCOUNTS);
+                        if (yipreValue > 0)
+                        {
+                            decimal otherTotalWastePwgt = 0;
+                            try
+                            {
+                                otherTotalWastePwgt = db.Database.SqlQuery<decimal?>(@"
+                                    SELECT SUM(x.WASTEPWGT) AS WASTEPWGT
+                                    FROM (
+                                        SELECT td.TRANDID,
+                                               (
+                                                   SELECT TOP 1 tpc.WASTEPWGT
+                                                   FROM TRANSACTION_PRODUCT_CALCULATION tpc
+                                                   WHERE tpc.TRANDID = td.TRANDID AND tpc.PACKMID = @p4
+                                                   ORDER BY tpc.PACKTMID, tpc.TRANPID
+                                               ) AS WASTEPWGT
+                                        FROM TRANSACTIONDETAIL td
+                                        WHERE td.TRANMID = @p0
+                                          AND td.TRANDID <> @p1
+                                          AND td.MTRLGID = @p2
+                                          AND td.MTRLID = @p3
+                                          AND CAST(td.MTRLCOUNTS AS VARCHAR(50)) = @p5
+                                    ) x
+                                    WHERE x.WASTEPWGT IS NOT NULL
+                                ",
+                                model.TRANMID,
+                                model.TRANDID,
+                                detailInfo.MTRLGID,
+                                detailInfo.MTRLID,
+                                model.PACKMID,
+                                (detailInfo.MTRLCOUNTS ?? string.Empty).Trim()).FirstOrDefault() ?? 0;
+                            }
+                            catch (Exception ex2)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Error computing overall WASTEPWGT total for YIELDWEIGHT: {ex2.Message}");
+                                otherTotalWastePwgt = 0;
+                            }
+
+                            var overallWastePwgt = otherTotalWastePwgt + model.WASTEPWGT;
+                            model.YIELDWEIGHT = overallWastePwgt / (yipreValue / 100);
+                        }
+                        else
+                        {
+                            model.YIELDWEIGHT = 0;
+                        }
+                    }
+                    else
+                    {
+                        model.YIELDWEIGHT = 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error computing YIELDWEIGHT: {ex.Message}");
+                    model.YIELDWEIGHT = 0;
+                }
+
                 // Check if header record exists for this specific TRANDID and PACKMID combination
                 var existing = db.TransactionProductCalculations
                     .FirstOrDefault(t => t.TRANDID == model.TRANDID && t.PACKMID == model.PACKMID && t.PACKTMID == 0);
@@ -1348,7 +1417,8 @@ namespace KVM_ERP.Controllers
                 return Json(new { 
                     success = true, 
                     message = "Calculation saved successfully",
-                    tranpid = savedRecord?.TRANPID ?? 0
+                    tranpid = savedRecord?.TRANPID ?? 0,
+                    yieldWeight = savedRecord?.YIELDWEIGHT ?? model.YIELDWEIGHT
                 });
             }
             catch (System.Data.Entity.Core.EntityCommandExecutionException ex)
@@ -1640,6 +1710,7 @@ namespace KVM_ERP.Controllers
             existing.PCKBOX = model.PCKBOX;
             existing.WASTEWGT = model.WASTEWGT;
             existing.WASTEPWGT = model.WASTEPWGT;
+            existing.YIELDWEIGHT = model.YIELDWEIGHT;
             existing.FACTORYWGT = model.FACTORYWGT;
             existing.FACAVGWGT = model.FACAVGWGT;
             existing.FACAVGCOUNT = model.FACAVGCOUNT;
@@ -1650,6 +1721,69 @@ namespace KVM_ERP.Controllers
             existing.RCVDTID = model.RCVDTID;
             existing.BKN = model.BKN;
             existing.OTHERS = model.OTHERS;
+        }
+
+        private class RawMaterialDetailInfo
+        {
+            public int MTRLGID { get; set; }
+            public int MTRLID { get; set; }
+            public string MTRLCOUNTS { get; set; }
+        }
+
+        private decimal LookupYieldPercentValue(int mtrlgid, int mtrlid, int packmid, string counts)
+        {
+            if (string.IsNullOrWhiteSpace(counts))
+            {
+                return 0;
+            }
+
+            string normalizedCounts = counts.Replace("-", "/").Replace(" ", "");
+            string originalCounts = counts.Trim();
+
+            var yields = db.YieldPercentMasters
+                .Where(y => y.MTRLGID == mtrlgid && y.MTRLID == mtrlid && y.PACKMID == packmid && y.DISPSTATUS == 0)
+                .ToList();
+
+            var exactMatch = yields.FirstOrDefault(y => y.YIPRECOUNTS == normalizedCounts || y.YIPRECOUNTS == originalCounts);
+            if (exactMatch != null)
+            {
+                return exactMatch.YIPREVALUE;
+            }
+
+            if (decimal.TryParse(originalCounts, out decimal countVal))
+            {
+                foreach (var y in yields)
+                {
+                    if (string.IsNullOrEmpty(y.YIPRECOUNTS)) continue;
+
+                    string range = y.YIPRECOUNTS.Replace(" ", "");
+                    string[] parts = range.Split('-', '/');
+
+                    if (parts.Length == 2)
+                    {
+                        if (decimal.TryParse(parts[0], out decimal min) && decimal.TryParse(parts[1], out decimal max))
+                        {
+                            if (countVal >= min && countVal <= max)
+                            {
+                                return y.YIPREVALUE;
+                            }
+                        }
+                    }
+                    else if (range.StartsWith("U", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string numPart = range.Substring(1).Trim('-', '/');
+                        if (decimal.TryParse(numPart, out decimal uMax))
+                        {
+                            if (countVal <= uMax)
+                            {
+                                return y.YIPREVALUE;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return 0;
         }
 
         private TransactionProductCalculation ParseFormToModel(FormCollection form)
