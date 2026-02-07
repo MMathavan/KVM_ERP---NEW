@@ -2144,21 +2144,6 @@
                     const storedCalc = tabPane.data('existing-calculation');
                     if (storedCalc) {
                         populateTabCalculation(storedCalc, packingId);
-                    } else {
-                        // For NEW rows (no stored data), attempt to fetch Yield Percent immediately
-                        if (mtrlgid && mtrlid && counts && counts !== '0.000' && counts !== '0') {
-                            $.getJSON('@Url.Action("GetYieldPercent", "RawMaterialIntake")', {
-                                mtrlgid: mtrlgid,
-                                mtrlid: mtrlid,
-                                packmid: packingId,
-                                counts: counts
-                            }).done(function(res) {
-                                if (res.success && res.value > 0) {
-                                    tabPane.find('.yield-percent').val(res.value).trigger('input');
-                                    calculateTabTotals(tabPane, true);
-                                }
-                            });
-                        }
                     }
                 })
                 .fail(function(xhr) {
@@ -2267,7 +2252,7 @@
             
             // Also trigger calculation on input changes for this tab
             setTimeout(function() {
-                tabPane.find('.pck-field, .bkn-field, .others-field, .pounds-value, .yield-percent, .per-kg-weight, .wastage').on('input', function() {
+                tabPane.find('.pck-field, .bkn-field, .others-field, .pounds-value, .per-kg-weight, .wastage').on('input', function() {
                     calculateTabTotals(tabPane);
                 });
             }, 300);
@@ -2628,37 +2613,6 @@
             // Update Slab display immediately
             tabPane.find('.total-counts').text(formatDecimalForCalc(slabValue));
 
-            // Fetch Yield Percent from DB if fields are changed
-            if (!skipYieldFetch) {
-                const mtrlgid = $('#productCalculationModal').data('product-group-id');
-                const modalTrandid = $('#productCalculationModal').data('trandid');
-                const $mainRow = $('#detailsTable tbody tr').filter(function() {
-                    return $(this).data('trandid') == modalTrandid;
-                });
-                const mtrlid = $mainRow.find('select.product').val();
-                const packmid = tabPane.attr('id').replace('pane-', '');
-                // Try getting from local variable first, then fallback to span
-                const counts = (typeof countPerKg !== 'undefined' && countPerKg) ? countPerKg : $('#modal-count-per-kg').text().trim();
-
-                console.log('--- Yield Percent Fetch (GradeWeight) ---');
-                console.log('MTRLGID:', mtrlgid, 'MTRLID:', mtrlid, 'PACKMID:', packmid, 'COUNTS:', counts);
-
-                if (mtrlgid && mtrlid && packmid && counts && counts !== '0.000' && counts !== '0') {
-                    $.getJSON('@Url.Action("GetYieldPercent", "RawMaterialIntake")', {
-                        mtrlgid: mtrlgid,
-                        mtrlid: mtrlid,
-                        packmid: packmid,
-                        counts: counts
-                    }).done(function(res) {
-                        console.log('Response (GradeWeight):', res);
-                        if (res.success && res.value > 0) {
-                            tabPane.find('.yield-percent').val(res.value).trigger('input');
-                            calculateGradeWeightMode(tabPane, true);
-                        }
-                    });
-                }
-            }
-
             // Get Peeled value (wastage field)
             const peeledValue = parseFloat(tabPane.find('.wastage').val()) || 0;
 
@@ -2750,37 +2704,6 @@
             
             console.log('Total PCK + BKN + OTHERS (TOPCK):', topck);
             tabPane.find('.total-counts').text(formatDecimalForCalc(topck));
-
-            // Fetch Yield Percent from DB if fields are changed
-            if (!skipYieldFetch) {
-                const mtrlgid = $('#productCalculationModal').data('product-group-id');
-                const modalTrandid = $('#productCalculationModal').data('trandid');
-                const $mainRow = $('#detailsTable tbody tr').filter(function() {
-                    return $(this).data('trandid') == modalTrandid;
-                });
-                const mtrlid = $mainRow.find('select.product').val();
-                const packmid = tabPane.attr('id').replace('pane-', '');
-                // Try getting from local variable first, then fallback to span
-                const counts = (typeof countPerKg !== 'undefined' && countPerKg) ? countPerKg : $('#modal-count-per-kg').text().trim();
-
-                console.log('--- Yield Percent Fetch (PackingMode) ---');
-                console.log('MTRLGID:', mtrlgid, 'MTRLID:', mtrlid, 'PACKMID:', packmid, 'COUNTS:', counts);
-
-                if (mtrlgid && mtrlid && packmid && counts && counts !== '0.000' && counts !== '0') {
-                    $.getJSON('@Url.Action("GetYieldPercent", "RawMaterialIntake")', {
-                        mtrlgid: mtrlgid,
-                        mtrlid: mtrlid,
-                        packmid: packmid,
-                        counts: counts
-                    }).done(function(res) {
-                        console.log('Response (PackingMode):', res);
-                        if (res.success && res.value > 0) {
-                            tabPane.find('.yield-percent').val(res.value).trigger('input');
-                            calculatePackingMode(tabPane, true);
-                        }
-                    });
-                }
-            }
 
             if (topck === 0) {
                 console.log('TOPCK is 0, setting all calculations to 0.000');
