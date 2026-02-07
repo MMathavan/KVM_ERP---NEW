@@ -302,10 +302,10 @@
                 const packMDescKey = pickKey(keys, 'PACKMDESC') || pickKey(keys, 'PACKINGMASTER') || pickKey(keys, 'RECEIVEDTYPE') || pickKey(keys, 'PACKINGTYPE');
                 const packTMDescKey = pickKey(keys, 'PACKTMDESC') || pickKey(keys, 'SIZE') || pickKey(keys, 'SIZENAME');
 
-                const openingKey = pickKey(keys, 'OPENING');
-                const inwardKey = pickKey(keys, 'INWARD');
-                const issuedKey = pickKey(keys, 'ISSUED');
-                const closingKey = pickKey(keys, 'CLOSING');
+                const openingKey = pickKey(keys, 'OPENING') || pickKey(keys, 'OPENINGQTY') || pickKey(keys, 'OPENQTY');
+                const inwardKey = pickKey(keys, 'INWARD') || pickKey(keys, 'INWARDQTY') || pickKey(keys, 'RECEIVED') || pickKey(keys, 'RECEIVEDQTY');
+                const issuedKey = pickKey(keys, 'ISSUED') || pickKey(keys, 'ISSUE') || pickKey(keys, 'ISSUEDQTY') || pickKey(keys, 'ISSUEQTY');
+                const closingKey = pickKey(keys, 'CLOSING') || pickKey(keys, 'CLOSINGQTY') || pickKey(keys, 'BALANCE') || pickKey(keys, 'BALQTY');
 
                 if (!itemKey || !packMDescKey || !packTMDescKey) {
                     // Fallback: show flat view if expected grouping columns are missing

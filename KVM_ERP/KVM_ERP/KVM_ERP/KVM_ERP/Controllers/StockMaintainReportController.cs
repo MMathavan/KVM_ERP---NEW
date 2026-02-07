@@ -125,17 +125,21 @@ namespace KVM_ERP.Controllers
                 conn.Open();
                 using (var reader = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
+                    do
                     {
-                        var row = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-                        for (int i = 0; i < reader.FieldCount; i++)
+                        while (reader.Read())
                         {
-                            var colName = reader.GetName(i);
-                            object value = reader.IsDBNull(i) ? null : reader.GetValue(i);
-                            row[colName] = value;
+                            var row = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                var colName = reader.GetName(i);
+                                object value = reader.IsDBNull(i) ? null : reader.GetValue(i);
+                                row[colName] = value;
+                            }
+                            result.Add(row);
                         }
-                        result.Add(row);
                     }
+                    while (reader.NextResult());
                 }
             }
 
