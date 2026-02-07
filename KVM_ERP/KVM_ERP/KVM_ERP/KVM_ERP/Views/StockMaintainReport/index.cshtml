@@ -102,6 +102,76 @@
         color: #6c757d;
         font-size: 16px;
     }
+
+    .table-container {
+        padding: 30px;
+        background: white;
+        overflow-x: auto;
+        display: none;
+    }
+
+    #stockMaintainTable {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 13px;
+    }
+
+    #stockMaintainTable thead th {
+        background: #7f88e9;
+        color: white;
+        font-weight: 600;
+        padding: 12px 8px;
+        text-align: center;
+        border: 1px solid #6c75d3;
+        white-space: nowrap;
+    }
+
+    #stockMaintainTable tbody td {
+        padding: 8px;
+        border: 1px solid #dee2e6;
+        text-align: center;
+    }
+
+    #stockMaintainTable tbody td.left {
+        text-align: left;
+        font-weight: 600;
+    }
+
+    #stockMaintainTable tbody tr.product-row {
+        background: #f8f9fa;
+        font-weight: 600;
+    }
+
+    #stockMaintainTable tbody tr.opening-row {
+        background: #e3f2fd;
+    }
+
+    #stockMaintainTable tbody tr.inward-row {
+        background: #fff3cd;
+    }
+
+    #stockMaintainTable tbody tr.issued-row {
+        background: #f8d7da;
+    }
+
+    #stockMaintainTable tbody tr.closing-row {
+        background: #d4edda;
+        font-weight: 600;
+    }
+
+    #stockMaintainTable tbody tr.item-total-row {
+        background: #ffc107;
+        font-weight: 700;
+    }
+
+    .packing-section-title {
+        color: #4facfe;
+        font-weight: 600;
+        border-bottom: 2px solid #4facfe;
+        padding-bottom: 10px;
+        margin-top: 20px;
+        margin-bottom: 12px;
+    }
 </style>
 
 <div class="main-container">
@@ -144,21 +214,254 @@
         <div class="report-status">
             Select dates and click "Load Data" to view the report.
         </div>
+
+        <div class="table-container" id="tableContainer">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h6 style="margin: 5px 0;"><strong>STOCK AS ON <span id="stockDate">@DateTime.Now.ToString("dd/MM/yyyy")</span></strong></h6>
+            </div>
+            <div id="stockTablesWrapper">
+                <p class="text-center">Please select dates and click "Load Data"</p>
+            </div>
+        </div>
     </div>
 </div>
 
 @section scripts {
     <script>
         $(document).ready(function () {
-            $('#loadDataBtn').on('click', function() {
-                // Design only - no functionality
-                console.log('Load Data clicked (Design Only Mode)');
+            $('#loadDataBtn').on('click', function () {
+                loadStockMaintainData();
             });
 
-            $('#exportBtn').on('click', function() {
-                // Design only - no functionality
-                console.log('Export to Excel clicked (Design Only Mode)');
+            $('#exportBtn').on('click', function () {
+                exportToExcel();
             });
+
+            function loadStockMaintainData() {
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+
+                if (!fromDate || !toDate) {
+                    alert('Please select both From and To dates');
+                    return;
+                }
+
+                $('.report-status').text('Loading...').show();
+                $('#tableContainer').hide();
+
+                $.ajax({
+                    url: '@Url.Action("GetStockData", "StockMaintainReport")',
+                    type: 'POST',
+                    data: {
+                        fromDate: fromDate,
+                        toDate: toDate
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            renderTable(response.data);
+                            $('#stockDate').text(new Date(toDate).toLocaleDateString('en-GB'));
+                        } else {
+                            alert('Error loading data: ' + response.message);
+                            $('.report-status').text('Select dates and click "Load Data" to view the report.').show();
+                        }
+                    },
+                    error: function () {
+                        alert('Error loading stock data');
+                        $('.report-status').text('Select dates and click "Load Data" to view the report.').show();
+                    }
+                });
+            }
+
+            function normalizeKey(k) {
+                return (k || '').toString().trim().toUpperCase();
+            }
+
+            function pickKey(keys, desired) {
+                const desiredUpper = desired.toUpperCase();
+                for (let i = 0; i < keys.length; i++) {
+                    if (normalizeKey(keys[i]) === desiredUpper) {
+                        return keys[i];
+                    }
+                }
+                return null;
+            }
+
+            function renderTable(data) {
+                const wrapper = $('#stockTablesWrapper');
+                wrapper.empty();
+
+                if (!data || data.length === 0) {
+                    $('.report-status').text('No data available').show();
+                    $('#tableContainer').hide();
+                    return;
+                }
+
+                // Expected fields from SP (case-insensitive)
+                const keys = Object.keys(data[0] || {});
+                const itemKey = pickKey(keys, 'ITEM') || pickKey(keys, 'PRODUCT') || pickKey(keys, 'MATERIAL') || pickKey(keys, 'ITEMNAME');
+                const packMDescKey = pickKey(keys, 'PACKMDESC') || pickKey(keys, 'PACKINGMASTER') || pickKey(keys, 'RECEIVEDTYPE') || pickKey(keys, 'PACKINGTYPE');
+                const packTMDescKey = pickKey(keys, 'PACKTMDESC') || pickKey(keys, 'SIZE') || pickKey(keys, 'SIZENAME');
+
+                const openingKey = pickKey(keys, 'OPENING');
+                const inwardKey = pickKey(keys, 'INWARD');
+                const issuedKey = pickKey(keys, 'ISSUED');
+                const closingKey = pickKey(keys, 'CLOSING');
+
+                if (!itemKey || !packMDescKey || !packTMDescKey) {
+                    // Fallback: show flat view if expected grouping columns are missing
+                    const tableHtml = `
+                        <table class="table table-bordered" id="stockMaintainTable">
+                            <thead><tr></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    `;
+                    wrapper.append(tableHtml);
+                    const headTr = wrapper.find('table thead tr');
+                    const body = wrapper.find('table tbody');
+                    keys.forEach(k => headTr.append(`<th>${k}</th>`));
+                    data.forEach(r => {
+                        const tr = $('<tr></tr>');
+                        keys.forEach(k => tr.append($('<td></td>').text(r[k] ?? '')));
+                        body.append(tr);
+                    });
+
+                    $('.report-status').hide();
+                    $('#tableContainer').show();
+                    return;
+                }
+
+                // Group by PACKMDESC
+                const groups = {};
+                data.forEach(function (row) {
+                    const g = (row[packMDescKey] || 'Unknown').toString();
+                    if (!groups[g]) groups[g] = [];
+                    groups[g].push(row);
+                });
+
+                let groupIndex = 0;
+                for (const gName in groups) {
+                    const rows = groups[gName];
+
+                    // Collect ordered size headers for this group
+                    const sizeHeaders = [];
+                    const sizeSet = {};
+                    rows.forEach(r => {
+                        const sz = (r[packTMDescKey] || '').toString();
+                        if (!sz) return;
+                        const nk = normalizeKey(sz);
+                        if (!sizeSet[nk]) {
+                            sizeSet[nk] = true;
+                            sizeHeaders.push(sz);
+                        }
+                    });
+
+                    if (groupIndex > 0) {
+                        wrapper.append('<div style="margin-top: 35px;"></div>');
+                    }
+
+                    wrapper.append(`<h5 class="packing-section-title"><i class="fa fa-box"></i> ${gName}</h5>`);
+
+                    // Build table header
+                    let headerHtml = '<tr><th>PARTICULARS</th>';
+                    sizeHeaders.forEach(h => headerHtml += `<th>${h}</th>`);
+                    headerHtml += '</tr>';
+
+                    const tableHtml = `
+                        <table class="table table-bordered" id="stockMaintainTable">
+                            <thead>${headerHtml}</thead>
+                            <tbody class="sm-body-${groupIndex}"></tbody>
+                        </table>
+                    `;
+                    wrapper.append(tableHtml);
+
+                    const tbody = wrapper.find(`.sm-body-${groupIndex}`);
+
+                    // Group within packing group by ITEM
+                    const items = {};
+                    rows.forEach(r => {
+                        const it = (r[itemKey] || 'Unknown').toString();
+                        if (!items[it]) items[it] = [];
+                        items[it].push(r);
+                    });
+
+                    let itemNo = 1;
+                    for (const itName in items) {
+                        const itemRows = items[itName];
+
+                        // Map by size => row
+                        const bySize = {};
+                        itemRows.forEach(r => {
+                            const sz = (r[packTMDescKey] || '').toString();
+                            if (!sz) return;
+                            bySize[normalizeKey(sz)] = r;
+                        });
+
+                        const totalCols = sizeHeaders.length + 1;
+                        tbody.append(`
+                            <tr class="product-row">
+                                <td class="left" colspan="${totalCols}">${itemNo}. ${itName}</td>
+                            </tr>
+                        `);
+
+                        function num(v) {
+                            const n = parseFloat(v);
+                            return isNaN(n) ? 0 : n;
+                        }
+
+                        function buildValueRow(label, cssClass, valueKey) {
+                            let rowHtml = `<tr class="${cssClass}"><td class="left">${label}</td>`;
+                            sizeHeaders.forEach(h => {
+                                const r = bySize[normalizeKey(h)] || {};
+                                const v = valueKey ? num(r[valueKey]) : 0;
+                                rowHtml += `<td>${v}</td>`;
+                            });
+                            rowHtml += `</tr>`;
+                            return { html: rowHtml };
+                        }
+
+                        const openingRow = buildValueRow('OPENING', 'opening-row', openingKey);
+                        const inwardRow = buildValueRow('INWARD', 'inward-row', inwardKey);
+                        const issuedRow = buildValueRow('ISSUED', 'issued-row', issuedKey);
+                        const closingRow = buildValueRow('CLOSING', 'closing-row', closingKey);
+
+                        tbody.append(openingRow.html);
+                        tbody.append(inwardRow.html);
+                        tbody.append(issuedRow.html);
+                        tbody.append(closingRow.html);
+
+                        // spacing
+                        tbody.append(`<tr><td colspan="${totalCols}" style="height: 12px; background: transparent; border: none;"></td></tr>`);
+                        itemNo++;
+                    }
+
+                    groupIndex++;
+                }
+
+                $('.report-status').hide();
+                $('#tableContainer').show();
+            }
+
+            function exportToExcel() {
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+
+                if (!fromDate || !toDate) {
+                    alert('Please select both From and To dates');
+                    return;
+                }
+
+                const form = $('<form>', {
+                    method: 'POST',
+                    action: '@Url.Action("ExportToExcel", "StockMaintainReport")'
+                });
+
+                form.append($('<input>', { type: 'hidden', name: 'fromDate', value: fromDate }));
+                form.append($('<input>', { type: 'hidden', name: 'toDate', value: toDate }));
+
+                $('body').append(form);
+                form.submit();
+                form.remove();
+            }
         });
     </script>
 }
