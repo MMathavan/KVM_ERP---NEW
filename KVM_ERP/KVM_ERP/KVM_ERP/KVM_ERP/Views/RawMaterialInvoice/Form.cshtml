@@ -2559,7 +2559,7 @@
             $('#grossAmount').text('₹ ' + grossAmount.toFixed(2));
             $('#packingDiscountAmount').text('₹ ' + totalPackingAmount.toFixed(2));
             $('#incentiveSummaryAmount').text('₹ ' + totalIncentiveAmount.toFixed(2));
-            $('#grandTotalDisplay').text('₹ ' + grossAmount.toFixed(2));
+            $('#grandTotalDisplay').text('₹ ' + totalNetAmount.toFixed(2));
             // Reset GST display
             $('#noTaxRow').show();
             $('#cgstRow, #sgstRow, #igstRow').hide();
@@ -2641,10 +2641,8 @@
             
             var totalTax = hsnGSTTotal + manualCostFactorTotal;
 
-            // Business rule: Grand Total = Subtotal
-            // Note: Expenses, Incentive, and GST are shown as breakup info only
-            // because the Subtotal already includes everything from the R button calculation.
-            var grandTotal = grossAmount;
+            // Grand Total should be the sum of Net Amount from selected rows
+            var grandTotal = totalNetAmount;
 
             // Update Grand Total display
             $('#grandTotalDisplay').text('₹ ' + grandTotal.toFixed(2));
