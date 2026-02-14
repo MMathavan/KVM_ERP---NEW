@@ -988,6 +988,30 @@
             });
         }
 
+        function calculateWasteAmount(index) {
+            var netWeight = parseFloat($('.waste-net-weight[data-index="' + index + '"]').val()) || 0;
+            var rate = parseFloat($('.waste-rate[data-index="' + index + '"]').val()) || 0;
+            var amount = (netWeight * rate).toFixed(2);
+            $('.waste-amount[data-index="' + index + '"]').val(amount);
+            calculateWastePackingAmount(index);
+        }
+
+        function calculateWastePackingAmount(index) {
+            var netWeight = parseFloat($('.waste-net-weight[data-index="' + index + '"]').val()) || 0;
+            var packingKg = parseFloat($('.waste-packing-kg[data-index="' + index + '"]').val()) || 0;
+            var packingAmount = (netWeight * packingKg).toFixed(2);
+            $('.waste-packing-amount[data-index="' + index + '"]').val(packingAmount);
+            calculateWasteNetAmount(index);
+        }
+
+        function calculateWasteNetAmount(index) {
+            var amount = parseFloat($('.waste-amount[data-index="' + index + '"]').val()) || 0;
+            var packingAmount = parseFloat($('.waste-packing-amount[data-index="' + index + '"]').val()) || 0;
+            var netAmount = amount - packingAmount;
+            $('.waste-net-amount[data-index="' + index + '"]').val(netAmount.toFixed(2));
+            calculateGrossAmount();
+        }
+
         function loadSupplierItems(supplierId) {
             $.ajax({
                 url: '@Url.Action("GetSupplierItems", "RawMaterialInvoice")',
@@ -1093,6 +1117,20 @@
                             $('.packing-kg[data-index="' + index + '"]').val((item.PackingKg || 0).toFixed(2));
                             $('.packing-amount[data-index="' + index + '"]').val((item.PackingAmount || 0).toFixed(2));
                             $('.net-amount[data-index="' + index + '"]').val((item.NetAmount || 0).toFixed(2));
+
+                            // Populate waste-row values (if any were saved)
+                            if (item.HasSavedWasteRow === true || item.HasSavedWasteRow === 1) {
+                                $('.waste-checkbox[data-index="' + index + '"]').prop('checked', true);
+                                $('.waste-net-weight[data-index="' + index + '"]').val((item.SavedWasteNetWeight || 0).toFixed(2));
+                                $('.waste-rate[data-index="' + index + '"]').val((item.SavedWasteRate || 0).toFixed(2));
+                                $('.waste-amount[data-index="' + index + '"]').val((item.SavedWasteAmount || 0).toFixed(2));
+                                $('.waste-packing-kg[data-index="' + index + '"]').val((item.SavedWastePackingKg || 0).toFixed(2));
+                                $('.waste-packing-amount[data-index="' + index + '"]').val((item.SavedWastePackingAmount || 0).toFixed(2));
+                                $('.waste-net-amount[data-index="' + index + '"]').val((item.SavedWasteNetAmount || 0).toFixed(2));
+                                $('.waste-incentive-amount[data-index="' + index + '"]').val((item.SavedWasteIncentiveAmount || 0).toFixed(2));
+                            } else {
+                                $('.waste-checkbox[data-index="' + index + '"]').prop('checked', false);
+                            }
                         });
 
                         // Recalculate packing / net amounts after loading
@@ -1401,6 +1439,42 @@
                 }
                 
                 html += '</tr>';
+
+                // Waste / Peeled row (separate line under the main item)
+                // Displayed when peeled weight exists in intake (WasteWeight > 0)
+                if (parseFloat(wasteWeight) > 0) {
+                    var wasteActualWeight = (parseFloat(wasteWeight) || 0).toFixed(2);
+                    var wasteNetWeightDefault = wasteActualWeight;
+
+                    // Use saved waste net weight when available (edit mode)
+                    if (item.HasSavedWasteRow === true || item.HasSavedWasteRow === 1) {
+                        wasteNetWeightDefault = (parseFloat(item.SavedWasteNetWeight) || 0).toFixed(2);
+                    }
+
+                    html += '<tr class="waste-row" data-item-id="' + (item.ItemId || 0) + '" data-index="' + index + '">';
+                    html += '<td><input type="checkbox" class="waste-checkbox" data-index="' + index + '" /></td>';
+                    html += '<td></td>';
+                    html += '<td><input type="text" readonly value="' + (item.ItemName || '') + ' - Peeled" /></td>';
+                    html += '<td><input type="text" readonly value="' + (item.Grade || '') + '" /></td>';
+                    html += '<td><input type="text" readonly value="' + (item.ProductionColour || '') + '" /></td>';
+                    html += '<td><input type="text" readonly value="' + (item.ReceivedType || '') + '" /></td>';
+                    html += '<td><input type="text" readonly value="' + wasteActualWeight + '" /></td>';
+                    html += '<td><input type="number" step="0.01" class="waste-net-weight" data-index="' + index + '" value="' + wasteNetWeightDefault + '" /></td>';
+
+                    var shouldShowEditColumnsForWaste = (isEditMode === "true") || (editId > 0);
+                    if (shouldShowEditColumnsForWaste) {
+                        // Waste row is always manual (no R-button modal)
+                        html += '<td class="rate-cell"><input type="number" step="0.01" class="waste-rate" data-index="' + index + '" placeholder="0.00" /></td>';
+                        html += '<td class="amount-cell"><input type="text" readonly class="waste-amount" data-index="' + index + '" value="0.00" /></td>';
+                        html += '<td class="packing-kg-cell"><input type="number" step="0.01" class="waste-packing-kg" data-index="' + index + '" placeholder="0.00" /></td>';
+                        html += '<td class="packing-amount-cell"><input type="text" readonly class="waste-packing-amount" data-index="' + index + '" value="0.00" /></td>';
+                        html += '<td class="incentive-cell"><input type="text" readonly class="waste-incentive-amount" data-index="' + index + '" value="0.00" /></td>';
+                        html += '<td class="net-amount-cell"><input type="text" readonly class="waste-net-amount" data-index="' + index + '" value="0.00" /></td>';
+                        html += '<td class="action-cell"></td>';
+                    }
+
+                    html += '</tr>';
+                }
             });
             $('#itemsTableBody').html(html);
             
@@ -1442,6 +1516,30 @@
                         calculateTaxRow(rowId);
                     });
                 }
+            });
+
+            // Waste row checkbox should also affect totals
+            $('.waste-checkbox').off('change').on('change', function () {
+                calculateGrossAmount();
+
+                // Recalculate all tax rows if tax modal is open or if tax data exists
+                if ($('#taxTableBody tr').length > 0) {
+                    $('#taxTableBody tr').each(function() {
+                        var rowId = $(this).data('row-id');
+                        calculateTaxRow(rowId);
+                    });
+                }
+            });
+
+            // Waste row inline calculations
+            $('.waste-net-weight, .waste-rate').off('input').on('input', function () {
+                var index = $(this).data('index');
+                calculateWasteAmount(index);
+            });
+
+            $('.waste-packing-kg').off('input').on('input', function () {
+                var index = $(this).data('index');
+                calculateWastePackingAmount(index);
             });
         }
 
@@ -2388,13 +2486,21 @@
             var checkedItems = [];
             $('#itemsTableBody tr').each(function() {
                 var checkbox = $(this).find('.row-checkbox');
-                if (checkbox.is(':checked')) {
+                var wasteCheckbox = $(this).find('.waste-checkbox');
+                if (checkbox.is(':checked') || wasteCheckbox.is(':checked')) {
                     var amount = parseFloat($(this).find('.amount').val()) || 0;
+                    if (amount <= 0) amount = parseFloat($(this).find('.waste-amount').val()) || 0;
+
                     var packingAmount = parseFloat($(this).find('.packing-amount').val()) || 0;
+                    if (packingAmount <= 0) packingAmount = parseFloat($(this).find('.waste-packing-amount').val()) || 0;
+
                     var netAmount = parseFloat($(this).find('.net-amount').val()) || 0;
+                    if (netAmount <= 0) netAmount = parseFloat($(this).find('.waste-net-amount').val()) || 0;
+
                     var incentiveAmount = parseFloat($(this).find('.incentive-amount').val()) || 0;
+                    if (incentiveAmount <= 0) incentiveAmount = parseFloat($(this).find('.waste-incentive-amount').val()) || 0;
                     var itemId = parseInt($(this).data('item-id')) || 0;
-                    var index = parseInt(checkbox.data('index')) || 0;
+                    var index = parseInt((checkbox.data('index') || wasteCheckbox.data('index'))) || 0;
 
                     console.log('Checked item:', itemId, 'Amount:', amount, 'PackingAmount:', packingAmount, 'NetAmount:', netAmount);
                     
@@ -2654,10 +2760,12 @@
             var selectedTotal = 0;
             $('#itemsTableBody tr').each(function() {
                 var checkbox = $(this).find('.row-checkbox');
-                if (checkbox.is(':checked')) {
+                var wasteCheckbox = $(this).find('.waste-checkbox');
+                if (checkbox.is(':checked') || wasteCheckbox.is(':checked')) {
                     var amount = parseFloat($(this).find('.amount').val()) || 0;
-                    var index = parseInt(checkbox.data('index')) || 0;
-
+                    if (amount <= 0) {
+                        amount = parseFloat($(this).find('.waste-amount').val()) || 0;
+                    }
                     selectedTotal += amount;
                 }
             });
@@ -2875,6 +2983,38 @@
                         IsSelected: true,
                         IsWasteRow: false   // Main row
                     });
+
+                    // Waste (peeled) row item: include only if waste checkbox is checked
+                    var wasteCheckbox = $('.waste-checkbox[data-index="' + index + '"]');
+                    var wasteSelected = wasteCheckbox.length && wasteCheckbox.is(':checked');
+                    if (wasteSelected) {
+                        var wasteNetWeight = parseFloat($('.waste-net-weight[data-index="' + index + '"]').val()) || 0;
+                        var wasteRate = parseFloat($('.waste-rate[data-index="' + index + '"]').val()) || 0;
+                        var wasteAmount = parseFloat($('.waste-amount[data-index="' + index + '"]').val()) || 0;
+                        var wastePackingKg = parseFloat($('.waste-packing-kg[data-index="' + index + '"]').val()) || 0;
+                        var wastePackingAmount = parseFloat($('.waste-packing-amount[data-index="' + index + '"]').val()) || 0;
+                        var wasteNetAmount = parseFloat($('.waste-net-amount[data-index="' + index + '"]').val()) || 0;
+                        var wasteIncentiveAmount = parseFloat($('.waste-incentive-amount[data-index="' + index + '"]').val()) || 0;
+
+                        invoiceData.Items.push({
+                            ItemId: item.ItemId,
+                            MaterialGroupId: item.MaterialGroupId || 0,
+                            GradeId: item.GradeId || 0,
+                            ProductionColourId: item.ProductionColourId || 0,
+                            ReceivedTypeId: item.ReceivedTypeId || 0,
+                            ActualWeight: item.WasteWeight || 0,
+                            NetWeight: wasteNetWeight,
+                            Rate: wasteRate,
+                            Amount: wasteAmount,
+                            PackingKg: wastePackingKg,
+                            PackingAmount: wastePackingAmount,
+                            NetAmount: wasteNetAmount,
+                            IncentiveAmount: wasteIncentiveAmount,
+                            TRANPID: item.TRANPID || 0,
+                            IsSelected: true,
+                            IsWasteRow: true
+                        });
+                    }
                 } else {
                     console.log('Skipping UNCHECKED item: ' + item.ItemName);
                 }
