@@ -740,6 +740,12 @@
                                         <div id="modalRemarks" class="text-muted">-</div>
                                     </div>
                                 </div>
+                                <div class="row mt-2" id="modalFactoryMinusPeeledRow" style="display:none;">
+                                    <div class="col-md-12">
+                                        <strong>Factory Weight - Peeled (KG):</strong>
+                                        <div id="modalFactoryMinusPeeled" class="text-muted">-</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -795,7 +801,7 @@
                                     <input type="number" class="form-control" id="packingTypePackingPerKg" step="0.01" oninput="calculatePackingDiscount('packingType')">
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">Peeled + Weight</label>
+                                    <label class="form-label">Pack KG Weight</label>
                                     <input type="number" class="form-control" id="packingTypeWastePWeight" step="0.01" readonly>
                                 </div>
                                 <div class="col-md-3">
@@ -1493,6 +1499,9 @@
             $('#packingTypeIncentiveValue').val('0.00');
             $('#packingTypeIncentiveTotal').val('0.00');
 
+            $('#modalFactoryMinusPeeledRow').hide();
+            $('#modalFactoryMinusPeeled').text('-');
+
             // Clear dynamic slab inputs container (will be repopulated by loadSlabData)
             $('#packingTypeSlabs').empty();
         }
@@ -1544,12 +1553,29 @@
                 $('#modalRemarks').text(refNoText);
             }
 
-            // Populate Peeled + Weight (WASTEPWGT from TRANSACTION_PRODUCT_CALCULATION)
-            var peeledPlusWeight = 0;
-            if (typeof item.WastePWeight !== 'undefined' && item.WastePWeight !== null) {
-                peeledPlusWeight = parseFloat(item.WastePWeight) || 0;
+            // Use Pack KG Weight for the existing "peeled + weight" field so calculations remain unchanged
+            var packKgWeight = 0;
+            if (typeof item.PackKgWeight !== 'undefined' && item.PackKgWeight !== null) {
+                packKgWeight = parseFloat(item.PackKgWeight) || 0;
             }
-            $('#packingTypeWastePWeight').val(peeledPlusWeight.toFixed(2));
+            $('#packingTypeWastePWeight').val(packKgWeight.toFixed(2));
+
+            // Conditional display: Factory Weight - Peeled
+            var peeled = 0;
+            if (typeof item.WasteWeight !== 'undefined' && item.WasteWeight !== null) {
+                peeled = parseFloat(item.WasteWeight) || 0;
+            }
+
+            var factoryWeight = 0;
+            if (typeof item.ActualWeight !== 'undefined' && item.ActualWeight !== null) {
+                factoryWeight = parseFloat(item.ActualWeight) || 0;
+            }
+
+            if (peeled > 0) {
+                var factoryMinusPeeled = factoryWeight - peeled;
+                $('#modalFactoryMinusPeeled').text(factoryMinusPeeled.toFixed(2) + ' KG');
+                $('#modalFactoryMinusPeeledRow').show();
+            }
             
             // Load slab data for this item
             loadSlabData(item.TRANPID);

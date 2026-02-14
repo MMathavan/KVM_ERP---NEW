@@ -508,6 +508,7 @@ namespace KVM_ERP.Controllers
                         ISNULL(ut.RCVDTID, 0) as ReceivedTypeId,
                         rt.RCVDTDESC as ReceivedType,
                         ISNULL(ut.FACTORYWGT, 0) as ActualWeight,
+                        ISNULL(ut.PCKKGWGT, 0) as PackKgWeight,
                         ISNULL(ut.WASTEWGT, 0) as WasteWeight,
                         ISNULL(ut.WASTEPWGT, 0) as WastePWeight,
                         ISNULL(ut.TRANPID, 0) as TRANPID,
@@ -591,6 +592,7 @@ namespace KVM_ERP.Controllers
                         ISNULL(td.TRANDAID, 0) as TRANPID,
                         ISNULL(tpc.WASTEPWGT, 0) as WastePWeight,
                         ISNULL(tpc.WASTEWGT, 0) as WasteWeight,
+                        ISNULL(tpc.PCKKGWGT, 0) as PackKgWeight,
                         ISNULL(td.TRANDINCAMT, 0) as IncentiveAmount,
                         ISNULL(tqc.REMARKS, '') as Remarks,
                         CASE 
@@ -2623,6 +2625,7 @@ namespace KVM_ERP.Controllers
         public int ReceivedTypeId { get; set; }
         public string ReceivedType { get; set; }
         public decimal ActualWeight { get; set; }
+        public decimal PackKgWeight { get; set; }
         public decimal WastePWeight { get; set; }
         public decimal WasteWeight { get; set; }  // WASTEWGT from TRANSACTION_PRODUCT_CALCULATION
         public int TRANPID { get; set; }  // Transaction Product Calculation ID
@@ -2707,6 +2710,7 @@ namespace KVM_ERP.Controllers
         public int TRANPID { get; set; }  // Transaction Product Calculation ID from TRANDAID
         public decimal WastePWeight { get; set; }
         public decimal WasteWeight { get; set; }  // WASTEWGT from TRANSACTION_PRODUCT_CALCULATION
+        public decimal PackKgWeight { get; set; }
         public decimal IncentiveAmount { get; set; } // TRANDINCAMT (line-level incentive)
         public int IsWasteRow { get; set; }       // 1 if this TRANSACTIONDETAIL row represents a Waste Weight line, otherwise 0
         public string Remarks { get; set; }
