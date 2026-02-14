@@ -1388,7 +1388,12 @@
                 html += '<td><input type="text" readonly value="' + (item.ProductionColour || '') + '" /></td>';
                 html += '<td><input type="text" readonly value="' + (item.ReceivedType || '') + '" /></td>';
                 html += '<td><input type="text" readonly value="' + actualWeight + '" /></td>';
-                html += '<td><input type="number" step="0.01" class="net-weight' + (isBknOrOthers ? ' bkn-others-cell' : '') + '" data-index="' + index + '" data-bkn-others="' + (isBknOrOthers ? '1' : '0') + '" value="' + actualWeight + '" /></td>';
+                html += '<td>' +
+                    '<input type="number" step="0.01" class="net-weight' + (isBknOrOthers ? ' bkn-others-cell' : '') + '" data-index="' + index + '" data-bkn-others="' + (isBknOrOthers ? '1' : '0') + '" value="' + actualWeight + '" />' +
+                    '<div class="net-minus-peeled-row text-muted" data-index="' + index + '" style="display:none; margin-top:4px; font-size:12px;">' +
+                        'Net - Peeled: <span class="net-minus-peeled" data-index="' + index + '">0.00</span>' +
+                    '</div>' +
+                '</td>';
                 
                 // Conditionally render Rate, Amount, and new Packing columns based on edit mode
                 var shouldShowEditColumns = (isEditMode === "true") || (editId > 0);
@@ -1541,6 +1546,42 @@
                 var index = $(this).data('index');
                 calculateWastePackingAmount(index);
             });
+
+            // Main row display-only: Net Weight - Peeled
+            // Keep this separate from existing calculation handlers to avoid side effects
+            $('.net-weight').off('input.netMinusPeeled').on('input.netMinusPeeled', function () {
+                var index = $(this).data('index');
+                updateNetMinusPeeledDisplay(index);
+            });
+
+            // Initialize display for all rows after rendering
+            itemsData.forEach(function(_, index) {
+                updateNetMinusPeeledDisplay(index);
+            });
+        }
+
+        function updateNetMinusPeeledDisplay(index) {
+            if (!Array.isArray(itemsData) || !itemsData[index]) {
+                return;
+            }
+
+            var peeled = parseFloat(itemsData[index].WasteWeight) || 0;
+            var row = $('.net-minus-peeled-row[data-index="' + index + '"]');
+            var valueSpan = $('.net-minus-peeled[data-index="' + index + '"]');
+
+            if (!row.length || !valueSpan.length) {
+                return;
+            }
+
+            if (peeled > 0) {
+                var netWeight = parseFloat($('.net-weight[data-index="' + index + '"]').val()) || 0;
+                var netMinusPeeled = netWeight - peeled;
+                valueSpan.text(netMinusPeeled.toFixed(2));
+                row.show();
+            } else {
+                row.hide();
+                valueSpan.text('0.00');
+            }
         }
 
         // Toggle column visibility based on mode
