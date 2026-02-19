@@ -548,7 +548,7 @@
                         </button>
                     </div>
                     <div class="col-md-6 text-end">
-                        <h4 class="mb-3">
+                        <h4 class="mb-3" style="display:none;">
                             <strong>Subtotal: </strong>
                             <span id="grossAmount" class="text-success" style="font-size: 20px; font-weight: bold;">₹ 0.00</span>
                         </h4>
@@ -993,6 +993,7 @@
             var rate = parseFloat($('.waste-rate[data-index="' + index + '"]').val()) || 0;
             var amount = (netWeight * rate).toFixed(2);
             $('.waste-amount[data-index="' + index + '"]').val(amount);
+            $('.waste-amount-inline[data-index="' + index + '"]').text(amount);
             calculateWastePackingAmount(index);
         }
 
@@ -1124,6 +1125,7 @@
                                 $('.waste-net-weight[data-index="' + index + '"]').val((item.SavedWasteNetWeight || 0).toFixed(2));
                                 $('.waste-rate[data-index="' + index + '"]').val((item.SavedWasteRate || 0).toFixed(2));
                                 $('.waste-amount[data-index="' + index + '"]').val((item.SavedWasteAmount || 0).toFixed(2));
+                                $('.waste-amount-inline[data-index="' + index + '"]').text((item.SavedWasteAmount || 0).toFixed(2));
                                 $('.waste-packing-kg[data-index="' + index + '"]').val((item.SavedWastePackingKg || 0).toFixed(2));
                                 $('.waste-packing-amount[data-index="' + index + '"]').val((item.SavedWastePackingAmount || 0).toFixed(2));
                                 $('.waste-net-amount[data-index="' + index + '"]').val((item.SavedWasteNetAmount || 0).toFixed(2));
@@ -1391,7 +1393,7 @@
                 html += '<td>' +
                     '<input type="number" step="0.01" class="net-weight' + (isBknOrOthers ? ' bkn-others-cell' : '') + '" data-index="' + index + '" data-bkn-others="' + (isBknOrOthers ? '1' : '0') + '" value="' + actualWeight + '" />' +
                     '<div class="net-minus-peeled-row text-muted" data-index="' + index + '" style="display:none; margin-top:4px; font-size:12px;">' +
-                        'Net - Peeled: <span class="net-minus-peeled" data-index="' + index + '">0.00</span>' +
+                        '<strong>Net - Peeled:</strong> <span class="net-minus-peeled" data-index="' + index + '">0.00</span>' +
                     '</div>' +
                 '</td>';
                 
@@ -1469,7 +1471,12 @@
                     var shouldShowEditColumnsForWaste = (isEditMode === "true") || (editId > 0);
                     if (shouldShowEditColumnsForWaste) {
                         // Waste row is always manual (no R-button modal)
-                        html += '<td class="rate-cell"><input type="number" step="0.01" class="waste-rate" data-index="' + index + '" placeholder="0.00" /></td>';
+                        html += '<td class="rate-cell">' +
+                            '<input type="number" step="0.01" class="waste-rate" data-index="' + index + '" placeholder="0.00" />' +
+                            '<div class="waste-amount-inline-row text-muted" data-index="' + index + '" style="margin-top:4px; font-size:12px;">' +
+                                '<strong>Amount:</strong> <span class="waste-amount-inline" data-index="' + index + '">0.00</span>' +
+                            '</div>' +
+                        '</td>';
                         html += '<td class="amount-cell"><input type="text" readonly class="waste-amount" data-index="' + index + '" value="0.00" /></td>';
                         html += '<td class="packing-kg-cell"><input type="number" step="0.01" class="waste-packing-kg" data-index="' + index + '" placeholder="0.00" /></td>';
                         html += '<td class="packing-amount-cell"><input type="text" readonly class="waste-packing-amount" data-index="' + index + '" value="0.00" /></td>';
@@ -1549,14 +1556,18 @@
 
             // Main row display-only: Net Weight - Peeled
             // Keep this separate from existing calculation handlers to avoid side effects
-            $('.net-weight').off('input.netMinusPeeled').on('input.netMinusPeeled', function () {
-                var index = $(this).data('index');
-                updateNetMinusPeeledDisplay(index);
-            });
+            $('.net-weight').off('input.netMinusPeeled');
 
             // Initialize display for all rows after rendering
             itemsData.forEach(function(_, index) {
                 updateNetMinusPeeledDisplay(index);
+            });
+
+            // Initialize inline Amount display for peeled rows
+            $('.waste-amount').each(function () {
+                var index = $(this).data('index');
+                var val = $(this).val() || '0.00';
+                $('.waste-amount-inline[data-index="' + index + '"]').text(val);
             });
         }
 
@@ -1566,6 +1577,7 @@
             }
 
             var peeled = parseFloat(itemsData[index].WasteWeight) || 0;
+            var yieldPercent = parseFloat(itemsData[index].YieldPercent) || 0;
             var row = $('.net-minus-peeled-row[data-index="' + index + '"]');
             var valueSpan = $('.net-minus-peeled[data-index="' + index + '"]');
 
@@ -1574,8 +1586,15 @@
             }
 
             if (peeled > 0) {
-                var netWeight = parseFloat($('.net-weight[data-index="' + index + '"]').val()) || 0;
+                var netWeight = 0;
+                if (typeof itemsData[index].ActualWeight !== 'undefined' && itemsData[index].ActualWeight !== null) {
+                    netWeight = parseFloat(itemsData[index].ActualWeight) || 0;
+                }
                 var netMinusPeeled = netWeight - peeled;
+                if (yieldPercent > 0) {
+                    var adjustedPeeled = peeled / (yieldPercent / 100);
+                    netMinusPeeled = netWeight - adjustedPeeled;
+                }
                 valueSpan.text(netMinusPeeled.toFixed(2));
                 row.show();
             } else {
@@ -1591,13 +1610,11 @@
             if (isEditMode) {
                 // Always show editable value columns in edit mode
                 $('#rateColumn').css('display', 'table-cell');
-                $('#amountColumn').css('display', 'table-cell');
                 $('#packingKgColumn').css('display', 'table-cell');
                 $('#packingAmountColumn').css('display', 'table-cell');
                 $('#incentiveColumn').css('display', 'table-cell');
                 $('#netAmountColumn').css('display', 'table-cell');
                 $('.rate-cell').css('display', 'table-cell');
-                $('.amount-cell').css('display', 'table-cell');
                 $('.packing-kg-cell').css('display', 'table-cell');
                 $('.packing-amount-cell').css('display', 'table-cell');
                 $('.incentive-cell').css('display', 'table-cell');
@@ -1612,9 +1629,13 @@
                     $('.action-cell').css('display', 'table-cell');
                 }
             } else {
-                $('#rateColumn, #amountColumn, #packingKgColumn, #packingAmountColumn, #incentiveColumn, #netAmountColumn, #actionColumn').css('display', 'none');
-                $('.rate-cell, .amount-cell, .packing-kg-cell, .packing-amount-cell, .incentive-cell, .net-amount-cell, .action-cell').css('display', 'none');
+                $('#rateColumn, #packingKgColumn, #packingAmountColumn, #incentiveColumn, #netAmountColumn, #actionColumn').css('display', 'none');
+                $('.rate-cell, .packing-kg-cell, .packing-amount-cell, .incentive-cell, .net-amount-cell, .action-cell').css('display', 'none');
             }
+
+            // Amount column is always hidden (Amount is shown inline for peeled row only)
+            $('#amountColumn').css('display', 'none');
+            $('.amount-cell').css('display', 'none');
         }
 
         // Reset all fields in the Rate Calculation modal so values from one row
@@ -1711,7 +1732,16 @@
             }
 
             if (peeled > 0) {
+                var yieldPercent = 0;
+                if (typeof item.YieldPercent !== 'undefined' && item.YieldPercent !== null) {
+                    yieldPercent = parseFloat(item.YieldPercent) || 0;
+                }
+
                 var factoryMinusPeeled = factoryWeight - peeled;
+                if (yieldPercent > 0) {
+                    var adjustedPeeled = peeled / (yieldPercent / 100);
+                    factoryMinusPeeled = factoryWeight - adjustedPeeled;
+                }
                 $('#modalFactoryMinusPeeled').text(factoryMinusPeeled.toFixed(2) + ' KG');
                 $('#modalFactoryMinusPeeledRow').show();
             }
@@ -2183,9 +2213,11 @@
                 // Also copy packing values from modal to the main grid row
                 var modalPackingPerKg = parseFloat($('#packingTypePackingPerKg').val()) || 0;
                 var modalPackingAmount = parseFloat($('#packingTypePackingAmount').val()) || 0;
+                var modalOnAccount = parseFloat($('#packingTypeIncentiveTotal').val()) || 0;
 
                 $('.packing-kg[data-index="' + itemIndex + '"]').val(modalPackingPerKg.toFixed(2));
                 $('.packing-amount[data-index="' + itemIndex + '"]').val(modalPackingAmount.toFixed(2));
+                $('.net-amount[data-index="' + itemIndex + '"]').val(modalOnAccount.toFixed(2));
 
                 // Get invoice ID (only save if we're in edit mode with a valid invoice ID)
                 var isEditMode = @(ViewBag.IsEdit != null ? "true" : "false");
@@ -2303,6 +2335,10 @@
                                 
                                 // Trigger calculation (amount, net, totals including incentive)
                                 calculateAmount(itemIndex);
+
+                                // Keep Net Amount consistent with the popup "On Account" value (display-only)
+                                $('.net-amount[data-index="' + itemIndex + '"]').val(modalOnAccount.toFixed(2));
+                                calculateGrossAmount();
                                 
                                 alert('✅ SUCCESS: Rate applied and weight details saved!\n' + response.message + '\n₹' + finalRate.toFixed(2) + ' per KG');
                                 
@@ -2338,6 +2374,10 @@
                     
                     // Trigger calculation
                     calculateAmount(itemIndex);
+
+                    // Keep Net Amount consistent with the popup "On Account" value (display-only)
+                    $('.net-amount[data-index="' + itemIndex + '"]').val(modalOnAccount.toFixed(2));
+                    calculateGrossAmount();
                     
                     alert('Rate applied successfully: ₹' + finalRate.toFixed(2) + ' per KG');
                     
@@ -2458,9 +2498,10 @@
                 var basisWeight = 0;
 
                 if (Array.isArray(itemsData) && itemsData[index]) {
+                    var packKgWeight = parseFloat(itemsData[index].PackKgWeight) || 0;
                     var wastePWeight = parseFloat(itemsData[index].WastePWeight) || 0;
                     var netWeightForRow = parseFloat(netWeightInput.val()) || 0;
-                    basisWeight = wastePWeight > 0 ? wastePWeight : netWeightForRow;
+                    basisWeight = packKgWeight > 0 ? packKgWeight : (wastePWeight > 0 ? wastePWeight : netWeightForRow);
                 } else {
                     basisWeight = parseFloat(netWeightInput.val()) || 0;
                 }
@@ -2496,14 +2537,11 @@
             }
 
             // Default: Net Amount mirrors Amount for normal R-button rows
-            var netAmount = amount;
-
-            // For BKN / Others / manual rows only, subtract Packing Amount on the row
             if (isBknOrOthers) {
-                netAmount = amount - packingAmount;
+                // For BKN / Others / manual rows only, subtract Packing Amount on the row
+                var netAmount = amount - packingAmount;
+                $('.net-amount[data-index="' + index + '"]').val(netAmount.toFixed(2));
             }
-
-            $('.net-amount[data-index="' + index + '"]').val(netAmount.toFixed(2));
             
             // Recalculate totals
             calculateGrossAmount();

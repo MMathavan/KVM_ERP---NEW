@@ -511,6 +511,7 @@ namespace KVM_ERP.Controllers
                         ISNULL(ut.PCKKGWGT, 0) as PackKgWeight,
                         ISNULL(ut.WASTEWGT, 0) as WasteWeight,
                         ISNULL(ut.WASTEPWGT, 0) as WastePWeight,
+                        ISNULL(ut.YELDPERCENT, 0) as YieldPercent,
                         ISNULL(ut.TRANPID, 0) as TRANPID,
                         ISNULL(tqc.REMARKS, '') as Remarks,
                         CASE 
@@ -593,6 +594,7 @@ namespace KVM_ERP.Controllers
                         ISNULL(tpc.WASTEPWGT, 0) as WastePWeight,
                         ISNULL(tpc.WASTEWGT, 0) as WasteWeight,
                         ISNULL(tpc.PCKKGWGT, 0) as PackKgWeight,
+                        ISNULL(tpc.YELDPERCENT, 0) as YieldPercent,
                         ISNULL(td.TRANDINCAMT, 0) as IncentiveAmount,
                         ISNULL(tqc.REMARKS, '') as Remarks,
                         CASE 
@@ -2628,6 +2630,7 @@ namespace KVM_ERP.Controllers
         public decimal PackKgWeight { get; set; }
         public decimal WastePWeight { get; set; }
         public decimal WasteWeight { get; set; }  // WASTEWGT from TRANSACTION_PRODUCT_CALCULATION
+        public decimal YieldPercent { get; set; } // YELDPERCENT from TRANSACTION_PRODUCT_CALCULATION
         public int TRANPID { get; set; }  // Transaction Product Calculation ID
         public string Remarks { get; set; }
         public int HasBknOrOthers { get; set; }
@@ -2711,6 +2714,7 @@ namespace KVM_ERP.Controllers
         public decimal WastePWeight { get; set; }
         public decimal WasteWeight { get; set; }  // WASTEWGT from TRANSACTION_PRODUCT_CALCULATION
         public decimal PackKgWeight { get; set; }
+        public decimal YieldPercent { get; set; } // YELDPERCENT from TRANSACTION_PRODUCT_CALCULATION
         public decimal IncentiveAmount { get; set; } // TRANDINCAMT (line-level incentive)
         public int IsWasteRow { get; set; }       // 1 if this TRANSACTIONDETAIL row represents a Waste Weight line, otherwise 0
         public string Remarks { get; set; }
