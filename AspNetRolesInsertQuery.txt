@@ -87,3 +87,18 @@ VALUES
   select * from TRANSACTIONDETAIL where TRANMID = 466
 
 SELECT * FROM TRANSACTION_INVOICE_WEIGHT_DETAILS WHERE TRANDID IN (1732, 1733, 1734);
+
+prompt
+----------------
+
+in the invoice there is no split of grade, production colour, received type,
+
+only by item
+
+if the item is same
+
+for the TRansaction master
+
+it will comes it in a single row
+
+different means diferent row
