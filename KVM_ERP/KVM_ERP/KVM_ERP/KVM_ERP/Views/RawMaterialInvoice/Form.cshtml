@@ -515,10 +515,10 @@
                                 <th>S.No</th>
                                 <th>Item</th>
                                 <th>Grade</th>
-                                <th>Production Colour</th>
-                                <th>Received Type</th>
-                                <th>Actual Weight (KG)</th>
-                                <th>Net Weight (KG)</th>
+                                <th>HL Weight (KG)</th>
+                                <th>Yield Percent</th>
+                                <th>HO Weight (KG)</th>
+                                <th>HO Net Weight (KG)</th>
                                 <th id="rateColumn" style="display: none;">Rate (₹/KG)</th>
                                 <th id="amountColumn" style="display: none;">Amount (₹)</th>
                                 <th id="packingKgColumn" style="display: none;">Packing/Kg (₹)</th>
@@ -726,11 +726,11 @@
                                         <div id="modalReceivedType" class="text-muted">-</div>
                                     </div>
                                     <div class="col-md-2">
-                                        <strong>Actual Weight (KG):</strong>
+                                        <strong>HO Weight (KG):</strong>
                                         <div id="modalActualWeight" class="text-muted">-</div>
                                     </div>
                                     <div class="col-md-2">
-                                        <strong>Net Weight (KG):</strong>
+                                        <strong>HO Net Weight (KG):</strong>
                                         <div id="modalNetWeight" class="text-muted">-</div>
                                     </div>
                                 </div>
@@ -1378,6 +1378,10 @@
                 var actualWeight = (item.ActualWeight || 0).toFixed(2);
                 var incentiveAmount = (item.IncentiveAmount || 0).toFixed(2);
                 var wasteWeight = (item.WasteWeight || 0);
+                var packKgWeight = (item.PackKgWeight || 0).toFixed(2);
+                var yieldPercent = (item.YieldPercent || 0).toFixed(2);
+                var yieldPctRaw = (item.YieldPercent || 0);
+                var hoWeight = (yieldPctRaw > 0 ? ((item.PackKgWeight || 0) / (yieldPctRaw / 100)) : 0).toFixed(2);
 
                 var isBknOrOthers = item.HasBknOrOthers === true || item.HasBknOrOthers === 1 || item.HasBknOrOthers === "1";
 
@@ -1387,14 +1391,11 @@
                 html += '<td>' + (index + 1) + '</td>';
                 html += '<td><input type="text" readonly value="' + (item.ItemName || '') + '" /></td>';
                 html += '<td><input type="text" readonly value="' + (item.Grade || '') + '" /></td>';
-                html += '<td><input type="text" readonly value="' + (item.ProductionColour || '') + '" /></td>';
-                html += '<td><input type="text" readonly value="' + (item.ReceivedType || '') + '" /></td>';
-                html += '<td><input type="text" readonly value="' + actualWeight + '" /></td>';
+                html += '<td><input type="text" readonly value="' + packKgWeight + '" /></td>';
+                html += '<td><input type="text" readonly value="' + yieldPercent + '" /></td>';
+                html += '<td><input type="text" readonly value="' + hoWeight + '" /></td>';
                 html += '<td>' +
-                    '<input type="number" step="0.01" class="net-weight' + (isBknOrOthers ? ' bkn-others-cell' : '') + '" data-index="' + index + '" data-bkn-others="' + (isBknOrOthers ? '1' : '0') + '" value="' + actualWeight + '" />' +
-                    '<div class="net-minus-peeled-row text-muted" data-index="' + index + '" style="display:none; margin-top:4px; font-size:12px;">' +
-                        '<strong>Net - Peeled:</strong> <span class="net-minus-peeled" data-index="' + index + '">0.00</span>' +
-                    '</div>' +
+                    '<input type="number" step="0.01" class="net-weight' + (isBknOrOthers ? ' bkn-others-cell' : '') + '" data-index="' + index + '" data-bkn-others="' + (isBknOrOthers ? '1' : '0') + '" value="' + hoWeight + '" />' +
                 '</td>';
                 
                 // Conditionally render Rate, Amount, and new Packing columns based on edit mode
@@ -1451,7 +1452,8 @@
                 // Displayed when peeled weight exists in intake (WasteWeight > 0)
                 if (parseFloat(wasteWeight) > 0) {
                     var wasteActualWeight = (parseFloat(wasteWeight) || 0).toFixed(2);
-                    var wasteNetWeightDefault = wasteActualWeight;
+                    var wasteHoWeight = (yieldPctRaw > 0 ? ((parseFloat(wasteActualWeight) || 0) / (yieldPctRaw / 100)) : 0).toFixed(2);
+                    var wasteNetWeightDefault = wasteHoWeight;
 
                     // Use saved waste net weight when available (edit mode)
                     if (item.HasSavedWasteRow === true || item.HasSavedWasteRow === 1) {
@@ -1463,9 +1465,9 @@
                     html += '<td></td>';
                     html += '<td><input type="text" readonly value="' + (item.ItemName || '') + ' - Peeled" /></td>';
                     html += '<td><input type="text" readonly value="' + (item.Grade || '') + '" /></td>';
-                    html += '<td><input type="text" readonly value="' + (item.ProductionColour || '') + '" /></td>';
-                    html += '<td><input type="text" readonly value="' + (item.ReceivedType || '') + '" /></td>';
                     html += '<td><input type="text" readonly value="' + wasteActualWeight + '" /></td>';
+                    html += '<td><input type="text" readonly value="' + yieldPercent + '" /></td>';
+                    html += '<td><input type="text" readonly value="' + wasteHoWeight + '" /></td>';
                     html += '<td><input type="number" step="0.01" class="waste-net-weight" data-index="' + index + '" value="' + wasteNetWeightDefault + '" /></td>';
 
                     var shouldShowEditColumnsForWaste = (isEditMode === "true") || (editId > 0);
