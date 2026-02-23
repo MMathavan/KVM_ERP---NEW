@@ -1930,7 +1930,7 @@ namespace KVM_ERP.Controllers
 
                 // STEP 1: Locate the TRANDID and PACKMID for this canonical TRANPID
                 var header = context.Database.SqlQuery<SlabHeaderInfo>($@"
-                    SELECT TOP 1 TRANDID, PACKMID
+                    SELECT TOP 1 TRANDID, PACKMID, ISNULL(CALCULATIONMODE, 0) AS CALCULATIONMODE
                     FROM TRANSACTION_PRODUCT_CALCULATION
                     WHERE TRANPID = @p0
                 ", tranpId).FirstOrDefault();
@@ -2023,7 +2023,8 @@ namespace KVM_ERP.Controllers
                         id = packingMaster?.PACKMID ?? header.PACKMID,
                         name = packingMaster?.PACKMDESC ?? "Packing"
                     },
-                    wastePWeight = wastePWeight
+                    wastePWeight = wastePWeight,
+                    calculationMode = header.CALCULATIONMODE
                 });
             }
             catch (Exception ex)
@@ -2039,6 +2040,7 @@ namespace KVM_ERP.Controllers
         {
             public int TRANDID { get; set; }
             public int PACKMID { get; set; }
+            public int CALCULATIONMODE { get; set; }
         }
 
         // Helper class for packing type info
