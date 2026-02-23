@@ -551,7 +551,6 @@
                                 <th><input type="checkbox" id="selectAll" title="Select All" /></th>
                                 <th>S.No</th>
                                 <th>Item</th>
-                                <th>Grade</th>
                                 <th>HL Weight (KG)</th>
                                 <th>Yield Percent</th>
                                 <th>HO Weight (KG)</th>
@@ -567,7 +566,7 @@
                         </thead>
                         <tbody id="itemsTableBody">
                             <tr>
-                                <td colspan="15" class="text-center text-muted">
+                                <td colspan="14" class="text-center text-muted">
                                     Please select a supplier to load items
                                 </td>
                             </tr>
@@ -1421,7 +1420,6 @@
                 html += '<td><input type="checkbox" class="row-checkbox" data-index="' + index + '" /></td>';
                 html += '<td>' + (index + 1) + '</td>';
                 html += '<td><input type="text" readonly value="' + (item.ItemName || '') + '" /></td>';
-                html += '<td><input type="text" readonly value="' + (item.Grade || '') + '" /></td>';
                 html += '<td><input type="text" readonly value="' + packKgWeight + '" /></td>';
                 html += '<td><input type="text" readonly value="' + yieldPercent + '" /></td>';
                 html += '<td><input type="text" readonly value="' + hoWeight + '" /></td>';
@@ -1495,7 +1493,6 @@
                     html += '<td><input type="checkbox" class="waste-checkbox" data-index="' + index + '" /></td>';
                     html += '<td></td>';
                     html += '<td><input type="text" readonly value="' + (item.ItemName || '') + ' - Peeled" /></td>';
-                    html += '<td><input type="text" readonly value="' + (item.Grade || '') + '" /></td>';
                     html += '<td><input type="text" readonly value="' + wasteActualWeight + '" /></td>';
                     html += '<td><input type="text" readonly value="' + yieldPercent + '" /></td>';
                     html += '<td><input type="text" readonly value="' + wasteHoWeight + '" /></td>';
