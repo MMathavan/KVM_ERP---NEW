@@ -10,7 +10,145 @@ namespace KVM_ERP.Controllers
     [SessionExpire]
     public class RawMaterialInvoiceController : Controller
     {
-        ApplicationDbContext context = new ApplicationDbContext();
+        private ApplicationDbContext context = new ApplicationDbContext();
+
+        private int? GetPurchaseInvoiceStatusId(string code)
+        {
+            return context.PurchaseInvoiceStatuses
+                .Where(s => s.PUINSTCODE == code)
+                .Select(s => (int?)s.PUINSTID)
+                .FirstOrDefault();
+        }
+
+        private void CopyInvoiceToApprovalTables(int tranMId, string currentUser)
+        {
+            context.Database.ExecuteSqlCommand(@"
+                IF OBJECT_ID('TRANSACTIONMASTER_APPROVAL', 'U') IS NULL
+                    THROW 50001, 'Missing table TRANSACTIONMASTER_APPROVAL', 1;
+
+                IF OBJECT_ID('TRANSACTIONDETAIL_APPROVAL', 'U') IS NULL
+                    THROW 50002, 'Missing table TRANSACTIONDETAIL_APPROVAL', 1;
+            ");
+
+            context.Database.ExecuteSqlCommand(@"
+                DELETE FROM TRANSACTIONDETAIL_APPROVAL WHERE TRANMID = @p0;
+                DELETE FROM TRANSACTIONMASTER_APPROVAL WHERE TRANMID = @p0;
+            ", tranMId);
+
+            context.Database.ExecuteSqlCommand(@"
+                INSERT INTO TRANSACTIONMASTER_APPROVAL
+                (TRANMID, TRANDATE, CATENAME, CATECODE, DISPSTATUS, TRANREFID, TRANREFNO, TRANNAMT, TRANGAMT, TRANPACKAMT, TRANINCAMT,
+                 TRANCGSTAMT, TRANSGSTAMT, TRANIGSTAMT, TRANCGSTEXPRN, TRANSGSTEXPRN, TRANIGSTEXPRN,
+                 CUSRID, LMUSRID, PRCSDATE)
+                SELECT
+                 tm.TRANMID, tm.TRANDATE, tm.CATENAME, tm.CATECODE, tm.DISPSTATUS, tm.TRANREFID, tm.TRANREFNO, tm.TRANNAMT, tm.TRANGAMT, tm.TRANPACKAMT, tm.TRANINCAMT,
+                 tm.TRANCGSTAMT, tm.TRANSGSTAMT, tm.TRANIGSTAMT, tm.TRANCGSTEXPRN, tm.TRANSGSTEXPRN, tm.TRANIGSTEXPRN,
+                 @p1, @p1, GETDATE()
+                FROM TRANSACTIONMASTER tm
+                WHERE tm.TRANMID = @p0 AND tm.REGSTRID = 2;
+            ", tranMId, currentUser);
+
+            context.Database.ExecuteSqlCommand(@"
+                INSERT INTO TRANSACTIONDETAIL_APPROVAL
+                (TRANMID, SourceTRANDID, MTRLGID, MTRLID, GRADEID, PCLRID, RCVDTID, HSNID,
+                 TRANAQTY, TRANDQTY, TRANEQTY, TRANDRATE, TRANDAMT, TRANDDISCEXPRN, TRANDDISCAMT, TRANDGAMT,
+                 TRANDCGSTEXPRN, TRANDSGSTEXPRN, TRANDIGSTEXPRN, TRANDCGSTAMT, TRANDSGSTAMT, TRANDIGSTAMT,
+                 TRANDNAMT, TRANDAID, TRANDINCAMT,
+                 CUSRID, LMUSRID, DISPSTATUS, PRCSDATE)
+                SELECT
+                 td.TRANMID, td.TRANDID, td.MTRLGID, td.MTRLID, td.GRADEID, td.PCLRID, td.RCVDTID, td.HSNID,
+                 td.TRANAQTY, td.TRANDQTY, td.TRANEQTY, td.TRANDRATE, td.TRANDAMT, td.TRANDDISCEXPRN, td.TRANDDISCAMT, td.TRANDGAMT,
+                 td.TRANDCGSTEXPRN, td.TRANDSGSTEXPRN, td.TRANDIGSTEXPRN, td.TRANDCGSTAMT, td.TRANDSGSTAMT, td.TRANDIGSTAMT,
+                 td.TRANDNAMT, td.TRANDAID, td.TRANDINCAMT,
+                 @p1, @p1, td.DISPSTATUS, GETDATE()
+                FROM TRANSACTIONDETAIL td
+                WHERE td.TRANMID = @p0;
+            ", tranMId, currentUser);
+        }
+
+        private void SaveApprovalEditsToApprovalTables(InvoiceSaveModel model, string currentUser)
+        {
+            if (!model.InvoiceId.HasValue || model.InvoiceId.Value <= 0)
+            {
+                throw new InvalidOperationException("Approval save requires an existing invoice id.");
+            }
+
+            var tranMId = model.InvoiceId.Value;
+
+            context.Database.ExecuteSqlCommand(@"
+                IF OBJECT_ID('TRANSACTIONMASTER_APPROVAL', 'U') IS NULL
+                    THROW 50001, 'Missing table TRANSACTIONMASTER_APPROVAL', 1;
+
+                IF OBJECT_ID('TRANSACTIONDETAIL_APPROVAL', 'U') IS NULL
+                    THROW 50002, 'Missing table TRANSACTIONDETAIL_APPROVAL', 1;
+            ");
+
+            var approvalExists = context.Database.SqlQuery<int>(@"
+                SELECT COUNT(1)
+                FROM TRANSACTIONMASTER_APPROVAL
+                WHERE TRANMID = @p0
+            ", tranMId).FirstOrDefault();
+
+            if (approvalExists <= 0)
+            {
+                throw new InvalidOperationException("Approval copy not found for this invoice. Please send to approval first.");
+            }
+
+            var selectedItems = (model.Items ?? new List<InvoiceItemModel>()).Where(i => i.IsSelected).ToList();
+            foreach (var item in selectedItems)
+            {
+                if (item.TRANDID <= 0)
+                {
+                    continue;
+                }
+
+                context.Database.ExecuteSqlCommand(@"
+                    UPDATE TRANSACTIONDETAIL_APPROVAL
+                    SET TRANDQTY = @p0,
+                        TRANDRATE = @p1,
+                        TRANDAMT = @p2,
+                        TRANDDISCEXPRN = @p3,
+                        TRANDDISCAMT = @p4,
+                        TRANDNAMT = @p5,
+                        TRANDINCAMT = @p6,
+                        LMUSRID = @p7,
+                        PRCSDATE = @p8
+                    WHERE TRANMID = @p9
+                      AND SourceTRANDID = @p10
+                ",
+                item.NetWeight,
+                item.Rate,
+                item.Amount,
+                item.PackingKg,
+                item.PackingAmount,
+                item.NetAmount,
+                item.IncentiveAmount,
+                currentUser,
+                DateTime.Now,
+                tranMId,
+                item.TRANDID);
+            }
+
+            context.Database.ExecuteSqlCommand(@"
+                UPDATE TRANSACTIONMASTER_APPROVAL
+                SET DISPSTATUS = @p0,
+                    TRANGAMT = @p1,
+                    TRANPACKAMT = @p2,
+                    TRANNAMT = @p3,
+                    TRANINCAMT = @p4,
+                    LMUSRID = @p5,
+                    PRCSDATE = @p6
+                WHERE TRANMID = @p7
+            ", model.Status, model.GrossAmount, model.PackingAmount, model.GrandTotal, model.IncentiveAmount, currentUser, DateTime.Now, tranMId);
+
+            context.Database.ExecuteSqlCommand(@"
+                UPDATE TRANSACTIONMASTER
+                SET DISPSTATUS = @p0,
+                    LMUSRID = @p1,
+                    PRCSDATE = @p2
+                WHERE TRANMID = @p3 AND REGSTRID = 2
+            ", model.Status, currentUser, DateTime.Now, tranMId);
+        }
 
         // GET: RawMaterialInvoice
         [Authorize(Roles = "PurchaseInvoiceIndex")]
@@ -18,11 +156,26 @@ namespace KVM_ERP.Controllers
         {
             try
             {
+                var approvedStatusId = GetPurchaseInvoiceStatusId("PUS004");
+
                 var invoices = context.Database.SqlQuery<RawMaterialInvoiceViewModel>(
-                    @"SELECT TRANMID, TRANDATE, TRANNO, TRANDNO, TRANREFNO, CATENAME, TRANNAMT
-                      FROM TRANSACTIONMASTER
-                      WHERE REGSTRID = 2
-                      ORDER BY TRANDATE DESC, TRANNO DESC"
+                    @"SELECT tm.TRANMID, tm.TRANDATE, tm.TRANNO, tm.TRANDNO, tm.TRANREFNO, tm.CATENAME,
+                             CASE
+                                 WHEN @p0 IS NOT NULL AND tm.DISPSTATUS = @p0
+                                     THEN CASE
+                                         WHEN ISNULL(tma.TRANNAMT, 0) = 0 THEN ISNULL(tma.TRANGAMT, 0)
+                                         ELSE ISNULL(tma.TRANNAMT, 0)
+                                     END
+                                 ELSE CASE
+                                     WHEN ISNULL(tm.TRANNAMT, 0) = 0 THEN ISNULL(tm.TRANGAMT, 0)
+                                     ELSE ISNULL(tm.TRANNAMT, 0)
+                                 END
+                             END as TRANNAMT
+                      FROM TRANSACTIONMASTER tm
+                      LEFT JOIN TRANSACTIONMASTER_APPROVAL tma ON tm.TRANMID = tma.TRANMID
+                      WHERE tm.REGSTRID = 2
+                      ORDER BY tm.TRANDATE DESC, tm.TRANNO DESC",
+                    approvedStatusId
                 ).ToList();
                 
                 return View(invoices);
@@ -41,30 +194,43 @@ namespace KVM_ERP.Controllers
                 
                 // Build SQL query with date filtering - Get GRAND TOTAL from TRANSACTIONMASTER
                 // TRANNAMT column stores the grand total (Subtotal + CGST + SGST + IGST)
+                var approvedStatusId = GetPurchaseInvoiceStatusId("PUS004");
                 var sql = @"SELECT tm.TRANMID, tm.TRANDATE, tm.TRANNO, tm.TRANDNO, tm.TRANREFNO, tm.CATENAME, 
-                           ISNULL(tm.TRANNAMT, 0) as TRANNAMT,
+                           CASE
+                               WHEN @p0 IS NOT NULL AND tm.DISPSTATUS = @p0
+                                   THEN CASE
+                                       WHEN ISNULL(tma.TRANNAMT, 0) = 0 THEN ISNULL(tma.TRANGAMT, 0)
+                                       ELSE ISNULL(tma.TRANNAMT, 0)
+                                   END
+                               ELSE CASE
+                                   WHEN ISNULL(tm.TRANNAMT, 0) = 0 THEN ISNULL(tm.TRANGAMT, 0)
+                                   ELSE ISNULL(tm.TRANNAMT, 0)
+                               END
+                           END as TRANNAMT,
                            tm.DISPSTATUS,
                            ISNULL(pis.PUINSTDESC, 'N/A') as StatusDescription
                            FROM TRANSACTIONMASTER tm
+                           LEFT JOIN TRANSACTIONMASTER_APPROVAL tma ON tm.TRANMID = tma.TRANMID
                            LEFT JOIN PURCHASEINVOICESTATUS pis ON tm.DISPSTATUS = pis.PUINSTID
                            WHERE tm.REGSTRID = 2";
                 
                 var parameters = new List<object>();
+                parameters.Add(approvedStatusId);
                 
                 // Add date filters if provided
                 if (!string.IsNullOrEmpty(fromDate))
                 {
-                    sql += " AND TRANDATE >= @p0";
+                    sql += " AND tm.TRANDATE >= @p" + parameters.Count;
                     parameters.Add(DateTime.Parse(fromDate));
                 }
                 
                 if (!string.IsNullOrEmpty(toDate))
                 {
-                    sql += " AND TRANDATE <= @p" + parameters.Count;
+                    sql += " AND tm.TRANDATE <= @p" + parameters.Count;
                     parameters.Add(DateTime.Parse(toDate).AddDays(1).AddSeconds(-1)); // Include full day
                 }
                 
-                sql += " ORDER BY TRANDATE DESC, TRANNO DESC";
+                sql += " ORDER BY tm.TRANDATE DESC, tm.TRANNO DESC";
                 
                 // Get invoice data from TRANSACTIONMASTER
                 var invoices = context.Database.SqlQuery<RawMaterialInvoiceViewModel>(sql, parameters.ToArray()).ToList();
@@ -141,6 +307,8 @@ namespace KVM_ERP.Controllers
         {
             try
             {
+                using (var transaction = context.Database.BeginTransaction())
+                {
                 // Check if user has delete role
                 if (!User.IsInRole("PurchaseInvoiceDelete"))
                 {
@@ -151,7 +319,12 @@ namespace KVM_ERP.Controllers
 
                 // Check if invoice exists and get its status
                 var invoice = context.Database.SqlQuery<RawMaterialInvoiceViewModel>(
-                    @"SELECT tm.TRANMID, tm.TRANDATE, tm.TRANNO, tm.TRANDNO, tm.TRANREFNO, tm.CATENAME, tm.TRANNAMT, tm.DISPSTATUS,
+                    @"SELECT tm.TRANMID, tm.TRANDATE, tm.TRANNO, tm.TRANDNO, tm.TRANREFNO, tm.CATENAME,
+                             CASE 
+                                 WHEN ISNULL(tm.TRANNAMT, 0) = 0 THEN ISNULL(tm.TRANGAMT, 0)
+                                 ELSE ISNULL(tm.TRANNAMT, 0)
+                             END as TRANNAMT,
+                             tm.DISPSTATUS,
                              ISNULL(pis.PUINSTDESC, 'N/A') as StatusDescription
                       FROM TRANSACTIONMASTER tm
                       LEFT JOIN PURCHASEINVOICESTATUS pis ON tm.DISPSTATUS = pis.PUINSTID
@@ -191,6 +364,13 @@ namespace KVM_ERP.Controllers
                     id
                 );
 
+                context.Database.ExecuteSqlCommand(@"
+                    IF OBJECT_ID('TRANSACTIONDETAIL_APPROVAL', 'U') IS NOT NULL
+                        DELETE FROM TRANSACTIONDETAIL_APPROVAL WHERE TRANMID = @p0;
+                    IF OBJECT_ID('TRANSACTIONMASTER_APPROVAL', 'U') IS NOT NULL
+                        DELETE FROM TRANSACTIONMASTER_APPROVAL WHERE TRANMID = @p0;
+                ", id);
+
                 // STEP 3: Delete invoice items (this makes TRANPID values available again)
                 context.Database.ExecuteSqlCommand(
                     "DELETE FROM TRANSACTIONDETAIL WHERE TRANMID = @p0",
@@ -204,7 +384,9 @@ namespace KVM_ERP.Controllers
                 );
 
                 System.Diagnostics.Debug.WriteLine($"Invoice {id} deleted successfully. {trandaidValues.Count} items are now available for re-invoicing");
+                transaction.Commit();
                 return Json(new { success = true, message = $"Invoice deleted successfully. {trandaidValues.Count} item(s) are now available for new invoices." });
+                }
             }
             catch (Exception ex)
             {
@@ -338,17 +520,16 @@ namespace KVM_ERP.Controllers
 
                     if (invoice != null)
                     {
-                        // Check if invoice is already approved - prevent editing
-                        var approvedStatus = context.PurchaseInvoiceStatuses
-                            .FirstOrDefault(s => s.PUINSTCODE == "PUS004");
-                        
-                        bool isApproved = approvedStatus != null && invoice.DISPSTATUS == approvedStatus.PUINSTID;
+                        var approvedStatusId = GetPurchaseInvoiceStatusId("PUS004");
+                        var waitingStatusId = GetPurchaseInvoiceStatusId("PUS003");
+
+                        bool isApproved = approvedStatusId.HasValue && invoice.DISPSTATUS == approvedStatusId.Value;
+                        bool isWaiting = waitingStatusId.HasValue && invoice.DISPSTATUS == waitingStatusId.Value;
                         ViewBag.IsApproved = isApproved;
-                        
+
                         if (isApproved && !isApprovalMode)
                         {
-                            // Invoice is approved and not in approval mode - prevent editing
-                            TempData["ErrorMessage"] = "This invoice has been approved and cannot be edited. Please contact administrator if changes are needed.";
+                            TempData["ErrorMessage"] = "This invoice is sent for approval / approved and cannot be edited.";
                             return RedirectToAction("Index");
                         }
                         
@@ -565,6 +746,58 @@ namespace KVM_ERP.Controllers
             try
             {
                 System.Diagnostics.Debug.WriteLine($"GetInvoiceItems called for invoiceId: {invoiceId}, isApprovalMode: {isApprovalMode}");
+
+                if (isApprovalMode)
+                {
+                    var itemsApproval = context.Database.SqlQuery<InvoiceItemEditViewModel>(@"
+                        SELECT
+                            tad.SourceTRANDID as TRANDID,
+                            tad.MTRLID as ItemId,
+                            m.MTRLDESC as ItemName,
+                            tad.MTRLGID as MaterialGroupId,
+                            tad.GRADEID as GradeId,
+                            g.GRADEDESC as Grade,
+                            tad.PCLRID as ProductionColourId,
+                            pcm.PCLRDESC as ProductionColour,
+                            tad.RCVDTID as ReceivedTypeId,
+                            rt.RCVDTDESC as ReceivedType,
+                            tad.TRANAQTY as ActualWeight,
+                            tad.TRANDQTY as NetWeight,
+                            tad.TRANDRATE as Rate,
+                            tad.TRANDAMT as Amount,
+                            ISNULL(tad.TRANDDISCEXPRN, 0) as PackingKg,
+                            ISNULL(tad.TRANDDISCAMT, 0) as PackingAmount,
+                            ISNULL(tad.TRANDNAMT, 0) as NetAmount,
+                            ISNULL(tad.TRANDAID, 0) as TRANPID,
+                            ISNULL(tpc.WASTEPWGT, 0) as WastePWeight,
+                            ISNULL(tpc.WASTEWGT, 0) as WasteWeight,
+                            ISNULL(tpc.PCKKGWGT, 0) as PackKgWeight,
+                            ISNULL(tpc.YELDPERCENT, 0) as YieldPercent,
+                            ISNULL(tad.TRANDINCAMT, 0) as IncentiveAmount,
+                            ISNULL(tqc.REMARKS, '') as Remarks,
+                            CASE
+                                WHEN ISNULL(tpc.WASTEWGT, 0) > 0
+                                     AND ABS(ISNULL(tad.TRANAQTY, 0) - ISNULL(tpc.WASTEWGT, 0)) < 0.0001
+                                THEN 1 ELSE 0
+                            END as IsWasteRow,
+                            CASE
+                                WHEN ISNULL(tpc.BKN, 0) <> 0 OR ISNULL(tpc.OTHERS, 0) <> 0 THEN 1
+                                ELSE 0
+                            END as HasBknOrOthers
+                        FROM TRANSACTIONDETAIL_APPROVAL tad
+                        INNER JOIN MATERIALMASTER m ON tad.MTRLID = m.MTRLID
+                        LEFT JOIN GRADEMASTER g ON tad.GRADEID = g.GRADEID
+                        LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON tad.PCLRID = pcm.PCLRID
+                        LEFT JOIN RECEIVEDTYPEMASTER rt ON tad.RCVDTID = rt.RCVDTID
+                        LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON tad.TRANDAID = tpc.TRANPID
+                        LEFT JOIN TRANSACTION_QUALITY_CHECK tqc ON tpc.TRANMID = tqc.TRANMID
+                        WHERE tad.TRANMID = @p0
+                          AND (tad.DISPSTATUS = 0 OR tad.DISPSTATUS IS NULL)
+                        ORDER BY tad.SourceTRANDID
+                    ", invoiceId).ToList();
+
+                    return Json(new { success = true, data = itemsApproval });
+                }
                 
                 // In Approval Mode: Show TRANDQTY (approved quantity)
                 // In Regular Mode: Show TRANEQTY (original invoice quantity)
@@ -1092,6 +1325,19 @@ namespace KVM_ERP.Controllers
                 // Get current user
                 string currentUser = User?.Identity?.Name ?? "System";
 
+                if (model.IsApprovalMode)
+                {
+                    SaveApprovalEditsToApprovalTables(model, currentUser);
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Approval saved successfully!",
+                        tranmId = model.InvoiceId ?? 0,
+                        tranNo = 0,
+                        tranDNo = ""
+                    });
+                }
+
                 int tranMId;
                 int tranNo;
                 string tranDNo;
@@ -1116,6 +1362,19 @@ namespace KVM_ERP.Controllers
                 {
                     // UPDATE existing invoice
                     tranMId = model.InvoiceId.Value;
+
+                    var approvedStatusId = GetPurchaseInvoiceStatusId("PUS004");
+                    var waitingStatusId = GetPurchaseInvoiceStatusId("PUS003");
+                    var currentStatus = context.Database.SqlQuery<int?>(@"
+                        SELECT CAST(DISPSTATUS AS INT)
+                        FROM TRANSACTIONMASTER
+                        WHERE TRANMID = @p0 AND REGSTRID = 2
+                    ", tranMId).FirstOrDefault();
+
+                    if (approvedStatusId.HasValue && currentStatus == approvedStatusId.Value)
+                    {
+                        return Json(new { success = false, message = "This invoice is sent for approval / approved and cannot be edited." });
+                    }
                     
                     // Get existing TRANNO and TRANDNO - ensure it's a Raw Material Invoice (REGSTRID=2)
                     var existingData = context.Database.SqlQuery<ExistingInvoiceData>(@"
@@ -1821,6 +2080,19 @@ namespace KVM_ERP.Controllers
                     System.Diagnostics.Debug.WriteLine($"No manual tax factors - cleared TRANSACTIONMASTERFACTOR for TRANMID={tranMId}");
                 }
 
+                var waitingStatusIdForCopy = GetPurchaseInvoiceStatusId("PUS003");
+                if (waitingStatusIdForCopy.HasValue && model.Status == waitingStatusIdForCopy.Value)
+                {
+                    try
+                    {
+                        CopyInvoiceToApprovalTables(tranMId, currentUser);
+                    }
+                    catch (Exception copyEx)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Failed to copy invoice to approval tables: {copyEx.Message}");
+                    }
+                }
+
                 return Json(new { 
                     success = true, 
                     message = "Invoice saved successfully!",
@@ -1846,25 +2118,54 @@ namespace KVM_ERP.Controllers
         {
             try
             {
+                var approvedStatusId = GetPurchaseInvoiceStatusId("PUS004");
+                var statusId = context.Database.SqlQuery<int?>(@"
+                    SELECT CAST(DISPSTATUS AS INT)
+                    FROM TRANSACTIONMASTER
+                    WHERE TRANMID = @p0 AND REGSTRID = 2
+                ", id).FirstOrDefault();
+
+                bool useApproval = approvedStatusId.HasValue && statusId.HasValue && statusId.Value == approvedStatusId.Value;
+
                 // Get invoice header
-                var invoice = context.Database.SqlQuery<InvoicePrintViewModel>(
-                    @"SELECT tm.TRANMID, tm.TRANNO, tm.TRANDNO, tm.TRANREFNO, tm.TRANDATE,
-                             tm.CATENAME, tm.CATECODE, tm.TRANNAMT, 
-                             pis.PUINSTDESC as StatusDescription,
-                             ISNULL(tm.TRANCGSTAMT, 0) as CGSTAMT,
-                             ISNULL(tm.TRANSGSTAMT, 0) as SGSTAMT,
-                             ISNULL(tm.TRANIGSTAMT, 0) as IGSTAMT,
-                             ISNULL(tm.TRANCGSTEXPRN, 0) as CGSTPER,
-                             ISNULL(tm.TRANSGSTEXPRN, 0) as SGSTPER,
-                             ISNULL(tm.TRANIGSTEXPRN, 0) as IGSTPER,
-                             ISNULL(tm.TRANGAMT, 0) as TRANGAMT,
-                             ISNULL(tm.TRANPACKAMT, 0) as TRANPACKAMT,
-                             ISNULL(tm.TRANINCAMT, 0) as TRANINCAMT
-                      FROM TRANSACTIONMASTER tm
-                      LEFT JOIN PURCHASEINVOICESTATUS pis ON tm.DISPSTATUS = pis.PUINSTID
-                      WHERE tm.TRANMID = @p0 AND tm.REGSTRID = 2",
-                    id
-                ).FirstOrDefault();
+                var invoice = useApproval
+                    ? context.Database.SqlQuery<InvoicePrintViewModel>(
+                        @"SELECT tm.TRANMID, tm.TRANNO, tm.TRANDNO, tm.TRANREFNO, tm.TRANDATE,
+                                 tm.CATENAME, tm.CATECODE, ISNULL(tma.TRANNAMT, tm.TRANNAMT) as TRANNAMT, 
+                                 pis.PUINSTDESC as StatusDescription,
+                                 ISNULL(tma.TRANCGSTAMT, 0) as CGSTAMT,
+                                 ISNULL(tma.TRANSGSTAMT, 0) as SGSTAMT,
+                                 ISNULL(tma.TRANIGSTAMT, 0) as IGSTAMT,
+                                 ISNULL(tma.TRANCGSTEXPRN, 0) as CGSTPER,
+                                 ISNULL(tma.TRANSGSTEXPRN, 0) as SGSTPER,
+                                 ISNULL(tma.TRANIGSTEXPRN, 0) as IGSTPER,
+                                 ISNULL(tma.TRANGAMT, 0) as TRANGAMT,
+                                 ISNULL(tma.TRANPACKAMT, 0) as TRANPACKAMT,
+                                 ISNULL(tma.TRANINCAMT, 0) as TRANINCAMT
+                          FROM TRANSACTIONMASTER tm
+                          INNER JOIN TRANSACTIONMASTER_APPROVAL tma ON tm.TRANMID = tma.TRANMID
+                          LEFT JOIN PURCHASEINVOICESTATUS pis ON tm.DISPSTATUS = pis.PUINSTID
+                          WHERE tm.TRANMID = @p0 AND tm.REGSTRID = 2",
+                        id
+                    ).FirstOrDefault()
+                    : context.Database.SqlQuery<InvoicePrintViewModel>(
+                        @"SELECT tm.TRANMID, tm.TRANNO, tm.TRANDNO, tm.TRANREFNO, tm.TRANDATE,
+                                 tm.CATENAME, tm.CATECODE, tm.TRANNAMT, 
+                                 pis.PUINSTDESC as StatusDescription,
+                                 ISNULL(tm.TRANCGSTAMT, 0) as CGSTAMT,
+                                 ISNULL(tm.TRANSGSTAMT, 0) as SGSTAMT,
+                                 ISNULL(tm.TRANIGSTAMT, 0) as IGSTAMT,
+                                 ISNULL(tm.TRANCGSTEXPRN, 0) as CGSTPER,
+                                 ISNULL(tm.TRANSGSTEXPRN, 0) as SGSTPER,
+                                 ISNULL(tm.TRANIGSTEXPRN, 0) as IGSTPER,
+                                 ISNULL(tm.TRANGAMT, 0) as TRANGAMT,
+                                 ISNULL(tm.TRANPACKAMT, 0) as TRANPACKAMT,
+                                 ISNULL(tm.TRANINCAMT, 0) as TRANINCAMT
+                          FROM TRANSACTIONMASTER tm
+                          LEFT JOIN PURCHASEINVOICESTATUS pis ON tm.DISPSTATUS = pis.PUINSTID
+                          WHERE tm.TRANMID = @p0 AND tm.REGSTRID = 2",
+                        id
+                    ).FirstOrDefault();
 
                 if (invoice == null)
                 {
@@ -1873,27 +2174,49 @@ namespace KVM_ERP.Controllers
                 }
 
                 // Get invoice items
-                invoice.Items = context.Database.SqlQuery<InvoiceItemPrintViewModel>(
-                    @"SELECT td.TRANDID, m.MTRLDESC as MTRLNAME, 
-                             ISNULL(g.GRADEDESC, '') as GRADEDESC,
-                             ISNULL(pcm.PCLRDESC, '') as PCLRDESC,
-                             ISNULL(rt.RCVDTDESC, '') as RCVDTDESC,
-                             td.TRANDQTY as TRANQTY, 
-                             td.TRANDRATE as TRANRATE, 
-                             td.TRANDAMT,
-                             ISNULL(td.TRANDDISCEXPRN, 0) as PACKINGKG,
-                             ISNULL(td.TRANDDISCAMT, 0) as PACKINGAMOUNT,
-                             ISNULL(td.TRANDNAMT, 0) as NETAMOUNT,
-                             ISNULL(td.TRANDINCAMT, 0) as INCENTIVEAMOUNT
-                      FROM TRANSACTIONDETAIL td
-                      INNER JOIN MATERIALMASTER m ON td.MTRLID = m.MTRLID
-                      LEFT JOIN GRADEMASTER g ON td.GRADEID = g.GRADEID
-                      LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON td.PCLRID = pcm.PCLRID
-                      LEFT JOIN RECEIVEDTYPEMASTER rt ON td.RCVDTID = rt.RCVDTID
-                      WHERE td.TRANMID = @p0
-                      ORDER BY td.TRANDID",
-                    id
-                ).ToList();
+                invoice.Items = useApproval
+                    ? context.Database.SqlQuery<InvoiceItemPrintViewModel>(
+                        @"SELECT tad.SourceTRANDID as TRANDID, m.MTRLDESC as MTRLNAME, 
+                                 ISNULL(g.GRADEDESC, '') as GRADEDESC,
+                                 ISNULL(pcm.PCLRDESC, '') as PCLRDESC,
+                                 ISNULL(rt.RCVDTDESC, '') as RCVDTDESC,
+                                 tad.TRANDQTY as TRANQTY, 
+                                 tad.TRANDRATE as TRANRATE, 
+                                 tad.TRANDAMT,
+                                 ISNULL(tad.TRANDDISCEXPRN, 0) as PACKINGKG,
+                                 ISNULL(tad.TRANDDISCAMT, 0) as PACKINGAMOUNT,
+                                 ISNULL(tad.TRANDNAMT, 0) as NETAMOUNT,
+                                 ISNULL(tad.TRANDINCAMT, 0) as INCENTIVEAMOUNT
+                          FROM TRANSACTIONDETAIL_APPROVAL tad
+                          INNER JOIN MATERIALMASTER m ON tad.MTRLID = m.MTRLID
+                          LEFT JOIN GRADEMASTER g ON tad.GRADEID = g.GRADEID
+                          LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON tad.PCLRID = pcm.PCLRID
+                          LEFT JOIN RECEIVEDTYPEMASTER rt ON tad.RCVDTID = rt.RCVDTID
+                          WHERE tad.TRANMID = @p0
+                          ORDER BY tad.SourceTRANDID",
+                        id
+                    ).ToList()
+                    : context.Database.SqlQuery<InvoiceItemPrintViewModel>(
+                        @"SELECT td.TRANDID, m.MTRLDESC as MTRLNAME, 
+                                 ISNULL(g.GRADEDESC, '') as GRADEDESC,
+                                 ISNULL(pcm.PCLRDESC, '') as PCLRDESC,
+                                 ISNULL(rt.RCVDTDESC, '') as RCVDTDESC,
+                                 td.TRANDQTY as TRANQTY, 
+                                 td.TRANDRATE as TRANRATE, 
+                                 td.TRANDAMT,
+                                 ISNULL(td.TRANDDISCEXPRN, 0) as PACKINGKG,
+                                 ISNULL(td.TRANDDISCAMT, 0) as PACKINGAMOUNT,
+                                 ISNULL(td.TRANDNAMT, 0) as NETAMOUNT,
+                                 ISNULL(td.TRANDINCAMT, 0) as INCENTIVEAMOUNT
+                          FROM TRANSACTIONDETAIL td
+                          INNER JOIN MATERIALMASTER m ON td.MTRLID = m.MTRLID
+                          LEFT JOIN GRADEMASTER g ON td.GRADEID = g.GRADEID
+                          LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON td.PCLRID = pcm.PCLRID
+                          LEFT JOIN RECEIVEDTYPEMASTER rt ON td.RCVDTID = rt.RCVDTID
+                          WHERE td.TRANMID = @p0
+                          ORDER BY td.TRANDID",
+                        id
+                    ).ToList();
 
                 // Get tax factors
                 invoice.TaxFactors = context.Database.SqlQuery<TaxFactorPrintViewModel>(
@@ -2658,6 +2981,7 @@ namespace KVM_ERP.Controllers
     // Model for invoice items
     public class InvoiceItemModel
     {
+        public int TRANDID { get; set; }          // Source TRANDID (for approval updates)
         public int ItemId { get; set; }          // MTRLID
         public int MaterialGroupId { get; set; }  // MTRLGID
         public int GradeId { get; set; }          // GRADEID

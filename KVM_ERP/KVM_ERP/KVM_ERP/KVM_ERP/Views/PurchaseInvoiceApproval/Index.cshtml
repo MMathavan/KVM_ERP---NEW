@@ -432,6 +432,11 @@
                             // Always show Print button
                             buttons += '<button class="btn action-btn print-btn" onclick="printInvoice(' + row.TRANMID + ')" title="Print">' +
                                       '<i class="fa fa-print"></i> Print</button>';
+
+                            if (status === 'approved') {
+                                buttons += '<button class="btn action-btn btn-danger" onclick="deleteApprovalCopy(' + row.TRANMID + ')" title="Delete Approval Copy">' +
+                                          '<i class="fa fa-trash"></i> Delete</button>';
+                            }
                             return buttons;
                         }
                     }
@@ -524,6 +529,41 @@
         // Print Invoice Function
         function printInvoice(tranmId) {
             window.open('@Url.Action("Print", "PurchaseInvoiceApproval")?id=' + tranmId, '_blank');
+        }
+
+        function deleteApprovalCopy(tranmId) {
+            if (!tranmId || tranmId <= 0) {
+                alert('Invalid invoice id');
+                return;
+            }
+
+            var ok = confirm('Delete approval copy and revert status to Waiting for Approval?');
+            if (!ok) {
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("DeleteApprovalCopy", "PurchaseInvoiceApproval")',
+                type: 'POST',
+                data: { id: tranmId },
+                success: function (res) {
+                    if (res && res.success) {
+                        alert(res.message || 'Deleted');
+                        if ($.fn.DataTable.isDataTable('#waitingTable')) {
+                            $('#waitingTable').DataTable().ajax.reload(null, false);
+                        }
+                        if ($.fn.DataTable.isDataTable('#approvedTable')) {
+                            $('#approvedTable').DataTable().ajax.reload(null, false);
+                        }
+                    } else {
+                        alert((res && res.message) ? res.message : 'Failed to delete approval copy');
+                    }
+                },
+                error: function (xhr, status, err) {
+                    console.error('DeleteApprovalCopy error:', status, err, xhr && xhr.responseText);
+                    alert('Failed to delete approval copy. Please check console.');
+                }
+            });
         }
     </script>
 }
