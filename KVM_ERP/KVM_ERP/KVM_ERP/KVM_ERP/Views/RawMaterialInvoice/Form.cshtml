@@ -3330,7 +3330,11 @@
                     if (result.success) {
                         alert('Invoice saved successfully');
                         // Redirect to invoice list
-                        window.location.href = '@Url.Action("Index", "RawMaterialInvoice")';
+                        if (isApprovalMode === true || isApprovalMode === "true") {
+                            window.location.href = '@Url.Action("Index", "PurchaseInvoiceApproval")';
+                        } else {
+                            window.location.href = '@Url.Action("Index", "RawMaterialInvoice")';
+                        }
                     } else {
                         alert('Error saving invoice: ' + result.message);
                     }
