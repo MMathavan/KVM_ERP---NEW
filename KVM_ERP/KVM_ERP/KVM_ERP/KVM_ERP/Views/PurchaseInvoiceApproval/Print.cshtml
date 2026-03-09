@@ -299,9 +299,6 @@
                 <tr>
                     <th style="width: 5%;">S.No</th>
                     <th style="width: 25%;">Item</th>
-                    <th style="width: 15%;">Grade</th>
-                    <th style="width: 15%;">Production Colour</th>
-                    <th style="width: 12%;">Received Type</th>
                     <th class="text-right" style="width: 10%;">Quantity</th>
                     <th class="text-right" style="width: 10%;">Rate (₹)</th>
                     <th class="text-right" style="width: 13%;">Amount (₹)</th>
@@ -311,19 +308,28 @@
                 @{
                     int serialNo = 1;
                     decimal subtotal = 0;
+                    // Approval print: consolidate by Material only (ignore Grade/Colour/Received Type)
+                    // Show Amount as Net Amount and Rate as NetRate (NetAmount / Qty)
+                    var consolidatedItems = (Model.Items ?? new List<KVM_ERP.Controllers.InvoiceItemPrintViewModel>())
+                        .GroupBy(x => (x.MTRLNAME ?? ""))
+                        .Select(g => new
+                        {
+                            MTRLNAME = g.Key,
+                            TRANQTY = g.Sum(i => i.TRANQTY),
+                            NETAMOUNT = g.Sum(i => i.NETAMOUNT)
+                        })
+                        .OrderBy(x => x.MTRLNAME)
+                        .ToList();
                 }
-                @foreach (var item in Model.Items)
+                @foreach (var item in consolidatedItems)
                 {
-                    subtotal += item.TRANDAMT;
+                    subtotal += item.NETAMOUNT;
                     <tr>
                         <td class="text-center">@serialNo</td>
                         <td>@item.MTRLNAME</td>
-                        <td>@(string.IsNullOrEmpty(item.GRADEDESC) ? "-" : item.GRADEDESC)</td>
-                        <td>@(string.IsNullOrEmpty(item.PCLRDESC) ? "-" : item.PCLRDESC)</td>
-                        <td>@(string.IsNullOrEmpty(item.RCVDTDESC) ? "-" : item.RCVDTDESC)</td>
                         <td class="text-right">@item.TRANQTY.ToString("N2")</td>
-                        <td class="text-right">@item.TRANRATE.ToString("N2")</td>
-                        <td class="text-right">@item.TRANDAMT.ToString("N2")</td>
+                        <td class="text-right">@((item.TRANQTY == 0 ? 0 : (item.NETAMOUNT / item.TRANQTY)).ToString("N2"))</td>
+                        <td class="text-right">@item.NETAMOUNT.ToString("N2")</td>
                     </tr>
                     serialNo++;
                 }
@@ -331,10 +337,19 @@
         </table>
 
         <div class="tax-summary">
-            <div class="tax-summary-row">
-                <span class="tax-label">Subtotal:</span>
-                <span class="tax-value">₹ @subtotal.ToString("N2")</span>
-            </div>
+            @{
+                decimal gstTotal = (Model.CGSTAMT + Model.SGSTAMT + Model.IGSTAMT);
+                decimal factorsSignedTotal = 0;
+                if (Model.TaxFactors != null && Model.TaxFactors.Any())
+                {
+                    foreach (var f in Model.TaxFactors)
+                    {
+                        var amt = f.CFAMT;
+                        factorsSignedTotal += (f.CFMODE == 0 ? amt : -amt);
+                    }
+                }
+                decimal grandTotal = subtotal + gstTotal + factorsSignedTotal;
+            }
 
             @* Display CGST from TRANSACTIONMASTER *@
             @if (Model.CGSTAMT > 0)
@@ -389,7 +404,7 @@
 
             <div class="tax-summary-row">
                 <span class="tax-label">Total Amount:</span>
-                <span class="tax-value">₹ @Model.TRANNAMT.ToString("N2")</span>
+                <span class="tax-value">₹ @grandTotal.ToString("N2")</span>
             </div>
         </div>
 

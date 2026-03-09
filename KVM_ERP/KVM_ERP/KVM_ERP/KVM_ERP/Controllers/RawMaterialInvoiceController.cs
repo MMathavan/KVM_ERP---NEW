@@ -102,6 +102,15 @@ namespace KVM_ERP.Controllers
                     continue;
                 }
 
+                // Recompute amounts server-side to avoid client rounding / distribution drift.
+                // Approval screen treats Rate as the authoritative value; keep PackingAmount unchanged.
+                decimal qty = item.NetWeight;
+                decimal rate = item.Rate;
+                decimal packingKg = item.PackingKg;
+                decimal packingAmount = item.PackingAmount;
+                decimal netAmount = qty * rate;
+                decimal grossAmount = netAmount + packingAmount;
+
                 context.Database.ExecuteSqlCommand(@"
                     UPDATE TRANSACTIONDETAIL_APPROVAL
                     SET TRANDQTY = @p0,
@@ -116,18 +125,49 @@ namespace KVM_ERP.Controllers
                     WHERE TRANMID = @p9
                       AND SourceTRANDID = @p10
                 ",
-                item.NetWeight,
-                item.Rate,
-                item.Amount,
-                item.PackingKg,
-                item.PackingAmount,
-                item.NetAmount,
+                qty,
+                rate,
+                grossAmount,
+                packingKg,
+                packingAmount,
+                netAmount,
                 item.IncentiveAmount,
                 currentUser,
                 DateTime.Now,
                 tranMId,
                 item.TRANDID);
             }
+
+            // Recompute totals on the server based on updated approval details.
+            // This avoids discrepancies between UI totals, print, and index after approval edits.
+            var totals = context.Database.SqlQuery<ApprovalTotals>(@"
+                SELECT
+                    ISNULL(SUM(TRANDAMT), 0) as GrossAmount,
+                    ISNULL(SUM(TRANDDISCAMT), 0) as PackingAmount,
+                    ISNULL(SUM(TRANDNAMT), 0) as NetAmount,
+                    ISNULL(SUM(TRANDINCAMT), 0) as IncentiveAmount
+                FROM TRANSACTIONDETAIL_APPROVAL
+                WHERE TRANMID = @p0
+            ", tranMId).FirstOrDefault() ?? new ApprovalTotals();
+
+            var gst = context.Database.SqlQuery<ApprovalGst>(@"
+                SELECT
+                    ISNULL(TRANCGSTAMT, 0) as CGST,
+                    ISNULL(TRANSGSTAMT, 0) as SGST,
+                    ISNULL(TRANIGSTAMT, 0) as IGST
+                FROM TRANSACTIONMASTER_APPROVAL
+                WHERE TRANMID = @p0
+            ", tranMId).FirstOrDefault() ?? new ApprovalGst();
+
+            // Factors are stored in TRANSACTIONMASTERFACTOR (same table used by print)
+            // DEDMODE: 0 => '+', 1 => '-'
+            var factorSignedTotal = context.Database.SqlQuery<decimal>(@"
+                SELECT ISNULL(SUM(CASE WHEN CAST(DEDMODE AS INT) = 0 THEN ISNULL(DEDVALUE, 0) ELSE -ISNULL(DEDVALUE, 0) END), 0)
+                FROM TRANSACTIONMASTERFACTOR
+                WHERE TRANMID = @p0
+            ", tranMId).FirstOrDefault();
+
+            var computedGrandTotal = totals.NetAmount + gst.CGST + gst.SGST + gst.IGST + factorSignedTotal;
 
             context.Database.ExecuteSqlCommand(@"
                 UPDATE TRANSACTIONMASTER_APPROVAL
@@ -139,7 +179,7 @@ namespace KVM_ERP.Controllers
                     LMUSRID = @p5,
                     PRCSDATE = @p6
                 WHERE TRANMID = @p7
-            ", model.Status, model.GrossAmount, model.PackingAmount, model.GrandTotal, model.IncentiveAmount, currentUser, DateTime.Now, tranMId);
+            ", model.Status, totals.GrossAmount, totals.PackingAmount, computedGrandTotal, totals.IncentiveAmount, currentUser, DateTime.Now, tranMId);
 
             context.Database.ExecuteSqlCommand(@"
                 UPDATE TRANSACTIONMASTER
@@ -148,6 +188,21 @@ namespace KVM_ERP.Controllers
                     PRCSDATE = @p2
                 WHERE TRANMID = @p3 AND REGSTRID = 2
             ", model.Status, currentUser, DateTime.Now, tranMId);
+        }
+
+        private class ApprovalTotals
+        {
+            public decimal GrossAmount { get; set; }
+            public decimal PackingAmount { get; set; }
+            public decimal NetAmount { get; set; }
+            public decimal IncentiveAmount { get; set; }
+        }
+
+        private class ApprovalGst
+        {
+            public decimal CGST { get; set; }
+            public decimal SGST { get; set; }
+            public decimal IGST { get; set; }
         }
 
         // GET: RawMaterialInvoice

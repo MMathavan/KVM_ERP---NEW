@@ -232,8 +232,7 @@ namespace KVM_ERP.Controllers
                     id
                 ).ToList();
 
-                // Reuse the same Razor view as the main Raw Material Invoice print
-                return View("~/Views/RawMaterialInvoice/Print.cshtml", invoice);
+                return View("~/Views/PurchaseInvoiceApproval/Print.cshtml", invoice);
             }
             catch (Exception ex)
             {
