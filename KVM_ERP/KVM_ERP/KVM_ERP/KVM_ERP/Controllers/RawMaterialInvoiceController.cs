@@ -2235,6 +2235,22 @@ namespace KVM_ERP.Controllers
                                  ISNULL(g.GRADEDESC, '') as GRADEDESC,
                                  ISNULL(pcm.PCLRDESC, '') as PCLRDESC,
                                  ISNULL(rt.RCVDTDESC, '') as RCVDTDESC,
+                                 CASE
+                                     WHEN ISNULL(tpc.WASTEWGT, 0) > 0
+                                          AND ABS(ISNULL(tad.TRANAQTY, 0) - ISNULL(tpc.WASTEWGT, 0)) < 0.0001
+                                     THEN ISNULL(tpc.WASTEWGT, 0)
+                                     ELSE ISNULL(tpc.PCKKGWGT, 0)
+                                 END as HLWeight,
+                                 ISNULL(tpc.YELDPERCENT, 0) as YieldPercent,
+                                 CASE 
+                                     WHEN ISNULL(tpc.YELDPERCENT, 0) > 0
+                                          AND ISNULL(tpc.WASTEWGT, 0) > 0
+                                          AND ABS(ISNULL(tad.TRANAQTY, 0) - ISNULL(tpc.WASTEWGT, 0)) < 0.0001
+                                     THEN (ISNULL(tpc.WASTEWGT, 0) / (ISNULL(tpc.YELDPERCENT, 0) / 100.0))
+                                     WHEN ISNULL(tpc.YELDPERCENT, 0) > 0
+                                     THEN (ISNULL(tpc.PCKKGWGT, 0) / (ISNULL(tpc.YELDPERCENT, 0) / 100.0))
+                                     ELSE 0
+                                 END as HOWeight,
                                  tad.TRANDQTY as TRANQTY, 
                                  tad.TRANDRATE as TRANRATE, 
                                  tad.TRANDAMT,
@@ -2247,6 +2263,7 @@ namespace KVM_ERP.Controllers
                           LEFT JOIN GRADEMASTER g ON tad.GRADEID = g.GRADEID
                           LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON tad.PCLRID = pcm.PCLRID
                           LEFT JOIN RECEIVEDTYPEMASTER rt ON tad.RCVDTID = rt.RCVDTID
+                          LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON tad.TRANDAID = tpc.TRANPID
                           WHERE tad.TRANMID = @p0
                           ORDER BY tad.SourceTRANDID",
                         id
@@ -2256,6 +2273,22 @@ namespace KVM_ERP.Controllers
                                  ISNULL(g.GRADEDESC, '') as GRADEDESC,
                                  ISNULL(pcm.PCLRDESC, '') as PCLRDESC,
                                  ISNULL(rt.RCVDTDESC, '') as RCVDTDESC,
+                                 CASE
+                                     WHEN ISNULL(tpc.WASTEWGT, 0) > 0
+                                          AND ABS(ISNULL(td.TRANAQTY, 0) - ISNULL(tpc.WASTEWGT, 0)) < 0.0001
+                                     THEN ISNULL(tpc.WASTEWGT, 0)
+                                     ELSE ISNULL(tpc.PCKKGWGT, 0)
+                                 END as HLWeight,
+                                 ISNULL(tpc.YELDPERCENT, 0) as YieldPercent,
+                                 CASE 
+                                     WHEN ISNULL(tpc.YELDPERCENT, 0) > 0
+                                          AND ISNULL(tpc.WASTEWGT, 0) > 0
+                                          AND ABS(ISNULL(td.TRANAQTY, 0) - ISNULL(tpc.WASTEWGT, 0)) < 0.0001
+                                     THEN (ISNULL(tpc.WASTEWGT, 0) / (ISNULL(tpc.YELDPERCENT, 0) / 100.0))
+                                     WHEN ISNULL(tpc.YELDPERCENT, 0) > 0
+                                     THEN (ISNULL(tpc.PCKKGWGT, 0) / (ISNULL(tpc.YELDPERCENT, 0) / 100.0))
+                                     ELSE 0
+                                 END as HOWeight,
                                  td.TRANDQTY as TRANQTY, 
                                  td.TRANDRATE as TRANRATE, 
                                  td.TRANDAMT,
@@ -2268,6 +2301,7 @@ namespace KVM_ERP.Controllers
                           LEFT JOIN GRADEMASTER g ON td.GRADEID = g.GRADEID
                           LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON td.PCLRID = pcm.PCLRID
                           LEFT JOIN RECEIVEDTYPEMASTER rt ON td.RCVDTID = rt.RCVDTID
+                          LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON td.TRANDAID = tpc.TRANPID
                           WHERE td.TRANMID = @p0
                           ORDER BY td.TRANDID",
                         id
@@ -3249,6 +3283,9 @@ namespace KVM_ERP.Controllers
         public string GRADEDESC { get; set; }
         public string PCLRDESC { get; set; }
         public string RCVDTDESC { get; set; }
+        public decimal HLWeight { get; set; }
+        public decimal YieldPercent { get; set; }
+        public decimal HOWeight { get; set; }
         public decimal TRANQTY { get; set; }
         public decimal TRANRATE { get; set; }
         public decimal TRANDAMT { get; set; }

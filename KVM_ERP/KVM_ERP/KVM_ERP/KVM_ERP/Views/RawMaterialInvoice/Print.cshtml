@@ -267,7 +267,7 @@
                 </div>
                 <div style="margin-top: 4px; text-align: center;">
                     <div class="purchase-note-title" style="font-size: 16px; font-weight: 700; text-decoration: underline;">
-                        RAW MATERIAL PURCHASE-NOTE
+                        PRODUCTION WORKOUT SHEET
                     </div>
                     @if (!string.IsNullOrEmpty(Model.StatusDescription))
                     {
@@ -302,10 +302,13 @@
             <thead>
                 <tr>
                     <th style="width: 5%;">S.No</th>
-                    <th style="width: 55%;">Particulars</th>
+                    <th style="width: 35%;">Particulars</th>
+                    <th class="text-right small-header" style="width: 10%;">HL Weight<br />(Kg)</th>
+                    <th class="text-right small-header" style="width: 10%;">Yield Percent</th>
+                    <th class="text-right small-header" style="width: 10%;">HO Weight<br />(Kg)</th>
                     <th class="text-right small-header" style="width: 15%;">Quantity<br />(Kg)</th>
                     <th class="text-right small-header" style="width: 10%;">Rate<br />(Rs.)</th>
-                    <th class="text-right small-header" style="width: 15%;">Amount<br />(Rs.)</th>
+                    <th class="text-right small-header" style="width: 10%;">Amount<br />(Rs.)</th>
                 </tr>
             </thead>
             <tbody>
@@ -332,6 +335,9 @@
                                 </span>
                             }
                         </td>
+                        <td class="text-right">@item.HLWeight.ToString("N2")</td>
+                        <td class="text-right">@item.YieldPercent.ToString("N2")</td>
+                        <td class="text-right">@item.HOWeight.ToString("N2")</td>
                         <td class="text-right">@item.TRANQTY.ToString("N2")</td>
                         <td class="text-right">@item.TRANRATE.ToString("N2")</td>
                         <td class="text-right">@item.TRANDAMT.ToString("N2")</td>
@@ -341,6 +347,9 @@
                 <tr>
                     <td></td>
                     <td style="text-align: right; font-weight: 700;">TOTAL</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td class="text-right" style="font-weight: 700;">@totalQty.ToString("N2")</td>
                     <td></td>
                     <td class="text-right" style="font-weight: 700;">@subtotal.ToString("N2")</td>
@@ -349,6 +358,16 @@
         </table>
 
         <div class="tax-summary">
+            <div class="tax-summary-row">
+                <span class="tax-label">Expenses (Discount):</span>
+                <span class="tax-value">₹ @Model.TRANPACKAMT.ToString("N2")</span>
+            </div>
+
+            <div class="tax-summary-row">
+                <span class="tax-label">On Incentive value:</span>
+                <span class="tax-value">₹ @Model.TRANINCAMT.ToString("N2")</span>
+            </div>
+
             <div class="tax-summary-row">
                 <span class="tax-label">Subtotal:</span>
                 <span class="tax-value">₹ @Model.TRANGAMT.ToString("N2")</span>
