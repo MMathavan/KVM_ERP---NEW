@@ -2847,14 +2847,6 @@ namespace KVM_ERP.Controllers
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.TOPCK) + @"</span>
                     </div>
                     <div class='calc-row'>
-                        <span class='calc-label'>PCK L Value:</span>
-                        <span class='calc-value'>" + FormatDecimalForPdf(calculation.PCKLVALUE) + @"</span>
-                    </div>
-                    <div class='calc-row'>
-                        <span class='calc-label'>Avg PCK Value:</span>
-                        <span class='calc-value'>" + FormatDecimalForPdf(calculation.AVGPCKVALUE) + @"</span>
-                    </div>
-                    <div class='calc-row'>
                         <span class='calc-label'>PNDS Value:</span>
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.PNDSVALUE) + @"</span>
                     </div>
@@ -2888,11 +2880,11 @@ namespace KVM_ERP.Controllers
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.PCKKGWGT) + @"</span>
                     </div>
                     <div class='calc-row'>
-                        <span class='calc-label'>Waste Weight:</span>
+                        <span class='calc-label'>Peeled:</span>
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.WASTEWGT) + @"</span>
                     </div>
                     <div class='calc-row'>
-                        <span class='calc-label'>Waste P Weight:</span>
+                        <span class='calc-label'>Peeled + Weight:</span>
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.WASTEPWGT) + @"</span>
                     </div>
                     <div class='calc-row total-row'>
@@ -3280,14 +3272,6 @@ namespace KVM_ERP.Controllers
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.TOPCK) + @"</span>
                     </div>
                     <div class='calc-row'>
-                        <span class='calc-label'>PCK L Value:</span>
-                        <span class='calc-value'>" + FormatDecimalForPdf(calculation.PCKLVALUE) + @"</span>
-                    </div>
-                    <div class='calc-row'>
-                        <span class='calc-label'>Avg PCK Value:</span>
-                        <span class='calc-value'>" + FormatDecimalForPdf(calculation.AVGPCKVALUE) + @"</span>
-                    </div>
-                    <div class='calc-row'>
                         <span class='calc-label'>PNDS Value:</span>
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.PNDSVALUE) + @"</span>
                     </div>
@@ -3321,11 +3305,11 @@ namespace KVM_ERP.Controllers
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.PCKKGWGT) + @"</span>
                     </div>
                     <div class='calc-row'>
-                        <span class='calc-label'>Waste Weight:</span>
+                        <span class='calc-label'>Peeled:</span>
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.WASTEWGT) + @"</span>
                     </div>
                     <div class='calc-row'>
-                        <span class='calc-label'>Waste P Weight:</span>
+                        <span class='calc-label'>Peeled + Weight:</span>
                         <span class='calc-value'>" + FormatDecimalForPdf(calculation.WASTEPWGT) + @"</span>
                     </div>
                     <div class='calc-row total-row'>
