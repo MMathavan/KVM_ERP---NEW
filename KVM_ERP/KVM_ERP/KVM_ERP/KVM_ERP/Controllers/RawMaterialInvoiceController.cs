@@ -3222,6 +3222,11 @@ namespace KVM_ERP.Controllers
         public DateTime TRANDATE { get; set; }
         public string CATENAME { get; set; }
         public string CATECODE { get; set; }
+        public int? SupplierId { get; set; }
+        public string SupplierDisplayName { get; set; }
+        public string SupplierLocation { get; set; }
+        public string IntakeVehicleNos { get; set; }
+        public int? NoOfBoxes { get; set; }
         public decimal TRANNAMT { get; set; }
         public string StatusDescription { get; set; }
         public decimal CGSTAMT { get; set; }
@@ -3251,6 +3256,7 @@ namespace KVM_ERP.Controllers
         public decimal PACKINGAMOUNT { get; set; }
         public decimal NETAMOUNT { get; set; }
         public decimal INCENTIVEAMOUNT { get; set; } // TRANDINCAMT
+        public string Remarks { get; set; }
     }
 
     public class TaxFactorPrintViewModel

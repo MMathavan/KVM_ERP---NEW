@@ -279,6 +279,10 @@
                     <span class="info-label">Reference No:</span>
                     <span class="info-value">@Model.TRANREFNO</span>
                 </div>
+                <div class="info-row">
+                    <span class="info-label">No of Boxes:</span>
+                    <span class="info-value">@(Model.NoOfBoxes.HasValue ? Model.NoOfBoxes.Value.ToString() : "")</span>
+                </div>
             </div>
 
             <div class="info-section">
@@ -288,8 +292,20 @@
                     <span class="info-value">@Model.CATENAME</span>
                 </div>
                 <div class="info-row">
+                    <span class="info-label">Supplier Display Name:</span>
+                    <span class="info-value">@Model.SupplierDisplayName</span>
+                </div>
+                <div class="info-row">
                     <span class="info-label">Supplier Code:</span>
                     <span class="info-value">@Model.CATECODE</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Vehicle No:</span>
+                    <span class="info-value">@Model.IntakeVehicleNos</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Location:</span>
+                    <span class="info-value">@Model.SupplierLocation</span>
                 </div>
             </div>
         </div>
@@ -308,6 +324,12 @@
                 @{
                     int serialNo = 1;
                     decimal subtotal = 0;
+                    var commonRemarks = string.Join(", ",
+                        (Model.Items ?? new List<KVM_ERP.Controllers.InvoiceItemPrintViewModel>())
+                            .Select(i => i.Remarks)
+                            .Where(r => !string.IsNullOrWhiteSpace(r))
+                            .Distinct()
+                    );
                     // Approval print: consolidate by Material only (ignore Grade/Colour/Received Type)
                     // Show Amount as Net Amount and Rate as NetRate (NetAmount / Qty)
                     var consolidatedItems = (Model.Items ?? new List<KVM_ERP.Controllers.InvoiceItemPrintViewModel>())
@@ -326,7 +348,15 @@
                     subtotal += item.NETAMOUNT;
                     <tr>
                         <td class="text-center">@serialNo</td>
-                        <td>@item.MTRLNAME</td>
+                        <td>
+                            @item.MTRLNAME
+                            @if (!string.IsNullOrWhiteSpace(commonRemarks))
+                            {
+                                <div style="padding-top: 4px; color: #555; font-size: 13px;">
+                                    <strong>Remarks:</strong> @commonRemarks
+                                </div>
+                            }
+                        </td>
                         <td class="text-right">@item.TRANQTY.ToString("N2")</td>
                         <td class="text-right">@((item.TRANQTY == 0 ? 0 : (item.NETAMOUNT / item.TRANQTY)).ToString("N2"))</td>
                         <td class="text-right">@item.NETAMOUNT.ToString("N2")</td>

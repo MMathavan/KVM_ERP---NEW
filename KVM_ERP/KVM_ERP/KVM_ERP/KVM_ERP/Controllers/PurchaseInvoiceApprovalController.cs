@@ -130,7 +130,11 @@ namespace KVM_ERP.Controllers
                 var invoice = useApproval
                     ? context.Database.SqlQuery<InvoicePrintViewModel>(
                         @"SELECT tm.TRANMID, tm.TRANNO, tm.TRANDNO, tm.TRANREFNO, tm.TRANDATE,
-                                 tm.CATENAME, tm.CATECODE, ISNULL(tma.TRANNAMT, tm.TRANNAMT) as TRANNAMT, 
+                                 tm.CATENAME, tm.CATECODE,
+                                 CAST(tm.TRANREFID AS INT) as SupplierId,
+                                 ISNULL(sm.CATEDNAME, '') as SupplierDisplayName,
+                                 ISNULL(lm.LOCTDESC, '') as SupplierLocation,
+                                 ISNULL(tma.TRANNAMT, tm.TRANNAMT) as TRANNAMT, 
                                  pis.PUINSTDESC as StatusDescription,
                                  ISNULL(tma.TRANCGSTAMT, 0) as CGSTAMT,
                                  ISNULL(tma.TRANSGSTAMT, 0) as SGSTAMT,
@@ -144,12 +148,18 @@ namespace KVM_ERP.Controllers
                           FROM TRANSACTIONMASTER tm
                           INNER JOIN TRANSACTIONMASTER_APPROVAL tma ON tm.TRANMID = tma.TRANMID
                           LEFT JOIN PURCHASEINVOICESTATUS pis ON tm.DISPSTATUS = pis.PUINSTID
+                          LEFT JOIN SUPPLIERMASTER sm ON tm.TRANREFID = sm.CATEID
+                          LEFT JOIN LOCATIONMASTER lm ON sm.LOCTID = lm.LOCTID
                           WHERE tm.TRANMID = @p0 AND tm.REGSTRID = 2",
                         id
                     ).FirstOrDefault()
                     : context.Database.SqlQuery<InvoicePrintViewModel>(
                         @"SELECT tm.TRANMID, tm.TRANNO, tm.TRANDNO, tm.TRANREFNO, tm.TRANDATE,
-                                 tm.CATENAME, tm.CATECODE, tm.TRANNAMT, 
+                                 tm.CATENAME, tm.CATECODE,
+                                 CAST(tm.TRANREFID AS INT) as SupplierId,
+                                 ISNULL(sm.CATEDNAME, '') as SupplierDisplayName,
+                                 ISNULL(lm.LOCTDESC, '') as SupplierLocation,
+                                 tm.TRANNAMT, 
                                  pis.PUINSTDESC as StatusDescription,
                                  ISNULL(tm.TRANCGSTAMT, 0) as CGSTAMT,
                                  ISNULL(tm.TRANSGSTAMT, 0) as SGSTAMT,
@@ -162,6 +172,8 @@ namespace KVM_ERP.Controllers
                                  ISNULL(tm.TRANINCAMT, 0) as TRANINCAMT
                           FROM TRANSACTIONMASTER tm
                           LEFT JOIN PURCHASEINVOICESTATUS pis ON tm.DISPSTATUS = pis.PUINSTID
+                          LEFT JOIN SUPPLIERMASTER sm ON tm.TRANREFID = sm.CATEID
+                          LEFT JOIN LOCATIONMASTER lm ON sm.LOCTID = lm.LOCTID
                           WHERE tm.TRANMID = @p0 AND tm.REGSTRID = 2",
                         id
                     ).FirstOrDefault();
@@ -185,12 +197,15 @@ namespace KVM_ERP.Controllers
                                  ISNULL(tad.TRANDDISCEXPRN, 0) as PACKINGKG,
                                  ISNULL(tad.TRANDDISCAMT, 0) as PACKINGAMOUNT,
                                  ISNULL(tad.TRANDNAMT, 0) as NETAMOUNT,
-                                 ISNULL(tad.TRANDINCAMT, 0) as INCENTIVEAMOUNT
+                                 ISNULL(tad.TRANDINCAMT, 0) as INCENTIVEAMOUNT,
+                                 ISNULL(tqc.REMARKS, '') as Remarks
                           FROM TRANSACTIONDETAIL_APPROVAL tad
                           INNER JOIN MATERIALMASTER m ON tad.MTRLID = m.MTRLID
                           LEFT JOIN GRADEMASTER g ON tad.GRADEID = g.GRADEID
                           LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON tad.PCLRID = pcm.PCLRID
                           LEFT JOIN RECEIVEDTYPEMASTER rt ON tad.RCVDTID = rt.RCVDTID
+                          LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON tad.TRANDAID = tpc.TRANPID
+                          LEFT JOIN TRANSACTION_QUALITY_CHECK tqc ON tpc.TRANMID = tqc.TRANMID
                           WHERE tad.TRANMID = @p0
                           ORDER BY tad.SourceTRANDID",
                         id
@@ -206,12 +221,15 @@ namespace KVM_ERP.Controllers
                                  ISNULL(td.TRANDDISCEXPRN, 0) as PACKINGKG,
                                  ISNULL(td.TRANDDISCAMT, 0) as PACKINGAMOUNT,
                                  ISNULL(td.TRANDNAMT, 0) as NETAMOUNT,
-                                 ISNULL(td.TRANDINCAMT, 0) as INCENTIVEAMOUNT
+                                 ISNULL(td.TRANDINCAMT, 0) as INCENTIVEAMOUNT,
+                                 ISNULL(tqc.REMARKS, '') as Remarks
                           FROM TRANSACTIONDETAIL td
                           INNER JOIN MATERIALMASTER m ON td.MTRLID = m.MTRLID
                           LEFT JOIN GRADEMASTER g ON td.GRADEID = g.GRADEID
                           LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON td.PCLRID = pcm.PCLRID
                           LEFT JOIN RECEIVEDTYPEMASTER rt ON td.RCVDTID = rt.RCVDTID
+                          LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON td.TRANDAID = tpc.TRANPID
+                          LEFT JOIN TRANSACTION_QUALITY_CHECK tqc ON tpc.TRANMID = tqc.TRANMID
                           WHERE td.TRANMID = @p0
                           ORDER BY td.TRANDID",
                         id
@@ -231,6 +249,55 @@ namespace KVM_ERP.Controllers
                       ORDER BY tmf.DEDORDR",
                     id
                 ).ToList();
+
+                // Fetch Vehicle No(s) from linked Raw Material Intake (REGSTRID = 1)
+                try
+                {
+                    var vehicleNos = context.Database.SqlQuery<string>(@"
+                        SELECT DISTINCT LTRIM(RTRIM(rmi.VECHNO)) AS VECHNO
+                        FROM TRANSACTIONDETAIL invtd
+                        INNER JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON invtd.TRANDAID = tpc.TRANPID
+                        INNER JOIN TRANSACTIONDETAIL rmid ON tpc.TRANDID = rmid.TRANDID
+                        INNER JOIN TRANSACTIONMASTER rmi ON rmid.TRANMID = rmi.TRANMID
+                        WHERE invtd.TRANMID = @p0
+                          AND rmi.REGSTRID = 1
+                          AND rmi.VECHNO IS NOT NULL
+                          AND LTRIM(RTRIM(rmi.VECHNO)) <> ''
+                    ", id).ToList();
+
+                    invoice.IntakeVehicleNos = vehicleNos != null && vehicleNos.Any()
+                        ? string.Join(", ", vehicleNos.Distinct())
+                        : "";
+                }
+                catch
+                {
+                    invoice.IntakeVehicleNos = "";
+                }
+
+                // Fetch No of Boxes from linked Raw Material Intake (REGSTRID = 1)
+                try
+                {
+                    var totalBoxes = context.Database.SqlQuery<int?>(@"
+                        SELECT SUM(x.MTRLNBOX) AS TotalBoxes
+                        FROM (
+                            SELECT DISTINCT
+                                rmid.TRANDID,
+                                ISNULL(rmid.MTRLNBOX, 0) AS MTRLNBOX
+                            FROM TRANSACTIONDETAIL invtd
+                            INNER JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON invtd.TRANDAID = tpc.TRANPID
+                            INNER JOIN TRANSACTIONDETAIL rmid ON tpc.TRANDID = rmid.TRANDID
+                            INNER JOIN TRANSACTIONMASTER rmi ON rmid.TRANMID = rmi.TRANMID
+                            WHERE invtd.TRANMID = @p0
+                              AND rmi.REGSTRID = 1
+                        ) x
+                    ", id).FirstOrDefault();
+
+                    invoice.NoOfBoxes = totalBoxes ?? 0;
+                }
+                catch
+                {
+                    invoice.NoOfBoxes = 0;
+                }
 
                 return View("~/Views/PurchaseInvoiceApproval/Print.cshtml", invoice);
             }
