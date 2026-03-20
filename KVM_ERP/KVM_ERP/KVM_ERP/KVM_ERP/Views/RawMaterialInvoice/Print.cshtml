@@ -368,11 +368,6 @@
                 <span class="tax-value">₹ @Model.TRANINCAMT.ToString("N2")</span>
             </div>
 
-            <div class="tax-summary-row">
-                <span class="tax-label">Subtotal:</span>
-                <span class="tax-value">₹ @Model.TRANGAMT.ToString("N2")</span>
-            </div>
-
             @* Invoice-level Incentive (TRANINCAMT) *@
             @if (false && Model.TRANINCAMT != 0)
             {
