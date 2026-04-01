@@ -334,6 +334,11 @@
                                     - @(string.IsNullOrEmpty(item.RCVDTDESC) ? "-" : item.RCVDTDESC)
                                 </span>
                             }
+                            @if (!string.IsNullOrWhiteSpace(item.Remarks))
+                            {
+                                <br />
+                                <span style="font-size: 13px; color: #555;">@item.Remarks</span>
+                            }
                         </td>
                         <td class="text-right">@item.HLWeight.ToString("N2")</td>
                         <td class="text-right">@item.YieldPercent.ToString("N2")</td>

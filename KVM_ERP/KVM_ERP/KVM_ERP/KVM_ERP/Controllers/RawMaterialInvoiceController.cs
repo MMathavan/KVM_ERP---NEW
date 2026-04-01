@@ -2257,13 +2257,15 @@ namespace KVM_ERP.Controllers
                                  ISNULL(tad.TRANDDISCEXPRN, 0) as PACKINGKG,
                                  ISNULL(tad.TRANDDISCAMT, 0) as PACKINGAMOUNT,
                                  ISNULL(tad.TRANDNAMT, 0) as NETAMOUNT,
-                                 ISNULL(tad.TRANDINCAMT, 0) as INCENTIVEAMOUNT
+                                 ISNULL(tad.TRANDINCAMT, 0) as INCENTIVEAMOUNT,
+                                 ISNULL(tqc.REMARKS, '') as Remarks
                           FROM TRANSACTIONDETAIL_APPROVAL tad
                           INNER JOIN MATERIALMASTER m ON tad.MTRLID = m.MTRLID
                           LEFT JOIN GRADEMASTER g ON tad.GRADEID = g.GRADEID
                           LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON tad.PCLRID = pcm.PCLRID
                           LEFT JOIN RECEIVEDTYPEMASTER rt ON tad.RCVDTID = rt.RCVDTID
                           LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON tad.TRANDAID = tpc.TRANPID
+                          LEFT JOIN TRANSACTION_QUALITY_CHECK tqc ON tpc.TRANMID = tqc.TRANMID
                           WHERE tad.TRANMID = @p0
                           ORDER BY tad.SourceTRANDID",
                         id
@@ -2295,13 +2297,15 @@ namespace KVM_ERP.Controllers
                                  ISNULL(td.TRANDDISCEXPRN, 0) as PACKINGKG,
                                  ISNULL(td.TRANDDISCAMT, 0) as PACKINGAMOUNT,
                                  ISNULL(td.TRANDNAMT, 0) as NETAMOUNT,
-                                 ISNULL(td.TRANDINCAMT, 0) as INCENTIVEAMOUNT
+                                 ISNULL(td.TRANDINCAMT, 0) as INCENTIVEAMOUNT,
+                                 ISNULL(tqc.REMARKS, '') as Remarks
                           FROM TRANSACTIONDETAIL td
                           INNER JOIN MATERIALMASTER m ON td.MTRLID = m.MTRLID
                           LEFT JOIN GRADEMASTER g ON td.GRADEID = g.GRADEID
                           LEFT JOIN PRODUCTIONCOLOURMASTER pcm ON td.PCLRID = pcm.PCLRID
                           LEFT JOIN RECEIVEDTYPEMASTER rt ON td.RCVDTID = rt.RCVDTID
                           LEFT JOIN TRANSACTION_PRODUCT_CALCULATION tpc ON td.TRANDAID = tpc.TRANPID
+                          LEFT JOIN TRANSACTION_QUALITY_CHECK tqc ON tpc.TRANMID = tqc.TRANMID
                           WHERE td.TRANMID = @p0
                           ORDER BY td.TRANDID",
                         id
