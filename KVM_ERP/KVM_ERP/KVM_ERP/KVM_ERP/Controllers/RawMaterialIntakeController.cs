@@ -795,6 +795,9 @@ namespace KVM_ERP.Controllers
         {
             try
             {
+                var sqlMinDate = new DateTime(1753, 1, 1);
+                var sqlMaxDate = new DateTime(9999, 12, 31);
+
                 // Debug logging
                 System.Diagnostics.Debug.WriteLine($"[GetAjaxData] fromDate: {fromDate}, toDate: {toDate}");
                 // Build dynamic WHERE clause for date filtering
@@ -807,6 +810,8 @@ namespace KVM_ERP.Controllers
                     DateTime fromDateTime;
                     if (DateTime.TryParse(fromDate, out fromDateTime))
                     {
+                        if (fromDateTime < sqlMinDate) fromDateTime = sqlMinDate;
+                        if (fromDateTime > sqlMaxDate) fromDateTime = sqlMaxDate;
                         whereClause += $" AND tm.TRANDATE >= @p{paramIndex}";
                         parameters.Add(fromDateTime.Date);
                         paramIndex++;
@@ -818,6 +823,8 @@ namespace KVM_ERP.Controllers
                     DateTime toDateTime;
                     if (DateTime.TryParse(toDate, out toDateTime))
                     {
+                        if (toDateTime < sqlMinDate) toDateTime = sqlMinDate;
+                        if (toDateTime > sqlMaxDate) toDateTime = sqlMaxDate;
                         whereClause += $" AND tm.TRANDATE <= @p{paramIndex}";
                         parameters.Add(toDateTime.Date.AddDays(1).AddSeconds(-1)); // Include full day
                         paramIndex++;
@@ -839,7 +846,7 @@ namespace KVM_ERP.Controllers
                          FROM TRANSACTIONDETAIL td
                          GROUP BY td.TRANMID
                       ) p ON p.TRANMID = tm.TRANMID
-                      WHERE tm.REGSTRID = 1 {whereClause}
+                      WHERE tm.REGSTRID = 1 AND tm.TRANDATE >= '17530101' {whereClause}
                       ORDER BY tm.TRANDATE DESC, tm.TRANMID DESC";
 
                 // Debug logging

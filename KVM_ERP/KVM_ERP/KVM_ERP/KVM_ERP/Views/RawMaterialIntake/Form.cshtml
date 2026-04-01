@@ -1135,6 +1135,10 @@
 
             // Apply packing tab visibility rules based on Material Group (MTRLGID)
             var initialPackingId = filterPackingTabsByMaterialGroup(productGroupId);
+
+            var initialVisiblePackingId = initialPackingId || $('#packingMasterTabs .nav-link:visible').first().data('packing-id') || $('#packingMasterTabs .nav-link').first().data('packing-id');
+            attachGlobalCalcFieldsToTab(initialVisiblePackingId);
+            setTimeout(function() { attachGlobalCalcFieldsToTab(initialVisiblePackingId); }, 200);
             
             // IMPORTANT: Clear cached data AND field containers from previous modal opens
             $('.tab-pane').each(function() {
@@ -1400,6 +1404,8 @@
                             $('.tab-pane').removeClass('show active');
                             tabToActivate.addClass('active');
                             $(`#pane-${packingIdToActivate}`).addClass('show active');
+
+                            attachGlobalCalcFieldsToTab(packingIdToActivate);
                             
                             // Load fields for active tab
                             loadPackingTypeFieldsForTab(packingIdToActivate);
@@ -1429,6 +1435,8 @@
                         $('.tab-pane').removeClass('show active');
                         firstTab.addClass('active');
                         $(`#pane-${packingId}`).addClass('show active');
+
+                        attachGlobalCalcFieldsToTab(packingId);
                         
                         loadPackingTypeFieldsForTab(packingId);
                         
@@ -1447,6 +1455,8 @@
                     $('.tab-pane').removeClass('show active');
                     firstTab.addClass('active');
                     $(`#pane-${packingId}`).addClass('show active');
+
+                    attachGlobalCalcFieldsToTab(packingId);
                     
                     loadPackingTypeFieldsForTab(packingId);
                 }
@@ -1477,6 +1487,30 @@
             }, 100);
         }
 
+        function attachGlobalCalcFieldsToTab(packingId, triesLeft) {
+            var $fields = $('#globalCalcFieldsContainer');
+            if ($fields.length === 0) return;
+            if (!packingId) return;
+
+            if (triesLeft === undefined || triesLeft === null) {
+                triesLeft = 10;
+            }
+
+            var $pane = $('#pane-' + packingId);
+            if ($pane.length === 0) return;
+
+            var $btnRow = $pane.find('.text-center.mt-3').first();
+            if ($btnRow.length === 0) {
+                if (triesLeft > 0) {
+                    setTimeout(function() { attachGlobalCalcFieldsToTab(packingId, triesLeft - 1); }, 80);
+                }
+                return;
+            }
+
+            $fields.show();
+            $fields.insertBefore($btnRow);
+        }
+
 
         // Manual tab switching function
         function switchTab(packingId) {
@@ -1489,7 +1523,9 @@
             // Add active class to clicked tab and corresponding pane
             $(`#tab-${packingId}`).addClass('active');
             $(`#pane-${packingId}`).addClass('show active');
-            
+
+            attachGlobalCalcFieldsToTab(packingId);
+
             // Load fields for the selected tab (only if not already loaded)
             loadPackingTypeFieldsForTab(packingId);
             // Ensure global factory fields remain populated across tab switches
@@ -1530,6 +1566,7 @@
                 setTimeout(function() {
                     updateRadioButtonsForActiveTab();
                 }, 50);
+                attachGlobalCalcFieldsToTab(packingId);
                 
                 // Fields exist, check mode and trigger appropriate calculation
                 const storedCalc = tabPane.data('existing-calculation');
@@ -1600,6 +1637,11 @@
             console.log('Modal fully shown - updating radio buttons for active tab');
             setTimeout(function() {
                 updateRadioButtonsForActiveTab();
+
+                const activeId = $('#packingMasterTabs .nav-link.active').data('packing-id');
+                if (activeId) {
+                    attachGlobalCalcFieldsToTab(activeId);
+                }
                 
                 // Also ensure production date is set from active tab data
                 const activeTab = $('.tab-pane.active');
@@ -2149,6 +2191,8 @@
                     if (storedCalc) {
                         populateTabCalculation(storedCalc, packingId);
                     }
+
+                    attachGlobalCalcFieldsToTab(packingId);
                 })
                 .fail(function(xhr) {
                     console.error('Error loading fields:', xhr.responseText);
@@ -3767,26 +3811,6 @@
                         <div class="row mt-3">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="gradeId" class="control-label"><strong>Grade <span class="text-danger">*</span> :</strong></label>
-                                    @Html.DropDownList("GRADEID", ViewBag.Grades as List<SelectListItem>, new { @class = "form-control", id = "gradeId" })
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="colourId" class="control-label"><strong>Production Colour <span class="text-danger">*</span> :</strong></label>
-                                    @Html.DropDownList("PCLRID", ViewBag.ProductionColours as List<SelectListItem>, new { @class = "form-control", id = "colourId" })
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="receivedTypeId" class="control-label"><strong>Received Type <span class="text-danger">*</span> :</strong></label>
-                                    @Html.DropDownList("RCVDTID", ViewBag.ReceivedTypes as List<SelectListItem>, new { @class = "form-control", id = "receivedTypeId" })
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <div class="form-group">
                                     <label for="prodDate" class="control-label"><strong>Date <span class="text-danger">*</span> :</strong></label>
                                     <input type="date" class="form-control" id="prodDate" name="PRODDATE" />
                                 </div>
@@ -3801,6 +3825,29 @@
                                 <div class="form-group">
                                     <label for="facAvgCount" class="control-label"><strong>Supplier Count:</strong></label>
                                     <input type="number" class="form-control fac-avg-count" id="facAvgCount" step="0.001" min="0" placeholder="0.000" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="globalCalcFieldsContainer" style="display:none;">
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="gradeId" class="control-label"><strong>Grade <span class="text-danger">*</span> :</strong></label>
+                                        @Html.DropDownList("GRADEID", ViewBag.Grades as List<SelectListItem>, new { @class = "form-control", id = "gradeId" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="colourId" class="control-label"><strong>Production Colour <span class="text-danger">*</span> :</strong></label>
+                                        @Html.DropDownList("PCLRID", ViewBag.ProductionColours as List<SelectListItem>, new { @class = "form-control", id = "colourId" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="receivedTypeId" class="control-label"><strong>Received Type <span class="text-danger">*</span> :</strong></label>
+                                        @Html.DropDownList("RCVDTID", ViewBag.ReceivedTypes as List<SelectListItem>, new { @class = "form-control", id = "receivedTypeId" })
+                                    </div>
                                 </div>
                             </div>
                         </div>
