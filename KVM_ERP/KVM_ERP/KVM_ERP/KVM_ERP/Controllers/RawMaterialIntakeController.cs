@@ -12,10 +12,15 @@ namespace KVM_ERP.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        private const string IntakeFromSessionKey = "RAW_MATERIAL_INTAKE_FROM_DATE";
+        private const string IntakeToSessionKey = "RAW_MATERIAL_INTAKE_TO_DATE";
+
         // GET: RawMaterialIntake
         [Authorize(Roles = "RawMaterialIntakeIndex")]
         public ActionResult Index()
         {
+            ViewBag.FromDate = (Session[IntakeFromSessionKey] as string) ?? "";
+            ViewBag.ToDate = (Session[IntakeToSessionKey] as string) ?? "";
             return View();
         }
 
@@ -795,6 +800,24 @@ namespace KVM_ERP.Controllers
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(fromDate))
+                {
+                    fromDate = Session[IntakeFromSessionKey] as string;
+                }
+                if (string.IsNullOrWhiteSpace(toDate))
+                {
+                    toDate = Session[IntakeToSessionKey] as string;
+                }
+
+                if (!string.IsNullOrWhiteSpace(fromDate))
+                {
+                    Session[IntakeFromSessionKey] = fromDate;
+                }
+                if (!string.IsNullOrWhiteSpace(toDate))
+                {
+                    Session[IntakeToSessionKey] = toDate;
+                }
+
                 // Debug logging
                 System.Diagnostics.Debug.WriteLine($"[GetAjaxData] fromDate: {fromDate}, toDate: {toDate}");
                 // Build dynamic WHERE clause for date filtering

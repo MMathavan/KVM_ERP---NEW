@@ -201,18 +201,15 @@
                                     <label for="fromDate" class="form-label fw-bold text-primary">
                                         <i class="fa fa-calendar-alt"></i> From Date
                                     </label>
-                                    <input type="date" id="fromDate" class="form-control border-2" />
+                                    <input type="date" id="fromDate" class="form-control border-2" value="@ViewBag.FromDate" />
                                 </div>
                                 <div class="col-md-3">
                                     <label for="toDate" class="form-label fw-bold text-primary">
                                         <i class="fa fa-calendar-alt"></i> To Date
                                     </label>
-                                    <input type="date" id="toDate" class="form-control border-2" />
+                                    <input type="date" id="toDate" class="form-control border-2" value="@ViewBag.ToDate" />
                                 </div>
                                 <div class="col-md-3">
-                                    <button type="button" id="filterBtn" class="btn btn-primary px-4">
-                                        <i class="fa fa-filter"></i> Filter
-                                    </button>
                                     <button type="button" id="clearBtn" class="btn btn-outline-secondary px-4 ms-2">
                                         <i class="fa fa-times"></i> Clear
                                     </button>
@@ -279,8 +276,12 @@
 
             // Set default date values BEFORE DataTable loads (so initial AJAX request is filtered)
             var today = new Date();
-            $('#toDate').val(today.toISOString().split('T')[0]);
-            $('#fromDate').val(today.toISOString().split('T')[0]);
+            if (!$('#toDate').val()) {
+                $('#toDate').val(today.toISOString().split('T')[0]);
+            }
+            if (!$('#fromDate').val()) {
+                $('#fromDate').val(today.toISOString().split('T')[0]);
+            }
 
             var table = $('#rawIntakeTable').DataTable({
                 ajax: {
@@ -466,28 +467,24 @@
                 }
             }
 
-            // Date Filter Event Handlers
-            $('#filterBtn').on('click', function() {
+            function reloadWithValidation() {
                 var fromDate = $('#fromDate').val();
                 var toDate = $('#toDate').val();
-                
+
                 // Validate date range
                 if (fromDate && toDate && fromDate > toDate) {
                     alert('From Date cannot be greater than To Date');
                     return;
                 }
-                
-                // Show loading state
-                $(this).html('<i class="fa fa-spinner fa-spin"></i> Filtering...');
-                $(this).prop('disabled', true);
-                
-                // Reload table with new filters
-                table.ajax.reload(function() {
-                    // Reset button state
-                    $('#filterBtn').html('<i class="fa fa-filter"></i> Filter');
-                    $('#filterBtn').prop('disabled', false);
+
+                table.ajax.reload(function () {
                     updateFilterStatus();
                 });
+            }
+
+            // Auto filter on date change
+            $('#fromDate, #toDate').on('change', function () {
+                reloadWithValidation();
             });
 
             $('#clearBtn').on('click', function() {
@@ -509,7 +506,7 @@
             // Allow Enter key to trigger filter
             $('#fromDate, #toDate').on('keypress', function(e) {
                 if (e.which === 13) { // Enter key
-                    $('#filterBtn').click();
+                    reloadWithValidation();
                 }
             });
 
