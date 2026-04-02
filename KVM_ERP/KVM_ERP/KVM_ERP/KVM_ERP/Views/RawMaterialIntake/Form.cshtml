@@ -490,6 +490,21 @@
                     </div>
                 </div>
 
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label" style="font-weight: 500;">Supplier Weight</label>
+                            <input type="number" class="form-control fac-avg-weight" id="facAvgWeight" name="FACAVGWGT" step="0.001" min="0" placeholder="0.000" style="border-radius: 4px;" value="@(ViewBag.FacAvgWgt ?? 0)" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label" style="font-weight: 500;">Supplier Count</label>
+                            <input type="number" class="form-control fac-avg-count" id="facAvgCount" name="FACAVGCOUNT" step="0.001" min="0" placeholder="0.000" style="border-radius: 4px;" value="@(ViewBag.FacAvgCnt ?? 0)" />
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Quality Check Section -->
                 <div class="quality-check-section" style="margin-top: 30px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9;">
                     <div class="section-title" style="margin-bottom: 20px; color: #2c3e50; font-weight: 600;">
@@ -3813,18 +3828,6 @@
                                 <div class="form-group">
                                     <label for="prodDate" class="control-label"><strong>Date <span class="text-danger">*</span> :</strong></label>
                                     <input type="date" class="form-control" id="prodDate" name="PRODDATE" />
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="facAvgWeight" class="control-label"><strong>Supplier Weight:</strong></label>
-                                    <input type="number" class="form-control fac-avg-weight" id="facAvgWeight" step="0.001" min="0" placeholder="0.000" />
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="facAvgCount" class="control-label"><strong>Supplier Count:</strong></label>
-                                    <input type="number" class="form-control fac-avg-count" id="facAvgCount" step="0.001" min="0" placeholder="0.000" />
                                 </div>
                             </div>
                         </div>

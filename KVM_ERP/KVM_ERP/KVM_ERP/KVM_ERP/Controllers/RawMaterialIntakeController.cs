@@ -169,6 +169,47 @@ namespace KVM_ERP.Controllers
                 // Load existing quality check for edit
                 var qualityCheck = db.TransactionQualityChecks.FirstOrDefault(q => q.TRANMID == model.TRANMID);
                 ViewBag.QualityCheckJson = qualityCheck != null ? JsonConvert.SerializeObject(qualityCheck) : "null";
+
+                decimal facWgt = 0;
+                decimal facCnt = 0;
+                var calcHasFac = db.Database.SqlQuery<int>(
+                    @"SELECT COUNT(1)
+                      FROM TRANSACTION_PRODUCT_CALCULATION
+                      WHERE TRANMID = @p0
+                        AND (ISNULL(FACAVGWGT, 0) > 0 OR ISNULL(FACAVGCOUNT, 0) > 0)",
+                    model.TRANMID).FirstOrDefault() > 0;
+
+                if (calcHasFac)
+                {
+                    var calcFac = db.Database.SqlQuery<TempFacRow>(
+                        @"SELECT TOP 1 TRANMID, FACAVGWGT, FACAVGCOUNT
+                          FROM TRANSACTION_PRODUCT_CALCULATION
+                          WHERE TRANMID = @p0
+                          ORDER BY PRCSDATE DESC, TRANPID DESC",
+                        model.TRANMID).FirstOrDefault();
+                    if (calcFac != null)
+                    {
+                        facWgt = calcFac.FACAVGWGT ?? 0;
+                        facCnt = calcFac.FACAVGCOUNT ?? 0;
+                    }
+                }
+                else
+                {
+                    var tmpFac = db.Database.SqlQuery<TempFacRow>(
+                        @"SELECT TOP 1 TRANMID, FACAVGWGT, FACAVGCOUNT
+                          FROM TEMP_FAC_WEIANDCOUNT
+                          WHERE TRANMID = @p0
+                          ORDER BY PRCSDATE DESC",
+                        model.TRANMID).FirstOrDefault();
+                    if (tmpFac != null)
+                    {
+                        facWgt = tmpFac.FACAVGWGT ?? 0;
+                        facCnt = tmpFac.FACAVGCOUNT ?? 0;
+                    }
+                }
+
+                ViewBag.FacAvgWgt = facWgt;
+                ViewBag.FacAvgCnt = facCnt;
             }
             else
             {
@@ -190,6 +231,9 @@ namespace KVM_ERP.Controllers
                     }).ToList();
                 ViewBag.SupplierList = supplierListItems;
                 ViewBag.DISPSTATUS = buildStatus(model.DISPSTATUS);
+
+                ViewBag.FacAvgWgt = 0m;
+                ViewBag.FacAvgCnt = 0m;
             }
 
             // For client-side auto-fill of code from supplier, pass minimal map
@@ -248,6 +292,9 @@ namespace KVM_ERP.Controllers
                     qualityCheck = JsonConvert.DeserializeObject<TransactionQualityCheck>(qualityCheckJson);
                 }
                 System.Diagnostics.Debug.WriteLine($"Quality check parsed: {(qualityCheck != null ? "YES" : "NO")}");
+
+                var facAvgWgt = ParseNullableDecimal(Request.Form["FACAVGWGT"]) ?? 0;
+                var facAvgCnt = ParseNullableDecimal(Request.Form["FACAVGCOUNT"]) ?? 0;
 
                 if (SupplierId.HasValue && SupplierId.Value > 0)
                 {
@@ -381,6 +428,26 @@ namespace KVM_ERP.Controllers
                             }
                         }
 
+                        var hasNonEmptyFacInCalc = db.Database.SqlQuery<int>(
+                            @"SELECT COUNT(1)
+                              FROM TRANSACTION_PRODUCT_CALCULATION
+                              WHERE TRANMID = @p0
+                                AND (ISNULL(FACAVGWGT, 0) > 0 OR ISNULL(FACAVGCOUNT, 0) > 0)",
+                            existing.TRANMID).FirstOrDefault() > 0;
+
+                        if (!hasNonEmptyFacInCalc)
+                        {
+                            db.Database.ExecuteSqlCommand(
+                                @"IF EXISTS (SELECT 1 FROM TEMP_FAC_WEIANDCOUNT WHERE TRANMID = @p0)
+                                      UPDATE TEMP_FAC_WEIANDCOUNT
+                                      SET FACAVGWGT = @p1, FACAVGCOUNT = @p2, PRCSDATE = @p3
+                                      WHERE TRANMID = @p0
+                                  ELSE
+                                      INSERT INTO TEMP_FAC_WEIANDCOUNT (TRANMID, FACAVGWGT, FACAVGCOUNT, PRCSDATE)
+                                      VALUES (@p0, @p1, @p2, @p3)",
+                                existing.TRANMID, facAvgWgt, facAvgCnt, DateTime.Now);
+                        }
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -446,6 +513,16 @@ namespace KVM_ERP.Controllers
                         qualityCheck.DONEBY?.Trim(), qualityCheck.VERIFIEDBY?.Trim(), qualityCheck.LOTDATE,
                         User?.Identity?.Name ?? "System", User?.Identity?.Name ?? "System", DateTime.Now);
                 }
+
+                db.Database.ExecuteSqlCommand(
+                    @"IF EXISTS (SELECT 1 FROM TEMP_FAC_WEIANDCOUNT WHERE TRANMID = @p0)
+                          UPDATE TEMP_FAC_WEIANDCOUNT
+                          SET FACAVGWGT = @p1, FACAVGCOUNT = @p2, PRCSDATE = @p3
+                          WHERE TRANMID = @p0
+                      ELSE
+                          INSERT INTO TEMP_FAC_WEIANDCOUNT (TRANMID, FACAVGWGT, FACAVGCOUNT, PRCSDATE)
+                          VALUES (@p0, @p1, @p2, @p3)",
+                    newId, facAvgWgt, facAvgCnt, DateTime.Now);
 
                 System.Diagnostics.Debug.WriteLine("=== SAVE COMPLETED ===");
                 return RedirectToAction("Index");
@@ -988,6 +1065,13 @@ namespace KVM_ERP.Controllers
             public decimal SLABVALUE { get; set; }
         }
 
+        private class TempFacRow
+        {
+            public int TRANMID { get; set; }
+            public decimal? FACAVGWGT { get; set; }
+            public decimal? FACAVGCOUNT { get; set; }
+        }
+
         // Get packing type fields based on packing master
         public JsonResult GetPackingTypeFields(int packingId)
         {
@@ -1302,6 +1386,35 @@ namespace KVM_ERP.Controllers
 
                 model.TRANMID = transactionDetail;
 
+                if (model.FACAVGWGT <= 0 || model.FACAVGCOUNT <= 0)
+                {
+                    try
+                    {
+                        var tmp = db.Database.SqlQuery<TempFacRow>(
+                            @"SELECT TOP 1 TRANMID, FACAVGWGT, FACAVGCOUNT
+                              FROM TEMP_FAC_WEIANDCOUNT
+                              WHERE TRANMID = @p0
+                              ORDER BY PRCSDATE DESC",
+                            model.TRANMID).FirstOrDefault();
+
+                        if (tmp != null)
+                        {
+                            if (model.FACAVGWGT <= 0)
+                            {
+                                model.FACAVGWGT = tmp.FACAVGWGT ?? 0;
+                            }
+                            if (model.FACAVGCOUNT <= 0)
+                            {
+                                model.FACAVGCOUNT = tmp.FACAVGCOUNT ?? 0;
+                            }
+                        }
+                    }
+                    catch (Exception exTmp)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"TEMP_FAC_WEIANDCOUNT lookup failed: {exTmp.Message}");
+                    }
+                }
+
                 // Calculate derived values
                 if (slabDetails != null && slabDetails.Any())
                 {
@@ -1413,6 +1526,10 @@ namespace KVM_ERP.Controllers
                 }
 
                 db.SaveChanges();
+
+                db.Database.ExecuteSqlCommand(
+                    "DELETE FROM TEMP_FAC_WEIANDCOUNT WHERE TRANMID = @p0",
+                    model.TRANMID);
                 
                 // Return the TRANPID for tracking (prefer header when present, otherwise any slab row)
                 var savedRecord = db.TransactionProductCalculations
