@@ -1026,6 +1026,9 @@ namespace KVM_ERP.Controllers
                 // Step 2: Delete transaction details
                 db.Database.ExecuteSqlCommand("DELETE FROM TRANSACTIONDETAIL WHERE TRANMID = @p0", id);
                 
+                // Step 2.1: Delete temporary FAC weight/count values (if any)
+                db.Database.ExecuteSqlCommand("DELETE FROM TEMP_FAC_WEIANDCOUNT WHERE TRANMID = @p0", id);
+
                 // Step 3: Delete the master record
                 db.Database.ExecuteSqlCommand("DELETE FROM TRANSACTIONMASTER WHERE TRANMID = @p0 AND REGSTRID = 1", id);
                 
