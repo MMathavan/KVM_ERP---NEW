@@ -503,6 +503,18 @@
                             <input type="number" class="form-control fac-avg-count" id="facAvgCount" name="FACAVGCOUNT" step="0.001" min="0" placeholder="0.000" style="border-radius: 4px;" value="@(ViewBag.FacAvgCnt ?? 0)" />
                         </div>
                     </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label" style="font-weight: 500;">No. of Boxes</label>
+                            <input type="number" class="form-control" id="mainNoOfBoxes" step="1" min="0" placeholder="0" style="border-radius: 4px;" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label" style="font-weight: 500;">Count (Per KG)</label>
+                            <input type="number" class="form-control" id="mainCountPerKg" step="1" min="0" placeholder="0" style="border-radius: 4px;" />
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Quality Check Section -->
@@ -691,8 +703,8 @@
                 $tbody.children('tr').each(function(){
                     var gid = parseInt($(this).find('select.mgroup').val()||'0',10);
                     var pid = parseInt($(this).find('select.product').val()||'0',10);
-                    var nbox = parseInt($(this).find('input.nbox').val()||'0',10);
-                    var cnt = parseInt($(this).find('input.counts').val()||'0',10);
+                    var nbox = parseInt($('#mainNoOfBoxes').val() || '0', 10);
+                    var cnt = parseInt($('#mainCountPerKg').val() || '0', 10);
                     var trandid = parseInt($(this).data('trandid')||'0',10);
                     if (gid>0 && pid>0 && nbox>=0 && cnt>=0){
                         rows.push({ TRANDID: trandid, MTRLGID: gid, MTRLID: pid, MTRLNBOX: nbox, MTRLCOUNTS: cnt });
@@ -775,14 +787,12 @@
                 <th style="width:60px;">S.No</th>\
                 <th style="width:200px;">Product Type</th>\
                 <th style="width:250px;">Product</th>\
-                <th style="width:120px;">No. of Boxes</th>\
-                <th style="width:120px;">Count (Per KG)</th>\
                 <th style="width:130px;">Weight(In KGS)</th>\
                 <th style="width:80px;">Action</th>\
             </tr></thead>');
             var $tbody = $('<tbody></tbody>');
             var $tfoot = $('<tfoot><tr class="total-weights-row" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; font-weight: bold;">\
-                <td colspan="5" class="text-center" style="padding: 12px;">Total Weights</td>\
+                <td colspan="3" class="text-center" style="padding: 12px;">Total Weights</td>\
                 <td class="text-center" style="padding: 12px;"><span id="totalWeightDisplay">0.000 KG</span></td>\
                 <td></td>\
             </tr></tfoot>');
@@ -880,8 +890,6 @@
                 var $sno = $('<td class="text-center align-middle"></td>').text(idx);
                 var $gtd = $('<td></td>');
                 var $ptd = $('<td></td>');
-                var $box = $('<td></td>').append('<input type="number" min="0" class="form-control nbox" placeholder="0" />');
-                var $cnt = $('<td></td>').append('<input type="number" min="0" class="form-control counts" placeholder="0" />');
                 var $weight = $('<td class="text-center align-middle"></td>').append('<span class="factory-weight-display text-muted">-</span><br/><span class="balance-stock-display text-danger"></span>');
                 var $act = $('<td class="text-center"></td>');
                 var $del = $('<button type="button" class="btn btn-danger btn-sm removeRow"><i class="fa fa-trash"></i></button>');
@@ -907,7 +915,7 @@
                 $gtd.append($gsel);
                 $ptd.append($psel);
 
-                $tr.append($sno, $gtd, $ptd, $box, $cnt, $weight, $act);
+                $tr.append($sno, $gtd, $ptd, $weight, $act);
                 $tbody.append($tr);
 
                 // Initialize Select2 on newly added dropdowns
@@ -930,8 +938,12 @@
 
                 if (init) {
                     loadProducts($tr, init.MTRLGID, init.MTRLID);
-                    if (init.MTRLNBOX) $tr.find('input.nbox').val(init.MTRLNBOX);
-                    if (init.MTRLCOUNTS) $tr.find('input.counts').val(init.MTRLCOUNTS);
+                    if ($('#mainNoOfBoxes').length && !$('#mainNoOfBoxes').val() && init.MTRLNBOX) {
+                        $('#mainNoOfBoxes').val(init.MTRLNBOX);
+                    }
+                    if ($('#mainCountPerKg').length && !$('#mainCountPerKg').val() && init.MTRLCOUNTS) {
+                        $('#mainCountPerKg').val(init.MTRLCOUNTS);
+                    }
                 }
 
                 // Wire events
@@ -986,8 +998,8 @@
                 var productType = $row.find('select.mgroup option:selected').text();
                 var productGroupId = parseInt($row.find('select.mgroup').val() || '0', 10);
                 var product = $row.find('select.product option:selected').text();
-                var noOfBoxes = $row.find('input.nbox').val();
-                var countPerKg = $row.find('input.counts').val();
+                var noOfBoxes = $('#mainNoOfBoxes').val();
+                var countPerKg = $('#mainCountPerKg').val();
                 
                 console.log('Opening Product Calculation Modal for TRANDID:', trandid);
                 console.log('Product Type:', productType, 'Product:', product, 'Group ID:', productGroupId);
