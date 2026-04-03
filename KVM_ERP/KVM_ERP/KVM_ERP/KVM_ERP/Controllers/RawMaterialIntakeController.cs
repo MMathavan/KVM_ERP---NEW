@@ -3730,7 +3730,7 @@ namespace KVM_ERP.Controllers
 
                 System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] Collapsed to {groupedCalculations.Count} calculation headers (by TRANDID+PACKMID)");
 
-                var totalFactoryWeight = groupedCalculations.Sum(calc => calc.FACTORYWGT);
+                var totalFactoryWeight = groupedCalculations.Sum(calc => calc.WASTEPWGT);
 
                 System.Diagnostics.Debug.WriteLine($"[GetFactoryWeight] Total factory weight (deduplicated): {totalFactoryWeight}");
 

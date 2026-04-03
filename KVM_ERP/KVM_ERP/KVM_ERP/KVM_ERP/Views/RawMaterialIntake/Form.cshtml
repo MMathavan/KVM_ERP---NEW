@@ -787,15 +787,14 @@
                 <th style="width:60px;">S.No</th>\
                 <th style="width:200px;">Product Type</th>\
                 <th style="width:250px;">Product</th>\
-                <th style="width:130px;">Weight(In KGS)</th>\
                 <th style="width:130px;">Supplier Yield(%)</th>\
+                <th style="width:130px;">Weight(In KGS)</th>\
                 <th style="width:80px;">Action</th>\
             </tr></thead>');
             var $tbody = $('<tbody></tbody>');
             var $tfoot = $('<tfoot><tr class="total-weights-row" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; font-weight: bold;">\
-                <td colspan="3" class="text-center" style="padding: 12px;">Total Weights</td>\
+                <td colspan="4" class="text-center" style="padding: 12px;">Total Weights</td>\
                 <td class="text-center" style="padding: 12px;"><span id="totalWeightDisplay">0.000 KG</span></td>\
-                <td></td>\
                 <td></td>\
             </tr></tfoot>');
             $table.append($thead).append($tbody).append($tfoot);
@@ -918,7 +917,7 @@
                 $gtd.append($gsel);
                 $ptd.append($psel);
 
-                $tr.append($sno, $gtd, $ptd, $weight, $yield, $act);
+                $tr.append($sno, $gtd, $ptd, $yield, $weight, $act);
                 $tbody.append($tr);
 
                 // Initialize Select2 on newly added dropdowns
@@ -990,6 +989,8 @@
                     }
                 });
             }
+
+            window.updateSupplierYields = updateSupplierYields;
 
             $('#addRowBtn').on('click', function(){ addRow(); });
             $tbody.on('click', '.removeRow', function(){
@@ -3143,7 +3144,7 @@
 
                         // Update derived displays after each weight update
                         updateTotalWeights();
-                        updateSupplierYields();
+                        if (window.updateSupplierYields) window.updateSupplierYields();
                         updateBalanceStocks();
                     }
                 },
@@ -3186,7 +3187,7 @@
         }
 
         $(document).on('input change', '#facAvgWeight', function () {
-            updateSupplierYields();
+            if (window.updateSupplierYields) window.updateSupplierYields();
         });
 
         // Function to calculate and update Balance Stock for each row
@@ -3457,8 +3458,8 @@
                 for (var key in allCalculations) {
                     var calc = allCalculations[key];
                     if (calc && calc.TRANDID == trandid) {
-                        var factoryWeight = parseFloat(calc.FACTORYWGT) || 0;
-                        productionQty += factoryWeight;
+                        var wastePWeight = parseFloat(calc.WASTEPWGT) || 0;
+                        productionQty += wastePWeight;
                         
                         // Check for latest date
                         if (calc.PRODDATE) {
@@ -3537,10 +3538,10 @@
                 var packingName = $tabPane.find('.nav-link').text() || $tabPane.attr('id') || 'Unknown';
                 
                 if (storedCalculation && storedCalculation.TRANDID == trandid) {
-                    var factoryWeight = parseFloat(storedCalculation.FACTORYWGT) || 0;
-                    if (factoryWeight > 0) {
-                        totalProduction += factoryWeight;
-                        console.log('- Found calculation from tab data for', packingName, '(TRANDID:', trandid, ') Factory Weight:', factoryWeight);
+                    var wastePWeight = parseFloat(storedCalculation.WASTEPWGT) || 0;
+                    if (wastePWeight > 0) {
+                        totalProduction += wastePWeight;
+                        console.log('- Found calculation from tab data for', packingName, '(TRANDID:', trandid, ') Factory Weight:', wastePWeight);
                     }
                 }
             });
@@ -3550,10 +3551,10 @@
                 for (var key in window.productionCalculations) {
                     var calc = window.productionCalculations[key];
                     if (calc && calc.TRANDID == trandid) {
-                        var factoryWeight = parseFloat(calc.FACTORYWGT) || 0;
-                        if (factoryWeight > 0) {
-                            totalProduction += factoryWeight;
-                            console.log('- Found calculation from database for TRANDID', trandid, 'Factory Weight:', factoryWeight);
+                        var wastePWeight = parseFloat(calc.WASTEPWGT) || 0;
+                        if (wastePWeight > 0) {
+                            totalProduction += wastePWeight;
+                            console.log('- Found calculation from database for TRANDID', trandid, 'Factory Weight:', wastePWeight);
                         }
                     }
                 }
@@ -3561,15 +3562,15 @@
             
             // Method 3: Try to get from any visible calculation results on the page
             if (totalProduction === 0) {
-                $('.factory-weight').each(function() {
-                    var factoryWeightText = $(this).text();
-                    var factoryWeight = parseFloat(factoryWeightText) || 0;
-                    if (factoryWeight > 0) {
+                $('.waste-p-weight').each(function() {
+                    var wastePWeightText = $(this).text();
+                    var wastePWeight = parseFloat(wastePWeightText) || 0;
+                    if (wastePWeight > 0) {
                         // Check if this belongs to our TRANDID (approximate check)
                         var $modal = $(this).closest('.modal');
                         if ($modal.length === 0 || $modal.is(':visible')) {
-                            totalProduction += factoryWeight;
-                            console.log('- Found factory weight from visible calculation:', factoryWeight);
+                            totalProduction += wastePWeight;
+                            console.log('- Found factory weight from visible calculation:', wastePWeight);
                         }
                     }
                 });
