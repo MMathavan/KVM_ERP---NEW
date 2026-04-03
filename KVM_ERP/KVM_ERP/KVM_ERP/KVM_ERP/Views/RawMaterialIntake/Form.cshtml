@@ -894,7 +894,7 @@
                 var $ptd = $('<td></td>');
                 var $headLessWeight = $('<td class="text-center align-middle"></td>').append('<span class="headless-weight-display text-muted">-</span>');
                 var $weight = $('<td class="text-center align-middle"></td>').append('<span class="factory-weight-display text-muted">-</span><br/><span class="balance-stock-display text-danger"></span>');
-                var $yield = $('<td class="text-right align-middle"></td>').append('<span class="supplier-yield-display text-muted">-</span>');
+                var $yield = $('<td class="text-center align-middle"></td>').append('<span class="supplier-yield-display text-muted">-</span>');
                 var $act = $('<td class="text-center"></td>');
                 var $del = $('<button type="button" class="btn btn-danger btn-sm removeRow"><i class="fa fa-trash"></i></button>');
                 
@@ -975,15 +975,15 @@
 
                 $tbody.children('tr').each(function () {
                     var $row = $(this);
-                    var weightText = $row.find('.factory-weight-display').text();
-                    var productionQty = 0;
-                    if (weightText && weightText !== '-') {
-                        var weightValue = parseFloat(weightText.replace(' KG', ''));
-                        if (!isNaN(weightValue)) {
-                            productionQty = weightValue;
+                    var peeledText = $row.find('.headless-weight-display').text();
+                    var peeledQty = 0;
+                    if (peeledText && peeledText !== '-') {
+                        var peeledValue = parseFloat(peeledText.replace(' KG', ''));
+                        if (!isNaN(peeledValue)) {
+                            peeledQty = peeledValue;
                         }
                     }
-                    var pct = (productionQty / facAvgWgt) * 100;
+                    var pct = (peeledQty / facAvgWgt) * 100;
                     if (isNaN(pct) || !isFinite(pct)) {
                         $row.find('.supplier-yield-display').text('-');
                     } else {
@@ -3194,6 +3194,8 @@
                             }
                         }
                     });
+
+                    if (window.updateSupplierYields) window.updateSupplierYields();
                 },
                 error: function() {
                     console.log('Error loading headless weight for TRANDID:', trandid);
@@ -3408,9 +3410,10 @@
                     
                     // Calculate production quantity from all factory weights for this TRANDID
                     var productionQty = calculateProductionQuantity(trandid);
+                    var peeledQty = calculatePeeledQuantity(trandid);
 
                     // Calculate Supplier Yield(%) based on Supplier Weight (FACAVGWGT)
-                    var supplierYieldPct = calculateSupplierYieldPercent(productionQty);
+                    var supplierYieldPct = calculateSupplierYieldPercent(peeledQty);
                     
                     // Get the latest date from product calculations for this TRANDID
                     var latestDate = getLatestProductionDate(trandid);
@@ -3498,15 +3501,19 @@
                     return;
                 }
                 
-                // Calculate production quantity from loaded calculations
+                // Calculate production quantity (Factory Weight) and Peeled + Weight from loaded calculations
                 var productionQty = 0;
+                var peeledQty = 0;
                 var latestDate = null;
                 
                 for (var key in allCalculations) {
                     var calc = allCalculations[key];
                     if (calc && calc.TRANDID == trandid) {
+                        var factoryWeight = parseFloat(calc.FACTORYWGT) || 0;
+                        productionQty += factoryWeight;
+
                         var wastePWeight = parseFloat(calc.WASTEPWGT) || 0;
-                        productionQty += wastePWeight;
+                        peeledQty += wastePWeight;
                         
                         // Check for latest date
                         if (calc.PRODDATE) {
@@ -3528,7 +3535,7 @@
                 // For first row: Client Weight - Production Quantity
                 // For subsequent rows: Previous Balance Stock - Current Production Quantity
                 var balanceStock = runningBalanceStock - productionQty;
-                var supplierYieldPct = calculateSupplierYieldPercent(productionQty);
+                var supplierYieldPct = calculateSupplierYieldPercent(peeledQty);
                 var dateDisplay = latestDate ? latestDate.toLocaleDateString() : 'N/A';
                 
                 console.log('Row', rowIndex, '- TRANDID:', trandid, 'Running Balance:', runningBalanceStock.toFixed(3), 'Production Qty:', productionQty.toFixed(3), 'New Balance Stock:', balanceStock.toFixed(3), 'Date:', dateDisplay);
@@ -3585,10 +3592,10 @@
                 var packingName = $tabPane.find('.nav-link').text() || $tabPane.attr('id') || 'Unknown';
                 
                 if (storedCalculation && storedCalculation.TRANDID == trandid) {
-                    var wastePWeight = parseFloat(storedCalculation.WASTEPWGT) || 0;
-                    if (wastePWeight > 0) {
-                        totalProduction += wastePWeight;
-                        console.log('- Found calculation from tab data for', packingName, '(TRANDID:', trandid, ') Factory Weight:', wastePWeight);
+                    var factoryWeight = parseFloat(storedCalculation.FACTORYWGT) || 0;
+                    if (factoryWeight > 0) {
+                        totalProduction += factoryWeight;
+                        console.log('- Found calculation from tab data for', packingName, '(TRANDID:', trandid, ') Factory Weight:', factoryWeight);
                     }
                 }
             });
@@ -3598,10 +3605,10 @@
                 for (var key in window.productionCalculations) {
                     var calc = window.productionCalculations[key];
                     if (calc && calc.TRANDID == trandid) {
-                        var wastePWeight = parseFloat(calc.WASTEPWGT) || 0;
-                        if (wastePWeight > 0) {
-                            totalProduction += wastePWeight;
-                            console.log('- Found calculation from database for TRANDID', trandid, 'Factory Weight:', wastePWeight);
+                        var factoryWeight = parseFloat(calc.FACTORYWGT) || 0;
+                        if (factoryWeight > 0) {
+                            totalProduction += factoryWeight;
+                            console.log('- Found calculation from database for TRANDID', trandid, 'Factory Weight:', factoryWeight);
                         }
                     }
                 }
@@ -3609,15 +3616,15 @@
             
             // Method 3: Try to get from any visible calculation results on the page
             if (totalProduction === 0) {
-                $('.waste-p-weight').each(function() {
-                    var wastePWeightText = $(this).text();
-                    var wastePWeight = parseFloat(wastePWeightText) || 0;
-                    if (wastePWeight > 0) {
+                $('.factory-weight').each(function() {
+                    var factoryWeightText = $(this).text();
+                    var factoryWeight = parseFloat(factoryWeightText) || 0;
+                    if (factoryWeight > 0) {
                         // Check if this belongs to our TRANDID (approximate check)
                         var $modal = $(this).closest('.modal');
                         if ($modal.length === 0 || $modal.is(':visible')) {
-                            totalProduction += wastePWeight;
-                            console.log('- Found factory weight from visible calculation:', wastePWeight);
+                            totalProduction += factoryWeight;
+                            console.log('- Found factory weight from visible calculation:', factoryWeight);
                         }
                     }
                 });
@@ -3625,6 +3632,44 @@
             
             console.log('=== Total Production Quantity for TRANDID', trandid, ':', totalProduction, '===');
             return totalProduction;
+        }
+
+        function calculatePeeledQuantity(trandid) {
+            var totalPeeled = 0;
+
+            $('.tab-pane').each(function() {
+                var storedCalculation = $(this).data('existing-calculation');
+                if (storedCalculation && storedCalculation.TRANDID == trandid) {
+                    totalPeeled += (parseFloat(storedCalculation.WASTEPWGT) || 0);
+                }
+            });
+
+            if (totalPeeled === 0 && window.productionCalculations) {
+                for (var key in window.productionCalculations) {
+                    var calc = window.productionCalculations[key];
+                    if (calc && calc.TRANDID == trandid) {
+                        totalPeeled += (parseFloat(calc.WASTEPWGT) || 0);
+                    }
+                }
+            }
+
+            if (totalPeeled === 0) {
+                $('#detailsTable tbody tr').each(function() {
+                    var $row = $(this);
+                    var rowTrandid = $row.data('trandid');
+                    if (rowTrandid == trandid) {
+                        var peeledText = $row.find('.headless-weight-display').text();
+                        if (peeledText && peeledText !== '-') {
+                            var peeledValue = parseFloat(peeledText.replace(' KG', ''));
+                            if (!isNaN(peeledValue)) {
+                                totalPeeled = peeledValue;
+                            }
+                        }
+                    }
+                });
+            }
+
+            return totalPeeled;
         }
 
         // Helper function to format date as dd/MM/yyyy
