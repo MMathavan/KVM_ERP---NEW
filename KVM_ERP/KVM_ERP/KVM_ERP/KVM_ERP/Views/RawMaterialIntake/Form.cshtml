@@ -788,12 +788,14 @@
                 <th style="width:200px;">Product Type</th>\
                 <th style="width:250px;">Product</th>\
                 <th style="width:130px;">Weight(In KGS)</th>\
+                <th style="width:130px;">Supplier Yield(%)</th>\
                 <th style="width:80px;">Action</th>\
             </tr></thead>');
             var $tbody = $('<tbody></tbody>');
             var $tfoot = $('<tfoot><tr class="total-weights-row" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; font-weight: bold;">\
                 <td colspan="3" class="text-center" style="padding: 12px;">Total Weights</td>\
                 <td class="text-center" style="padding: 12px;"><span id="totalWeightDisplay">0.000 KG</span></td>\
+                <td></td>\
                 <td></td>\
             </tr></tfoot>');
             $table.append($thead).append($tbody).append($tfoot);
@@ -891,6 +893,7 @@
                 var $gtd = $('<td></td>');
                 var $ptd = $('<td></td>');
                 var $weight = $('<td class="text-center align-middle"></td>').append('<span class="factory-weight-display text-muted">-</span><br/><span class="balance-stock-display text-danger"></span>');
+                var $yield = $('<td class="text-right align-middle"></td>').append('<span class="supplier-yield-display text-muted">-</span>');
                 var $act = $('<td class="text-center"></td>');
                 var $del = $('<button type="button" class="btn btn-danger btn-sm removeRow"><i class="fa fa-trash"></i></button>');
                 
@@ -915,7 +918,7 @@
                 $gtd.append($gsel);
                 $ptd.append($psel);
 
-                $tr.append($sno, $gtd, $ptd, $weight, $act);
+                $tr.append($sno, $gtd, $ptd, $weight, $yield, $act);
                 $tbody.append($tr);
 
                 // Initialize Select2 on newly added dropdowns
@@ -960,12 +963,41 @@
                 });
             }
 
+            function updateSupplierYields() {
+                var facAvgWgt = parseFloat($('#facAvgWeight').val());
+                if (isNaN(facAvgWgt) || facAvgWgt <= 0) {
+                    $tbody.children('tr').each(function () {
+                        $(this).find('.supplier-yield-display').text('-');
+                    });
+                    return;
+                }
+
+                $tbody.children('tr').each(function () {
+                    var $row = $(this);
+                    var weightText = $row.find('.factory-weight-display').text();
+                    var productionQty = 0;
+                    if (weightText && weightText !== '-') {
+                        var weightValue = parseFloat(weightText.replace(' KG', ''));
+                        if (!isNaN(weightValue)) {
+                            productionQty = weightValue;
+                        }
+                    }
+                    var pct = (productionQty / facAvgWgt) * 100;
+                    if (isNaN(pct) || !isFinite(pct)) {
+                        $row.find('.supplier-yield-display').text('-');
+                    } else {
+                        $row.find('.supplier-yield-display').text(pct.toFixed(3));
+                    }
+                });
+            }
+
             $('#addRowBtn').on('click', function(){ addRow(); });
             $tbody.on('click', '.removeRow', function(){
                 $(this).closest('tr').remove();
                 renumber();
                 // Update total weights after row removal
                 updateTotalWeights();
+                updateSupplierYields();
             });
 
             // Load existing rows
@@ -1049,11 +1081,31 @@
             var $c = $('#facAvgCount');
             if (!$w.length || !$c.length) return;
 
+            function canAutoFillFactoryField($el) {
+                if (!$el || !$el.length) return false;
+                if ($el.data('userEdited')) return false;
+                var raw = ($el.val() || '').toString().trim();
+                if (raw === '') return true;
+                var num = parseFloat(raw);
+                if (isNaN(num)) return true;
+                return num <= 0;
+            }
+
+            // Mark fields as user-edited to avoid overwriting user input
+            if (!$w.data('wireUserEdited')) {
+                $w.on('input change', function () { $(this).data('userEdited', true); });
+                $w.data('wireUserEdited', true);
+            }
+            if (!$c.data('wireUserEdited')) {
+                $c.on('input change', function () { $(this).data('userEdited', true); });
+                $c.data('wireUserEdited', true);
+            }
+
             var vals = resolveFactoryFieldsFromTabs();
-            if ((!$w.val() || $w.val() === '') && (vals.weight || vals.weight === 0)) {
+            if (canAutoFillFactoryField($w) && (vals.weight || vals.weight === 0)) {
                 $w.val(vals.weight);
             }
-            if ((!$c.val() || $c.val() === '') && (vals.count || vals.count === 0)) {
+            if (canAutoFillFactoryField($c) && (vals.count || vals.count === 0)) {
                 $c.val(vals.count);
             }
         }
@@ -1234,10 +1286,10 @@
                     
                     // Also set global Client Factory fields if present
                     if (data && data.success && data.calculation) {
-                        if ($('#facAvgWeight').length && !$('#facAvgWeight').val() && (data.calculation.FACAVGWGT || data.calculation.FACAVGWGT === 0)) {
+                        if ($('#facAvgWeight').length && !$('#facAvgWeight').data('userEdited') && (parseFloat($('#facAvgWeight').val()) || 0) <= 0 && (data.calculation.FACAVGWGT || data.calculation.FACAVGWGT === 0)) {
                             $('#facAvgWeight').val(data.calculation.FACAVGWGT);
                         }
-                        if ($('#facAvgCount').length && !$('#facAvgCount').val() && (data.calculation.FACAVGCOUNT || data.calculation.FACAVGCOUNT === 0)) {
+                        if ($('#facAvgCount').length && !$('#facAvgCount').data('userEdited') && (parseFloat($('#facAvgCount').val()) || 0) <= 0 && (data.calculation.FACAVGCOUNT || data.calculation.FACAVGCOUNT === 0)) {
                             $('#facAvgCount').val(data.calculation.FACAVGCOUNT);
                         }
                     }
@@ -1278,10 +1330,10 @@
                             }
                             
                             // Set global factory fields from first calculation
-                            if (!$('#facAvgWeight').val() && (calc.FACAVGWGT || calc.FACAVGWGT === 0)) {
+                            if (!$('#facAvgWeight').data('userEdited') && (parseFloat($('#facAvgWeight').val()) || 0) <= 0 && (calc.FACAVGWGT || calc.FACAVGWGT === 0)) {
                                 $('#facAvgWeight').val(calc.FACAVGWGT);
                             }
-                            if (!$('#facAvgCount').val() && (calc.FACAVGCOUNT || calc.FACAVGCOUNT === 0)) {
+                            if (!$('#facAvgCount').data('userEdited') && (parseFloat($('#facAvgCount').val()) || 0) <= 0 && (calc.FACAVGCOUNT || calc.FACAVGCOUNT === 0)) {
                                 $('#facAvgCount').val(calc.FACAVGCOUNT);
                             }
                             
@@ -1376,11 +1428,11 @@
                                 }
                                 
                                 // Set factory fields
-                                if (firstCalc.FACAVGWGT !== null && firstCalc.FACAVGWGT !== undefined) {
+                                if ($('#facAvgWeight').length && !$('#facAvgWeight').data('userEdited') && (parseFloat($('#facAvgWeight').val()) || 0) <= 0 && firstCalc.FACAVGWGT !== null && firstCalc.FACAVGWGT !== undefined) {
                                     $('#facAvgWeight').val(firstCalc.FACAVGWGT);
                                     console.log('✓ Factory Avg Weight set:', firstCalc.FACAVGWGT);
                                 }
-                                if (firstCalc.FACAVGCOUNT !== null && firstCalc.FACAVGCOUNT !== undefined) {
+                                if ($('#facAvgCount').length && !$('#facAvgCount').data('userEdited') && (parseFloat($('#facAvgCount').val()) || 0) <= 0 && firstCalc.FACAVGCOUNT !== null && firstCalc.FACAVGCOUNT !== undefined) {
                                     $('#facAvgCount').val(firstCalc.FACAVGCOUNT);
                                     console.log('✓ Factory Avg Count set:', firstCalc.FACAVGCOUNT);
                                 }
@@ -2003,10 +2055,10 @@
                         }, 100);
                     }
                     // Also set factory fields if found
-                    if (foundFacAvgWgt !== null && $('#facAvgWeight').length) {
+                    if (foundFacAvgWgt !== null && $('#facAvgWeight').length && !$('#facAvgWeight').data('userEdited') && (parseFloat($('#facAvgWeight').val()) || 0) <= 0) {
                         $('#facAvgWeight').val(foundFacAvgWgt);
                     }
-                    if (foundFacAvgCnt !== null && $('#facAvgCount').length) {
+                    if (foundFacAvgCnt !== null && $('#facAvgCount').length && !$('#facAvgCount').data('userEdited') && (parseFloat($('#facAvgCount').val()) || 0) <= 0) {
                         $('#facAvgCount').val(foundFacAvgCnt);
                     }
                 } catch (error) {
@@ -2063,17 +2115,17 @@
                                     console.log('Set date from server:', formattedDate);
                                     console.log('Server date field verification:', dateField.val());
                                 }
-                                // Also set factory fields from server response if present
+                                // Also set factory fields from server response if present and inputs are empty
                                 if (data.calculation) {
-                                    if ((data.calculation.FACAVGWGT || data.calculation.FACAVGWGT === 0) && $('#facAvgWeight').length) {
+                                    if ((data.calculation.FACAVGWGT || data.calculation.FACAVGWGT === 0) && $('#facAvgWeight').length && !$('#facAvgWeight').data('userEdited') && (parseFloat($('#facAvgWeight').val()) || 0) <= 0) {
                                         $('#facAvgWeight').val(data.calculation.FACAVGWGT);
                                     }
-                                    if ((data.calculation.FACAVGCOUNT || data.calculation.FACAVGCOUNT === 0) && $('#facAvgCount').length) {
+                                    if ((data.calculation.FACAVGCOUNT || data.calculation.FACAVGCOUNT === 0) && $('#facAvgCount').length && !$('#facAvgCount').data('userEdited') && (parseFloat($('#facAvgCount').val()) || 0) <= 0) {
                                         $('#facAvgCount').val(data.calculation.FACAVGCOUNT);
                                     }
                                 }
                             } catch (error) {
-                                console.error('Error setting date from server:', error);
+                                console.error('Error populating tab data:', error);
                             }
                         }
                     },
@@ -3068,32 +3120,35 @@
                 type: 'GET',
                 data: { trandid: trandid },
                 success: function(response) {
-                    if (response.success) {
+                    if (response && response.success) {
                         // Find the row with this TRANDID and update the weight display
                         var $tableBody = $('#detailsTable tbody');
                         $tableBody.children('tr').each(function() {
-                            var rowTrandid = $(this).data('trandid');
+                            var $row = $(this);
+                            var rowTrandid = $row.data('trandid');
                             if (rowTrandid == trandid) {
-                                var weightDisplay = $(this).find('.factory-weight-display');
+                                var weightDisplay = $row.find('.factory-weight-display');
                                 if (response.factoryWeight > 0) {
                                     var displayText = parseFloat(response.factoryWeight).toFixed(3) + ' KG';
                                     weightDisplay.text(displayText)
-                                                .removeClass('text-muted')
-                                                .addClass('text-success font-weight-bold');
+                                        .removeClass('text-muted')
+                                        .addClass('text-success');
                                 } else {
-                                    weightDisplay.text('-').removeClass('text-success font-weight-bold').addClass('text-muted');
+                                    weightDisplay.text('-')
+                                        .removeClass('text-success')
+                                        .addClass('text-muted');
                                 }
-                                
-                                // Update total weights after individual weight is updated
-                                updateTotalWeights();
-                                // Also recalculate Balance Stock so it reflects the latest weights
-                                updateBalanceStocks();
                             }
                         });
+
+                        // Update derived displays after each weight update
+                        updateTotalWeights();
+                        updateSupplierYields();
+                        updateBalanceStocks();
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log('Error getting factory weight for TRANDID:', trandid, 'Error:', error);
+                    console.error('Error loading factory weight:', status, error);
                 }
             });
         }
@@ -3129,6 +3184,10 @@
             // Update the total display
             $('#totalWeightDisplay').text(totalWeight.toFixed(3) + ' KG');
         }
+
+        $(document).on('input change', '#facAvgWeight', function () {
+            updateSupplierYields();
+        });
 
         // Function to calculate and update Balance Stock for each row
         // Uses the client weight and the per-row factory weights that are already loaded
@@ -3250,6 +3309,26 @@
             }
         }
 
+        function getSupplierWeightForYield() {
+            var facAvgWgt = parseFloat($('#facAvgWeight').val());
+            if (isNaN(facAvgWgt) || facAvgWgt <= 0) {
+                return 0;
+            }
+            return facAvgWgt;
+        }
+
+        function calculateSupplierYieldPercent(productionQty) {
+            var facAvgWgt = getSupplierWeightForYield();
+            if (!facAvgWgt || facAvgWgt <= 0) {
+                return 0;
+            }
+            var pct = (productionQty / facAvgWgt) * 100;
+            if (isNaN(pct) || !isFinite(pct)) {
+                return 0;
+            }
+            return pct;
+        }
+
         function populateProductionTable(clientWeight) {
             console.log('Populating production table with client weight:', clientWeight);
             
@@ -3281,6 +3360,9 @@
                     
                     // Calculate production quantity from all factory weights for this TRANDID
                     var productionQty = calculateProductionQuantity(trandid);
+
+                    // Calculate Supplier Yield(%) based on Supplier Weight (FACAVGWGT)
+                    var supplierYieldPct = calculateSupplierYieldPercent(productionQty);
                     
                     // Get the latest date from product calculations for this TRANDID
                     var latestDate = getLatestProductionDate(trandid);
@@ -3298,6 +3380,7 @@
                     $tr.append('<td>' + productType + '</td>');
                     $tr.append('<td>' + product + '</td>');
                     $tr.append('<td class="text-right">' + productionQty.toFixed(3) + '</td>');
+                    $tr.append('<td class="text-right">' + supplierYieldPct.toFixed(3) + '</td>');
                     $tr.append('<td class="text-right">' + balanceStock.toFixed(3) + '</td>');
                     $tr.append('<td class="text-center">' + (latestDate || 'N/A') + '</td>');
                     
@@ -3311,14 +3394,14 @@
                 // If no rows, show message
                 if (rowIndex === 1) {
                     console.log('No transaction details found - showing empty message');
-                    var $emptyRow = $('<tr><td colspan="6" class="text-center text-muted">No transaction details available</td></tr>');
+                    var $emptyRow = $('<tr><td colspan="7" class="text-center text-muted">No transaction details available</td></tr>');
                     $tbody.append($emptyRow);
                 }
                 
                 console.log('Production table populated with', (rowIndex - 1), 'rows');
             } catch (error) {
                 console.error('Error populating production table:', error);
-                var $errorRow = $('<tr><td colspan="6" class="text-center text-danger">Error loading production data: ' + error.message + '</td></tr>');
+                var $errorRow = $('<tr><td colspan="7" class="text-center text-danger">Error loading production data: ' + error.message + '</td></tr>');
                 $tbody.append($errorRow);
             }
         }
@@ -3397,6 +3480,7 @@
                 // For first row: Client Weight - Production Quantity
                 // For subsequent rows: Previous Balance Stock - Current Production Quantity
                 var balanceStock = runningBalanceStock - productionQty;
+                var supplierYieldPct = calculateSupplierYieldPercent(productionQty);
                 var dateDisplay = latestDate ? latestDate.toLocaleDateString() : 'N/A';
                 
                 console.log('Row', rowIndex, '- TRANDID:', trandid, 'Running Balance:', runningBalanceStock.toFixed(3), 'Production Qty:', productionQty.toFixed(3), 'New Balance Stock:', balanceStock.toFixed(3), 'Date:', dateDisplay);
@@ -3413,6 +3497,7 @@
                 $tr.append('<td>' + productType + '</td>');
                 $tr.append('<td>' + product + '</td>');
                 $tr.append('<td class="text-right">' + productionQty.toFixed(3) + '</td>');
+                $tr.append('<td class="text-right">' + supplierYieldPct.toFixed(3) + '</td>');
                 $tr.append('<td class="text-right">' + balanceStock.toFixed(3) + '</td>');
                 $tr.append('<td class="text-center">' + dateDisplay + '</td>');
                 
@@ -3425,12 +3510,20 @@
             
             // If no rows, show message
             if (rowIndex === 1) {
-                var $emptyRow = $('<tr><td colspan="6" class="text-center text-muted">No transaction details available</td></tr>');
+                var $emptyRow = $('<tr><td colspan="7" class="text-center text-muted">No transaction details available</td></tr>');
                 $tbody.append($emptyRow);
             }
             
             console.log('Production table populated with', (rowIndex - 1), 'rows');
         }
+
+        $(document).on('input change', '#facAvgWeight', function () {
+            if (!$('#productionModal').is(':visible')) {
+                return;
+            }
+            var clientWeight = parseFloat($('#CLIENTWGHT').val()) || 0;
+            populateProductionTableWithData(clientWeight, window.productionCalculations || {});
+        });
 
         function calculateProductionQuantity(trandid) {
             var totalProduction = 0;
@@ -4134,6 +4227,7 @@
                                         <th>Product Type</th>
                                         <th>Product</th>
                                         <th>Production Quantity (KG)</th>
+                                        <th>Supplier Yield(%)</th>
                                         <th>Balance Stock (KG)</th>
                                         <th>Date</th>
                                     </tr>
