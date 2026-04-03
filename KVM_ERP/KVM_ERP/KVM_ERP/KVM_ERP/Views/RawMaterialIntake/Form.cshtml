@@ -787,13 +787,14 @@
                 <th style="width:60px;">S.No</th>\
                 <th style="width:200px;">Product Type</th>\
                 <th style="width:250px;">Product</th>\
+                <th style="width:130px;">HeadLess Weight</th>\
                 <th style="width:130px;">Supplier Yield(%)</th>\
                 <th style="width:130px;">Weight(In KGS)</th>\
                 <th style="width:80px;">Action</th>\
             </tr></thead>');
             var $tbody = $('<tbody></tbody>');
             var $tfoot = $('<tfoot><tr class="total-weights-row" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; font-weight: bold;">\
-                <td colspan="4" class="text-center" style="padding: 12px;">Total Weights</td>\
+                <td colspan="5" class="text-center" style="padding: 12px;">Total Weights</td>\
                 <td class="text-center" style="padding: 12px;"><span id="totalWeightDisplay">0.000 KG</span></td>\
                 <td></td>\
             </tr></tfoot>');
@@ -891,6 +892,7 @@
                 var $sno = $('<td class="text-center align-middle"></td>').text(idx);
                 var $gtd = $('<td></td>');
                 var $ptd = $('<td></td>');
+                var $headLessWeight = $('<td class="text-center align-middle"></td>').append('<span class="headless-weight-display text-muted">-</span>');
                 var $weight = $('<td class="text-center align-middle"></td>').append('<span class="factory-weight-display text-muted">-</span><br/><span class="balance-stock-display text-danger"></span>');
                 var $yield = $('<td class="text-right align-middle"></td>').append('<span class="supplier-yield-display text-muted">-</span>');
                 var $act = $('<td class="text-center"></td>');
@@ -917,7 +919,7 @@
                 $gtd.append($gsel);
                 $ptd.append($psel);
 
-                $tr.append($sno, $gtd, $ptd, $yield, $weight, $act);
+                $tr.append($sno, $gtd, $ptd, $headLessWeight, $yield, $weight, $act);
                 $tbody.append($tr);
 
                 // Initialize Select2 on newly added dropdowns
@@ -3142,6 +3144,8 @@
                             }
                         });
 
+                        updateHeadLessWeightDisplay(trandid);
+
                         // Update derived displays after each weight update
                         updateTotalWeights();
                         if (window.updateSupplierYields) window.updateSupplierYields();
@@ -3150,6 +3154,49 @@
                 },
                 error: function(xhr, status, error) {
                     console.error('Error loading factory weight:', status, error);
+                }
+            });
+        }
+
+        function updateHeadLessWeightDisplay(trandid) {
+            if (!trandid || trandid <= 0) return;
+
+            $.ajax({
+                url: '@Url.Action("GetAllProductCalculations", "RawMaterialIntake")',
+                type: 'GET',
+                data: { trandid: trandid },
+                success: function(resp) {
+                    if (!resp || !resp.success || !Array.isArray(resp.calculations)) {
+                        return;
+                    }
+
+                    var headLessTotal = 0;
+                    resp.calculations.forEach(function(calc) {
+                        if (calc) {
+                            headLessTotal += (parseFloat(calc.WASTEPWGT) || 0);
+                        }
+                    });
+
+                    var $tableBody = $('#detailsTable tbody');
+                    $tableBody.children('tr').each(function() {
+                        var $row = $(this);
+                        var rowTrandid = $row.data('trandid');
+                        if (rowTrandid == trandid) {
+                            var headLessDisplay = $row.find('.headless-weight-display');
+                            if (headLessTotal > 0) {
+                                headLessDisplay.text(headLessTotal.toFixed(3) + ' KG')
+                                    .removeClass('text-muted')
+                                    .addClass('text-success');
+                            } else {
+                                headLessDisplay.text('-')
+                                    .removeClass('text-success')
+                                    .addClass('text-muted');
+                            }
+                        }
+                    });
+                },
+                error: function() {
+                    console.log('Error loading headless weight for TRANDID:', trandid);
                 }
             });
         }
