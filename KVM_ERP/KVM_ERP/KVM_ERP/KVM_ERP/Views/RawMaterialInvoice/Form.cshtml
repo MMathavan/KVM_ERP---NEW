@@ -1292,6 +1292,7 @@
 
         function loadInvoiceTaxFactors(invoiceId) {
             console.log('loadInvoiceTaxFactors called for invoiceId:', invoiceId);
+            var isApprovalMode = @(ViewBag.IsApprovalMode != null && ViewBag.IsApprovalMode == true ? "true" : "false");
             
             // IMPORTANT: Load cost factors FIRST, then load tax data
             $.ajax({
@@ -1306,7 +1307,7 @@
                         $.ajax({
                             url: '@Url.Action("GetInvoiceTaxFactors", "RawMaterialInvoice")',
                             type: 'POST',
-                            data: { invoiceId: invoiceId },
+                            data: { invoiceId: invoiceId, isApprovalMode: isApprovalMode },
                             success: function (response) {
                                 console.log('Tax factors response:', response);
                                 console.log('Tax factors data:', JSON.stringify(response.data, null, 2));
@@ -1315,12 +1316,13 @@
                                     
                                     // Clear existing tax rows
                                     $('#taxTableBody').empty();
-                                    taxData = response.data; // Store tax data
+                                    taxData = response.data.map(normalizeTaxFactor); // Store tax data
+                                    updateManualTaxDisplay();
                                     
                                     // Calculate and display tax totals on main form
                                     var totalTax = 0;
-                                    response.data.forEach(function(tax) {
-                                        totalTax += parseFloat(tax.DEDVALUE) || 0;
+                                    taxData.forEach(function(tax) {
+                                        totalTax += tax.DEDVALUE;
                                     });
                                     
                                     // Update main form display
@@ -1332,7 +1334,7 @@
                                     calculateGrossAmount();
                                     
                                     // Add each saved tax factor as a row
-                                    response.data.forEach(function(tax, index) {
+                                    taxData.forEach(function(tax, index) {
                                         addTaxRow();
                                         
                                         // Wait a bit for the row to be added, then populate it
@@ -1395,7 +1397,7 @@
                                         console.log('Updating tax totals after row population...');
                                         updateTaxTotals();
                                         updateManualTaxDisplay(); // Display manual taxes on main form
-                                    }, 100 * response.data.length + 300);
+                                    }, 100 * taxData.length + 300);
                                 } else {
                                     console.log('No tax factors found or empty response');
                                     taxData = [];
@@ -2758,7 +2760,7 @@
             // Add manual cost factors from Tax popup (if any)
             if (taxData && taxData.length > 0) {
                 taxData.forEach(function(tax) {
-                    manualCostFactorTotal += tax.DEDVALUE || 0;
+                    manualCostFactorTotal += parseFloat(tax.DEDVALUE) || 0;
                 });
             }
             
@@ -2777,7 +2779,7 @@
             $('#otherChargesRow').remove();
             
             // Show manual cost factors as separate line if present
-            if (manualCostFactorTotal > 0) {
+            if (false && manualCostFactorTotal !== 0) {
                 // Show additional cost factors below GST
                 var costFactorHtml = '<div style="margin-bottom: 8px;"><strong>Other Charges: </strong><span class="text-info" style="font-size: 18px; font-weight: bold; margin-left: 10px;">₹ ' + manualCostFactorTotal.toFixed(2) + '</span></div>';
                 $('#gstBreakdown').append('<div id="otherChargesRow">' + costFactorHtml + '</div>');
@@ -2807,7 +2809,7 @@
             $('#grandTotalDisplay').text('₹ 0.00');
             // Reset GST display
             $('#noTaxRow').show();
-            $('#cgstRow, #sgstRow, #igstRow, #otherChargesRow').hide();
+            $('#cgstRow, #sgstRow, #igstRow').hide();
         }
 
         // Tax Modal Functions
@@ -2815,6 +2817,22 @@
         var taxRowIndex = 0;
         var taxRows = [];
         var taxData = []; // Store tax calculation data
+
+        function normalizeTaxFactor(tax) {
+            return {
+                CFID: parseInt(tax.CFID) || 0,
+                CFDESC: tax.CFDESC || '',
+                CFEXPR: parseFloat(tax.CFEXPR) || 0,
+                CFMODE: parseInt(tax.CFMODE) || 0,
+                CFTYPE: parseInt(tax.CFTYPE) || 0,
+                DEDVALUE: parseFloat(tax.DEDVALUE) || 0,
+                CFOPTN: parseInt(tax.CFOPTN) || 0,
+                DORDRID: parseInt(tax.DORDRID) || 0,
+                CGSTEXPRN: parseFloat(tax.CGSTEXPRN) || 0,
+                SGSTEXPRN: parseFloat(tax.SGSTEXPRN) || 0,
+                IGSTEXPRN: parseFloat(tax.IGSTEXPRN) || 0
+            };
+        }
 
         function openTaxModal() {
             // Load cost factors
@@ -3021,7 +3039,7 @@
                         igstExprn = cfExpr;  // Save IGST percentage (e.g., 18)
                     }
                     
-                    taxData.push({
+                    taxData.push(normalizeTaxFactor({
                         CFID: parseInt(cfId),
                         CFDESC: cfSelect.find('option:selected').text(),
                         CFEXPR: cfExpr,
@@ -3033,7 +3051,7 @@
                         CGSTEXPRN: cgstExprn,  // CGST percentage from CFEXPR if CGST
                         SGSTEXPRN: sgstExprn,  // SGST percentage from CFEXPR if SGST
                         IGSTEXPRN: igstExprn   // IGST percentage from CFEXPR if IGST
-                    });
+                    }));
                 }
             });
             

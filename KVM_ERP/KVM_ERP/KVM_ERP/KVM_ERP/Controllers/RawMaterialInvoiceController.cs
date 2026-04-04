@@ -28,9 +28,13 @@ namespace KVM_ERP.Controllers
 
                 IF OBJECT_ID('TRANSACTIONDETAIL_APPROVAL', 'U') IS NULL
                     THROW 50002, 'Missing table TRANSACTIONDETAIL_APPROVAL', 1;
+
+                IF OBJECT_ID('TRANSACTIONMASTERFACTOR_APPROVAL', 'U') IS NULL
+                    THROW 50003, 'Missing table TRANSACTIONMASTERFACTOR_APPROVAL', 1;
             ");
 
             context.Database.ExecuteSqlCommand(@"
+                DELETE FROM TRANSACTIONMASTERFACTOR_APPROVAL WHERE TRANMID = @p0;
                 DELETE FROM TRANSACTIONDETAIL_APPROVAL WHERE TRANMID = @p0;
                 DELETE FROM TRANSACTIONMASTER_APPROVAL WHERE TRANMID = @p0;
             ", tranMId);
@@ -64,6 +68,21 @@ namespace KVM_ERP.Controllers
                 FROM TRANSACTIONDETAIL td
                 WHERE td.TRANMID = @p0;
             ", tranMId, currentUser);
+
+            context.Database.ExecuteSqlCommand(@"
+                INSERT INTO TRANSACTIONMASTERFACTOR_APPROVAL
+                (TRANMID, CFID, DEDEXPRN, DEDMODE, DEDTYPE, DEDORDR,
+                 CFOPTN, DORDRID, DEDVALUE, TRANCFDESC, CFHSNID,
+                 TRANCFCGSTEXPRN, TRANCFSGSTEXPRN, TRANCFIGSTEXPRN,
+                 TRANCFCGSTAMT, TRANCFSGSTAMT, TRANCFIGSTAMT)
+                SELECT
+                 tmf.TRANMID, tmf.CFID, tmf.DEDEXPRN, tmf.DEDMODE, tmf.DEDTYPE, tmf.DEDORDR,
+                 tmf.CFOPTN, tmf.DORDRID, tmf.DEDVALUE, tmf.TRANCFDESC, tmf.CFHSNID,
+                 tmf.TRANCFCGSTEXPRN, tmf.TRANCFSGSTEXPRN, tmf.TRANCFIGSTEXPRN,
+                 tmf.TRANCFCGSTAMT, tmf.TRANCFSGSTAMT, tmf.TRANCFIGSTAMT
+                FROM TRANSACTIONMASTERFACTOR tmf
+                WHERE tmf.TRANMID = @p0;
+            ", tranMId);
         }
 
         private void SaveApprovalEditsToApprovalTables(InvoiceSaveModel model, string currentUser)
@@ -81,6 +100,9 @@ namespace KVM_ERP.Controllers
 
                 IF OBJECT_ID('TRANSACTIONDETAIL_APPROVAL', 'U') IS NULL
                     THROW 50002, 'Missing table TRANSACTIONDETAIL_APPROVAL', 1;
+
+                IF OBJECT_ID('TRANSACTIONMASTERFACTOR_APPROVAL', 'U') IS NULL
+                    THROW 50003, 'Missing table TRANSACTIONMASTERFACTOR_APPROVAL', 1;
             ");
 
             var approvalExists = context.Database.SqlQuery<int>(@"
@@ -159,11 +181,60 @@ namespace KVM_ERP.Controllers
                 WHERE TRANMID = @p0
             ", tranMId).FirstOrDefault() ?? new ApprovalGst();
 
-            // Factors are stored in TRANSACTIONMASTERFACTOR (same table used by print)
+            if (model.TaxFactors != null && model.TaxFactors.Count > 0)
+            {
+                context.Database.ExecuteSqlCommand(@"
+                    DELETE FROM TRANSACTIONMASTERFACTOR_APPROVAL
+                    WHERE TRANMID = @p0
+                ", tranMId);
+
+                int taxOrder = 1;
+                foreach (var tax in model.TaxFactors)
+                {
+                    context.Database.ExecuteSqlCommand(@"
+                        INSERT INTO TRANSACTIONMASTERFACTOR_APPROVAL (
+                            TRANMID, CFID, DEDEXPRN, DEDMODE, DEDTYPE, DEDORDR,
+                            CFOPTN, DORDRID, DEDVALUE, TRANCFDESC, CFHSNID,
+                            TRANCFCGSTEXPRN, TRANCFSGSTEXPRN, TRANCFIGSTEXPRN,
+                            TRANCFCGSTAMT, TRANCFSGSTAMT, TRANCFIGSTAMT
+                        ) VALUES (
+                            @p0, @p1, @p2, @p3, @p4, @p5,
+                            @p6, @p7, @p8, @p9, @p10,
+                            @p11, @p12, @p13, @p14, @p15, @p16
+                        )
+                    ",
+                    tranMId,
+                    tax.CFID,
+                    tax.CFEXPR,
+                    tax.CFMODE,
+                    tax.CFTYPE,
+                    taxOrder++,
+                    tax.CFOPTN,
+                    tax.DORDRID,
+                    tax.DEDVALUE,
+                    tax.CFDESC,
+                    0,
+                    tax.CGSTEXPRN,
+                    tax.SGSTEXPRN,
+                    tax.IGSTEXPRN,
+                    0,
+                    0,
+                    0);
+                }
+            }
+            else
+            {
+                context.Database.ExecuteSqlCommand(@"
+                    DELETE FROM TRANSACTIONMASTERFACTOR_APPROVAL
+                    WHERE TRANMID = @p0
+                ", tranMId);
+            }
+
+            // Approval factors are isolated in TRANSACTIONMASTERFACTOR_APPROVAL.
             // DEDMODE: 0 => '+', 1 => '-'
             var factorSignedTotal = context.Database.SqlQuery<decimal>(@"
                 SELECT ISNULL(SUM(CASE WHEN CAST(DEDMODE AS INT) = 0 THEN ISNULL(DEDVALUE, 0) ELSE -ISNULL(DEDVALUE, 0) END), 0)
-                FROM TRANSACTIONMASTERFACTOR
+                FROM TRANSACTIONMASTERFACTOR_APPROVAL
                 WHERE TRANMID = @p0
             ", tranMId).FirstOrDefault();
 
@@ -415,7 +486,9 @@ namespace KVM_ERP.Controllers
 
                 // STEP 2: Delete tax factors
                 context.Database.ExecuteSqlCommand(
-                    "DELETE FROM TRANSACTIONMASTERFACTOR WHERE TRANMID = @p0",
+                    @"DELETE FROM TRANSACTIONMASTERFACTOR WHERE TRANMID = @p0;
+                      IF OBJECT_ID('TRANSACTIONMASTERFACTOR_APPROVAL', 'U') IS NOT NULL
+                          DELETE FROM TRANSACTIONMASTERFACTOR_APPROVAL WHERE TRANMID = @p0;",
                     id
                 );
 
@@ -613,9 +686,10 @@ namespace KVM_ERP.Controllers
                             WHERE TRANMID = @p0 AND REGSTRID = 2
                         ", id.Value).FirstOrDefault() ?? new ApprovalGst();
 
-                        var factorSignedTotal = context.Database.SqlQuery<decimal>(@"
+                        var factorTable = isApprovalMode ? "TRANSACTIONMASTERFACTOR_APPROVAL" : "TRANSACTIONMASTERFACTOR";
+                        var factorSignedTotal = context.Database.SqlQuery<decimal>($@"
                             SELECT ISNULL(SUM(CASE WHEN CAST(DEDMODE AS INT) = 0 THEN ISNULL(DEDVALUE, 0) ELSE -ISNULL(DEDVALUE, 0) END), 0)
-                            FROM TRANSACTIONMASTERFACTOR
+                            FROM {factorTable}
                             WHERE TRANMID = @p0
                         ", id.Value).FirstOrDefault();
 
@@ -1147,13 +1221,15 @@ namespace KVM_ERP.Controllers
 
         // Get invoice tax factors for editing
         [HttpPost]
-        public JsonResult GetInvoiceTaxFactors(int invoiceId)
+        public JsonResult GetInvoiceTaxFactors(int invoiceId, bool isApprovalMode = false)
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine($"GetInvoiceTaxFactors called for invoiceId: {invoiceId}");
+                System.Diagnostics.Debug.WriteLine($"GetInvoiceTaxFactors called for invoiceId: {invoiceId}, isApprovalMode: {isApprovalMode}");
                 
-                var taxFactors = context.Database.SqlQuery<TaxFactorEditViewModel>(@"
+                var factorTable = isApprovalMode ? "TRANSACTIONMASTERFACTOR_APPROVAL" : "TRANSACTIONMASTERFACTOR";
+
+                var taxFactors = context.Database.SqlQuery<TaxFactorEditViewModel>($@"
                     SELECT 
                         tmf.CFID,
                         cf.CFDESC,
@@ -1166,7 +1242,7 @@ namespace KVM_ERP.Controllers
                         ISNULL(tmf.TRANCFCGSTEXPRN, 0) as CGSTEXPRN,
                         ISNULL(tmf.TRANCFSGSTEXPRN, 0) as SGSTEXPRN,
                         ISNULL(tmf.TRANCFIGSTEXPRN, 0) as IGSTEXPRN
-                    FROM TRANSACTIONMASTERFACTOR tmf
+                    FROM {factorTable} tmf
                     LEFT JOIN COSTFACTORMASTER cf ON tmf.CFID = cf.CFID
                     WHERE tmf.TRANMID = @p0
                     ORDER BY tmf.DEDORDR
@@ -2336,14 +2412,15 @@ namespace KVM_ERP.Controllers
                     ).ToList();
 
                 // Get tax factors
+                var printFactorTable = useApproval ? "TRANSACTIONMASTERFACTOR_APPROVAL" : "TRANSACTIONMASTERFACTOR";
                 invoice.TaxFactors = context.Database.SqlQuery<TaxFactorPrintViewModel>(
-                    @"SELECT tmf.TRANMFID, 
+                    $@"SELECT tmf.TRANMFID, 
                              ISNULL(tmf.TRANCFDESC, cf.CFDESC) as CFDESC,
                              ISNULL(CAST(tmf.CFOPTN AS INT), 0) as OPTNVALUE,
                              ISNULL(tmf.DEDEXPRN, 0) as CFRATE,
                              ISNULL(tmf.DEDVALUE, 0) as CFAMT,
                              ISNULL(CAST(tmf.DEDMODE AS INT), 0) as CFMODE
-                      FROM TRANSACTIONMASTERFACTOR tmf
+                      FROM {printFactorTable} tmf
                       INNER JOIN COSTFACTORMASTER cf ON tmf.CFID = cf.CFID
                       WHERE tmf.TRANMID = @p0
                       ORDER BY tmf.DEDORDR",
@@ -2354,9 +2431,9 @@ namespace KVM_ERP.Controllers
                 // Recompute only as a fallback for older invoices where TRANNAMT was not stored.
                 if (invoice.TRANNAMT == 0)
                 {
-                    var factorSignedTotalPrint = context.Database.SqlQuery<decimal>(@"
+                    var factorSignedTotalPrint = context.Database.SqlQuery<decimal>($@"
                         SELECT ISNULL(SUM(CASE WHEN CAST(DEDMODE AS INT) = 0 THEN ISNULL(DEDVALUE, 0) ELSE -ISNULL(DEDVALUE, 0) END), 0)
-                        FROM TRANSACTIONMASTERFACTOR
+                        FROM {printFactorTable}
                         WHERE TRANMID = @p0
                     ", id).FirstOrDefault();
 
