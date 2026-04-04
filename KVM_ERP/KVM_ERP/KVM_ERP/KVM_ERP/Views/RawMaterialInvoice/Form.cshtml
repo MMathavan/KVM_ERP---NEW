@@ -2764,8 +2764,11 @@
             
             var totalTax = hsnGSTTotal + manualCostFactorTotal;
 
-            // Grand Total should be the sum of Net Amount from selected rows
-            var grandTotal = totalNetAmount;
+            // Grand Total should include:
+            // - Net Amount from selected rows
+            // - HSN GST totals
+            // - Manual cost factors (signed; TDS will be negative)
+            var grandTotal = totalNetAmount + hsnGSTTotal + manualCostFactorTotal;
 
             // Update Grand Total display
             $('#grandTotalDisplay').text('₹ ' + grandTotal.toFixed(2));
@@ -2962,16 +2965,34 @@
             $('.amount-output').each(function() {
                 totalTax += parseFloat($(this).val()) || 0;
             });
-            
-            // Use selected items total for calculation
-            var selectedTotal = getSelectedItemsTotal();
-            var grandTotal = selectedTotal + totalTax;
+
+            function parseCurrencyToNumber(value) {
+                if (value === null || value === undefined) return 0;
+                var text = ('' + value).trim();
+                text = text.replace(/₹/g, '').replace(/,/g, '').trim();
+                var num = parseFloat(text);
+                return isNaN(num) ? 0 : num;
+            }
+
+            // In the main breakup, Grand Total already includes any previously applied manual factors (taxData).
+            // The modal footer should show the impact of the CURRENT modal rows, without double-counting
+            // any manual factors already applied.
+            var currentBreakupGrandTotal = parseCurrencyToNumber($('#grandTotalDisplay').text());
+            var existingManualFactorTotal = 0;
+            if (taxData && taxData.length > 0) {
+                taxData.forEach(function(tax) {
+                    existingManualFactorTotal += (tax.DEDVALUE || 0);
+                });
+            }
+
+            var baseGrandTotalWithoutManual = currentBreakupGrandTotal - existingManualFactorTotal;
+            var grandTotal = baseGrandTotalWithoutManual + totalTax;
             
             // Update modal footer totals
             $('#totalTaxAmount').text('₹ ' + totalTax.toFixed(2));
             $('#grandTotal').text('₹ ' + grandTotal.toFixed(2));
             
-            console.log('Tax Totals Updated - Selected Total: ₹' + selectedTotal.toFixed(2) + ', Tax: ₹' + totalTax.toFixed(2) + ', Grand Total: ₹' + grandTotal.toFixed(2));
+            console.log('Tax Totals Updated - Tax: ₹' + totalTax.toFixed(2) + ', Grand Total: ₹' + grandTotal.toFixed(2));
         }
 
         function applyTaxCalculation() {

@@ -595,7 +595,31 @@ namespace KVM_ERP.Controllers
                         ViewBag.Status = invoice.DISPSTATUS;
                         ViewBag.SupplierId = invoice.TRANREFID;
                         ViewBag.InvoiceIncentiveAmount = invoice.TRANINCAMT;
-                        ViewBag.InvoiceGrandTotal = invoice.TRANNAMT; // Saved Grand Total (TRANNAMT)
+
+                        // Recompute Grand Total using saved factors (e.g., TDS) so edit screen matches calculations.
+                        // TRANDNAMT is treated as the base (net amount), then GST + signed factors are applied.
+                        var netAmount = context.Database.SqlQuery<decimal>(@"
+                            SELECT ISNULL(SUM(ISNULL(TRANDNAMT, 0)), 0)
+                            FROM TRANSACTIONDETAIL
+                            WHERE TRANMID = @p0
+                        ", id.Value).FirstOrDefault();
+
+                        var gst = context.Database.SqlQuery<ApprovalGst>(@"
+                            SELECT
+                                ISNULL(TRANCGSTAMT, 0) as CGST,
+                                ISNULL(TRANSGSTAMT, 0) as SGST,
+                                ISNULL(TRANIGSTAMT, 0) as IGST
+                            FROM TRANSACTIONMASTER
+                            WHERE TRANMID = @p0 AND REGSTRID = 2
+                        ", id.Value).FirstOrDefault() ?? new ApprovalGst();
+
+                        var factorSignedTotal = context.Database.SqlQuery<decimal>(@"
+                            SELECT ISNULL(SUM(CASE WHEN CAST(DEDMODE AS INT) = 0 THEN ISNULL(DEDVALUE, 0) ELSE -ISNULL(DEDVALUE, 0) END), 0)
+                            FROM TRANSACTIONMASTERFACTOR
+                            WHERE TRANMID = @p0
+                        ", id.Value).FirstOrDefault();
+
+                        ViewBag.InvoiceGrandTotal = netAmount + gst.CGST + gst.SGST + gst.IGST + factorSignedTotal;
                         ViewBag.IsEdit = true;
                         ViewBag.EditId = id.Value;
                         
@@ -2325,6 +2349,31 @@ namespace KVM_ERP.Controllers
                       ORDER BY tmf.DEDORDR",
                     id
                 ).ToList();
+
+                // Print should show the same saved grand total that was calculated on the form.
+                // Recompute only as a fallback for older invoices where TRANNAMT was not stored.
+                if (invoice.TRANNAMT == 0)
+                {
+                    var factorSignedTotalPrint = context.Database.SqlQuery<decimal>(@"
+                        SELECT ISNULL(SUM(CASE WHEN CAST(DEDMODE AS INT) = 0 THEN ISNULL(DEDVALUE, 0) ELSE -ISNULL(DEDVALUE, 0) END), 0)
+                        FROM TRANSACTIONMASTERFACTOR
+                        WHERE TRANMID = @p0
+                    ", id).FirstOrDefault();
+
+                    var netAmountPrint = useApproval
+                        ? context.Database.SqlQuery<decimal>(@"
+                            SELECT ISNULL(SUM(ISNULL(TRANDNAMT, 0)), 0)
+                            FROM TRANSACTIONDETAIL_APPROVAL
+                            WHERE TRANMID = @p0
+                        ", id).FirstOrDefault()
+                        : context.Database.SqlQuery<decimal>(@"
+                            SELECT ISNULL(SUM(ISNULL(TRANDNAMT, 0)), 0)
+                            FROM TRANSACTIONDETAIL
+                            WHERE TRANMID = @p0
+                        ", id).FirstOrDefault();
+
+                    invoice.TRANNAMT = netAmountPrint + invoice.CGSTAMT + invoice.SGSTAMT + invoice.IGSTAMT + factorSignedTotalPrint;
+                }
 
                 return View(invoice);
             }
