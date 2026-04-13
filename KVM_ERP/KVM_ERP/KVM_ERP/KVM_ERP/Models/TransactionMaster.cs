@@ -30,6 +30,10 @@ namespace KVM_ERP.Models
         [Column("VECHNO")]
         public string VECHNO { get; set; }
 
+        [MaxLength(50)]
+        [Column("STOCKNAME")]
+        public string STOCKNAME { get; set; }
+
         [Required]
         [Column("CLIENTWGHT")]
         public decimal CLIENTWGHT { get; set; }

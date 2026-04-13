@@ -146,6 +146,7 @@ namespace KVM_ERP.Controllers
                     {
                         OpeningId = tranMid,
                         AsOnDate = header.TRANDATE.ToString("yyyy-MM-dd"),
+                        StockName = header.STOCKNAME,
                         ProductTypeId = productTypeId,
                         PackingId = packingId,
                         GradeId = gradeId,
@@ -199,6 +200,7 @@ namespace KVM_ERP.Controllers
                                     SELECT
                                         tm.TRANMID,
                                         tm.TRANDATE,
+                                        tm.STOCKNAME,
                                         mg.MTRLGDESC AS ProductType,
                                         pm.PACKMDESC AS PackingMaster,
                                         m.MTRLDESC AS Product,
@@ -215,11 +217,12 @@ namespace KVM_ERP.Controllers
                                       AND (m.DISPSTATUS = 0 OR m.DISPSTATUS IS NULL)" +
                                whereClause +
                                @"
-                                    GROUP BY tm.TRANMID, tm.TRANDATE, mg.MTRLGDESC, pm.PACKMDESC, m.MTRLDESC
+                                    GROUP BY tm.TRANMID, tm.TRANDATE, tm.STOCKNAME, mg.MTRLGDESC, pm.PACKMDESC, m.MTRLDESC
                                 )
                                 SELECT
                                     it.TRANMID,
                                     MAX(it.TRANDATE) AS TRANDATE,
+                                    MAX(it.STOCKNAME) AS STOCKNAME,
                                     MAX(it.ProductType) AS ProductType,
                                     MAX(it.PackingMaster) AS PackingMaster,
                                     STUFF((
@@ -248,6 +251,7 @@ namespace KVM_ERP.Controllers
                 {
                     TRANMID = r.TRANMID,
                     TRANDATE = r.TRANDATE.ToString("yyyy-MM-dd"),
+                    STOCKNAME = r.STOCKNAME ?? string.Empty,
                     ProductType = r.ProductType ?? string.Empty,
                     Product = r.Product ?? string.Empty,
                     PackingMaster = r.PackingMaster ?? string.Empty,
@@ -454,6 +458,11 @@ namespace KVM_ERP.Controllers
                     return Json(new { success = false, message = "Packing Weight and No of Slabs must be greater than zero." });
                 }
 
+                if (model.StockName != null && model.StockName.Length > 50)
+                {
+                    return Json(new { success = false, message = "Stock Name must be 50 characters or less." });
+                }
+
                 if (model.Items == null || !model.Items.Any())
                 {
                     return Json(new { success = false, message = "No items to save." });
@@ -499,16 +508,18 @@ namespace KVM_ERP.Controllers
                             CATENAME = @p1,
                             CATECODE = @p2,
                             VECHNO = @p3,
-                            DISPSTATUS = @p4,
-                            LMUSRID = @p5,
-                            PRCSDATE = @p6
-                        WHERE TRANMID = @p7 AND REGSTRID = 11";
+                            STOCKNAME = @p4,
+                            DISPSTATUS = @p5,
+                            LMUSRID = @p6,
+                            PRCSDATE = @p7
+                        WHERE TRANMID = @p8 AND REGSTRID = 11";
 
                     db.Database.ExecuteSqlCommand(updateSql,
                         trandate,
                         "OPENING STOCK",
                         "OPENING",
                         "-",
+                        (object)model.StockName ?? DBNull.Value,
                         0,
                         currentUser,
                         DateTime.Now,
@@ -536,7 +547,7 @@ namespace KVM_ERP.Controllers
 
                     var insertSql = @"
                         INSERT INTO TRANSACTIONMASTER (
-                            TRANDATE, CATENAME, CATECODE, VECHNO, DISPSTATUS,
+                            TRANDATE, CATENAME, CATECODE, VECHNO, STOCKNAME, DISPSTATUS,
                             CUSRID, LMUSRID, PRCSDATE, CLIENTWGHT, COMPYID,
                             REGSTRID, TRANNO, TRANDNO, TRANREFID, TRANNAMT,
                             TRANAMTWRDS, TRANREFNO,
@@ -544,13 +555,13 @@ namespace KVM_ERP.Controllers
                             TRANCGSTEXPRN, TRANSGSTEXPRN, TRANIGSTEXPRN,
                             TRANGAMT, TRANPACKAMT, TRANINCAMT
                         ) VALUES (
-                            @p0, @p1, @p2, @p3, @p4,
-                            @p5, @p6, @p7, @p8, @p9,
-                            @p10, @p11, @p12, @p13, @p14,
-                            @p15, @p16,
-                            @p17, @p18, @p19,
-                            @p20, @p21, @p22,
-                            @p23, @p24, @p25
+                            @p0, @p1, @p2, @p3, @p4, @p5,
+                            @p6, @p7, @p8, @p9, @p10,
+                            @p11, @p12, @p13, @p14, @p15,
+                            @p16, @p17,
+                            @p18, @p19, @p20,
+                            @p21, @p22, @p23,
+                            @p24, @p25, @p26
                         );
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
@@ -559,28 +570,29 @@ namespace KVM_ERP.Controllers
                         "OPENING STOCK",       // @p1 CATENAME
                         "OPENING",             // @p2 CATECODE
                         "-",                   // @p3 VECHNO
-                        0,                     // @p4 DISPSTATUS
-                        currentUser,           // @p5 CUSRID
-                        currentUser,           // @p6 LMUSRID
-                        DateTime.Now,          // @p7 PRCSDATE
-                        0m,                    // @p8 CLIENTWGHT
-                        compyId,               // @p9 COMPYID
-                        regstrId,              // @p10 REGSTRID
-                        tranNo,                // @p11 TRANNO
-                        tranDNo,               // @p12 TRANDNO
-                        0,                     // @p13 TRANREFID
-                        0m,                    // @p14 TRANNAMT
-                        string.Empty,          // @p15 TRANAMTWRDS
-                        string.Empty,          // @p16 TRANREFNO
-                        0m,                    // @p17 TRANCGSTAMT
-                        0m,                    // @p18 TRANSGSTAMT
-                        0m,                    // @p19 TRANIGSTAMT
-                        0m,                    // @p20 TRANCGSTEXPRN
-                        0m,                    // @p21 TRANSGSTEXPRN
-                        0m,                    // @p22 TRANIGSTEXPRN
-                        0m,                    // @p23 TRANGAMT
-                        0m,                    // @p24 TRANPACKAMT
-                        0m                     // @p25 TRANINCAMT
+                        (object)model.StockName ?? DBNull.Value, // @p4 STOCKNAME
+                        0,                     // @p5 DISPSTATUS
+                        currentUser,           // @p6 CUSRID
+                        currentUser,           // @p7 LMUSRID
+                        DateTime.Now,          // @p8 PRCSDATE
+                        0m,                    // @p9 CLIENTWGHT
+                        compyId,               // @p10 COMPYID
+                        regstrId,              // @p11 REGSTRID
+                        tranNo,                // @p12 TRANNO
+                        tranDNo,               // @p13 TRANDNO
+                        0,                     // @p14 TRANREFID
+                        0m,                    // @p15 TRANNAMT
+                        string.Empty,          // @p16 TRANAMTWRDS
+                        string.Empty,          // @p17 TRANREFNO
+                        0m,                    // @p18 TRANCGSTAMT
+                        0m,                    // @p19 TRANSGSTAMT
+                        0m,                    // @p20 TRANIGSTAMT
+                        0m,                    // @p21 TRANCGSTEXPRN
+                        0m,                    // @p22 TRANSGSTEXPRN
+                        0m,                    // @p23 TRANIGSTEXPRN
+                        0m,                    // @p24 TRANGAMT
+                        0m,                    // @p25 TRANPACKAMT
+                        0m                     // @p26 TRANINCAMT
                     ).FirstOrDefault();
                 }
 
@@ -761,6 +773,7 @@ namespace KVM_ERP.Controllers
         {
             public int TRANMID { get; set; }
             public DateTime TRANDATE { get; set; }
+            public string STOCKNAME { get; set; }
             public string ProductType { get; set; }
             public string Product { get; set; }
             public string PackingMaster { get; set; }
@@ -771,6 +784,8 @@ namespace KVM_ERP.Controllers
         {
             public int? OpeningId { get; set; }
             public string AsOnDate { get; set; }
+
+            public string StockName { get; set; }
 
             public int ProductTypeId { get; set; }
             public int PackingId { get; set; }

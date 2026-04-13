@@ -117,6 +117,23 @@
         text-align: right;
     }
 
+    #openingStockSummary .os-slab .os-box-output {
+        height: 26px;
+        font-size: 12px;
+        width: 80px;
+        text-align: right;
+        background-color: #ffffff;
+    }
+
+    #openingStockSummary .os-slab .os-box-label {
+        display: block;
+        font-size: 10px;
+        font-weight: 700;
+        margin-top: 4px;
+        margin-bottom: 2px;
+        color: #6c757d;
+    }
+
     #openingStockSummary .os-item-select {
         width: 100%;
     }
@@ -139,6 +156,33 @@
         border-radius: 4px;
         text-align: right;
     }
+
+    .os-five-col-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        column-gap: 15px;
+        row-gap: 0;
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+
+    .os-five-col-row > .os-five-col {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    @@media (max-width: 991.98px) {
+        .os-five-col-row {
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: 12px;
+        }
+    }
+
+    @@media (max-width: 575.98px) {
+        .os-five-col-row {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 
 <div class="main-container">
@@ -159,6 +203,12 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
+                        <label class="control-label">Stock Name</label>
+                        <input id="stockName" type="text" class="form-control" maxlength="50" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
                         <label class="control-label">Product Type <span class="text-danger">*</span></label>
                         @Html.DropDownList("ProductTypeId", materialGroups, "-- Select Product Type --", new { @class = "form-control select2", id = "productType", required = "required" })
                     </div>
@@ -171,34 +221,34 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+            </div>
+
+            <div class="os-five-col-row">
+                <div class="os-five-col">
                     <div class="form-group">
                         <label class="control-label">Grade <span class="text-danger">*</span></label>
                         @Html.DropDownList("GradeId", gradeList, "-- Select Grade --", new { @class = "form-control select2", id = "grade", required = "required" })
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-3">
+                <div class="os-five-col">
                     <div class="form-group">
                         <label class="control-label">Production Colour <span class="text-danger">*</span></label>
                         @Html.DropDownList("ProductionColourId", colourList, "-- Select Colour --", new { @class = "form-control select2", id = "productionColour", required = "required" })
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="os-five-col">
                     <div class="form-group">
                         <label class="control-label">Received Type <span class="text-danger">*</span></label>
                         @Html.DropDownList("ReceivedTypeId", receivedTypes, "-- Select Received Type --", new { @class = "form-control select2", id = "receivedType", required = "required" })
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="os-five-col">
                     <div class="form-group">
                         <label class="control-label">Packing Weight with Glazing <span class="text-danger">*</span></label>
                         <input id="packingWeight" type="number" class="form-control" step="0.001" min="0" required />
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="os-five-col">
                     <div class="form-group">
                         <label class="control-label">No of Slabs <span class="text-danger">*</span></label>
                         <input id="noOfSlabs" type="number" class="form-control" step="1" min="0" required />
@@ -346,12 +396,43 @@
                 var $slab = $('<div class="os-slab"></div>');
                 var labelHtml = '<label>' + (field.label || '') + ':</label>';
                 var inputHtml = '<input type="number" class="form-control os-slab-input" min="0" step="0.001" data-packtmid="' + field.id + '" />';
+                var boxLabelHtml = '<label class="os-box-label">No. of Boxes</label>';
+                var boxHtml = '<input type="text" class="form-control os-box-output" readonly="readonly" tabindex="-1" data-packtmid="' + field.id + '" />';
                 $slab.append(labelHtml);
                 $slab.append(inputHtml);
+                $slab.append(boxLabelHtml);
+                $slab.append(boxHtml);
                 wrapper.append($slab);
             }
 
             $cell.append(wrapper);
+        }
+
+        function osGetNoOfSlabsValue() {
+            return parseInt($('#noOfSlabs').val(), 10) || 0;
+        }
+
+        function osCalcBoxes(slabValue, noOfSlabs) {
+            if (!noOfSlabs || noOfSlabs <= 0) return '';
+            var v = parseFloat(slabValue);
+            if (isNaN(v) || v <= 0) return '';
+            return Math.floor(v / noOfSlabs);
+        }
+
+        function osUpdateBoxesForRow($row) {
+            var noOfSlabs = osGetNoOfSlabsValue();
+            $row.find('.os-slab-input').each(function () {
+                var $slabInput = $(this);
+                var packtmid = $slabInput.data('packtmid');
+                var boxes = osCalcBoxes($slabInput.val(), noOfSlabs);
+                $row.find('.os-box-output[data-packtmid="' + packtmid + '"]').val(boxes);
+            });
+        }
+
+        function osUpdateBoxesForAllRows() {
+            $('#openingStockBody tr.os-row').each(function () {
+                osUpdateBoxesForRow($(this));
+            });
         }
 
         function osBuildItemSelect() {
@@ -443,6 +524,7 @@
 
             osEnhanceItemSelect($select);
             osRenderSlabsForRow($row);
+            osUpdateBoxesForRow($row);
             osRenumberRows();
             osRefreshItemOptions();
         }
@@ -518,6 +600,7 @@
         function osRefreshAllSlabs() {
             $('#openingStockBody tr.os-row').each(function () {
                 osRenderSlabsForRow($(this));
+                osUpdateBoxesForRow($(this));
             });
         }
         function osMaybeInitEditGrid() {
@@ -560,6 +643,8 @@
                         $row.find('.os-slab-input[data-packtmid="' + slab.PackingTypeId + '"]').val(slab.Value);
                     });
                 }
+
+                osUpdateBoxesForRow($row);
             });
 
             osRenumberRows();
@@ -572,6 +657,14 @@
                 placeholder: '-- Select --',
                 allowClear: true,
                 width: '100%'
+            });
+
+            $(document).on('input', '.os-slab-input', function () {
+                osUpdateBoxesForRow($(this).closest('tr'));
+            });
+
+            $('#noOfSlabs').on('input change', function () {
+                osUpdateBoxesForAllRows();
             });
 
             $('#productType').on('change', function () {
@@ -650,6 +743,9 @@
                 if (osExistingOpening.AsOnDate) {
                     $('#asOnDate').val(osExistingOpening.AsOnDate);
                 }
+                if (osExistingOpening.StockName != null) {
+                    $('#stockName').val(osExistingOpening.StockName);
+                }
                 if (osExistingOpening.ProductTypeId) {
                     $('#productType').val(osExistingOpening.ProductTypeId.toString()).trigger('change');
                 }
@@ -676,6 +772,7 @@
             var $btn = $('#btnSaveOpening');
 
             var asOnDate = $('#asOnDate').val();
+            var stockName = $('#stockName').val();
             var productTypeId = $('#productType').val();
             var packingId = $('#packing').val();
             var gradeId = $('#grade').val();
@@ -754,6 +851,7 @@
             var model = {
                 OpeningId: osExistingOpening ? osExistingOpening.OpeningId : null,
                 AsOnDate: asOnDate,
+                StockName: stockName,
                 ProductTypeId: parseInt(productTypeId, 10),
                 PackingId: parseInt(packingId, 10),
                 GradeId: parseInt(gradeId, 10),
