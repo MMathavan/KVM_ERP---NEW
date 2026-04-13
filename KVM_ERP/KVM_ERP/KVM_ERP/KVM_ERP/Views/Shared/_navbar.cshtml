@@ -890,7 +890,7 @@
                                                 foreach (var item in Model)
                                                 {
                                                     // Exclude IssuedStock from Masters -> Item Details; it is handled under Stock menu
-                                                    if (item.MenuGId == 2 && item.ControllerName != "IssuedStock")
+                                                    if (item.MenuGId == 2 && item.ControllerName != "IssuedStock" && item.ControllerName != "IQFOpeningStock")
                                                     {
                                                         <li class="@item.activeli">
                                                             <a class="dropdown-item" href="@Url.Action(item.ActionName, item.ControllerName)">
@@ -907,9 +907,9 @@
                         </li>
                     }
 
-                    @if (Model != null && links.Any(x => (x.MenuGId == 2 || x.MenuGId == 22) && x.ControllerName != "IssuedStock"))
+                    @if (Model != null && links.Any(x => (x.MenuGId == 2 || x.MenuGId == 22) && x.ControllerName != "IssuedStock" && x.ControllerName != "IQFOpeningStock"))
                     {
-                        foreach (var item in Model.Where(x => (x.MenuGId == 2 || x.MenuGId == 22) && x.ControllerName != "IssuedStock"))
+                        foreach (var item in Model.Where(x => (x.MenuGId == 2 || x.MenuGId == 22) && x.ControllerName != "IssuedStock" && x.ControllerName != "IQFOpeningStock"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action(item.ActionName, item.ControllerName)" id="@("menu-"+item.MenuGId)">
