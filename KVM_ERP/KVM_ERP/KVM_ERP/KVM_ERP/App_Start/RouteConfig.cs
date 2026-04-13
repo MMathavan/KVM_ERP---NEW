@@ -122,6 +122,14 @@ namespace KVM_ERP
                 namespaces: new[] { "KVM_ERP.Controllers.Masters" }
             );
 
+            // Explicit route for IQFIssuedStock
+            routes.MapRoute(
+                name: "IQFIssuedStock",
+                url: "IQFIssuedStock/{action}/{id}",
+                defaults: new { controller = "IQFIssuedStock", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "KVM_ERP.Controllers" }
+            );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
