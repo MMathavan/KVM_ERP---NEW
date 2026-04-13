@@ -232,6 +232,7 @@
     <Compile Include="Controllers\OpeningStockController.cs" />
     <Compile Include="Controllers\IQFOpeningStockController.cs" />
     <Compile Include="Controllers\IssuedStockController.cs" />
+    <Compile Include="Controllers\IQFIssuedStockController.cs" />
     <Compile Include="Controllers\SupplierStockViewController.cs" />
     <Compile Include="Controllers\StockViewReportController.cs" />
     <Compile Include="Controllers\StockMaintainReportController.cs" />
@@ -1297,6 +1298,8 @@
     <Content Include="Views\StockViewReport\Index.cshtml" />
     <Content Include="Views\Reports\RawMaterialsImport.cshtml" />
     <Content Include="Views\RawMaterialInvoice\Index.cshtml" />
+    <Content Include="Views\IQFIssuedStock\Index.cshtml" />
+    <Content Include="Views\IQFIssuedStock\Form.cshtml" />
     <!-- Excluded per cleanup -->
     <!-- <Content Include="Views\AnnouncementMaster\Index.cshtml" /> -->
     <!-- <Content Include="Views\AnnouncementMaster\Form.cshtml" /> -->
